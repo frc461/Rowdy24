@@ -17,25 +17,25 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Limelight extends SubsystemBase{
+public class Limelight extends SubsystemBase {
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     DoubleArraySubscriber ySub;
     public double botPose[];
     public double botPoseX;
     public double botPoseZ;
-    public int updates;
 
     public Limelight() {
         ySub = table.getDoubleArrayTopic("botpose_targetspace").subscribe(new double[6]);
         botPose = new double[6];
         botPoseX = 0.0;
         botPoseZ = 0.0;
-        updates = 0;
     }
 
     public void refreshValues(){
@@ -43,8 +43,6 @@ public class Limelight extends SubsystemBase{
         botPose = ySub.get(new double[6]);
         botPoseX = botPose[0]; //X+ is to the right if you are looking at the tag
         botPoseZ = botPose[2]; //Z+ is perpendicular to the plane of the tag (Z+ is away from tag on data side, Z- is away on non data side)
-        updates++;
-        System.out.println("refresh");
     }
 
     public double getRX(){
@@ -105,17 +103,21 @@ public class Limelight extends SubsystemBase{
     // }
 
     
-
+    //more like navigate to tag command
     public Command getTagCommand() {
+        if (this.botPoseX == 0 && this.botPoseZ == 0) {
+            return new InstantCommand();
+        }
         // Since we are using a holonomic drivetrain, the rotation component of this pose
         // represents the goal holonomic rotation
-        Pose2d targetPose = new Pose2d(0.45, 0, Rotation2d.fromDegrees(0));
+        Pose2d targetPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
 
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
             Constants.Swerve.maxSpeed, Constants.Swerve.maxAccel, 
             Constants.Swerve.maxAngularVelocity, Units.degreesToRadians(720));
 
+        System.out.println("getTagCommand running");
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         return AutoBuilder.pathfindToPose(
             targetPose,

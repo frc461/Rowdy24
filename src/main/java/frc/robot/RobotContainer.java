@@ -2,10 +2,19 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathfindHolonomic;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 // import frc.robot.autos.AutoChooser;
 // import frc.robot.autos.AutoTrajectories;
-import frc.robot.autos.eventMap;
+//import frc.robot.autos.eventMap;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -33,7 +42,7 @@ public class RobotContainer {
     private final Intake s_Intake = new Intake();
     private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
     private final Limelight limelight = new Limelight();
-    private final eventMap map = new eventMap(s_Swerve, s_Intake, s_Wrist, s_Elevator);
+    //private final eventMap map = new eventMap(s_Swerve, s_Intake, s_Wrist, s_Elevator);
     // private final AutoTrajectories trajectories = new AutoTrajectories();
     // private final AutoChooser chooser = new AutoChooser(trajectories, map.getMap(), s_Swerve, s_Intake, s_Wrist, s_Elevator);
 
@@ -70,6 +79,7 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton driver_stowButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     private final JoystickButton driver_limelightButton = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton driver_zeroPoseButton = new JoystickButton(driver, XboxController.Button.kX.value);
 
     private final POVButton driver_stowButton2 = new POVButton(operator, 270);
     // private final JoystickButton xModeButton = new JoystickButton(driver, XboxController.Button.kX.value);
@@ -113,6 +123,10 @@ public class RobotContainer {
           s_Intake,
           operator
         )
+      );
+
+      limelight.setDefaultCommand(
+        new TeleopLimelight(limelight)
       );
         
       // Configure the button bindings
@@ -235,16 +249,68 @@ public class RobotContainer {
 
         //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
         
-        driver_limelightButton.onTrue(
+        driver_zeroPoseButton.whileTrue(
+          new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0))))
+        );
+
+        driver_limelightButton.whileTrue(
+          // Commands.parallel(
+          //   new PrintCommand("This works?!?!?!!"),
+          //   new PathfindHolonomic(
+          //     new Pose2d(2, 2, Rotation2d.fromDegrees(0)),
+          //     new PathConstraints(
+          //       Constants.Swerve.maxSpeed, Constants.Swerve.maxAccel, 
+          //       Constants.Swerve.maxAngularVelocity, Units.degreesToRadians(720)
+          //     ),
+          //     0,
+          //     s_Swerve::getPose,
+          //     () -> (s_Swerve.getChassisSpeeds()),
+          //     s_Swerve::_driveAutoBuilder,
+          //     new HolonomicPathFollowerConfig(
+          //       new PIDConstants(10, 1, 0),
+          //       new PIDConstants(10, 1, 0),
+          //       Constants.Swerve.maxSpeed,
+          //       Constants.Swerve.centerToWheel,
+          //       new ReplanningConfig()
+          //     ),
+          //     0,
+          //     s_Swerve
+          //   )
+          // )
             Commands.sequence(
-              new InstantCommand(() -> limelight.refreshValues()),
-              new InstantCommand(() -> s_Swerve.resetOdometry(
-              new Pose2d(
-                  limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(limelight.botPose[4])
+              new PrintCommand("This works?!?!?!!"),
+              new InstantCommand(
+                () -> s_Swerve.resetOdometry(
+                  new Pose2d(
+                      limelight.botPoseZ,
+                      -limelight.botPoseX,
+                      Rotation2d.fromDegrees(limelight.botPose[4])
                   )
                 )
               ),
-              limelight.getTagCommand()
+              // limelight.getTagCommand()
+              new PathfindHolonomic(
+                new Pose2d(0.5, 0, Rotation2d.fromDegrees(0)),
+                new PathConstraints(
+                  Constants.Swerve.maxSpeed,
+                  Constants.Swerve.maxAccel, 
+                  Constants.Swerve.maxAngularVelocity,
+                  Units.degreesToRadians(720)
+                ),
+                0,
+                s_Swerve::getPose,
+                () -> (s_Swerve.getChassisSpeeds()),
+                s_Swerve::_driveAutoBuilder,
+                new HolonomicPathFollowerConfig(
+                  new PIDConstants(10, 1, 0),
+                  new PIDConstants(10, 1, 0),
+                  Constants.Swerve.maxSpeed,
+                  Constants.Swerve.centerToWheel,
+                  new ReplanningConfig()
+                ),
+                0,
+                s_Swerve
+              )
             )
             
             // Commands.sequence(
@@ -278,9 +344,10 @@ public class RobotContainer {
         SmartDashboard.putNumber("balanceP", 0.03);
         // SmartDashboard.getNumber("balanceI", elevatorAxis);
         // SmartDashboard.getNumber("balanceD", elevatorAxis);
-        SmartDashboard.putNumber("bpftX", limelight.botPoseX);
-        SmartDashboard.putNumber("bpftZ", limelight.botPoseZ);
-        SmartDashboard.putNumber("Limelight updates", limelight.updates);
+        SmartDashboard.putNumber("botposeX", limelight.botPoseX);
+        SmartDashboard.putNumber("botposeZ", limelight.botPoseZ);
+        SmartDashboard.putNumber("PoseX", s_Swerve.getPose().getX());
+        SmartDashboard.putNumber("PoseY", s_Swerve.getPose().getY());
         SmartDashboard.putBoolean("Pov pressed", e_presButton_0.getAsBoolean());
         SmartDashboard.putNumber("Elevator Position", s_Elevator.getEncoder().getPosition());
         SmartDashboard.putNumber("Elevator Target", s_Elevator.getTarget());
