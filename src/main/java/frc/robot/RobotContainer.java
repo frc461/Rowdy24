@@ -235,7 +235,7 @@ public class RobotContainer {
 
         //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
         
-        driver_limelightButton.onTrue(
+        driver_limelightButton.whileTrue(
             Commands.sequence(
               new InstantCommand(() -> limelight.refreshValues()),
               new InstantCommand(() -> s_Swerve.resetOdometry(
