@@ -57,7 +57,7 @@ public class Swerve extends SubsystemBase {
             this::getPose, // Robot pose supplier
             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            this::_driveAutoBuilder, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            this::driveAutoBuilder, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                 new PIDConstants(0.5, 0.0, 0.0), // Translation PID constants
                 new PIDConstants(0.5, 0.0, 0.0), // Rotation PID constants
@@ -73,7 +73,7 @@ public class Swerve extends SubsystemBase {
         return Constants.Swerve.swerveKinematics.toChassisSpeeds(getModuleStates());
     }
 
-    public void _driveAutoBuilder(ChassisSpeeds speeds) {
+    public void driveAutoBuilder(ChassisSpeeds speeds) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
         
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
@@ -174,7 +174,7 @@ public class Swerve extends SubsystemBase {
     public void rotateToDegree(double target){
         PIDController rotController = new PIDController(0.1, 0.0008, 0.001);
         rotController.enableContinuousInput(-180, 180);
-        
+
         double rotate = rotController.calculate(gyro.getYaw(), target);
 
         drive(new Translation2d(0, 0), -.25*rotate, false, true);        
