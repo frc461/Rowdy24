@@ -227,87 +227,45 @@ public class RobotContainer {
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))));
 
-    // driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
 
-    driver_zeroPoseButton.whileTrue(
-        new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)))));
+        //driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
+        
+        driver_limelightButton.whileTrue(
+            Commands.sequence(
+              new InstantCommand(() -> limelight.refreshValues()),
+              new InstantCommand(() -> s_Swerve.resetOdometry(
+              new Pose2d(
+                  limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(limelight.botPose[4])
+                  )
+                )
+              ),
+              limelight.getTagCommand()
+            )
 
-    driver_limelightButton.whileTrue(
-        // Commands.parallel(
-        // new PrintCommand("This works?!?!?!!"),
-        // new PathfindHolonomic(
-        // new Pose2d(2, 2, Rotation2d.fromDegrees(0)),
-        // new PathConstraints(
-        // Constants.Swerve.maxSpeed, Constants.Swerve.maxAccel,
-        // Constants.Swerve.maxAngularVelocity, Units.degreesToRadians(720)
-        // ),
-        // 0,
-        // s_Swerve::getPose,
-        // () -> (s_Swerve.getChassisSpeeds()),
-        // s_Swerve::_driveAutoBuilder,
-        // new HolonomicPathFollowerConfig(
-        // new PIDConstants(10, 1, 0),
-        // new PIDConstants(10, 1, 0),
-        // Constants.Swerve.maxSpeed,
-        // Constants.Swerve.centerToWheel,
-        // new ReplanningConfig()
-        // ),
-        // 0,
-        // s_Swerve
-        // )
-        // )
-        Commands.sequence(
-            new PrintCommand("This works?!?!?!!"),
-            new InstantCommand(
-                () -> s_Swerve.resetOdometry(
-                    new Pose2d(
-                        limelight.botPoseZ,
-                        -limelight.botPoseX,
-                        Rotation2d.fromDegrees(limelight.botPose[4])))),
-            // limelight.getTagCommand()
-            new PathfindHolonomic(
-                new Pose2d(0.5, 0, Rotation2d.fromDegrees(0)),
-                new PathConstraints(
-                    Constants.Swerve.maxSpeed,
-                    Constants.Swerve.maxAccel,
-                    Constants.Swerve.maxAngularVelocity,
-                    Units.degreesToRadians(720)),
-                0,
-                s_Swerve::getPose,
-                () -> (s_Swerve.getChassisSpeeds()),
-                s_Swerve::_driveAutoBuilder,
-                new HolonomicPathFollowerConfig(
-                    new PIDConstants(10, 1, 0),
-                    new PIDConstants(10, 1, 0),
-                    Constants.Swerve.maxSpeed,
-                    Constants.Swerve.centerToWheel,
-                    new ReplanningConfig()),
-                0,
-                s_Swerve))
-
-    // Commands.sequence(
-    // new InstantCommand(() -> limelight.refreshValues()),
-    // new InstantCommand(() -> s_Swerve.resetOdometry(
-    // new Pose2d(
-    // limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(0)
-    // )
-    // )
-    // ),
-    // new SwerveControllerCommand (
-    // limelight.testTraj(s_Swerve.getYaw()),
-    // s_Swerve::getPose,
-    // Constants.Swerve.swerveKinematics,
-    // new PIDController(0.6, 0, 0),
-    // new PIDController(0.7, 0, 0.1),
-    // new ProfiledPIDController(0.2, 0, 0,
-    // Constants.AutoConstants.kThetaControllerConstraints),
-    // s_Swerve::setModuleStates,
-    // s_Swerve
-    // )
-    // )
-    );
-
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+            
+            
+            // Commands.sequence(
+            //   new InstantCommand(() -> limelight.refreshValues()),
+            //   new InstantCommand(() -> s_Swerve.resetOdometry(
+            //   new Pose2d(
+            //       limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(0)
+            //       )
+            //     )
+            //   ),
+            //   new SwerveControllerCommand (
+            //     limelight.testTraj(s_Swerve.getYaw()),
+            //     s_Swerve::getPose,
+            //     Constants.Swerve.swerveKinematics,
+            //     new PIDController(0.6, 0, 0),
+            //     new PIDController(0.7, 0, 0.1),
+            //     new ProfiledPIDController(0.2, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+            //     s_Swerve::setModuleStates,
+            //     s_Swerve
+            //   )
+            // )
+          );
+          
+        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
     // xModeButton.whileTrue(new InstantCommand(()-> s_Swerve.setXMode()));
 
