@@ -123,7 +123,7 @@ public class Limelight extends SubsystemBase{
         System.out.println("done with tag");
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         return AutoBuilder.pathfindToPose(
-            targetPose,
+            new Pose2d(2, 0, Rotation2d.fromDegrees(0)),
             constraints,
             0.0, // Goal end velocity in meters/sec
             0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.

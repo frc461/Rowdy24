@@ -74,12 +74,31 @@ public class Swerve extends SubsystemBase {
     }
 
     public void driveAutoBuilder(ChassisSpeeds speeds) {
-        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
+        ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+        SwerveModuleState[] targetStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
+        setStates(targetStates);
+
+    }
+
+    // public ChassisSpeeds getChassisSpeeds() {
+    //     return Constants.Swerve.swerveKinematics.toChassisSpeeds(getModuleStates());
+    // }
+
+    // public void driveAutoBuilder(ChassisSpeeds speeds) {
+    //     SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
         
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+    //     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
         
-        for(SwerveModule mod : mSwerveMods){
-            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], true);
+    //     for(SwerveModule mod : mSwerveMods){
+    //         mod.setDesiredState(swerveModuleStates[mod.moduleNumber], true);
+    //     }
+    // }
+
+    public void setStates(SwerveModuleState[] targetStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Constants.Swerve.maxSpeed);
+        
+        for(int i = 0; i < mSwerveMods.length; i++) {
+            mSwerveMods[i].setDesiredState(targetStates[i], false);
         }
     }
 

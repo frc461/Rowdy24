@@ -2,10 +2,16 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPoint;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -135,6 +141,16 @@ public class RobotContainer {
   private void configureButtonBindings() {
     /* Driver Buttons (and op buttons) */
 
+    SmartDashboard.putData("Pathfind to Pickup Pos", AutoBuilder.pathfindToPose(
+        new Pose2d(14.0, 6.5, Rotation2d.fromDegrees(0)), 
+        new PathConstraints(
+          4.0, 4.0, 
+          Units.degreesToRadians(360), Units.degreesToRadians(540)
+        ), 
+        0, 
+        2.0
+      ));
+      
     w_preset_0.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
     w_preset_1.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_MID_LIMIT)));
     w_preset_2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_LOWER_LIMIT)));
@@ -218,29 +234,30 @@ public class RobotContainer {
             new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))));
 
     // driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
-    driver_limelightButton.onTrue(
-            new InstantCommand(() -> s_Swerve.resetOdometry(
-                new Pose2d(
-                    limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(limelight.botPose[4])))));
+    // driver_limelightButton.onTrue(
+    //         new InstantCommand(() -> s_Swerve.resetOdometry(
+    //             // new Pose2d(
+    //             //     limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(limelight.botPose[4])))));
+    //             new Pose2d(0, 0, Rotation2d.fromDegrees(0)))));
 
-    driver_limelightButton.onTrue(limelight.getTagCommand());
-    // driver_limelightButton.whileTrue(
-    // Commands.sequence(
-    // new PrintCommand("start\n"),
-    // new InstantCommand(() -> limelight.refreshValues()),
-    // // new InstantCommand(() -> s_Swerve.resetOdometry(
-    // // new Pose2d(
-    // // limelight.botPoseZ, -limelight.botPoseX,
-    // Rotation2d.fromDegrees(limelight.botPose[4])
-    // // )
-    // // )
-    // // ),
-    // new PrintCommand("about to drive\n"),
-
-    // new InstantCommand(() -> limelight.getTagCommand()),
-    // new PrintCommand("done\n")
-
+    // driver_limelightButton.onTrue(limelight.getTagCommand());
+    driver_limelightButton.whileTrue(
+    Commands.sequence(
+    new PrintCommand("start\n"),
+    new InstantCommand(() -> s_Swerve.resetOdometry(
+        new Pose2d(0, 0, Rotation2d.fromDegrees(0)))),
+    // new Pose2d(
+    // limelight.botPoseZ, -limelight.botPoseX,
+    // Rotation2d.fromDegrees(limelight.botPose[4]),
     // )
+    // )
+    // ),
+    new PrintCommand("about to drive\n"),
+
+    limelight.getTagCommand(),
+    new PrintCommand("done\n")
+    )
+    );
 
     // Commands.sequence(
     // new InstantCommand(() -> limelight.refreshValues()),
@@ -307,23 +324,30 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
 
-    Constants.gyroOffset = s_Swerve.gyro.getPitch();
-    // s_Swerve.zeroGyro();
-    s_Swerve.gyro.setYaw(180);
+
+    PathConstraints constraints = new PathConstraints(
+            Constants.Swerve.maxSpeed, Constants.Swerve.maxAccel, 
+            Constants.Swerve.maxAngularVelocity, Units.degreesToRadians(720));
+
+    return AutoBuilder.pathfindToPose(new Pose2d(2, 0, Rotation2d.fromDegrees(0)), constraints, 0, 0);
+
+    // Constants.gyroOffset = s_Swerve.gyro.getPitch();
+    // // s_Swerve.zeroGyro();
+    // s_Swerve.gyro.setYaw(180);
+    // // s_Swerve.resetOdometry(new Pose2d(
+    // // limelight.getRX(), limelight.getRZ(), Rotation2d.fromDegrees(0))
+    // // );
     // s_Swerve.resetOdometry(new Pose2d(
-    // limelight.getRX(), limelight.getRZ(), Rotation2d.fromDegrees(0))
-    // );
-    s_Swerve.resetOdometry(new Pose2d(
-        10, 10, Rotation2d.fromDegrees(0)));
-    return (new SwerveControllerCommand(
-        limelight.testTraj(s_Swerve.getYaw()),
-        s_Swerve::getPose,
-        Constants.Swerve.swerveKinematics,
-        new PIDController(1, 0.05, 0.01),
-        new PIDController(1, 0.05, 0.01),
-        new ProfiledPIDController(1, 0.05, 0, Constants.AutoConstants.kThetaControllerConstraints),
-        s_Swerve::setModuleStates,
-        s_Swerve));
+    //     10, 10, Rotation2d.fromDegrees(0)));
+    // return (new SwerveControllerCommand(
+    //     limelight.testTraj(s_Swerve.getYaw()),
+    //     s_Swerve::getPose,
+    //     Constants.Swerve.swerveKinematics,
+    //     new PIDController(1, 0.05, 0.01),
+    //     new PIDController(1, 0.05, 0.01),
+    //     new ProfiledPIDController(1, 0.05, 0, Constants.AutoConstants.kThetaControllerConstraints),
+    //     s_Swerve::setModuleStates,
+    //     s_Swerve));
 
     // chooser.getCommand();
   }
