@@ -19,7 +19,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -43,6 +43,7 @@ public class Limelight extends SubsystemBase {
         botPose = ySub.get(new double[6]);
         botPoseX = botPose[0]; //X+ is to the right if you are looking at the tag
         botPoseZ = botPose[2]; //Z+ is perpendicular to the plane of the tag (Z+ is away from tag on data side, Z- is away on non data side)
+        updates++;
     }
 
     public double getRX(){
@@ -105,26 +106,28 @@ public class Limelight extends SubsystemBase {
     
     //more like navigate to tag command
     public Command getTagCommand() {
-        if (this.botPoseX == 0 && this.botPoseZ == 0) {
-            return new InstantCommand();
-        }
+        
         // Since we are using a holonomic drivetrain, the rotation component of this pose
         // represents the goal holonomic rotation
-        Pose2d targetPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+        System.out.println("start tag");
+        Pose2d targetPose = new Pose2d(0.45, 0.45, Rotation2d.fromDegrees(0));
+
 
         // Create the constraints to use while pathfinding
         PathConstraints constraints = new PathConstraints(
             Constants.Swerve.maxSpeed, Constants.Swerve.maxAccel, 
             Constants.Swerve.maxAngularVelocity, Units.degreesToRadians(720));
 
-        System.out.println("getTagCommand running");
+
+        System.out.println("done with tag");
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         return AutoBuilder.pathfindToPose(
-            targetPose,
+            new Pose2d(2, 0, Rotation2d.fromDegrees(0)),
             constraints,
             0.0, // Goal end velocity in meters/sec
             0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
+        
     }
 
     //FollowPathWithEvents follower = new FollowPathWithEvents(null, null, null);    
