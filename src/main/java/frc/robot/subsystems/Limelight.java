@@ -30,6 +30,7 @@ public class Limelight extends SubsystemBase {
     public double botPose[];
     public double botPoseX;
     public double botPoseZ;
+    public int updates;
 
     public Limelight() {
         ySub = table.getDoubleArrayTopic("botpose_targetspace").subscribe(new double[6]);
