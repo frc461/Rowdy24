@@ -17,12 +17,13 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Limelight extends SubsystemBase{
+public class Limelight extends SubsystemBase {
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     DoubleArraySubscriber ySub;
@@ -36,7 +37,6 @@ public class Limelight extends SubsystemBase{
         botPose = new double[6];
         botPoseX = 0.0;
         botPoseZ = 0.0;
-        updates = 0;
     }
 
     public void refreshValues(){
@@ -105,7 +105,7 @@ public class Limelight extends SubsystemBase{
     // }
 
     
-
+    //more like navigate to tag command
     public Command getTagCommand() {
         
         // Since we are using a holonomic drivetrain, the rotation component of this pose

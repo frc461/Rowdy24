@@ -26,8 +26,8 @@ public class eventMap {
         this.s_Intake = _s_Intake;
         this.s_Wrist = _s_Wrist;
 
-        eventMap.put("intakeOff", new AutoIntakeCommand(s_Intake,0, false)); // usually used after pickup cone/cube
-        eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance())); //  was just autoBalance *** balance\ on charge station
+        eventMap.put("intakeOff", new AutoIntakeCommand(s_Intake,0, false)); //usually used after pickup cone/cube
+        eventMap.put("balance", new InstantCommand(() -> s_Swerve.autoBalance())); //was just autoBalance *** balance\ on charge station
         eventMap.put("elevatorUp", new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)));
         eventMap.put("autoCorrect", new InstantCommand(() -> s_Swerve.rotateToDegree(180)));
         eventMap.put("autoConeOut", new AutoIntakeCommand(_s_Intake, 0.57, true));
@@ -88,7 +88,7 @@ public class eventMap {
             Commands.sequence(
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore)),
-            new WaitCommand(0.75), //TODO could be slower
+            new WaitCommand(0.75),
             //new PrintCommand("setting intake"),
             new AutoIntakeCommand(s_Intake, -1, false),
             new WaitCommand(0.5),
@@ -102,7 +102,7 @@ public class eventMap {
             Commands.sequence(
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidCubeScore)),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidCubeScore)),
-            new WaitCommand(0.5), //TODO could be slower
+            new WaitCommand(0.5),
             //new PrintCommand("setting intake"),
             new AutoIntakeCommand(s_Intake, -1, false),
             new WaitCommand(0.5),

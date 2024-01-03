@@ -8,7 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
-import java.util.function.Supplier;
+//import java.util.function.Supplier;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -55,12 +55,12 @@ public class Swerve extends SubsystemBase {
 
         AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
-            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveAutoBuilder, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                new PIDConstants(0.5, 0.0, 0.0), // Translation PID constants
-                new PIDConstants(0.5, 0.0, 0.0), // Rotation PID constants
+                new PIDConstants(1, 0.0, 0.0), // Translation PID constants
+                new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
                 Constants.Swerve.maxSpeed, // Max module speed, in m/s
                 Constants.Swerve.centerToWheel, // Drive base radius in meters. Distance from robot center to furthest module.
                 new ReplanningConfig() // Default path replanning config. See the API for the options here
