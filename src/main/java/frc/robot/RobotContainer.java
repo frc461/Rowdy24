@@ -21,9 +21,11 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.autos.AutoChooser;
 import frc.robot.autos.eventMap;
 // import frc.robot.autos.AutoChooser;
 // import frc.robot.autos.AutoTrajectories;
@@ -50,7 +52,7 @@ public class RobotContainer {
   private final Limelight limelight = new Limelight();
   private final eventMap map = new eventMap(s_Swerve, s_Intake, s_Wrist, s_Elevator);
   // private final AutoTrajectories trajectories = new AutoTrajectories();
-  // private final AutoChooser chooser = new AutoChooser(trajectories,
+  private final AutoChooser chooser = new AutoChooser();
   // map.getMap(), s_Swerve, s_Intake, s_Wrist, s_Elevator);
 
   public double intakeVec = 0;
@@ -131,9 +133,6 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
-
-    // SmartDashboard.putData("Auto Choices", chooser.getAutoChooser());
-
   }
 
   /**
@@ -331,49 +330,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
 
-    PathConstraints constraints = new PathConstraints(
-            Constants.Swerve.maxSpeed, Constants.Swerve.maxAccel, 
-            Constants.Swerve.maxAngularVelocity, Units.degreesToRadians(720));
-
-
-        // Create a list of bezier points from poses. Each pose represents one waypoint. 
-        // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
-        List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-        //new Pose2d(2.0, 1.0, Rotation2d.fromDegrees(0)),
-        new Pose2d(-limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(0))
-        );
-        
-
-        // Create the path using the bezier points created above
-        PathPlannerPath path = new PathPlannerPath(
-            bezierPoints,
-            constraints,
-            new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-        );
-
-
-       return AutoBuilder.pathfindThenFollowPath(path, constraints, 3);
-
-
-    // Constants.gyroOffset = s_Swerve.gyro.getPitch();
-    // // s_Swerve.zeroGyro();
-    // s_Swerve.gyro.setYaw(180);
-    // // s_Swerve.resetOdometry(new Pose2d(
-    // // limelight.getRX(), limelight.getRZ(), Rotation2d.fromDegrees(0))
-    // // );
-    // s_Swerve.resetOdometry(new Pose2d(
-    //     10, 10, Rotation2d.fromDegrees(0)));
-    // return (new SwerveControllerCommand(
-    //     limelight.testTraj(s_Swerve.getYaw()),
-    //     s_Swerve::getPose,
-    //     Constants.Swerve.swerveKinematics,
-    //     new PIDController(1, 0.05, 0.01),
-    //     new PIDController(1, 0.05, 0.01),
-    //     new ProfiledPIDController(1, 0.05, 0, Constants.AutoConstants.kThetaControllerConstraints),
-    //     s_Swerve::setModuleStates,
-    //     s_Swerve));
-
-    // chooser.getCommand();
+    return chooser.getCommand();
   }
 }
