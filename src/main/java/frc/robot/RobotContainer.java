@@ -334,18 +334,16 @@ public class RobotContainer {
             Constants.Swerve.maxSpeed, Constants.Swerve.maxAccel, 
             Constants.Swerve.maxAngularVelocity, Units.degreesToRadians(720));
 
-    //AutoBuilder.pathfindToPose(new Pose2d(2, 0, Rotation2d.fromDegrees(0)), constraints, 0, 0);
 
         // Create a list of bezier points from poses. Each pose represents one waypoint. 
         // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
-        s_Swerve.resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
-        s_Swerve.gyro.setYaw(0);
         List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
         new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
         //new Pose2d(2.0, 1.0, Rotation2d.fromDegrees(0)),
         new Pose2d(-limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(0))
         );
         
+
         // Create the path using the bezier points created above
         PathPlannerPath path = new PathPlannerPath(
             bezierPoints,
