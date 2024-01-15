@@ -50,10 +50,8 @@ public class RobotContainer {
   private final Intake s_Intake = new Intake();
   private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
   private final Limelight limelight = new Limelight();
-  private final eventMap map = new eventMap(s_Swerve, s_Intake, s_Wrist, s_Elevator);
   // private final AutoTrajectories trajectories = new AutoTrajectories();
   private final AutoChooser chooser = new AutoChooser();
-  // map.getMap(), s_Swerve, s_Intake, s_Wrist, s_Elevator);
 
   public double intakeVec = 0;
 
@@ -133,6 +131,8 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+
+    SmartDashboard.putData("Auto Choices", chooser.getAutoChooser());
   }
 
   /**
@@ -239,57 +239,8 @@ public class RobotContainer {
             new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
             new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))));
 
-    // driver_AutoBalance.onTrue(new InstantCommand(() -> s_Swerve.autoBalance()));
-    // driver_limelightButton.onTrue(
-    //         new InstantCommand(() -> s_Swerve.resetOdometry(
-    //             // new Pose2d(
-    //             //     limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(limelight.botPose[4])))));
-    //             new Pose2d(0, 0, Rotation2d.fromDegrees(0)))));
-
-    // driver_limelightButton.onTrue(limelight.getTagCommand());
-    driver_limelightButton.whileTrue(
-    Commands.sequence(
-    new PrintCommand("start\n"),
-    new InstantCommand(() -> s_Swerve.resetOdometry(
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0)))),
-    // new Pose2d(
-    // limelight.botPoseZ, -limelight.botPoseX,
-    // Rotation2d.fromDegrees(limelight.botPose[4]),
-    // )
-    // )
-    // ),
-    new PrintCommand("about to drive\n"),
-
-    limelight.getTagCommand(),
-    new PrintCommand("done\n")
-    )
-    );
-
-    // Commands.sequence(
-    // new InstantCommand(() -> limelight.refreshValues()),
-    // new InstantCommand(() -> s_Swerve.resetOdometry(
-    // new Pose2d(
-    // limelight.botPoseZ, -limelight.botPoseX, Rotation2d.fromDegrees(0)
-    // )
-    // )
-    // ),
-    // new SwerveControllerCommand (
-    // limelight.testTraj(s_Swerve.getYaw()),
-    // s_Swerve::getPose,
-    // Constants.Swerve.swerveKinematics,
-    // new PIDController(0.6, 0, 0),
-    // new PIDController(0.7, 0, 0.1),
-    // new ProfiledPIDController(0.2, 0, 0,
-    // Constants.AutoConstants.kThetaControllerConstraints),
-    // s_Swerve::setModuleStates,
-    // s_Swerve
-    // )
-    // )
-    // );
 
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-
-    // xModeButton.whileTrue(new InstantCommand(()-> s_Swerve.setXMode()));
 
   }
 
