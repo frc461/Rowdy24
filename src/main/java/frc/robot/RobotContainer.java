@@ -121,7 +121,7 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
-    chooser = AutoBuilder.buildAutoChooser("default");
+    chooser = AutoBuilder.buildAutoChooser("defaultAuto");
     SmartDashboard.putData("Auto Choices", chooser);
   }
 
