@@ -15,8 +15,11 @@ Some Notes:
 
 We used these libraries/vendordeps:
   Phoenix v5 and v6: https://pro.docs.ctr-electronics.com/en/stable/docs/installation/installation-frc.html
+  
   RevLib 2024: https://software-metadata.revrobotics.com/REVLib-2024.json
+  
   Pathplanner 2024.(insert newest version here): https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json
+  
   WPIlib New Commands 1.0: this should come pre-installed with WPIlib
   
   
