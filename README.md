@@ -1,4 +1,4 @@
-461's robot code for the 2024 season:
+461's robot code for the 2024 season
 
 Some Notes:
 
