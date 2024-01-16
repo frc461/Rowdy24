@@ -30,6 +30,8 @@ public class Limelight extends SubsystemBase {
     public double botPose[];
     public double botPoseX;
     public double botPoseZ;
+    public double tagX;
+    public double tagY;
     public int updates;
 
     public Limelight() {
@@ -42,6 +44,8 @@ public class Limelight extends SubsystemBase {
     public void refreshValues(){
         table = NetworkTableInstance.getDefault().getTable("limelight");
         botPose = ySub.get(new double[6]);
+        tagX = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+        tagY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
         botPoseX = botPose[0]; //X+ is to the right if you are looking at the tag
         botPoseZ = botPose[2]; //Z+ is perpendicular to the plane of the tag (Z+ is away from tag on data side, Z- is away on non data side)
         updates++;
@@ -76,6 +80,17 @@ public class Limelight extends SubsystemBase {
         refreshValues();
         return botPose[5];
     }
+
+    public double getTagX2D() {
+        refreshValues();
+        return tagX;
+    }
+
+    public double getTagY2D() {
+        refreshValues();
+        return tagY;
+    }
+
 
     public Trajectory testTraj(Rotation2d yaw){
         TrajectoryConfig config = new TrajectoryConfig(0.5, 0.5);
