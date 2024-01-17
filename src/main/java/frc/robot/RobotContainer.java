@@ -150,16 +150,6 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     /* Driver Buttons (and op buttons) */
-
-    SmartDashboard.putData("Pathfind to Pickup Pos", AutoBuilder.pathfindToPose(
-        new Pose2d(14.0, 6.5, Rotation2d.fromDegrees(0)), 
-        new PathConstraints(
-          4.0, 4.0, 
-          Units.degreesToRadians(360), Units.degreesToRadians(540)
-        ), 
-        0, 
-        2.0
-      ));
       
     w_preset_0.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
     w_preset_1.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_MID_LIMIT)));
