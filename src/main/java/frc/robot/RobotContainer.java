@@ -95,7 +95,10 @@ public class RobotContainer {
   private DigitalOutput LEDone = new DigitalOutput(9);
 
   /* Variables */
-  boolean driveStatus = false;
+
+
+    boolean driveStatus = false;
+  //new LimelightFollow(limelight, s_Swerve);
 
   /**
    * The container for the robot. Contains subsystems, IO devices, and commands.
@@ -249,22 +252,8 @@ public class RobotContainer {
 
     // driver_limelightButton.onTrue(limelight.getTagCommand());
     driver_limelightButton.whileTrue(
-    Commands.sequence(
-    new PrintCommand("start\n"),
-    new InstantCommand(() -> s_Swerve.resetOdometry(
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0)))),
-    // new Pose2d(
-    // limelight.botPoseZ, -limelight.botPoseX,
-    // Rotation2d.fromDegrees(limelight.botPose[4]),
-    // )
-    // )
-    // ),
-    new PrintCommand("about to drive\n"),
-
-    limelight.getTagCommand(),
-    new PrintCommand("done\n")
-    )
-    );
+        Commands.sequence(new LimelightFollow(limelight, s_Swerve))
+        );
 
     // Commands.sequence(
     // new InstantCommand(() -> limelight.refreshValues()),
