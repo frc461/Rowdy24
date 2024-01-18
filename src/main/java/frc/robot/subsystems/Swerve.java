@@ -48,20 +48,21 @@ public class Swerve extends SubsystemBase {
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
 
-        // AutoBuilder.configureHolonomic(
-        //     this::getPose, // Robot pose supplier
-        //     this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-        //     this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        //     this::driveAutoBuilder, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        //     new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-        //         new PIDConstants(1, 0.0, 0.0), // Translation PID constants
-        //         new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
-        //         Constants.Swerve.maxSpeed, // Max module speed, in m/s
-        //         Constants.Swerve.centerToWheel, // Drive base radius in meters. Distance from robot center to furthest module.
-        //         new ReplanningConfig() // Default path replanning config. See the API for the options here
-        //     ),
-        //     this // Reference to this subsystem to set requirements
-        // );
+        AutoBuilder.configureHolonomic(
+            this::getPose, // Robot pose supplier
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            this::driveAutoBuilder, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                new PIDConstants(1, 0.0, 0.0), // Translation PID constants
+                new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
+                Constants.Swerve.maxSpeed, // Max module speed, in m/s
+                Constants.Swerve.centerToWheel, // Drive base radius in meters. Distance from robot center to furthest module.
+                new ReplanningConfig() // Default path replanning config. See the API for the options here
+            ),
+            () -> false,
+            this // Reference to this subsystem to set requirements
+        );
     }
 
     public ChassisSpeeds getChassisSpeeds() {
