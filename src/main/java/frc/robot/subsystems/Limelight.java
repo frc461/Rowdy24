@@ -17,15 +17,14 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
     DoubleArraySubscriber ySub;
     public double botPose[];
     public double botPoseX;
@@ -45,9 +44,7 @@ public class Limelight extends SubsystemBase {
     public void refreshValues(){
         table = NetworkTableInstance.getDefault().getTable("limelight");
         botPose = ySub.get(new double[6]);
-        tagX = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-        tagY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-        tagPresent = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+        tagPresent = table.getEntry("tv").getDouble(0);
         botPoseX = botPose[0]; //X+ is to the right if you are looking at the tag
         botPoseZ = botPose[2]; //Z+ is perpendicular to the plane of the tag (Z+ is away from tag on data side, Z- is away on non data side)
         updates++;
@@ -68,34 +65,19 @@ public class Limelight extends SubsystemBase {
         return botPose[2];
     }
 
-    public double getRoll(){
+    public double getPitch(){
         refreshValues();
         return botPose[3];
     }
 
-    public double getPitch(){
+    public double getYaw(){
         refreshValues();
         return botPose[4];
     }
 
-    public double getYaw(){
+    public double getRoll(){
         refreshValues();
         return botPose[5];
-    }
-
-    public double getTagX2D() {
-        refreshValues();
-        return tagX;
-    }
-
-    public double getTagY2D() {
-        refreshValues();
-        return tagY;
-    }
-
-    public double isTagPresent() {
-        refreshValues();
-        return tagPresent;
     }
 
     public Trajectory testTraj(Rotation2d yaw){

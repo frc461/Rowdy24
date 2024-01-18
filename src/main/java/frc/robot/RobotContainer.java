@@ -129,8 +129,8 @@ public class RobotContainer {
             operator));
 
     limelight.setDefaultCommand(
-        new TeleopLimelight(
-            limelight));
+        new TeleopLimelight(limelight)
+    );
 
     // Configure the button bindings
     configureButtonBindings();
@@ -241,9 +241,6 @@ public class RobotContainer {
     //             new Pose2d(0, 0, Rotation2d.fromDegrees(0)))));
 
     // driver_limelightButton.onTrue(limelight.getTagCommand());
-    driver_limelightButton.whileTrue(
-        Commands.sequence(new LimelightFollow(limelight, s_Swerve))
-        );
 
     // Commands.sequence(
     // new InstantCommand(() -> limelight.refreshValues()),
@@ -293,6 +290,9 @@ public class RobotContainer {
     SmartDashboard.putNumber("pitch", s_Swerve.gyro.getPitch());
     SmartDashboard.putNumber("roll", s_Swerve.gyro.getRoll());
     SmartDashboard.putNumber("elevatorPower", s_Elevator.elevatorPower());
+    SmartDashboard.putNumber("rollLimelight", limelight.getRoll());
+    SmartDashboard.putNumber("yawLimelight", limelight.getYaw());
+    SmartDashboard.putNumber("pitchLimelight", limelight.getPitch());
 
     // SmartDashboard.putNumber("Pid off",
     // chooser.getPIDController().getPositionError());

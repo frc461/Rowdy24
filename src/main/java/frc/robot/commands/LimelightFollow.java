@@ -6,19 +6,18 @@ import frc.robot.subsystems.Limelight;
 
 public class LimelightFollow extends Command {
     private Limelight s_limelight;
-    private Swerve s_Swerve;
+    private Swerve swerve;
     
-    public LimelightFollow(Limelight lime, Swerve swerve) {
-        s_limelight = lime;
-        s_Swerve = swerve;
-        addRequirements(s_limelight, s_Swerve);
+    public LimelightFollow(Limelight limelight, Swerve swerve) {
+        s_limelight = limelight;
+        this.swerve = swerve;
+        addRequirements(s_limelight, swerve);
     }
 
     @Override
     public void execute() {
-
-        if(s_limelight.isTagPresent() != 0) {
-            s_Swerve.rotateToDegree(s_limelight.getYaw());
+        if (s_limelight.getYaw() != 0) {
+            swerve.rotateToDegree(s_limelight.getYaw());
         }
     }
     
