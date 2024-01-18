@@ -18,7 +18,7 @@ public class LimelightFollow extends Command {
     public void execute() {
 
         if(s_limelight.isTagPresent() != 0) {
-            System.out.println(s_limelight.getTagX2D());
+            s_Swerve.rotateToDegree(s_limelight.getYaw());
         }
     }
     
