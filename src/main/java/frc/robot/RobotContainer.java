@@ -258,6 +258,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("odometry x", s_Swerve.getPose().getX());
     SmartDashboard.putNumber("odometry y", s_Swerve.getPose().getY());
 
+    SmartDashboard.putData("Field", s_Swerve.getField2d());
 
 
     // SmartDashboard.putNumber("Pid off",

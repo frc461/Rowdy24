@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -30,6 +31,7 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    final Field2d m_field = new Field2d();
 
     public Swerve() {
         
@@ -79,6 +81,12 @@ public class Swerve extends SubsystemBase {
                 },
             this // Reference to this subsystem to set requirements
         );
+
+        
+    }
+
+    public Field2d getField2d() {
+        return m_field;
     }
 
     public ChassisSpeeds getChassisSpeeds() {
@@ -188,6 +196,7 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions());  
+        m_field.setRobotPose(swerveOdometry.getPoseMeters());
         SmartDashboard.putString("Robot Location: ", getPose().getTranslation().toString());
         SmartDashboard.putString("Yaw status", getYaw().toString());
 
