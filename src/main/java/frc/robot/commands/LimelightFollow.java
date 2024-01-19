@@ -16,9 +16,7 @@ public class LimelightFollow extends Command {
 
     @Override
     public void execute() {
-        if (s_limelight.getYaw() != 0) {
-            swerve.rotateToDegree(s_limelight.getYaw());
-        }
+        swerve.rotateDegrees(s_limelight.getYaw());
     }
     
 }

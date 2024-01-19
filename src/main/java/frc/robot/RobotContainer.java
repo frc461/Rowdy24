@@ -231,7 +231,7 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    driver_limelightButton.onTrue(new InstantCommand(() -> s_Swerve.rotateDegrees(limelight.getYaw())));
+    driver_limelightButton.whileTrue(new LimelightFollow(limelight, s_Swerve));
 
   }
 

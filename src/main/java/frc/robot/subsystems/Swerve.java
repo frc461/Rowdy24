@@ -212,7 +212,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void rotateDegrees(double angle) {
-        rotateDegrees(getYaw().getDegrees() + angle);
+        rotateToDegree(getYaw().getDegrees() + angle);
     }
 
     //2023 autobalance function
