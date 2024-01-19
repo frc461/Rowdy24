@@ -35,7 +35,7 @@ public class Limelight extends SubsystemBase {
     public int updates;
 
     public Limelight() {
-        ySub = table.getDoubleArrayTopic("targetpose_cameraspace").subscribe(new double[6]);
+        ySub = table.getDoubleArrayTopic("targetpose_botspace").subscribe(new double[6]);
         botPose = new double[6];
         botPoseX = 0.0;
         botPoseZ = 0.0;

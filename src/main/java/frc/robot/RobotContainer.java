@@ -96,23 +96,17 @@ public class RobotContainer {
 
   /* Variables */
 
-
-    boolean driveStatus = false;
-  //new LimelightFollow(limelight, s_Swerve);
-
   /**
    * The container for the robot. Contains subsystems, IO devices, and commands.
    */
   public RobotContainer() {
-
-    double limelightOffset = 0;
     
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis)+limelightOffset,
+            () -> -driver.getRawAxis(rotationAxis),
             () -> robotCentric.getAsBoolean()));
 
     s_Elevator.setDefaultCommand(
@@ -237,9 +231,6 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    driver_limelightButton.onTrue(new InstantCommand(()-> limelight.getRX()));
-
-
     driver_limelightButton.onTrue(new InstantCommand(() -> s_Swerve.rotateDegrees(limelight.getYaw())));
 
   }
@@ -271,9 +262,9 @@ public class RobotContainer {
     // SmartDashboard.putNumber("Pid off",
     // chooser.getPIDController().getPositionError());
 
-    // SmartDashboard.putNumber("RX", s_Limelight.getRX());
-    // SmartDashboard.putNumber("RY", s_Limelight.getRY());
-    // SmartDashboard.putNumber("RZ", s_Limelight.getRZ());
+     SmartDashboard.putNumber("RX", limelight.getRX());
+     SmartDashboard.putNumber("RY", limelight.getRY());
+     SmartDashboard.putNumber("RZ", limelight.getRZ());
   }
 
   /**
