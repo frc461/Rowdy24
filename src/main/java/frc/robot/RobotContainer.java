@@ -104,13 +104,15 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, IO devices, and commands.
    */
   public RobotContainer() {
+
+    double limelightOffset = 0;
     
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
             () -> -driver.getRawAxis(translationAxis),
             () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
+            () -> -driver.getRawAxis(rotationAxis)+limelightOffset,
             () -> robotCentric.getAsBoolean()));
 
     s_Elevator.setDefaultCommand(
@@ -234,6 +236,11 @@ public class RobotContainer {
 
 
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+
+    driver_limelightButton.onTrue(new InstantCommand(()-> limelight.getRX()));
+
+
+    driver_limelightButton.onTrue(new InstantCommand(() -> s_Swerve.rotateDegrees(limelight.getYaw())));
 
   }
 

@@ -11,6 +11,11 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 //import java.util.function.Supplier;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -203,14 +208,11 @@ public class Swerve extends SubsystemBase {
 
         double rotate = rotController.calculate(gyro.getYaw(), target);
 
-        drive(new Translation2d(0, 0), -.25*rotate, false, true);        
+        drive(new Translation2d(0, 0), -.25*rotate, false, true);
     }
 
-    //Old and possibly deprecated (depreciated) function
-    public void limelightDrive(Limelight limelight){
-        while (limelight.getRZ() > 0.65) {
-            drive(new Translation2d(.1,0),0,false,false);
-        }
+    public void rotateDegrees(double angle) {
+        rotateDegrees(getYaw().getDegrees() + angle);
     }
 
     //2023 autobalance function
