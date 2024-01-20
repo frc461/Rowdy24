@@ -3,33 +3,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
 
-import java.util.List;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPoint;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.autos.AutoChooser;
-import frc.robot.autos.eventMap;
-// import frc.robot.autos.AutoChooser;
-// import frc.robot.autos.AutoTrajectories;
-//import frc.robot.autos.eventMap;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -48,7 +28,6 @@ public class RobotContainer {
   public final Swerve s_Swerve = new Swerve();
   private final Elevator s_Elevator = new Elevator();
   private final Limelight limelight = new Limelight();
-  private final AutoChooser chooser = new AutoChooser();
 
   /* Controllers */
   private final Joystick driver = new Joystick(0);
@@ -114,7 +93,6 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    SmartDashboard.putData("Auto Choices", chooser.getAutoChooser());
   }
 
   /**
@@ -176,7 +154,5 @@ public class RobotContainer {
    */
 
   public Command getAutonomousCommand() {
-
-    return chooser.getCommand();
   }
 }
