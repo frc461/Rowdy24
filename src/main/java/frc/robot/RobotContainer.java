@@ -226,7 +226,14 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    driver_limelightButton.whileTrue(new LimelightFollow(limelight, s_Swerve));
+    //driver_limelightButton.whileTrue(Commands.sequence(new LimelightFollow(limelight, s_Swerve)));
+    driver_limelightButton.whileTrue(new LimelightFollow(
+            limelight,
+            s_Swerve,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            () -> -driver.getRawAxis(rotationAxis),
+            () -> robotCentric.getAsBoolean()));
 
   }
 
