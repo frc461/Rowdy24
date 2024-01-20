@@ -52,8 +52,6 @@ public class RobotContainer {
   private final Limelight limelight = new Limelight();
   private final AutoChooser chooser = new AutoChooser();
 
-  public double intakeVec = 0;
-
   public Command autoCode = Commands.sequence(new PrintCommand("no auto selected"));
 
   /* Controllers */
