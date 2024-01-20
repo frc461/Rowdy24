@@ -12,8 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -27,6 +27,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import frc.robot.subsystems.Limelight;
+
 public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
@@ -39,7 +41,6 @@ public class Swerve extends SubsystemBase {
         
         gyro.configFactoryDefault();
         zeroGyro();
-        
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -82,7 +83,7 @@ public class Swerve extends SubsystemBase {
             this // Reference to this subsystem to set requirements
         );
 
-        
+
     }
 
     public Field2d getField2d() {
@@ -99,7 +100,7 @@ public class Swerve extends SubsystemBase {
     //     setStates(targetStates);
 
     // }
-// 
+//
 
 
     public void driveAutoBuilder(ChassisSpeeds speeds) {
@@ -209,22 +210,33 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    // Puts the wheels in an X configuration
+    public void setXMode(){
+        SwerveModuleState Xstates[] = {new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState()};
+
+        for(int i = 0; i < 5; i++){
+            Xstates[i].speedMetersPerSecond = 0.0;
+            Xstates[i].angle.equals(new Rotation2d().fromDegrees(i*90)); //Rotates each successive wheel 90 degrees further
+        }
+
+        setModuleStates(Xstates);
+    }
+
+    //attempts to rotate the drivetrain to a given value
     public void rotateToDegree(double target){
         PIDController rotController = new PIDController(0.1, 0.0008, 0.001);
         rotController.enableContinuousInput(-180, 180);
 
         double rotate = rotController.calculate(gyro.getYaw(), target);
 
-        drive(new Translation2d(0, 0), -.25*rotate, false, true);        
+        drive(new Translation2d(0, 0), -.25*rotate, false, true);
     }
 
-    // public void setXMode(){
-        // Constants.Mod0.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)));
-        // .setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90)));
-        // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90)));
-        // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90+90)));
-    // }
+    public void rotateDegrees(double angle) {
+        rotateToDegree(getYaw().getDegrees() + angle);
+    }
 
+    //2023 autobalance function
     public void autoBalance(){
         double target = 0;
         System.out.println("Autobalance Start");
