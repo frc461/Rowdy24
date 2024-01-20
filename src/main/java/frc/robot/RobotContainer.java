@@ -50,7 +50,6 @@ public class RobotContainer {
   private final Intake s_Intake = new Intake();
   private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
   private final Limelight limelight = new Limelight();
-  // private final AutoTrajectories trajectories = new AutoTrajectories();
   private final AutoChooser chooser = new AutoChooser();
 
   public double intakeVec = 0;
