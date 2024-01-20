@@ -3,19 +3,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
 
-import java.util.List;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPoint;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -25,8 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.autos.AutoChooser;
-import frc.robot.autos.eventMap;
 // import frc.robot.autos.AutoChooser;
 // import frc.robot.autos.AutoTrajectories;
 //import frc.robot.autos.eventMap;
@@ -50,7 +40,12 @@ public class RobotContainer {
   private final Intake s_Intake = new Intake();
   private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
   private final Limelight limelight = new Limelight();
-  private final AutoChooser chooser = new AutoChooser();
+  // private final AutoTrajectories trajectories = new AutoTrajectories();
+  private final SendableChooser<Command> chooser;
+
+  public double intakeVec = 0;
+
+  public Command autoCode = Commands.sequence(new PrintCommand("no auto selected"));
 
   /* Controllers */
   private final Joystick driver = new Joystick(0);
@@ -125,8 +120,8 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
-
-    SmartDashboard.putData("Auto Choices", chooser.getAutoChooser());
+    chooser = AutoBuilder.buildAutoChooser("defaultAuto");
+    SmartDashboard.putData("Auto Choices", chooser);
   }
 
   /**
@@ -261,6 +256,12 @@ public class RobotContainer {
     SmartDashboard.putNumber("yawLimelight", limelight.getYaw());
     SmartDashboard.putNumber("pitchLimelight", limelight.getPitch());
 
+    SmartDashboard.putNumber("odometry x", s_Swerve.getPose().getX());
+    SmartDashboard.putNumber("odometry y", s_Swerve.getPose().getY());
+
+    SmartDashboard.putData("Field", s_Swerve.getField2d());
+
+
     // SmartDashboard.putNumber("Pid off",
     // chooser.getPIDController().getPositionError());
 
@@ -276,7 +277,6 @@ public class RobotContainer {
    */
 
   public Command getAutonomousCommand() {
-
-    return chooser.getCommand();
+    return chooser.getSelected();
   }
 }

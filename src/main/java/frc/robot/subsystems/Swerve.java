@@ -21,26 +21,24 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import frc.robot.subsystems.Limelight;
-
 public class Swerve extends SubsystemBase {
-
-    private final Limelight s_limelight = new Limelight();
-
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    final Field2d m_field = new Field2d();
 
     public Swerve() {
         
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         
         gyro.configFactoryDefault();
-        zeroGyro();        
+        zeroGyro();
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -63,15 +61,31 @@ public class Swerve extends SubsystemBase {
             this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveAutoBuilder, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                new PIDConstants(1, 0.0, 0.0), // Translation PID constants
-                new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
+                new PIDConstants(0, 0.0, 0), // Translation PID constants
+                new PIDConstants(0, 0.0, 0), // Rotation PID constants
                 Constants.Swerve.maxSpeed, // Max module speed, in m/s
                 Constants.Swerve.centerToWheel, // Drive base radius in meters. Distance from robot center to furthest module.
-                new ReplanningConfig() // Default path replanning config. See the API for the options here
+                new ReplanningConfig(true, true) // Default path replanning config. See the API for the options here
             ),
-            () -> false,
+            () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
             this // Reference to this subsystem to set requirements
         );
+
+
+    }
+
+    public Field2d getField2d() {
+        return m_field;
     }
 
     public ChassisSpeeds getChassisSpeeds() {
@@ -79,12 +93,12 @@ public class Swerve extends SubsystemBase {
     }
 
     // public void driveAutoBuilder(ChassisSpeeds speeds) {
-    //     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+    //     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(speeds, 0.001);
     //     SwerveModuleState[] targetStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
     //     setStates(targetStates);
 
     // }
-
+//
 
 
     public void driveAutoBuilder(ChassisSpeeds speeds) {
@@ -181,6 +195,7 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions());  
+        m_field.setRobotPose(swerveOdometry.getPoseMeters());
         SmartDashboard.putString("Robot Location: ", getPose().getTranslation().toString());
         SmartDashboard.putString("Yaw status", getYaw().toString());
 
