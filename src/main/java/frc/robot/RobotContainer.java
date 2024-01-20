@@ -47,8 +47,6 @@ public class RobotContainer {
   /* Subsystems */
   public final Swerve s_Swerve = new Swerve();
   private final Elevator s_Elevator = new Elevator();
-  private final Intake s_Intake = new Intake();
-  private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
   private final Limelight limelight = new Limelight();
   private final AutoChooser chooser = new AutoChooser();
 
@@ -109,16 +107,6 @@ public class RobotContainer {
             s_Elevator,
             () -> -operator.getRawAxis(elevatorAxis)));
 
-    s_Wrist.setDefaultCommand(
-        new TeleopWrist(
-            s_Wrist,
-            () -> -operator.getRawAxis(wristAxis)));
-
-    s_Intake.setDefaultCommand(
-        new TeleopIntake(
-            s_Intake,
-            operator));
-
     limelight.setDefaultCommand(
         new TeleopLimelight(limelight)
     );
@@ -140,89 +128,6 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     /* Driver Buttons (and op buttons) */
-      
-    w_preset_0.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
-    w_preset_1.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_MID_LIMIT)));
-    w_preset_2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_LOWER_LIMIT)));
-
-    e_presButton_0.onTrue( // Preset to score high cone
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(true)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
-            new WaitCommand(.25),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighConeScore)))
-
-    );
-
-    e_presButton_1.onTrue( // Preset to score mid cone
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(true)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidScore)),
-            new WaitCommand(.1),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidConeScore))));
-
-    e_presButton_2.onTrue( // Preset to pick up fallen cone
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(false)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup))));
-
-    e_presButton_3.onTrue( // Preset to pick up cone from single substation
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(false)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup2))));
-
-    w_preset_0.onTrue( // Preset to score high cube
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(true)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighCubeScore)),
-            new WaitCommand(.25),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore))));
-
-    w_preset_1.onTrue( // Preset to pick up cube
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(true)),
-            new InstantCommand(() -> LEDone.set(false)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristCubePickup))
-        // Set lights Purple
-        ));
-
-    w_preset_2.onTrue( // Preset to score mid cube
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(true)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidCubeScore)),
-            new WaitCommand(.1),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidCubeScore))));
-
-    operator_stowButton.onTrue(
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(false)),
-            new InstantCommand(() -> LEDone.set(false)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))));
-
-    driver_stowButton2.onTrue(
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(false)),
-            new InstantCommand(() -> LEDone.set(false)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))));
-
-    driver_stowButton.onTrue(
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(false)),
-            new InstantCommand(() -> LEDone.set(false)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))));
-
 
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
@@ -248,11 +153,6 @@ public class RobotContainer {
     SmartDashboard.putNumber("Elevator Position", s_Elevator.getEncoder().getPosition());
     SmartDashboard.putNumber("Elevator Target", s_Elevator.getTarget());
     SmartDashboard.putBoolean("elevator limit triggered?", s_Elevator.elevatorSwitchTriggered());
-    SmartDashboard.putNumber("Wrist Position", s_Wrist.getEncoder().getPosition());
-    SmartDashboard.putNumber("Wrist Target", s_Wrist.getTarget());
-    SmartDashboard.putBoolean("cube beam broken?: ", s_Intake.cubeBeamBroken());
-    SmartDashboard.putBoolean("cone beam broken?", s_Intake.coneBeamBroken());
-    SmartDashboard.putNumber("intake speed", s_Intake.getSpeed());
     SmartDashboard.putNumber("yaw", s_Swerve.gyro.getYaw());
     SmartDashboard.putNumber("pitch", s_Swerve.gyro.getPitch());
     SmartDashboard.putNumber("roll", s_Swerve.gyro.getRoll());
