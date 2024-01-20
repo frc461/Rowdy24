@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
@@ -39,11 +40,17 @@ public class LimelightFollow extends Command {
        /* Get Values, Deadband*/
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
-        
+
+        /* Get rotation */
+        PIDController rotController = new PIDController(0.3, 0.0008, 0.001);
+        rotController.enableContinuousInput(-180, 180);
+
+        double rotate = rotController.calculate(s_Swerve.gyro.getYaw(), s_Swerve.getYaw().getDegrees() + 15*s_limelight.getRX());
+
         /* Drive */
         s_Swerve.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
-            s_limelight.getYaw(), 
+            -rotate,
             !robotCentricSup.getAsBoolean(), 
             true
         );
