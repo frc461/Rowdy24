@@ -12,8 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -25,7 +25,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import frc.robot.subsystems.Limelight;
+
 public class Swerve extends SubsystemBase {
+
+    private final Limelight s_limelight = new Limelight();
+
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
@@ -35,8 +40,7 @@ public class Swerve extends SubsystemBase {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         
         gyro.configFactoryDefault();
-        zeroGyro();
-        
+        zeroGyro();        
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -57,7 +61,7 @@ public class Swerve extends SubsystemBase {
             this::getPose, // Robot pose supplier
             this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            this::_driveAutoBuilder, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            this::driveAutoBuilder, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                 new PIDConstants(1, 0.0, 0.0), // Translation PID constants
                 new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
@@ -65,6 +69,7 @@ public class Swerve extends SubsystemBase {
                 Constants.Swerve.centerToWheel, // Drive base radius in meters. Distance from robot center to furthest module.
                 new ReplanningConfig() // Default path replanning config. See the API for the options here
             ),
+            () -> false,
             this // Reference to this subsystem to set requirements
         );
     }
@@ -73,13 +78,30 @@ public class Swerve extends SubsystemBase {
         return Constants.Swerve.swerveKinematics.toChassisSpeeds(getModuleStates());
     }
 
-    public void _driveAutoBuilder(ChassisSpeeds speeds) {
+    // public void driveAutoBuilder(ChassisSpeeds speeds) {
+    //     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+    //     SwerveModuleState[] targetStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
+    //     setStates(targetStates);
+
+    // }
+
+
+
+    public void driveAutoBuilder(ChassisSpeeds speeds) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
         
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
         
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], true);
+        }
+    }
+
+    public void setStates(SwerveModuleState[] targetStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Constants.Swerve.maxSpeed);
+        
+        for(int i = 0; i < mSwerveMods.length; i++) {
+            mSwerveMods[i].setDesiredState(targetStates[i], false);
         }
     }
 
@@ -171,28 +193,33 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    // Puts the wheels in an X configuration
+    public void setXMode(){
+        SwerveModuleState Xstates[] = {new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState(), new SwerveModuleState()};
+
+        for(int i = 0; i < 5; i++){
+            Xstates[i].speedMetersPerSecond = 0.0;
+            Xstates[i].angle.equals(new Rotation2d().fromDegrees(i*90)); //Rotates each successive wheel 90 degrees further
+        }
+
+        setModuleStates(Xstates);
+    }
+
+    //attempts to rotate the drivetrain to a given value
     public void rotateToDegree(double target){
-        PIDController rotController = new PIDController(.1,0.0008,0.001);
+        PIDController rotController = new PIDController(0.1, 0.0008, 0.001);
         rotController.enableContinuousInput(-180, 180);
 
         double rotate = rotController.calculate(gyro.getYaw(), target);
 
-        drive(new Translation2d(0, 0), -.25*rotate, false, true);        
+        drive(new Translation2d(0, 0), -.25*rotate, false, true);
     }
 
-    // public void setXMode(){
-        // Constants.Mod0.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45)));
-        // .setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90)));
-        // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90)));
-        // SwerveModule.setAngle(new SwerveModuleState(0.0, Rotation2d.fromDegrees(45+90+90+90)));
-    // }
-
-    public void limelightDrive(Limelight limelight){
-        while (limelight.getRZ() > 0.65) {
-            drive(new Translation2d(.1,0),0,false,false);
-        }
+    public void rotateDegrees(double angle) {
+        rotateToDegree(getYaw().getDegrees() + angle);
     }
 
+    //2023 autobalance function
     public void autoBalance(){
         double target = 0;
         System.out.println("Autobalance Start");
