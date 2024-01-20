@@ -85,7 +85,6 @@ public class RobotContainer {
   private DigitalOutput LEDone = new DigitalOutput(9);
 
   /* Variables */
-  boolean driveStatus = false;
 
   /**
    * The container for the robot. Contains subsystems, IO devices, and commands.
@@ -116,8 +115,8 @@ public class RobotContainer {
             operator));
 
     limelight.setDefaultCommand(
-        new TeleopLimelight(
-            limelight));
+        new TeleopLimelight(limelight)
+    );
 
     // Configure the button bindings
     configureButtonBindings();
@@ -136,16 +135,6 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     /* Driver Buttons (and op buttons) */
-
-    SmartDashboard.putData("Pathfind to Pickup Pos", AutoBuilder.pathfindToPose(
-        new Pose2d(14.0, 6.5, Rotation2d.fromDegrees(0)), 
-        new PathConstraints(
-          4.0, 4.0, 
-          Units.degreesToRadians(360), Units.degreesToRadians(540)
-        ), 
-        0, 
-        2.0
-      ));
       
     w_preset_0.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
     w_preset_1.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_MID_LIMIT)));
@@ -232,6 +221,15 @@ public class RobotContainer {
 
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
+    //driver_limelightButton.whileTrue(Commands.sequence(new LimelightFollow(limelight, s_Swerve)));
+    driver_limelightButton.whileTrue(new LimelightFollow(
+            limelight,
+            s_Swerve,
+            () -> -driver.getRawAxis(translationAxis),
+            () -> -driver.getRawAxis(strafeAxis),
+            () -> -driver.getRawAxis(rotationAxis),
+            () -> robotCentric.getAsBoolean()));
+
   }
 
   public void printValues() { // all of the smartdashboard prints:
@@ -254,6 +252,9 @@ public class RobotContainer {
     SmartDashboard.putNumber("pitch", s_Swerve.gyro.getPitch());
     SmartDashboard.putNumber("roll", s_Swerve.gyro.getRoll());
     SmartDashboard.putNumber("elevatorPower", s_Elevator.elevatorPower());
+    SmartDashboard.putNumber("rollLimelight", limelight.getRoll());
+    SmartDashboard.putNumber("yawLimelight", limelight.getYaw());
+    SmartDashboard.putNumber("pitchLimelight", limelight.getPitch());
 
     SmartDashboard.putNumber("odometry x", s_Swerve.getPose().getX());
     SmartDashboard.putNumber("odometry y", s_Swerve.getPose().getY());
@@ -264,9 +265,9 @@ public class RobotContainer {
     // SmartDashboard.putNumber("Pid off",
     // chooser.getPIDController().getPositionError());
 
-    // SmartDashboard.putNumber("RX", s_Limelight.getRX());
-    // SmartDashboard.putNumber("RY", s_Limelight.getRY());
-    // SmartDashboard.putNumber("RZ", s_Limelight.getRZ());
+     SmartDashboard.putNumber("RX", limelight.getRX());
+     SmartDashboard.putNumber("RY", limelight.getRY());
+     SmartDashboard.putNumber("RZ", limelight.getRZ());
   }
 
   /**
