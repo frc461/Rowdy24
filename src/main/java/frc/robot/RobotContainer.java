@@ -52,8 +52,6 @@ public class RobotContainer {
   private final Limelight limelight = new Limelight();
   private final AutoChooser chooser = new AutoChooser();
 
-  public Command autoCode = Commands.sequence(new PrintCommand("no auto selected"));
-
   /* Controllers */
   private final Joystick driver = new Joystick(0);
   private final Joystick operator = new Joystick(1);
