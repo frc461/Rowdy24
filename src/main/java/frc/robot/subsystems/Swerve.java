@@ -62,11 +62,11 @@ public class Swerve extends SubsystemBase {
             this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveAutoBuilder, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                new PIDConstants(0.5, 0.0, 0.01), // Translation PID constants
-                new PIDConstants(0.5, 0.0, 0.01), // Rotation PID constants
+                new PIDConstants(0, 0.0, 0), // Translation PID constants
+                new PIDConstants(0, 0.0, 0), // Rotation PID constants
                 Constants.Swerve.maxSpeed, // Max module speed, in m/s
                 Constants.Swerve.centerToWheel, // Drive base radius in meters. Distance from robot center to furthest module.
-                new ReplanningConfig() // Default path replanning config. See the API for the options here
+                new ReplanningConfig(true, true) // Default path replanning config. See the API for the options here
             ),
             () -> {
                     // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -108,7 +108,7 @@ public class Swerve extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
         
         for(SwerveModule mod : mSwerveMods){
-            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], false);
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], true);
         }
     }
 
