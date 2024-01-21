@@ -12,46 +12,48 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Limelight;
 
 public class LimelightFollow extends Command {
-    private Limelight s_limelight;
-    private Swerve s_Swerve;    
-    private DoubleSupplier translationSup;
-    private DoubleSupplier strafeSup;
-    private DoubleSupplier rotationSup;
-    private BooleanSupplier robotCentricSup;
+    private final Limelight limelight;
+    private final Swerve swerve;
+    private final DoubleSupplier translation;
+    private final DoubleSupplier strafe;
+    private final BooleanSupplier robotCentric;
 
-   
-
-    
-    public LimelightFollow(Limelight limelight, Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
-        s_limelight = limelight;
-        this.s_Swerve = s_Swerve;
-        this.translationSup = translationSup;
-        this.strafeSup = strafeSup;
-        this.rotationSup = rotationSup;
-        this.robotCentricSup = robotCentricSup;
-        addRequirements(s_limelight, s_Swerve);
+    public LimelightFollow(Limelight limelight, Swerve swerve, DoubleSupplier translation, DoubleSupplier strafeSup, BooleanSupplier robotCentric) {
+        this.limelight = limelight;
+        this.swerve = swerve;
+        this.translation = translation;
+        this.strafe = strafeSup;
+        this.robotCentric = robotCentric;
+        addRequirements(this.limelight, swerve);
     }
 
+
+    /* how to go to apriltag:
+     * find tag (duh)
+     * find position of tag relative to robot
+     * rotate from current position to tag using rotation PID controller
+     * variate PID magnitude by distance factor
+     * allow turret mode ("locked" rotation to tag)
+     */
     @Override
     public void execute() {
+        limelight.refreshValues();
 
-        s_limelight.refreshValues();
+       /* Apply Deadband*/
+        double translationVal = MathUtil.applyDeadband(translation.getAsDouble(), Constants.stickDeadband);
+        double strafeVal = MathUtil.applyDeadband(strafe.getAsDouble(), Constants.stickDeadband);
 
-       /* Get Values, Deadband*/
-        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
-        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
-
-        /* Get rotation */
+        /* Calculate Rotation Magnitude */
         PIDController rotController = new PIDController(0.3, 0.0008, 0.001);
         rotController.enableContinuousInput(-180, 180);
 
-        double rotate = rotController.calculate(s_Swerve.gyro.getYaw(), s_Swerve.getYaw().getDegrees() + 15*s_limelight.getRX());
+        double rotate = rotController.calculate(swerve.gyro.getYaw(), swerve.getYaw().getDegrees() + 15* limelight.getRX());
 
         /* Drive */
-        s_Swerve.drive(
+        swerve.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
             -rotate,
-            !robotCentricSup.getAsBoolean(), 
+            !robotCentric.getAsBoolean(),
             true
         );
     }

@@ -79,10 +79,11 @@ public class RobotContainer {
     /**
     * The container for the robot. Contains subsystems, IO devices, and commands.
     */
+
     public RobotContainer() {
         swerve.setDefaultCommand(
             new TeleopSwerve(
-                    swerve,
+                swerve,
                 () -> -driver.getRawAxis(translationAxis),
                 () -> -driver.getRawAxis(strafeAxis),
                 () -> -driver.getRawAxis(rotationAxis),
@@ -115,8 +116,7 @@ public class RobotContainer {
     */
 
     private void configureButtonBindings() {
-        /* Driver Buttons (and op buttons) */
-
+        /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
 
         driverLimelight.whileTrue(new LimelightFollow(
@@ -124,9 +124,10 @@ public class RobotContainer {
                 swerve,
                 () -> -driver.getRawAxis(translationAxis),
                 () -> -driver.getRawAxis(strafeAxis),
-                () -> -driver.getRawAxis(rotationAxis),
-                robotCentric));
+                robotCentric)
+        );
 
+        /* Operator Buttons */
     }
 
     // smartdashboard prints
