@@ -1,5 +1,11 @@
 package frc.robot;
 
+import com.ctre.phoenix.sensors.CANCoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,14 +18,6 @@ import frc.lib.util.CANSparkMaxUtil;
 import frc.lib.math.OnboardModuleState;
 import frc.lib.util.CANCoderUtil;
 import frc.lib.util.CANCoderUtil.CCUsage;
-
-
-import com.ctre.phoenix.sensors.CANCoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
 
 public class SwerveModule {
     public int moduleNumber;
