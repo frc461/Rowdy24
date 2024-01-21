@@ -12,14 +12,14 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.Constants;
 import frc.robot.subsystems.Limelight;
 
-public class LimelightFollow extends Command {
+public class TeleopLimelightTurret extends Command {
     private final Limelight limelight;
     private final Swerve swerve;
     private final DoubleSupplier translation;
     private final DoubleSupplier strafe;
     private final BooleanSupplier robotCentric;
 
-    public LimelightFollow(Limelight limelight, Swerve swerve, DoubleSupplier translation, DoubleSupplier strafeSup, BooleanSupplier robotCentric) {
+    public TeleopLimelightTurret(Limelight limelight, Swerve swerve, DoubleSupplier translation, DoubleSupplier strafeSup, BooleanSupplier robotCentric) {
         this.limelight = limelight;
         this.swerve = swerve;
         this.translation = translation;

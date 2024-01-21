@@ -115,7 +115,7 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
 
-        driverLimelight.whileTrue(new LimelightFollow(
+        driverLimelight.whileTrue(new TeleopLimelightTurret(
                 limelight,
                 swerve,
                 () -> -driver.getRawAxis(translationAxis),
