@@ -24,46 +24,55 @@ import frc.robot.subsystems.*;
 
 public class RobotContainer {
     /* Subsystems */
-    public final Swerve s_Swerve = new Swerve();
-    private final Elevator s_Elevator = new Elevator();
+    public final Swerve swerve = new Swerve();
+    private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick operator = new Joystick(1);
 
+    /* Operate Controls */
+    private final int wristAxis = XboxController.Axis.kLeftY.value;
+    private final int elevatorAxis = XboxController.Axis.kRightY.value;
+
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    // op controls
-    private final int wristAxis = XboxController.Axis.kLeftY.value;
-    private final int elevatorAxis = XboxController.Axis.kRightY.value;
+    /* Operator Buttons */
+    // TODO: change generic button locations to respective functions
+    private final JoystickButton operatorA = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton operatorB = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final JoystickButton operatorX = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton operatorY = new JoystickButton(operator, XboxController.Button.kY.value);
 
-    private final JoystickButton e_presButton_0 = new JoystickButton(operator, XboxController.Button.kY.value);
-    private final JoystickButton e_presButton_1 = new JoystickButton(operator, XboxController.Button.kX.value);
-    private final JoystickButton e_presButton_2 = new JoystickButton(operator, XboxController.Button.kA.value);
-    private final JoystickButton e_presButton_3 = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final JoystickButton operatorLeftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton operatorRightBumper = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
 
-    private final POVButton w_preset_0 = new POVButton(operator, 0);
-    private final POVButton w_preset_1 = new POVButton(operator, 90);
-    private final POVButton w_preset_2 = new POVButton(operator, 180);
-    private final POVButton operator_stowButton = new POVButton(operator, 270);
+    private final POVButton operatorZero = new POVButton(operator, 0);
+    private final POVButton operatorNinety = new POVButton(operator, 90);
+    private final POVButton operatorOneEighty = new POVButton(operator, 180);
+    private final POVButton operatorTwoSeventy = new POVButton(operator, 270);
 
     /* Driver Buttons */
+    private final JoystickButton driverA = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final JoystickButton driverLimelight = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton driverX = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton driver_stowButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    private final JoystickButton driver_limelightButton = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton driverRightBumper = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
-    private final POVButton driver_stowButton2 = new POVButton(operator, 270);
-    // private final JoystickButton xModeButton = new JoystickButton(driver,
-    // XboxController.Button.kX.value);
+    private final POVButton driverZero = new POVButton(driver, 0);
+    private final POVButton driverNinety = new POVButton(driver, 90);
+    private final POVButton driverOneEighty = new POVButton(driver, 180);
+    private final POVButton driverTwoSeventy = new POVButton(driver, 270);
 
-    /* LED Initialization Code */
-    private DigitalOutput LEDzero = new DigitalOutput(8);
-    private DigitalOutput LEDone = new DigitalOutput(9);
+    /* LED Initialization */
+    private final DigitalOutput lightEight = new DigitalOutput(8);
+    private final DigitalOutput lightNine = new DigitalOutput(9);
 
     /* Variables */
 
@@ -71,18 +80,22 @@ public class RobotContainer {
     * The container for the robot. Contains subsystems, IO devices, and commands.
     */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
+        swerve.setDefaultCommand(
             new TeleopSwerve(
-                s_Swerve,
+                    swerve,
                 () -> -driver.getRawAxis(translationAxis),
                 () -> -driver.getRawAxis(strafeAxis),
                 () -> -driver.getRawAxis(rotationAxis),
-                () -> robotCentric.getAsBoolean()));
+                robotCentric
+            )
+        );
 
-        s_Elevator.setDefaultCommand(
+        elevator.setDefaultCommand(
             new TeleopElevator(
-                s_Elevator,
-                () -> -operator.getRawAxis(elevatorAxis)));
+                    elevator,
+                () -> -operator.getRawAxis(elevatorAxis)
+            )
+        );
 
         limelight.setDefaultCommand(
             new TeleopLimelight(limelight)
@@ -104,29 +117,30 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons (and op buttons) */
 
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
 
-        driver_limelightButton.whileTrue(new LimelightFollow(
+        driverLimelight.whileTrue(new LimelightFollow(
                 limelight,
-                s_Swerve,
+                swerve,
                 () -> -driver.getRawAxis(translationAxis),
                 () -> -driver.getRawAxis(strafeAxis),
                 () -> -driver.getRawAxis(rotationAxis),
-                () -> robotCentric.getAsBoolean()));
+                robotCentric));
 
     }
 
-    public void printValues() { // all of the smartdashboard prints:
+    // smartdashboard prints
+    public void printValues() {
         // robot angular position
-        SmartDashboard.putNumber("yaw", s_Swerve.gyro.getYaw());
-        SmartDashboard.putNumber("pitch", s_Swerve.gyro.getPitch());
-        SmartDashboard.putNumber("roll", s_Swerve.gyro.getRoll());
+        SmartDashboard.putNumber("yaw", swerve.gyro.getYaw());
+        SmartDashboard.putNumber("pitch", swerve.gyro.getPitch());
+        SmartDashboard.putNumber("roll", swerve.gyro.getRoll());
 
         // elevator debug
-        SmartDashboard.putNumber("Elevator Position", s_Elevator.getEncoder().getPosition());
-        SmartDashboard.putNumber("Elevator Target", s_Elevator.getTarget());
-        SmartDashboard.putBoolean("elevator limit triggered?", s_Elevator.elevatorSwitchTriggered());
-        SmartDashboard.putNumber("elevatorPower", s_Elevator.elevatorPower());
+        SmartDashboard.putNumber("Elevator Position", elevator.getEncoder().getPosition());
+        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
+        SmartDashboard.putBoolean("elevator limit triggered?", elevator.elevatorSwitchTriggered());
+        SmartDashboard.putNumber("elevatorPower", elevator.elevatorPower());
 
         // limelight debug
         SmartDashboard.putNumber("Limelight updates", limelight.updates);
@@ -145,6 +159,6 @@ public class RobotContainer {
     */
 
     public Command getAutonomousCommand() {
-      return null;
+        return null;
     }
 }
