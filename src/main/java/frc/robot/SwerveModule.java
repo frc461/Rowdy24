@@ -38,7 +38,7 @@ public class SwerveModule {
     private SwerveModulePosition currentPosition = new SwerveModulePosition();
     private SwerveModuleState currentState = new SwerveModuleState();
 
-    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.DRIVE_KS, Constants.Swerve.DRIVE_KV, Constants.Swerve.DRIVE_KA);
+    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.DRIVE_S, Constants.Swerve.DRIVE_V, Constants.Swerve.DRIVE_A);
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;
@@ -117,10 +117,10 @@ public class SwerveModule {
         mAngleMotor.setInverted(Constants.Swerve.ANGLE_MOTOR_INVERT);
         mAngleMotor.setIdleMode(Constants.Swerve.ANGLE_NEUTRAL_MODE);
         integratedAngleEncoder.setPositionConversionFactor(Constants.Swerve.ANGLE_CONVERSION_FACTOR);
-        angleController.setP(Constants.Swerve.ANGLE_KP);
-        angleController.setI(Constants.Swerve.ANGLE_KI);
-        angleController.setD(Constants.Swerve.ANGLE_KD);
-        angleController.setFF(Constants.Swerve.ANGLE_KF);
+        angleController.setP(Constants.Swerve.ANGLE_P);
+        angleController.setI(Constants.Swerve.ANGLE_I);
+        angleController.setD(Constants.Swerve.ANGLE_D);
+        angleController.setFF(Constants.Swerve.ANGLE_F);
         mAngleMotor.enableVoltageCompensation(Constants.Swerve.VOLTAGE_COMP);
         mAngleMotor.burnFlash();
         resetToAbsolute();
@@ -135,10 +135,10 @@ public class SwerveModule {
         mDriveMotor.setIdleMode(Constants.Swerve.DRIVE_NEUTRAL_MODE);
         driveEncoder.setVelocityConversionFactor(Constants.Swerve.DRIVE_CONVERSION_VELOCITY_FACTOR);
         driveEncoder.setPositionConversionFactor(Constants.Swerve.DRIVE_CONVERSION_POSITION_FACTOR);
-        driveController.setP(Constants.Swerve.ANGLE_KP);
-        driveController.setI(Constants.Swerve.ANGLE_KI);
-        driveController.setD(Constants.Swerve.ANGLE_KD);
-        driveController.setFF(Constants.Swerve.ANGLE_KF);
+        driveController.setP(Constants.Swerve.DRIVE_P);
+        driveController.setI(Constants.Swerve.DRIVE_I);
+        driveController.setD(Constants.Swerve.DRIVE_D);
+        driveController.setFF(Constants.Swerve.DRIVE_F);
         mDriveMotor.enableVoltageCompensation(Constants.Swerve.VOLTAGE_COMP);
         mDriveMotor.burnFlash();
         driveEncoder.setPosition(0.0);

@@ -11,10 +11,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase{
-    private final CANSparkMax elevator = new CANSparkMax(31, MotorType.kBrushless);
-    private final PIDController pidController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, Constants.ELEVATOR_D);
+    private final CANSparkMax elevator = new CANSparkMax(Constants.Elevator.ELEVATOR_MOTOR_ID, MotorType.kBrushless);
+    private final PIDController pidController = new PIDController(
+            Constants.Elevator.ELEVATOR_P,
+            Constants.Elevator.ELEVATOR_I,
+            Constants.Elevator.ELEVATOR_D
+    );
     private final RelativeEncoder encoder = elevator.getEncoder();
-    private final DigitalInput elevatorSwitch = new DigitalInput(3); //limit switch that re-zeros the elevator encoder;
+    private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_SWITCH_ID); // limit switch that re-zeros the elevator encoder
     private double position;
     private double target;
 
@@ -23,8 +27,8 @@ public class Elevator extends SubsystemBase{
         target = encoder.getPosition();
 
         elevator.restoreFactoryDefaults();
-        elevator.setSmartCurrentLimit(70);
-        elevator.setInverted(true);
+        elevator.setSmartCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
+        elevator.setInverted(Constants.Elevator.ELEVATOR_INVERT);
     }
 
     @Override
@@ -47,7 +51,7 @@ public class Elevator extends SubsystemBase{
 
     public void checkLimitSwitches() {
         if (elevatorSwitchTriggered()) {
-            encoder.setPosition(0);
+            encoder.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
         }
     }
 
@@ -58,12 +62,12 @@ public class Elevator extends SubsystemBase{
     public void moveElevator(double axisValue) {
         target = position;
         if (axisValue < 0 && elevatorSwitchTriggered()) {
-            target = 0;
+            target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
             holdHeight();
             return;
         }
-        else if (axisValue > 0 && position >= Constants.ELEVATOR_UPPER_LIMIT) {
-            target = Constants.ELEVATOR_UPPER_LIMIT;
+        else if (axisValue > 0 && position >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
+            target = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
             holdHeight();
             return;
         }

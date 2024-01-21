@@ -50,23 +50,30 @@ public class Swerve extends SubsystemBase {
             this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             speeds -> {
-                // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
-                setModuleStates(swerveModuleStates);
+                    // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                    SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
+                    setModuleStates(swerveModuleStates);
             },
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                new PIDConstants(1, 0.0, 0.0), // Translation PID constants
-                new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
-                Constants.Swerve.MAX_SPEED, // Max module speed, in m/s
-                Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to furthest module.
-                new ReplanningConfig() // Default path replanning config. See the API for the options here
+                    new PIDConstants(
+                            Constants.Auto.AUTO_DRIVE_P,
+                            Constants.Auto.AUTO_DRIVE_I,
+                            Constants.Auto.AUTO_DRIVE_D
+                    ), // Translation PID constants
+                    new PIDConstants(
+                            Constants.Auto.AUTO_ANGLE_P,
+                            Constants.Auto.AUTO_ANGLE_I,
+                            Constants.Auto.AUTO_ANGLE_D), // Rotation PID constants
+                    Constants.Swerve.MAX_SPEED, // Max module speed, in m/s
+                    Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new ReplanningConfig() // Default path replanning config. See the API for the options here
             ),
             () -> {
-                // Boolean supplier that controls when the path will be mirrored for the red alliance
-                // This will flip the path being followed to the red side of the field.
-                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-                var alliance = DriverStation.getAlliance();
-                return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+                    var alliance = DriverStation.getAlliance();
+                    return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
             },
             this // Reference to this subsystem to set requirements
         );
@@ -107,7 +114,9 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getYaw() {
-        return (Constants.Swerve.INVERT_GYRO) ? 180 - gyro.getYaw() : gyro.getYaw();
+        return (Constants.Swerve.INVERT_GYRO) ?
+                Constants.MAXIMUM_ANGLE - (gyro.getYaw() % Constants.MAXIMUM_ANGLE) :
+                gyro.getYaw() % Constants.MAXIMUM_ANGLE;
     }
     public Rotation2d getHeading() {
         return Rotation2d.fromDegrees(getYaw());
@@ -158,17 +167,17 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    //Rotates to a passed parameter value
-    public void rotateToDegree(double target){
-        PIDController rotController = new PIDController(0.1, 0.0008, 0.001);
-        rotController.enableContinuousInput(-180, 180);
+    //Rotates by a passed amount of degrees
+    public void rotateDegrees(double target){
+        PIDController rotController = new PIDController(
+                Constants.Swerve.ANGLE_P,
+                Constants.Swerve.ANGLE_I,
+                Constants.Swerve.ANGLE_D
+        );
+        rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
-        double rotate = rotController.calculate(getYaw(), target);
+        double rotate = rotController.calculate(getYaw(), getYaw() + target);
 
         drive(new Translation2d(0, 0), rotate, false, true);
-    }
-
-    public void rotateDegrees(double angle) {
-        rotateToDegree(getYaw() + angle);
     }
 }

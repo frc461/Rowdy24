@@ -45,10 +45,15 @@ public class LimelightFollow extends Command {
         double strafeVal = MathUtil.applyDeadband(strafe.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
-        PIDController rotController = new PIDController(0.3, 0.0008, 0.001);
-        rotController.enableContinuousInput(-180, 180);
+        PIDController rotController = new PIDController(
+                Constants.Limelight.LIMELIGHT_P,
+                Constants.Limelight.LIMELIGHT_I,
+                Constants.Limelight.LIMELIGHT_D
+        );
+        rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
-        double rotate = rotController.calculate(swerve.getYaw(), swerve.getYaw() + 15* limelight.getRX());
+        // TODO: Calculate more accurate target using RX and RZ angle values, then get rid of varied P in PID
+        double rotate = rotController.calculate(swerve.getYaw(), swerve.getYaw() + 15 * limelight.getRX());
 
         /* Drive */
         swerve.drive(
