@@ -129,7 +129,8 @@ public class RobotContainer {
     // smartdashboard prints
     public void printValues() {
         // robot angular position
-        SmartDashboard.putNumber("yaw", swerve.gyro.getYaw());
+        SmartDashboard.putString("robot location: ", swerve.getPose().getTranslation().toString());
+        SmartDashboard.putNumber("yaw", swerve.getYaw().getDegrees());
         SmartDashboard.putNumber("pitch", swerve.gyro.getPitch());
         SmartDashboard.putNumber("roll", swerve.gyro.getRoll());
 
