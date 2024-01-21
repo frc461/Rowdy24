@@ -24,7 +24,7 @@ import frc.robot.subsystems.*;
 
 public class RobotContainer {
     /* Subsystems */
-    public final Swerve swerve = new Swerve();
+    private final Swerve swerve = new Swerve();
     private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
 

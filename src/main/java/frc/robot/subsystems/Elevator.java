@@ -10,16 +10,17 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Elevator extends SubsystemBase{
-    private CANSparkMax elevator;
-    private PIDController pidController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, Constants.ELEVATOR_D);
-    private RelativeEncoder m_encoder;
-    double position = 0;
-    double target = 0;
-    DigitalInput elevatorSwitch = new DigitalInput(3); //limit switch that re-zeros the elevator encoder;
+    private final CANSparkMax elevator = new CANSparkMax(31, MotorType.kBrushless);
+    private final PIDController pidController = new PIDController(Constants.ELEVATOR_P, Constants.ELEVATOR_I, Constants.ELEVATOR_D);
+    private final RelativeEncoder encoder = elevator.getEncoder();
+    private final DigitalInput elevatorSwitch = new DigitalInput(3); //limit switch that re-zeros the elevator encoder;
+    private double position;
+    private double target;
 
     public Elevator() {
-        elevator = new CANSparkMax(31, MotorType.kBrushless);
-        m_encoder = elevator.getEncoder();
+        position = encoder.getPosition();
+        target = encoder.getPosition();
+
         elevator.restoreFactoryDefaults();
         elevator.setSmartCurrentLimit(70);
         elevator.setInverted(true);
