@@ -98,10 +98,6 @@ public class RobotContainer {
             )
         );
 
-        limelight.setDefaultCommand(
-            new TeleopLimelight(limelight)
-        );
-
         // Configure the button bindings
         configureButtonBindings();
     }

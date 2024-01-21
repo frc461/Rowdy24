@@ -18,6 +18,11 @@ public class Limelight extends SubsystemBase {
         tagPose = new double[6];
     }
 
+    @Override
+    public void periodic() {
+        refreshValues();
+    }
+
     public void refreshValues(){
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tagPose = tagPoseTopic.get(new double[6]);
