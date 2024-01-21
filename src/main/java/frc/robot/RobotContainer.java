@@ -128,11 +128,11 @@ public class RobotContainer {
 
     // smartdashboard prints
     public void printValues() {
-        // robot angular position
-        SmartDashboard.putString("robot location: ", swerve.getPose().getTranslation().toString());
-        SmartDashboard.putNumber("yaw", swerve.getYaw().getDegrees());
-        SmartDashboard.putNumber("pitch", swerve.gyro.getPitch());
-        SmartDashboard.putNumber("roll", swerve.gyro.getRoll());
+        // robot position
+        SmartDashboard.putString("Robot Pose2d", swerve.getPose().getTranslation().toString());
+        SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
+        SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
+        SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
 
         // elevator debug
         SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
@@ -141,13 +141,13 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
 
         // limelight debug
-        SmartDashboard.putNumber("Limelight updates", limelight.updates);
-        SmartDashboard.putNumber("rollLimelight", limelight.getRoll());
-        SmartDashboard.putNumber("yawLimelight", limelight.getYaw());
-        SmartDashboard.putNumber("pitchLimelight", limelight.getPitch());
-        SmartDashboard.putNumber("RX", limelight.getRX());
-        SmartDashboard.putNumber("RY", limelight.getRY());
-        SmartDashboard.putNumber("RZ", limelight.getRZ());
+        SmartDashboard.putNumber("Limelight Updates", limelight.updates);
+        SmartDashboard.putNumber("Limelight Yaw", limelight.getYaw());
+        SmartDashboard.putNumber("Limelight Pitch", limelight.getPitch());
+        SmartDashboard.putNumber("Limelight Roll", limelight.getRoll());
+        SmartDashboard.putNumber("Limelight X", limelight.getRX());
+        SmartDashboard.putNumber("Limelight Y", limelight.getRY());
+        SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
     }
 
     /**

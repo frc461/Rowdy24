@@ -41,7 +41,7 @@ public class Swerve extends SubsystemBase {
         Timer.delay(1.0);
         resetModulesToAbsolute();
 
-        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
+        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getHeading(), getModulePositions());
 
         AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
@@ -72,7 +72,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic(){
-        swerveOdometry.update(getYaw(), getModulePositions());
+        swerveOdometry.update(getHeading(), getModulePositions());
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
@@ -90,7 +90,7 @@ public class Swerve extends SubsystemBase {
                                     translation.getX(), 
                                     translation.getY(), 
                                     rotation, 
-                                    getYaw()
+                                    getHeading()
                                 )
                                 : new ChassisSpeeds(
                                     translation.getX(), 
@@ -104,10 +104,21 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public double getYaw() {
+        return (Constants.Swerve.invertGyro) ? 180 - gyro.getYaw() : gyro.getYaw();
+    }
+    public Rotation2d getHeading() {
+        return Rotation2d.fromDegrees(getYaw());
+    }
+    public double getPitch() {
+        return gyro.getPitch();
+    }
+    public double getRoll() {
+        return gyro.getRoll();
+    }
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
     }
-
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
         for(SwerveModule mod : mSwerveMods){
@@ -115,17 +126,12 @@ public class Swerve extends SubsystemBase {
         }
         return states;
     }
-
     public SwerveModulePosition[] getModulePositions(){
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
         for(SwerveModule mod : mSwerveMods){
             positions[mod.moduleNumber] = mod.getPosition();
         }
         return positions;
-    }
-
-    public Rotation2d getYaw() {
-        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(180 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
 
     public void zeroGyro(){
@@ -141,7 +147,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
+        swerveOdometry.resetPosition(getHeading(), getModulePositions(), pose);
     }
 
     public void resetModulesToAbsolute(){
@@ -155,12 +161,12 @@ public class Swerve extends SubsystemBase {
         PIDController rotController = new PIDController(0.1, 0.0008, 0.001);
         rotController.enableContinuousInput(-180, 180);
 
-        double rotate = rotController.calculate(getYaw().getDegrees(), target);
+        double rotate = rotController.calculate(getYaw(), target);
 
         drive(new Translation2d(0, 0), rotate, false, true);
     }
 
     public void rotateDegrees(double angle) {
-        rotateToDegree(getYaw().getDegrees() + angle);
+        rotateToDegree(getYaw() + angle);
     }
 }

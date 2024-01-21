@@ -47,7 +47,7 @@ public class LimelightFollow extends Command {
         PIDController rotController = new PIDController(0.3, 0.0008, 0.001);
         rotController.enableContinuousInput(-180, 180);
 
-        double rotate = rotController.calculate(swerve.gyro.getYaw(), swerve.getYaw().getDegrees() + 15* limelight.getRX());
+        double rotate = rotController.calculate(swerve.getYaw(), swerve.getYaw() + 15* limelight.getRX());
 
         /* Drive */
         swerve.drive(
