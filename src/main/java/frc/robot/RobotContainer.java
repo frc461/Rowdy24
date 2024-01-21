@@ -1,14 +1,6 @@
-// this is a comment
 package frc.robot;
-
 import edu.wpi.first.wpilibj2.command.*;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathConstraints;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -17,9 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-// import frc.robot.autos.AutoChooser;
-// import frc.robot.autos.AutoTrajectories;
-//import frc.robot.autos.eventMap;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -40,7 +29,6 @@ public class RobotContainer {
   private final Intake s_Intake = new Intake();
   private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
   private final Limelight limelight = new Limelight();
-  // private final AutoTrajectories trajectories = new AutoTrajectories();
   private final SendableChooser<Command> chooser;
 
   public double intakeVec = 0;
@@ -232,10 +220,7 @@ public class RobotContainer {
 
   }
 
-  public void printValues() { // all of the smartdashboard prints:
-    SmartDashboard.putNumber("balanceP", 0.03);
-    // SmartDashboard.getNumber("balanceI", elevatorAxis);
-    // SmartDashboard.getNumber("balanceD", elevatorAxis);
+  public void printValues() { // all of the SmartDashboard prints:
     SmartDashboard.putNumber("bpftX", limelight.botPoseX);
     SmartDashboard.putNumber("bpftZ", limelight.botPoseZ);
     SmartDashboard.putNumber("Limelight updates", limelight.updates);
@@ -255,19 +240,12 @@ public class RobotContainer {
     SmartDashboard.putNumber("rollLimelight", limelight.getRoll());
     SmartDashboard.putNumber("yawLimelight", limelight.getYaw());
     SmartDashboard.putNumber("pitchLimelight", limelight.getPitch());
-
     SmartDashboard.putNumber("odometry x", s_Swerve.getPose().getX());
     SmartDashboard.putNumber("odometry y", s_Swerve.getPose().getY());
-
     SmartDashboard.putData("Field", s_Swerve.getField2d());
-
-
-    // SmartDashboard.putNumber("Pid off",
-    // chooser.getPIDController().getPositionError());
-
-     SmartDashboard.putNumber("RX", limelight.getRX());
-     SmartDashboard.putNumber("RY", limelight.getRY());
-     SmartDashboard.putNumber("RZ", limelight.getRZ());
+    SmartDashboard.putNumber("RX", limelight.getRX());
+    SmartDashboard.putNumber("RY", limelight.getRY());
+    SmartDashboard.putNumber("RZ", limelight.getRZ());
   }
 
   /**

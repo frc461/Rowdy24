@@ -92,15 +92,6 @@ public class Swerve extends SubsystemBase {
         return Constants.Swerve.swerveKinematics.toChassisSpeeds(getModuleStates());
     }
 
-    // public void driveAutoBuilder(ChassisSpeeds speeds) {
-    //     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(speeds, 0.001);
-    //     SwerveModuleState[] targetStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
-    //     setStates(targetStates);
-
-    // }
-//
-
-
     public void driveAutoBuilder(ChassisSpeeds speeds) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds);
         
@@ -214,13 +205,13 @@ public class Swerve extends SubsystemBase {
 
         for(int i = 0; i < 5; i++){
             Xstates[i].speedMetersPerSecond = 0.0;
-            Xstates[i].angle.equals(new Rotation2d().fromDegrees(i*90)); //Rotates each successive wheel 90 degrees further
+            Xstates[i].angle.equals(Rotation2d.fromDegrees(i*90)); //Rotates each successive wheel 90 degrees further
         }
 
         setModuleStates(Xstates);
     }
 
-    //attempts to rotate the drivetrain to a given value
+    // Attempts to rotate the drivetrain to a given value
     public void rotateToDegree(double target){
         PIDController rotController = new PIDController(0.1, 0.0008, 0.001);
         rotController.enableContinuousInput(-180, 180);
@@ -233,25 +224,4 @@ public class Swerve extends SubsystemBase {
     public void rotateDegrees(double angle) {
         rotateToDegree(getYaw().getDegrees() + angle);
     }
-
-    //2023 autobalance function
-    public void autoBalance(){
-        double target = 0;
-        System.out.println("Autobalance Start");
-        Timer timer = new Timer();
-        timer.reset();
-        timer.start();
-
-        while(timer.get() < 8){
-
-            PIDController balanceController = new PIDController(SmartDashboard.getNumber("balanceP", 0.03),0.01 ,0.00000000000001); // p was .033
-            balanceController.setTolerance(2.5); //was 2.5
-
-            target = balanceController.calculate(gyro.getPitch(), Constants.gyroOffset);
-            System.out.println("Transation target: " + 1*target);
-            drive(new Translation2d(1*target, 0), 0, false, true);        
-        } 
-        System.out.println("stopped balancing");
-    }
-    
 }

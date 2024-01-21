@@ -1,38 +1,30 @@
 package frc.robot;
-
 import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-    import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
-
     public static double gyroOffset = 0;
 
-    
     public static final double ELEVATOR_P = 0.097;//0.097;
     public static final double ELEVATOR_I = 0.0;
-    public static final double ELEVATOR_D = 0.0;//0.001;
+    public static final double ELEVATOR_D = 0.0;
     public static final double ELEVATOR_FF = 0.0010000000474974513;
+
     public static final double ELEVATOR_UPPER_LIMIT = 61;
-
-    //public static final double elevatorStowPos = -100;
-
     public static final double elevatorHighScore = 61.5;
     public static final double elevatorHighCubeScore = 61.5;
-    public static final double elevatorMidScore = 57.7; //79.336;
-    public static final double elevatorMidCubeScore = 32.3; //79.336;
-    public static final double elevatorConePickup = 0; //6.52;
+    public static final double elevatorMidScore = 57.7; 
+    public static final double elevatorMidCubeScore = 32.3; 
+    public static final double elevatorConePickup = 0;
     public static final double elevatorBot = 0;
-
-    //public static final double wristStowPos = 0.9;
 
     public static final double WRIST_P = 4.0;
     public static final double WRIST_I = 0.1;
@@ -42,13 +34,13 @@ public final class Constants {
     public static final double WRIST_MID_LIMIT = 0.63;
     public static final double WRIST_UPPER_LIMIT = 0.86;
 
-    public static final double wristHighConeScore = 0.565; //.613
+    public static final double wristHighConeScore = 0.565;
     public static final double wristHighCubeScore = 0.795;
-    public static final double wristMidConeScore = 0.456; //0.607;
+    public static final double wristMidConeScore = 0.456;
     public static final double wristMidCubeScore = 0.755;
     public static final double wristConePickup = 0.468;
-    public static final double wristConePickup2 = 0.786; //was 0.8
-    public static final double wristCubePickup = 0.590; //was .590 (low) .648 )high)
+    public static final double wristConePickup2 = 0.786;
+    public static final double wristCubePickup = 0.590;
 
     public static final Constraints kThetaControllerConstraints = null;
 

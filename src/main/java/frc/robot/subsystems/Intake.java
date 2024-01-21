@@ -14,13 +14,9 @@ public class Intake extends SubsystemBase {
     DigitalInput cubeBeam = new DigitalInput(0);
     DigitalInput coneBeam = new DigitalInput(1);
     private int counter = 0;
-    // public Lights lights = new Lights();
-    
     private AddressableLED led = new AddressableLED(0);
     private AddressableLEDBuffer ledData = new AddressableLEDBuffer(2);
-
     private DigitalOutput intakeIndicator = new DigitalOutput(4);
-
     public boolean intakeCube = false;
 
     public Intake() {
@@ -28,12 +24,10 @@ public class Intake extends SubsystemBase {
         intake.restoreFactoryDefaults();
         intake.setInverted(true);
         led.setLength(ledData.getLength());
-        //lights.showLights("blue");
         showLights(255, 0, 0);
         
     }
-    //3553 pepvlldrv
-
+    
     public void turnOnIndicator() { intakeIndicator.set(true); }
 
     public void turnOffIndicator() { intakeIndicator.set(false); }
@@ -48,13 +42,11 @@ public class Intake extends SubsystemBase {
 
     public void runIntake(Joystick joystick){
         if (joystick.getRawButton(XboxController.Button.kRightBumper.value)) {
-            //lights.showLights("yellow");
             showLights(255, 0, 255);
             intake.set(-1);
             intakeCube = false;
         } else if (joystick.getRawButton(XboxController.Button.kLeftBumper.value)) {
             intake.set(0.7);
-            //lights.showLights("purple");
             showLights(255, 255, 0);
             intakeCube = true;
         } else if (joystick.getRawAxis(XboxController.Axis.kRightTrigger.value) > 0.2) {
@@ -69,8 +61,6 @@ public class Intake extends SubsystemBase {
             System.out.println("coneBeam:" + intakeCube);
         } else {
             intake.set(0);
-            //lights.showLights("red");
-            // stopLights();
         }
 
         // beam brake indicator. beam brake lmao

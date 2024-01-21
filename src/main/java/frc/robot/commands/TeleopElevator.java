@@ -1,6 +1,5 @@
 package frc.robot.commands;
 import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -9,7 +8,6 @@ import frc.robot.subsystems.Elevator;
 public class TeleopElevator extends Command {    
     private Elevator s_Elevator;    
     private DoubleSupplier motionSup;
-
 
     public TeleopElevator(Elevator s_Elevator, DoubleSupplier motionSup) {
         this.s_Elevator = s_Elevator;

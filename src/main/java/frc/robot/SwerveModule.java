@@ -25,21 +25,13 @@ public class SwerveModule {
     public int moduleNumber;
     private Rotation2d angleOffset;
     private Rotation2d lastAngle;
-
     private CANSparkMax mAngleMotor;
     private CANSparkMax mDriveMotor;
-
-
     private RelativeEncoder driveEncoder;
     private RelativeEncoder integratedAngleEncoder;
     private CANCoder angleEncoder;
-
     private SparkMaxPIDController driveController;
     private SparkMaxPIDController angleController;
-
-    private SwerveModulePosition currentPosition = new SwerveModulePosition();
-    private SwerveModuleState currentState = new SwerveModuleState();
-
     private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
@@ -145,8 +137,6 @@ public class SwerveModule {
         mDriveMotor.burnFlash();
         driveEncoder.setPosition(0.0);
     }
-
-    //everything below here is fine.
 
     public SwerveModuleState getState(){
         return new SwerveModuleState(

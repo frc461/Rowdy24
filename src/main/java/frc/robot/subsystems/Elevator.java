@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 import frc.robot.Constants;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,6 +31,7 @@ public class Elevator extends SubsystemBase{
     public double getTarget() {
         return target;
     }
+    
     public double elevatorPower() {
         return elevator.getAppliedOutput();
     }
@@ -55,31 +54,26 @@ public class Elevator extends SubsystemBase{
         target = height;
     }
 
-    public void moveElevator(double movementVector)
-    {
+    public void moveElevator(double movementVector) {
         
-        if(movementVector < 0 && elevatorSwitchTriggered())
-        {
+        if (movementVector < 0 && elevatorSwitchTriggered()) {
             target = 0;
             holdHeight();
            return;
-        }
-        else if (movementVector > 0 && m_encoder.getPosition() > Constants.ELEVATOR_UPPER_LIMIT)
-        {
+        } else if (movementVector > 0 && m_encoder.getPosition() > Constants.ELEVATOR_UPPER_LIMIT) {
             target = Constants.ELEVATOR_UPPER_LIMIT;
             holdHeight();
             return;
         }
-        if(elevatorSwitchTriggered())
-        {
+        
+        if (elevatorSwitchTriggered()) {
             m_encoder.setPosition(0); //was zero (don't worry about it);
         }
         elevator.set(movementVector);
         target = m_encoder.getPosition();
     }
 
-    public void holdHeight()
-    {
+    public void holdHeight() {
         elevator.set(pidController.calculate(m_encoder.getPosition(), target));
     }
 
@@ -87,10 +81,8 @@ public class Elevator extends SubsystemBase{
         return !elevatorSwitch.get();
     }
 
-    public void checkLimitSwitches()
-    {
-        if(elevatorSwitchTriggered())
-        {
+    public void checkLimitSwitches() {
+        if(elevatorSwitchTriggered()){
             m_encoder.setPosition(0);
         }
 
