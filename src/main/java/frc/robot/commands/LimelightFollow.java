@@ -7,6 +7,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.subsystems.Swerve;
 import frc.robot.Constants;
 import frc.robot.subsystems.Limelight;
@@ -40,8 +41,8 @@ public class LimelightFollow extends Command {
         limelight.refreshValues();
 
        /* Apply Deadband*/
-        double translationVal = MathUtil.applyDeadband(translation.getAsDouble(), Constants.stickDeadband);
-        double strafeVal = MathUtil.applyDeadband(strafe.getAsDouble(), Constants.stickDeadband);
+        double translationVal = MathUtil.applyDeadband(translation.getAsDouble(), Constants.STICK_DEADBAND);
+        double strafeVal = MathUtil.applyDeadband(strafe.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
         PIDController rotController = new PIDController(0.3, 0.0008, 0.001);
@@ -51,7 +52,7 @@ public class LimelightFollow extends Command {
 
         /* Drive */
         swerve.drive(
-            new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
+            new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
             -rotate,
             !robotCentric.getAsBoolean(),
             true

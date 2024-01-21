@@ -6,11 +6,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
-
-    NetworkTable table;
-    DoubleArraySubscriber tagPoseTopic;
-    public double[] tagPose;
-    public int updates;
+    private final DoubleArraySubscriber tagPoseTopic;
+    private NetworkTable table;
+    private double[] tagPose;
+    private int updates;
 
     public Limelight() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -23,10 +22,8 @@ public class Limelight extends SubsystemBase {
         refreshValues();
     }
 
-    public void refreshValues(){
-        table = NetworkTableInstance.getDefault().getTable("limelight");
-        tagPose = tagPoseTopic.get(new double[6]);
-        updates++;
+    public int getUpdates(){
+        return updates;
     }
 
     //X+ is to the right if you are looking at the tag
@@ -59,5 +56,11 @@ public class Limelight extends SubsystemBase {
     public double getRoll(){
         refreshValues();
         return tagPose[5];
+    }
+
+    public void refreshValues(){
+        table = NetworkTableInstance.getDefault().getTable("limelight");
+        tagPose = tagPoseTopic.get(new double[6]);
+        updates++;
     }
 }

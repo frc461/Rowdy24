@@ -141,7 +141,7 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
 
         // limelight debug
-        SmartDashboard.putNumber("Limelight Updates", limelight.updates);
+        SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());
         SmartDashboard.putNumber("Limelight Yaw", limelight.getYaw());
         SmartDashboard.putNumber("Limelight Pitch", limelight.getPitch());
         SmartDashboard.putNumber("Limelight Roll", limelight.getRoll());
