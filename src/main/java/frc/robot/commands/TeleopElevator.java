@@ -7,30 +7,29 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
 public class TeleopElevator extends Command {    
-    private Elevator s_Elevator;    
-    private DoubleSupplier motionSup;
+    private final Elevator elevator;
+    private final DoubleSupplier motionSup;
 
 
-    public TeleopElevator(Elevator s_Elevator, DoubleSupplier motionSup) {
-        this.s_Elevator = s_Elevator;
-        addRequirements(s_Elevator);
+    public TeleopElevator(Elevator elevator, DoubleSupplier motionSup) {
+        this.elevator = elevator;
+        addRequirements(elevator);
         this.motionSup = motionSup;
     }
 
     @Override
     public void execute() {
         /* Get Values, Deadband*/
-        double motionVal = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.stickDeadband);
-        //check for limit switch always
-        s_Elevator.checkLimitSwitches();
-        /* Drive */
-        if (motionVal != 0) {
-            s_Elevator.moveElevator(motionVal);
-        } else {
-            s_Elevator.holdHeight();
-        }
-        
-    }
+        double axisValue = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.stickDeadband);
 
-    
+        /* Check for limit switch */
+        elevator.checkLimitSwitches();
+
+        /* Drive */
+        if (axisValue != 0) {
+            elevator.moveElevator(axisValue);
+        } else {
+            elevator.holdHeight();
+        }
+    }
 }

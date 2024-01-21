@@ -135,10 +135,10 @@ public class RobotContainer {
         SmartDashboard.putNumber("roll", swerve.gyro.getRoll());
 
         // elevator debug
-        SmartDashboard.putNumber("Elevator Position", elevator.getEncoder().getPosition());
+        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
         SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
-        SmartDashboard.putBoolean("elevator limit triggered?", elevator.elevatorSwitchTriggered());
-        SmartDashboard.putNumber("elevatorPower", elevator.elevatorPower());
+        SmartDashboard.putNumber("Elevator Power", elevator.elevatorPower());
+        SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
 
         // limelight debug
         SmartDashboard.putNumber("Limelight updates", limelight.updates);
