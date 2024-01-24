@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -20,7 +21,7 @@ public class Intake extends SubsystemBase{
         intake = new CANSparkMax(33, MotorType.kBrushed);
         intake.restoreFactoryDefaults();
         intake.setInverted(true);
-        led.setLength(ledData.getLength());
+        //led.setLength(ledData.getLength());
         //lights.showLights("blue");
         
     }
