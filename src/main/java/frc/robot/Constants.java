@@ -1,12 +1,9 @@
 package frc.robot;
-
 import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -61,6 +58,10 @@ public final class Constants {
 
         public static final int ANGLER_CURRENT_LIMIT = 60;
         public static final boolean ANGLER_INVERT = false;
+
+        //TODO: change this
+        public static final int ANGLER_LOWER_LIMIT = 0;
+        public static final int ANGLER_UPPER_LIMIT = 10;
     }
 
     public static final class Carriage {

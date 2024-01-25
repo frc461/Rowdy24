@@ -3,6 +3,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -19,9 +20,10 @@ public class Shooter extends SubsystemBase {
     private final RelativeEncoder rightEncoder = rightShooter.getEncoder();
 
     private final CANSparkMax shooterAngler = new CANSparkMax(Constants.Shooter.ANGLER_ID, MotorType.kBrushless);
-    private final SparkMaxPIDController anglerPID = shooterAngler.getPIDController();
+    //private final SparkMaxPIDController anglerPID = shooterAngler.getPIDController();
+    private final PIDController anglerPID = new PIDController(0, 0, 0);
     private final RelativeEncoder anglerEncoder = shooterAngler.getEncoder();
-
+    double target = Constants.Shooter.ANGLER_UPPER_LIMIT;
 
     public Shooter() {
         leftShooter.restoreFactoryDefaults();
@@ -54,7 +56,23 @@ public class Shooter extends SubsystemBase {
     }
 
     public void tiltShooter(double angle) {
-        anglerPID.setReference(angle, CANSparkMax.ControlType.kPosition);
+        //TODO: not sure if this is the correct conversion
+        double angleToRot = (angle*42)/(360);
+
+        if (angleToRot < anglerEncoder.getPosition() && anglerEncoder.getPosition() < Constants.Shooter.ANGLER_LOWER_LIMIT) {
+            angleToRot = Constants.Shooter.ANGLER_LOWER_LIMIT;
+        } else if (angleToRot > anglerEncoder.getPosition() && anglerEncoder.getPosition() > Constants.Shooter.ANGLER_UPPER_LIMIT) {
+            angleToRot = Constants.Shooter.ANGLER_UPPER_LIMIT;
+        }
+        target = angleToRot;
+        shooterAngler.set(anglerPID.calculate(anglerEncoder.getPosition(), angleToRot));
+    }
+
+    public void holdTilt() {
+        if(target < Constants.Shooter.ANGLER_LOWER_LIMIT){
+            target = Constants.Shooter.ANGLER_LOWER_LIMIT;
+        }
+        shooterAngler.set(anglerPID.calculate(anglerEncoder.getPosition(), target));
     }
 
 }

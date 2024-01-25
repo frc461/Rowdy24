@@ -7,11 +7,13 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase{
     private CANSparkMax intake;
-    DigitalInput intakeBeam = new DigitalInput(0);   
     
     private CANSparkMax carriage;
-    DigitalInput carriageBeam = new DigitalInput(1);
-    DigitalInput ampBeam = new DigitalInput(2);
+    
+    //TODO: ask tech to put beam breaks in these places
+    DigitalInput carriageBeam = new DigitalInput(0); // enter the carriage (completely out of the intake)
+    DigitalInput ampBeam = new DigitalInput(1); // exit to amp
+    DigitalInput shooterBeam = new DigitalInput(2); // exit through shooter
     
     private boolean hasPiece = false;
 
@@ -26,8 +28,9 @@ public class Intake extends SubsystemBase{
     }
 
     public void setIntakeSpeed(double speed) {
-        // TODO: check if a piece is already in the intake
-        if (!hasPiece) {
+        if (speed <= 0) {
+            intake.set(speed);
+        } else if (!hasPiece) {
             intake.set(speed);
         } else {
             intake.set(0);
@@ -38,7 +41,7 @@ public class Intake extends SubsystemBase{
     public void periodic() {
         if (getCarriageBeamBroken()) {
             hasPiece = true;
-        } else if (getAmpBeamBroken()) {
+        } else if (getAmpBeamBroken() || getShooterBeamBroken()) {
             hasPiece = false;
         }
     }
@@ -47,12 +50,12 @@ public class Intake extends SubsystemBase{
         return intake.get();
     }
 
-    public boolean getIntakeBeamBroken() {
-        return intakeBeam.get();
-    }
-
     public boolean getAmpBeamBroken() {
         return ampBeam.get();
+    }
+
+    public boolean getShooterBeamBroken() {
+        return shooterBeam.get();
     }
 
     public void setCarriageSpeed(double speed) {

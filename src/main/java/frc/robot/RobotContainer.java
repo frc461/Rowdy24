@@ -1,5 +1,4 @@
 package frc.robot;
-
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -8,7 +7,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -141,8 +139,12 @@ public class RobotContainer {
         elevatorAmp.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
         stowElevator.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
-        revShooter.whileTrue(new InstantCommand(()-> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER)));
-        revShooter.whileFalse(new InstantCommand(()-> shooter.shoot(0)));
+        //TODO: change angle to point of interest/use trig to find the real angle
+        revShooter.whileTrue(Commands.sequence(new InstantCommand(()->shooter.tiltShooter(limelight.getPitch())), 
+        new InstantCommand(()-> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER))));
+
+        revShooter.whileFalse(Commands.parallel(new InstantCommand(()-> shooter.shoot(0)), 
+        new InstantCommand(() -> shooter.holdTilt()))); // TODO: could make the shooter run at nonzero speed all the time
     }
 
     // smartdashboard prints

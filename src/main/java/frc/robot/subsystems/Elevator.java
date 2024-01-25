@@ -1,9 +1,7 @@
 package frc.robot.subsystems;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -75,7 +73,6 @@ public class Elevator extends SubsystemBase{
     }
 
     public void setHeight(double height) {
-        System.out.print("setting height");
         if (height < encoder.getPosition() && elevatorSwitchTriggered()) {
             encoder.setPosition(0);
             height = 0;
