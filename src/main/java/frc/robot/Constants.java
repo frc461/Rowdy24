@@ -129,7 +129,7 @@ public final class Constants {
             public static final int DRIVE_MOTOR_ID = 1;
             public static final int ANGLE_MOTOR_ID = 11;
             public static final int CANCODER_ID = 21;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(-142.768); //127.3 original value
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(-142.768+90); //127.3 original value
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS = 
                 new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
@@ -139,7 +139,7 @@ public final class Constants {
             public static final int DRIVE_MOTOR_ID = 2;
             public static final int ANGLE_MOTOR_ID = 12;
             public static final int CANCODER_ID = 22;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(352.178);
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(352.178+90);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS = 
                 new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
@@ -149,7 +149,7 @@ public final class Constants {
             public static final int DRIVE_MOTOR_ID = 3;
             public static final int ANGLE_MOTOR_ID = 13;
             public static final int CANCODER_ID = 23;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(308.847);
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(308.847+90);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS = 
                 new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
@@ -159,7 +159,7 @@ public final class Constants {
             public static final int DRIVE_MOTOR_ID = 4;
             public static final int ANGLE_MOTOR_ID = 14;
             public static final int CANCODER_ID = 24;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(241.523);
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(241.523+90);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS = 
                 new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
