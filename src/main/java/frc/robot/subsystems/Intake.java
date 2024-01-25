@@ -17,12 +17,6 @@ public class Intake extends SubsystemBase{
     public boolean intakeCube = false;
 
     public Intake() {
-        intake = new CANSparkMax(33, MotorType.kBrushed);
-        intake.restoreFactoryDefaults();
-        intake.setInverted(true);
-        led.setLength(ledData.getLength());
-        //lights.showLights("blue");
-        
     }
 
 

@@ -90,6 +90,7 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Position", mod.getPosition().distanceMeters);
 
         }
+        SmartDashboard.putNumber("Yaw TEST", this.getYaw());
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -114,9 +115,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getYaw() {
-        return (Constants.Swerve.INVERT_GYRO) ?
-                Constants.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble() % Constants.MAXIMUM_ANGLE) :
-                gyro.getYaw().getValueAsDouble() % Constants.MAXIMUM_ANGLE;
+        return gyro.getYaw().getValueAsDouble() % Constants.MAXIMUM_ANGLE;
     }
     public Rotation2d getHeading() {
         return Rotation2d.fromDegrees(getYaw());
