@@ -48,7 +48,7 @@ public final class CTREConfigs {
         
         /* Swerve CANCoder Configuration */
         MagnetSensorConfigs sensorConfigs = new MagnetSensorConfigs();
-        sensorConfigs.withAbsoluteSensorRange(AbsoluteSensorRangeValue.Unsigned_0To1);
+        sensorConfigs.withAbsoluteSensorRange(AbsoluteSensorRangeValue.Signed_PlusMinusHalf);
         sensorConfigs.withSensorDirection(Constants.Swerve.CANCODER_SENSOR_DIRECTION);
         swerveCanCoderConfig.MagnetSensor = sensorConfigs;
     }
