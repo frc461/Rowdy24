@@ -13,8 +13,8 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final double STICK_DEADBAND = 0.1;
-    public static final double MINIMUM_ANGLE = -180.0;
-    public static final double MAXIMUM_ANGLE = 180.0;
+    public static final double MINIMUM_ANGLE = 0.0;
+    public static final double MAXIMUM_ANGLE = 360.0;
 
     public static final class Elevator {
         public static final int ELEVATOR_MOTOR_ID = 31;
