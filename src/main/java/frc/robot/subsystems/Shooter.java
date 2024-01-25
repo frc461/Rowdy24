@@ -49,8 +49,8 @@ public class Shooter extends SubsystemBase {
 
     public void shoot(double speed) {
         //TODO make sure this works lolololol
-        leftPidController.setReference(speed, CANSparkMax.ControlType.kDutyCycle);
-        rightPidController.setReference(speed, CANSparkMax.ControlType.kDutyCycle);
+        leftPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
+        rightPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
     }
 
     public void tiltShooter(double angle) {

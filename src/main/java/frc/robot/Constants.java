@@ -52,7 +52,7 @@ public final class Constants {
         public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final boolean SHOOTER_INVERT = false;
 
-        public static final double BASE_SHOOTER_SPEED = 0.6;
+        public static final double BASE_SHOOTER_SPEED = 1000;
         public static final double DISTANCE_MULTIPLIER = 0.1;
 
         public static final double ANGLER_P = 1;
@@ -61,6 +61,10 @@ public final class Constants {
 
         public static final int ANGLER_CURRENT_LIMIT = 60;
         public static final boolean ANGLER_INVERT = false;
+    }
+
+    public static final class Carriage {
+        public static final int CARRIAGE_ID = 41;
     }
 
     public static final class Swerve {

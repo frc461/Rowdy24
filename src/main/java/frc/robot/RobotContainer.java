@@ -29,6 +29,7 @@ public class RobotContainer {
     private final Limelight limelight = new Limelight();
     private final Intake intake = new Intake();
     private final Shooter shooter = new Shooter();
+    private final Carriage carriage = new Carriage();
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -125,8 +126,17 @@ public class RobotContainer {
                 robotCentric)
         );
 
-        intakeButton.whileTrue(Commands.parallel(new InstantCommand(()->intake.setSpeed(1))));
-        intakeButton.whileFalse(new InstantCommand(()->intake.setSpeed(0)));
+        intakeButton.whileTrue(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(1)), 
+        new InstantCommand(()->intake.setCarriageSpeed(1))));
+
+        intakeButton.whileFalse(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(0)), 
+        new InstantCommand(()->intake.setCarriageSpeed(0))));
+
+        outtakeButton.whileTrue(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(1)), 
+        new InstantCommand(()->intake.setCarriageSpeed(-1))));
+
+        outtakeButton.whileFalse(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(0)), 
+        new InstantCommand(()->intake.setCarriageSpeed(0))));
 
         elevatorAmp.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
         stowElevator.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
