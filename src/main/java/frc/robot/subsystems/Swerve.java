@@ -168,15 +168,16 @@ public class Swerve extends SubsystemBase {
 
     //Rotates by a passed amount of degrees
     public void rotateDegrees(double target){
-        PIDController rotController = new PIDController(
-                Constants.Swerve.ANGLE_P,
-                Constants.Swerve.ANGLE_I,
-                Constants.Swerve.ANGLE_D
-        );
-        rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
-
-        double rotate = rotController.calculate(getYaw(), getYaw() + target);
-
-        drive(new Translation2d(0, 0), rotate, false, true);
+        try (
+                PIDController rotController = new PIDController(
+                        Constants.Swerve.ANGLE_P,
+                        Constants.Swerve.ANGLE_I,
+                        Constants.Swerve.ANGLE_D
+                )
+        ) {
+            rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
+            double rotate = rotController.calculate(getYaw(), getYaw() + target);
+            drive(new Translation2d(0, 0), rotate, false, true);
+        }
     }
 }
