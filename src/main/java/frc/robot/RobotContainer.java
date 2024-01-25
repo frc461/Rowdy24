@@ -132,10 +132,7 @@ public class RobotContainer {
         stowElevator.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
         revShooter.whileTrue(new InstantCommand(()-> shooter.shoot(1)));
-        revShooter.whileFalse(new InstantCommand(()-> shooter.shoot(1)));
-
-        
-
+        revShooter.whileFalse(new InstantCommand(()-> shooter.shoot(0)));
     }
 
     // smartdashboard prints

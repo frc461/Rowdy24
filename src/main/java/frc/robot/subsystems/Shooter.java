@@ -37,7 +37,8 @@ public class Shooter extends SubsystemBase {
         rightPidController.setD(Constants.Shooter.SHOOTER_D);
     }
 
-    public void Shoot(double speed) {
+    public void shoot(double speed) {
+        //TODO make sure this works lolololol
         leftPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
         rightPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
     }

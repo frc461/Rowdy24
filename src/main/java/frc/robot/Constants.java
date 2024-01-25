@@ -16,16 +16,17 @@ public final class Constants {
     public static final double MAXIMUM_ANGLE = 180.0;
 
     public static final class Elevator {
-        public static final int ELEVATOR_MOTOR_ID = 31;
+        public static final int ELEVATOR_ID = 31;
         public static final int ELEVATOR_SWITCH_ID = 3;
         public static final int ELEVATOR_CURRENT_LIMIT = 70;
         public static final boolean ELEVATOR_INVERT = true;
-
         public static final double ELEVATOR_P = 0.097;
         public static final double ELEVATOR_I = 0.0;
         public static final double ELEVATOR_D = 0.0;
         public static final double ELEVATOR_LOWER_LIMIT = 0;
         public static final double ELEVATOR_UPPER_LIMIT = 61;
+        public static final double ELEVATOR_AMP = 61;
+        public static final double ELEVATOR_STOW = 0;
 
     }
 
@@ -33,6 +34,22 @@ public final class Constants {
         public static final double LIMELIGHT_P = 0.3;
         public static final double LIMELIGHT_I = 0.0008;
         public static final double LIMELIGHT_D = 0.001;
+    }
+
+    public static final class Intake {
+        public static final int INTAKE_ID = 41;
+    }
+
+    public static final class Shooter {
+        public static final int LEFT_SHOOTER_ID = 61;
+        public static final int RIGHT_SHOOTER_ID = 62;
+
+        public static final double SHOOTER_P = 1;
+        public static final double SHOOTER_I = 0.0;
+        public static final double SHOOTER_D = 0.0;
+
+        public static final int SHOOTER_CURRENT_LIMIT = 60;
+        public static final boolean SHOOTER_INVERT = false;
     }
 
     public static final class Swerve {
@@ -44,8 +61,8 @@ public final class Constants {
             COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L2);
 
         /* Drivetrain Constants */
-        public static final double TRACK_WIDTH = Units.inchesToMeters(18.75);
-        public static final double WHEEL_BASE = Units.inchesToMeters(22.50);
+        public static final double TRACK_WIDTH = Units.inchesToMeters(18.375);
+        public static final double WHEEL_BASE = Units.inchesToMeters(18.375);
         public static final double CENTER_TO_WHEEL = Math.sqrt(Math.pow(WHEEL_BASE / 2.0, 2) + Math.pow(TRACK_WIDTH / 2.0, 2));
         public static final double WHEEL_CIRCUMFERENCE = CHOSEN_MODULE.wheelCircumference;
 

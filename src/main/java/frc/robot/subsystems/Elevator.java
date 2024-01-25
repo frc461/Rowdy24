@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase{
-    private final CANSparkMax elevator = new CANSparkMax(Constants.Elevator.ELEVATOR_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkMax elevator = new CANSparkMax(Constants.Elevator.ELEVATOR_ID, MotorType.kBrushless);
     private final PIDController pidController = new PIDController(
             Constants.Elevator.ELEVATOR_P,
             Constants.Elevator.ELEVATOR_I,
@@ -73,4 +73,17 @@ public class Elevator extends SubsystemBase{
         }
         elevator.set(axisValue);
     }
+
+    public void setHeight(double height) {
+        System.out.print("setting height");
+        if (height < encoder.getPosition() && elevatorSwitchTriggered()) {
+            encoder.setPosition(0);
+            height = 0;
+        } else if (height > encoder.getPosition() && encoder.getPosition() > Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
+            height = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
+        }
+        elevator.set(pidController.calculate(encoder.getPosition(), height));
+        target = height;
+    }
+
 }
