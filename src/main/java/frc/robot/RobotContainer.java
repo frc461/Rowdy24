@@ -131,7 +131,7 @@ public class RobotContainer {
         elevatorAmp.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
         stowElevator.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
-        revShooter.whileTrue(new InstantCommand(()-> shooter.shoot(1)));
+        revShooter.whileTrue(new InstantCommand(()-> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER)));
         revShooter.whileFalse(new InstantCommand(()-> shooter.shoot(0)));
     }
 

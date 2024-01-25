@@ -3,8 +3,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -19,6 +17,11 @@ public class Shooter extends SubsystemBase {
 
     private final RelativeEncoder leftEncoder = leftShooter.getEncoder();
     private final RelativeEncoder rightEncoder = rightShooter.getEncoder();
+
+    private final CANSparkMax shooterAngler = new CANSparkMax(Constants.Shooter.ANGLER_ID, MotorType.kBrushless);
+    private final SparkMaxPIDController anglerPID = shooterAngler.getPIDController();
+    private final RelativeEncoder anglerEncoder = shooterAngler.getEncoder();
+
 
     public Shooter() {
         leftShooter.restoreFactoryDefaults();
@@ -35,12 +38,23 @@ public class Shooter extends SubsystemBase {
         rightPidController.setP(Constants.Shooter.SHOOTER_P);
         rightPidController.setI(Constants.Shooter.SHOOTER_I);
         rightPidController.setD(Constants.Shooter.SHOOTER_D);
+
+        shooterAngler.restoreFactoryDefaults();
+        shooterAngler.setSmartCurrentLimit(Constants.Shooter.ANGLER_CURRENT_LIMIT);
+        shooterAngler.setInverted(Constants.Shooter.ANGLER_INVERT);
+        anglerPID.setP(Constants.Shooter.ANGLER_P);
+        anglerPID.setI(Constants.Shooter.ANGLER_I);
+        anglerPID.setD(Constants.Shooter.ANGLER_D);
     }
 
     public void shoot(double speed) {
         //TODO make sure this works lolololol
-        leftPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
-        rightPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
+        leftPidController.setReference(speed, CANSparkMax.ControlType.kDutyCycle);
+        rightPidController.setReference(speed, CANSparkMax.ControlType.kDutyCycle);
+    }
+
+    public void tiltShooter(double angle) {
+        anglerPID.setReference(angle, CANSparkMax.ControlType.kPosition);
     }
 
 }
