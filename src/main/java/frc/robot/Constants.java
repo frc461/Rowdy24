@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -69,18 +70,18 @@ public final class Constants {
         public static final boolean DRIVE_MOTOR_INVERT = CHOSEN_MODULE.driveMotorInvert;
 
         /* Angle Encoder Invert */
-        public static final boolean CANCODER_INVERT = CHOSEN_MODULE.canCoderInvert;
+        public static final SensorDirectionValue CANCODER_SENSOR_DIRECTION = CHOSEN_MODULE.canCoderInvert;
 
         /* Swerve Current Limiting */
-        public static final int ANGLE_CONTINUOUS_CURRENT_LIMIT = 25;
-        public static final int ANGLE_PEAK_CURRENT_LIMIT = 40;
-        public static final double ANGLE_PEAK_CURRENT_DURATION = 0.1;
-        public static final boolean ANGLE_ENABLE_CURRENT_LIMIT = true;
+        public static final int ANGLE_CONTINUOUS_SUPPLY_CURRENT_LIMIT = 25;
+        public static final int ANGLE_PEAK_SUPPLY_CURRENT_LIMIT = 40;
+        public static final double ANGLE_PEAK_SUPPLY_CURRENT_DURATION = 0.1;
+        public static final boolean ANGLE_ENABLE_SUPPLY_CURRENT_LIMIT = true;
 
-        public static final int DRIVE_CONTINUOUS_CURRENT_LIMIT = 35;
-        public static final int DRIVE_PEAK_CURRENT_LIMIT = 60;
-        public static final double DRIVE_PEAK_CURRENT_DURATION = 0.1;
-        public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
+        public static final int DRIVE_CONTINUOUS_SUPPLY_CURRENT_LIMIT = 35;
+        public static final int DRIVE_PEAK_SUPPLY_CURRENT_LIMIT = 60;
+        public static final double DRIVE_PEAK_SUPPLY_CURRENT_DURATION = 0.1;
+        public static final boolean DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT = true;
 
         /* These values are used by the drive falcon to ramp in open loop and closed loop driving.
          * We found a small open loop ramp (0.25) helps with tread wear, tipping, etc */

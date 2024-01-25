@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -25,8 +26,8 @@ public class Swerve extends SubsystemBase {
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
-        
-        gyro.configFactoryDefault();
+
+        gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
 
         mSwerveMods = new SwerveModule[] {
@@ -114,17 +115,17 @@ public class Swerve extends SubsystemBase {
 
     public double getYaw() {
         return (Constants.Swerve.INVERT_GYRO) ?
-                Constants.MAXIMUM_ANGLE - (gyro.getYaw() % Constants.MAXIMUM_ANGLE) :
-                gyro.getYaw() % Constants.MAXIMUM_ANGLE;
+                Constants.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble() % Constants.MAXIMUM_ANGLE) :
+                gyro.getYaw().getValueAsDouble() % Constants.MAXIMUM_ANGLE;
     }
     public Rotation2d getHeading() {
         return Rotation2d.fromDegrees(getYaw());
     }
     public double getPitch() {
-        return gyro.getPitch();
+        return gyro.getPitch().getValueAsDouble();
     }
     public double getRoll() {
-        return gyro.getRoll();
+        return gyro.getRoll().getValueAsDouble();
     }
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
