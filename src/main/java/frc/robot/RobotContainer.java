@@ -27,6 +27,8 @@ public class RobotContainer {
     private final Swerve swerve = new Swerve();
     private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
+    private final Intake intake = new Intake();
+    private final Shooter shooter = new Shooter();
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -43,13 +45,13 @@ public class RobotContainer {
 
     /* Operator Buttons */
     // TODO: change generic button locations to respective functions
-    private final JoystickButton operatorA = new JoystickButton(operator, XboxController.Button.kA.value);
-    private final JoystickButton operatorB = new JoystickButton(operator, XboxController.Button.kB.value);
-    private final JoystickButton operatorX = new JoystickButton(operator, XboxController.Button.kX.value);
-    private final JoystickButton operatorY = new JoystickButton(operator, XboxController.Button.kY.value);
+    private final JoystickButton stowElevator = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final JoystickButton revShooter = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
 
-    private final JoystickButton operatorLeftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton operatorRightBumper = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+    private final JoystickButton outtakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
 
     private final POVButton operatorZero = new POVButton(operator, 0);
     private final POVButton operatorNinety = new POVButton(operator, 90);
@@ -123,7 +125,17 @@ public class RobotContainer {
                 robotCentric)
         );
 
-        /* Operator Buttons */
+        intakeButton.whileTrue(Commands.parallel(new InstantCommand(()->intake.setSpeed(1))));
+        intakeButton.whileFalse(new InstantCommand(()->intake.setSpeed(0)));
+
+        elevatorAmp.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
+        stowElevator.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
+
+        revShooter.whileTrue(new InstantCommand(()-> shooter.shoot(1)));
+        revShooter.whileFalse(new InstantCommand(()-> shooter.shoot(1)));
+
+        
+
     }
 
     // smartdashboard prints
