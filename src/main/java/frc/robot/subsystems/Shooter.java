@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -12,8 +12,9 @@ public class Shooter extends SubsystemBase {
     private final CANSparkMax leftShooter;
     private final CANSparkMax rightShooter;
 
-    private final SparkMaxPIDController leftPidController;
-    private final SparkMaxPIDController rightPidController;
+    private final SparkPIDController leftPidController = leftShooter.getPIDController();
+    private final SparkPIDController rightPidController = rightShooter.getPIDController();
+
 
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;

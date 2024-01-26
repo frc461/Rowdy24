@@ -2,9 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -34,8 +33,8 @@ public class SwerveModule {
     private RelativeEncoder integratedAngleEncoder;
     private CANCoder angleEncoder;
 
-    private SparkMaxPIDController driveController;
-    private SparkMaxPIDController angleController;
+    private SparkPIDController driveController;
+    private SparkPIDController angleController;
 
     private SwerveModulePosition currentPosition = new SwerveModulePosition();
     private SwerveModuleState currentState = new SwerveModuleState();
@@ -80,7 +79,7 @@ public class SwerveModule {
         else {
             driveController.setReference(
             desiredState.speedMetersPerSecond,
-            ControlType.kVelocity,
+            CANSparkMax.ControlType.kVelocity,
             0,
             feedforward.calculate(desiredState.speedMetersPerSecond));
         }
@@ -88,7 +87,7 @@ public class SwerveModule {
 
     public void setAngle(SwerveModuleState desiredState){
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
-        angleController.setReference(angle.getDegrees(), ControlType.kPosition);
+        angleController.setReference(angle.getDegrees(), CANSparkMax.ControlType.kPosition);
         lastAngle = angle;
     }
 
