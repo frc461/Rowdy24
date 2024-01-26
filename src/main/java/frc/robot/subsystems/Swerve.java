@@ -113,9 +113,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getYaw() {
-        return (Constants.Swerve.INVERT_GYRO) ?
-                Constants.MAXIMUM_ANGLE - (gyro.getYaw() % Constants.MAXIMUM_ANGLE) :
-                gyro.getYaw() % Constants.MAXIMUM_ANGLE;
+        return gyro.getYaw();
     }
     public Rotation2d getHeading() {
         return Rotation2d.fromDegrees(getYaw());
