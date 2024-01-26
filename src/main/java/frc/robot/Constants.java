@@ -34,7 +34,7 @@ public final class Constants {
     }
 
     public static final class Intake {
-        public static final int INTAKE_ID = 41;
+        public static final int INTAKE_ID = 91;
     }
 
     public static final class Shooter {
@@ -65,7 +65,7 @@ public final class Constants {
     }
 
     public static final class Carriage {
-        public static final int CARRIAGE_ID = 41;
+        public static final int CARRIAGE_ID = 81;
     }
 
     public static final class Swerve {

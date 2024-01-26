@@ -26,8 +26,8 @@ public class RobotContainer {
     private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final Intake intake = new Intake();
-    private final Shooter shooter = new Shooter();
-    private final Carriage carriage = new Carriage();
+    //private final Shooter shooter = new Shooter();
+    //private final Carriage carriage = new Carriage();
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -43,7 +43,6 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Operator Buttons */
-    // TODO: change generic button locations to respective functions
     private final JoystickButton stowElevator = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kB.value);
     private final JoystickButton revShooter = new JoystickButton(operator, XboxController.Button.kX.value);
@@ -128,23 +127,23 @@ public class RobotContainer {
         new InstantCommand(()->intake.setCarriageSpeed(1))));
 
         intakeButton.whileFalse(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(0)), 
-        new InstantCommand(()->intake.setCarriageSpeed(0))));
+        new InstantCommand(()->intake.setCarriageSpeed(-0.1))));
 
         outtakeButton.whileTrue(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(1)), 
         new InstantCommand(()->intake.setCarriageSpeed(-1))));
 
         outtakeButton.whileFalse(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(0)), 
-        new InstantCommand(()->intake.setCarriageSpeed(0))));
+        new InstantCommand(()->intake.setCarriageSpeed(-0.1))));
 
-        elevatorAmp.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
-        stowElevator.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
+        // elevatorAmp.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
+        // stowElevator.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
-        //TODO: change angle to point of interest/use trig to find the real angle
-        revShooter.whileTrue(Commands.sequence(new InstantCommand(()->shooter.tiltShooter(limelight.getPitch())), 
-        new InstantCommand(()-> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER))));
+        // //TODO: change angle to point of interest/use trig to find the real angle
+        // revShooter.whileTrue(Commands.sequence(new InstantCommand(()->shooter.tiltShooter(limelight.getPitch())), 
+        // new InstantCommand(()-> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER))));
 
-        revShooter.whileFalse(Commands.parallel(new InstantCommand(()-> shooter.shoot(0)), 
-        new InstantCommand(() -> shooter.holdTilt()))); // TODO: could make the shooter run at nonzero speed all the time
+        // revShooter.whileFalse(Commands.parallel(new InstantCommand(()-> shooter.shoot(0)), 
+        // new InstantCommand(() -> shooter.holdTilt()))); // TODO: could make the shooter run at nonzero speed all the time
     }
 
     // smartdashboard prints

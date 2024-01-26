@@ -9,18 +9,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase{
-    private final CANSparkMax elevator = new CANSparkMax(Constants.Elevator.ELEVATOR_ID, MotorType.kBrushless);
+    private final CANSparkMax elevator;
     private final PIDController pidController = new PIDController(
             Constants.Elevator.ELEVATOR_P,
             Constants.Elevator.ELEVATOR_I,
             Constants.Elevator.ELEVATOR_D
     );
-    private final RelativeEncoder encoder = elevator.getEncoder();
+    private final RelativeEncoder encoder;
     private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_SWITCH_ID); // limit switch that re-zeros the elevator encoder
     private double position;
     private double target;
 
     public Elevator() {
+        elevator = new CANSparkMax(Constants.Elevator.ELEVATOR_ID, MotorType.kBrushless);
+        encoder = elevator.getEncoder();
         position = encoder.getPosition();
         target = encoder.getPosition();
 

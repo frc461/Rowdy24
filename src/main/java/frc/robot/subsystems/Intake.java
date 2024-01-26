@@ -33,17 +33,17 @@ public class Intake extends SubsystemBase{
         } else if (!hasPiece) {
             intake.set(speed);
         } else {
-            intake.set(0);
+            intake.set(-1);
         }
     }
 
     @Override
     public void periodic() {
-        if (getCarriageBeamBroken()) {
-            hasPiece = true;
-        } else if (getAmpBeamBroken() || getShooterBeamBroken()) {
-            hasPiece = false;
-        }
+        // if (getCarriageBeamBroken()) {
+        //     hasPiece = true;
+        // } else if (getAmpBeamBroken() || getShooterBeamBroken()) {
+        //     hasPiece = false;
+        // }
     }
 
     public double getIntakeSpeed() {
