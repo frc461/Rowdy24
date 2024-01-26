@@ -25,7 +25,7 @@ public class RobotContainer {
     private final Swerve swerve = new Swerve();
     private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
-    private final Intake intake = new Intake();
+    private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     //private final Shooter shooter = new Shooter();
     //private final Carriage carriage = new Carriage();
 
@@ -123,17 +123,17 @@ public class RobotContainer {
                 robotCentric)
         );
 
-        intakeButton.whileTrue(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(1)), 
-        new InstantCommand(()->intake.setCarriageSpeed(1))));
+        intakeButton.whileTrue(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(1)),
+        new InstantCommand(()-> intakeCarriage.setCarriageSpeed(1))));
 
-        intakeButton.whileFalse(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(-0.1)), 
-        new InstantCommand(()->intake.setCarriageSpeed(0))));
+        intakeButton.whileFalse(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-0.1)),
+        new InstantCommand(()-> intakeCarriage.setCarriageSpeed(0))));
 
-        outtakeButton.whileTrue(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(-1)), 
-        new InstantCommand(()->intake.setCarriageSpeed(-1))));
+        outtakeButton.whileTrue(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-1)),
+        new InstantCommand(()-> intakeCarriage.setCarriageSpeed(-1))));
 
-        outtakeButton.whileFalse(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(-0.1)), 
-        new InstantCommand(()->intake.setCarriageSpeed(0))));
+        outtakeButton.whileFalse(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-0.1)),
+        new InstantCommand(()-> intakeCarriage.setCarriageSpeed(0))));
 
         // elevatorAmp.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
         // stowElevator.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));

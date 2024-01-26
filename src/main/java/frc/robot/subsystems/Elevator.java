@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
 
-public class Elevator extends SubsystemBase{
+public class Elevator extends SubsystemBase {
     private final CANSparkMax elevator;
     private final PIDController pidController = new PIDController(
             Constants.Elevator.ELEVATOR_P,
@@ -76,13 +76,12 @@ public class Elevator extends SubsystemBase{
 
     public void setHeight(double height) {
         if (height < encoder.getPosition() && elevatorSwitchTriggered()) {
-            encoder.setPosition(0);
-            height = 0;
+            encoder.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
+            height = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
         } else if (height > encoder.getPosition() && encoder.getPosition() > Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
             height = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
         }
         elevator.set(pidController.calculate(encoder.getPosition(), height));
         target = height;
     }
-
 }

@@ -5,19 +5,18 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Intake extends SubsystemBase{
-    private CANSparkMax intake;
-    
-    private CANSparkMax carriage;
+public class IntakeCarriage extends SubsystemBase{
+    private final CANSparkMax intake;
+    private final CANSparkMax carriage;
     
     //TODO: ask tech to put beam breaks in these places
-    DigitalInput carriageBeam = new DigitalInput(0); // enter the carriage (completely out of the intake)
-    DigitalInput ampBeam = new DigitalInput(1); // exit to amp
-    DigitalInput shooterBeam = new DigitalInput(2); // exit through shooter
+    DigitalInput carriageBeam = new DigitalInput(0); // end of carriage (on shooter side)
+    DigitalInput ampBeam = new DigitalInput(1); // entrance of carriage (which is the amp shooter)
+    DigitalInput shooterBeam = new DigitalInput(2); // completely exit through shooter
     
     private boolean hasPiece = false;
 
-    public Intake() {
+    public IntakeCarriage() {
         intake = new CANSparkMax(Constants.Intake.INTAKE_ID, MotorType.kBrushed);
         intake.restoreFactoryDefaults();
         intake.setInverted(true);
@@ -25,16 +24,6 @@ public class Intake extends SubsystemBase{
         carriage = new CANSparkMax(Constants.Carriage.CARRIAGE_ID, MotorType.kBrushless);
         carriage.restoreFactoryDefaults();
         carriage.setInverted(true);
-    }
-
-    public void setIntakeSpeed(double speed) {
-        if (speed <= 0) {
-            intake.set(speed);
-        } else if (!hasPiece) {
-            intake.set(speed);
-        } else {
-            intake.set(-1);
-        }
     }
 
     @Override
@@ -50,23 +39,33 @@ public class Intake extends SubsystemBase{
         return intake.get();
     }
 
-    public boolean getAmpBeamBroken() {
-        return ampBeam.get();
-    }
-
-    public boolean getShooterBeamBroken() {
-        return shooterBeam.get();
-    }
-
-    public void setCarriageSpeed(double speed) {
-        carriage.set(speed);
-    }
-
     public double getCarriageSpeed() {
         return carriage.get();
     }
 
+    public boolean getAmpBeamBroken() {
+        return !ampBeam.get();
+    }
+
+    public boolean getShooterBeamBroken() {
+        return !shooterBeam.get();
+    }
+
     public boolean getCarriageBeamBroken() {
-        return carriageBeam.get();
+        return !carriageBeam.get();
+    }
+
+    public void setIntakeSpeed(double speed) {
+        if (speed <= 0) {
+            intake.set(speed);
+        } else if (!hasPiece) {
+            intake.set(speed);
+        } else {
+            intake.set(-1);
+        }
+    }
+
+    public void setCarriageSpeed(double speed) {
+        carriage.set(speed);
     }
 }
