@@ -24,7 +24,6 @@ public final class Constants {
         public static final double ELEVATOR_UPPER_LIMIT = 61;
         public static final double ELEVATOR_AMP = 61;
         public static final double ELEVATOR_STOW = 0;
-
     }
 
     public static final class Limelight {
@@ -41,24 +40,18 @@ public final class Constants {
         public static final int LEFT_SHOOTER_ID = 61;
         public static final int RIGHT_SHOOTER_ID = 62;
         public static final int ANGLER_ID = 63;
-
         public static final double SHOOTER_P = 1;
         public static final double SHOOTER_I = 0.0;
         public static final double SHOOTER_D = 0.0;
-
         public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final boolean SHOOTER_INVERT = false;
-
         public static final double BASE_SHOOTER_SPEED = 1000;
         public static final double DISTANCE_MULTIPLIER = 0.1;
-
         public static final double ANGLER_P = 1;
         public static final double ANGLER_I = 0.0;
         public static final double ANGLER_D = 0.0;
-
         public static final int ANGLER_CURRENT_LIMIT = 60;
         public static final boolean ANGLER_INVERT = false;
-
         //TODO: change this
         public static final int ANGLER_LOWER_LIMIT = 0;
         public static final int ANGLER_UPPER_LIMIT = 10;

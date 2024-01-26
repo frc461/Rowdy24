@@ -138,8 +138,8 @@ public class RobotContainer {
         // elevatorAmp.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
         // stowElevator.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
-        // //TODO: change angle to point of interest/use trig to find the real angle
-        // revShooter.whileTrue(Commands.sequence(new InstantCommand(()->shooter.tiltShooter(limelight.getPitch())), 
+        //TODO: verify this trig
+        // revShooter.whileTrue(Commands.sequence(new InstantCommand(()-> shooter.tiltShooter(Math.atan((limelight.getRY()+0.6096)/limelight.getRX()))), 
         // new InstantCommand(()-> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER))));
 
         // revShooter.whileFalse(Commands.parallel(new InstantCommand(()-> shooter.shoot(0)), 
