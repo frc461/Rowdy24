@@ -21,15 +21,16 @@ import frc.robot.Constants;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
-    private final SwerveModule[] swerveMods;
+    private final SwerveModule[] mSwerveMods;
     private final Pigeon2 gyro;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
+
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
 
-        swerveMods = new SwerveModule[] {
+        mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
             new SwerveModule(1, Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS),
             new SwerveModule(2, Constants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS),
@@ -64,7 +65,7 @@ public class Swerve extends SubsystemBase {
                             Constants.Auto.AUTO_ANGLE_I,
                             Constants.Auto.AUTO_ANGLE_D), // Rotation PID constants
                     Constants.Swerve.MAX_SPEED, // Max module speed, in m/s
-                    Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to the furthest module.
+                    Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
             ),
             () -> {
@@ -82,13 +83,13 @@ public class Swerve extends SubsystemBase {
     public void periodic(){
         swerveOdometry.update(getHeading(), getModulePositions());
 
-        for(SwerveModule mod : swerveMods){
+        for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Position", mod.getPosition().distanceMeters);
+
         }
-        SmartDashboard.putNumber("Yaw TEST", this.getYaw());
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -107,13 +108,15 @@ public class Swerve extends SubsystemBase {
                                 );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
 
-        for(SwerveModule mod : swerveMods){
+        for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
         }
     }
 
     public double getYaw() {
-        return gyro.getYaw().getValueAsDouble();
+        return (Constants.Swerve.INVERT_GYRO) ?
+                Constants.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
+                gyro.getYaw().getValueAsDouble();
     }
     public Rotation2d getHeading() {
         return Rotation2d.fromDegrees(getYaw());
@@ -129,14 +132,14 @@ public class Swerve extends SubsystemBase {
     }
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
-        for(SwerveModule mod : swerveMods){
+        for(SwerveModule mod : mSwerveMods){
             states[mod.moduleNumber] = mod.getState();
         }
         return states;
     }
     public SwerveModulePosition[] getModulePositions(){
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
-        for(SwerveModule mod : swerveMods){
+        for(SwerveModule mod : mSwerveMods){
             positions[mod.moduleNumber] = mod.getPosition();
         }
         return positions;
@@ -149,7 +152,7 @@ public class Swerve extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.MAX_SPEED);
 
-        for(SwerveModule mod : swerveMods){
+        for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(desiredStates[mod.moduleNumber], true);
         }
     }
@@ -159,23 +162,22 @@ public class Swerve extends SubsystemBase {
     }
 
     public void resetModulesToAbsolute(){
-        for (SwerveModule mod : swerveMods){
+        for (SwerveModule mod : mSwerveMods){
             mod.resetToAbsolute();
         }
     }
 
     //Rotates by a passed amount of degrees
     public void rotateDegrees(double target){
-        try (
-                PIDController rotController = new PIDController(
-                        Constants.Swerve.ANGLE_P,
-                        Constants.Swerve.ANGLE_I,
-                        Constants.Swerve.ANGLE_D
-                )
-        ) {
-            rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
-            double rotate = rotController.calculate(getYaw(), getYaw() + target);
-            drive(new Translation2d(0, 0), rotate, false, true);
-        }
+        PIDController rotController = new PIDController(
+                Constants.Swerve.ANGLE_P,
+                Constants.Swerve.ANGLE_I,
+                Constants.Swerve.ANGLE_D
+        );
+        rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
+
+        double rotate = rotController.calculate(getYaw(), getYaw() + target);
+
+        drive(new Translation2d(0, 0), rotate, false, true);
     }
 }
