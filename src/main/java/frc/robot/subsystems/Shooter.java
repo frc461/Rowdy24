@@ -12,8 +12,8 @@ public class Shooter extends SubsystemBase {
     private final CANSparkMax leftShooter;
     private final CANSparkMax rightShooter;
 
-    private final SparkPIDController leftPidController = leftShooter.getPIDController();
-    private final SparkPIDController rightPidController = rightShooter.getPIDController();
+    private final SparkPIDController leftPidController;
+    private final SparkPIDController rightPidController;
 
 
     private final RelativeEncoder leftEncoder;
