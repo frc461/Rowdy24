@@ -1,4 +1,4 @@
-# FRC 461 Rowdy24 Software
+# FRC 461 Rowdy24 Robot Code
 
 ## Notes
 
