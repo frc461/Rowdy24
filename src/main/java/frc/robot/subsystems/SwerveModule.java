@@ -3,9 +3,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -21,7 +21,7 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class SwerveModule {
-    public final int moduleNumber;
+    public int moduleNumber;
     private final Rotation2d angleOffset;
     private Rotation2d lastAngle;
 
@@ -33,10 +33,9 @@ public class SwerveModule {
     private final RelativeEncoder integratedAngleEncoder;
     private final CANcoder angleEncoder;
 
-    private final SparkMaxPIDController driveController;
-    private final SparkMaxPIDController angleController;
-
-    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.DRIVE_S, Constants.Swerve.DRIVE_V, Constants.Swerve.DRIVE_A);
+    private final SparkPIDController driveController;
+    private final SparkPIDController angleController;
+    private final SimpleMotorFeedforward feedforward;
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;
@@ -57,6 +56,10 @@ public class SwerveModule {
         driveEncoder = driveMotor.getEncoder();
         driveController = driveMotor.getPIDController();
         configDriveMotor();
+
+        feedforward = new SimpleMotorFeedforward(
+                Constants.Swerve.DRIVE_S, Constants.Swerve.DRIVE_V, Constants.Swerve.DRIVE_A
+        );
 
         lastAngle = getState().angle;
     }
@@ -83,7 +86,7 @@ public class SwerveModule {
     }
 
     public void setAngle(SwerveModuleState desiredState){
-        Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less than 1%. Prevents Jittering.
+        Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         angleController.setReference(angle.getDegrees(), ControlType.kPosition);
         lastAngle = angle;
     }

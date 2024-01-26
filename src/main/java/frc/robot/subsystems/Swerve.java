@@ -65,7 +65,7 @@ public class Swerve extends SubsystemBase {
                             Constants.Auto.AUTO_ANGLE_I,
                             Constants.Auto.AUTO_ANGLE_D), // Rotation PID constants
                     Constants.Swerve.MAX_SPEED, // Max module speed, in m/s
-                    Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to furthest module.
+                    Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to the furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
             ),
             () -> {
@@ -168,16 +168,19 @@ public class Swerve extends SubsystemBase {
     }
 
     //Rotates by a passed amount of degrees
-    public void rotateDegrees(double target){
-        PIDController rotController = new PIDController(
-                Constants.Swerve.ANGLE_P,
-                Constants.Swerve.ANGLE_I,
-                Constants.Swerve.ANGLE_D
-        );
-        rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
+    public void rotateDegrees(double target) {
+        try (
+                PIDController rotController = new PIDController(
+                        Constants.Swerve.ANGLE_P,
+                        Constants.Swerve.ANGLE_I,
+                        Constants.Swerve.ANGLE_D
+                )
+        ) {
+            rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
-        double rotate = rotController.calculate(getYaw(), getYaw() + target);
+            double rotate = rotController.calculate(getYaw(), getYaw() + target);
 
-        drive(new Translation2d(0, 0), rotate, false, true);
+            drive(new Translation2d(0, 0), rotate, false, true);
+        }
     }
 }
