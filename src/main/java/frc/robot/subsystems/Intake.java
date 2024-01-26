@@ -18,7 +18,7 @@ public class Intake extends SubsystemBase{
     private boolean hasPiece = false;
 
     public Intake() {
-        intake = new CANSparkMax(Constants.Intake.INTAKE_ID, MotorType.kBrushless);
+        intake = new CANSparkMax(Constants.Intake.INTAKE_ID, MotorType.kBrushed);
         intake.restoreFactoryDefaults();
         intake.setInverted(true);
 

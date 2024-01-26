@@ -126,14 +126,14 @@ public class RobotContainer {
         intakeButton.whileTrue(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(1)), 
         new InstantCommand(()->intake.setCarriageSpeed(1))));
 
-        intakeButton.whileFalse(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(0)), 
-        new InstantCommand(()->intake.setCarriageSpeed(-0.1))));
+        intakeButton.whileFalse(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(-0.1)), 
+        new InstantCommand(()->intake.setCarriageSpeed(0))));
 
-        outtakeButton.whileTrue(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(1)), 
+        outtakeButton.whileTrue(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(-1)), 
         new InstantCommand(()->intake.setCarriageSpeed(-1))));
 
-        outtakeButton.whileFalse(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(0)), 
-        new InstantCommand(()->intake.setCarriageSpeed(-0.1))));
+        outtakeButton.whileFalse(Commands.parallel(new InstantCommand(()->intake.setIntakeSpeed(-0.1)), 
+        new InstantCommand(()->intake.setCarriageSpeed(0))));
 
         // elevatorAmp.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
         // stowElevator.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
