@@ -29,14 +29,15 @@ public class RobotContainer {
     private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
-    //private final Shooter shooter = new Shooter();
+    private final Shooter shooter = new Shooter();
+    private final Angler angler = new Angler();
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick operator = new Joystick(1);
 
     /* Operate Controls */
-    private final int wristAxis = XboxController.Axis.kLeftY.value;
+    private final int anglerAxis = XboxController.Axis.kLeftY.value;
     private final int elevatorAxis = XboxController.Axis.kRightY.value;
 
     /* Drive Controls */
@@ -94,6 +95,13 @@ public class RobotContainer {
                 robotCentric
             )
         );
+        
+        shooter.setDefaultCommand(
+            new TeleopAngler(
+                angler,
+                () -> -operator.getRawAxis(anglerAxis)
+            )
+        );
 
         elevator.setDefaultCommand(
             new TeleopElevator(
@@ -144,17 +152,14 @@ public class RobotContainer {
         // elevatorStow.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
         // TODO: verify this trig
-//         revShooter.whileTrue(Commands.sequence(
-//                 new InstantCommand(() -> shooter.tiltShooter(Math.atan((limelight.getRY()+0.6096)/limelight.getRZ()))),
-//                 new InstantCommand(() -> shooter.shoot(
-//                         Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER
-//                 ))
-//         ));
+        revShooter.whileTrue(
+            new InstantCommand(
+                () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER)
+        ));
 
-//         revShooter.whileFalse(Commands.parallel(
-//                 new InstantCommand(()-> shooter.shoot(0)),
-//                 new InstantCommand(() -> shooter.holdTilt())
-//         )); // TODO: could make the shooter run at nonzero speed all the time
+        revShooter.whileFalse(
+                new InstantCommand(()-> shooter.shoot(0))
+        ); // TODO: could make the shooter run at nonzero speed all the time
     }
 
     // smartdashboard prints
@@ -179,6 +184,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight X", limelight.getRX());
         SmartDashboard.putNumber("Limelight Y", limelight.getRY());
         SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
+
+        SmartDashboard.putNumber("Angler encoder", angler.getEncoder());
     }
 
     /**

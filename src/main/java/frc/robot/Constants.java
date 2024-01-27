@@ -61,7 +61,6 @@ public final class Constants {
         public static final double ANGLER_D = 0.0;
         public static final int ANGLER_CURRENT_LIMIT = 60;
         public static final boolean ANGLER_INVERT = false;
-        //TODO: change this
         public static final double ANGLER_ROTATION_CONSTANT = 42.0 / 360.0;
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 10;

@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -9,8 +12,8 @@ import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
-    private final CANSparkMax leftShooter;
-    private final CANSparkMax rightShooter;
+    private final CANSparkFlex leftShooter;
+    private final CANSparkFlex rightShooter;
 
     private final SparkPIDController leftPidController;
     private final SparkPIDController rightPidController;
@@ -19,19 +22,14 @@ public class Shooter extends SubsystemBase {
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
 
-    private final CANSparkMax shooterAngler;
-    private final PIDController anglerPID;
-    private final RelativeEncoder anglerEncoder;
-    private double target;
-
     public Shooter() {
-        leftShooter = new CANSparkMax(Constants.Shooter.LEFT_SHOOTER_ID, MotorType.kBrushless);
+        leftShooter = new CANSparkFlex(Constants.Shooter.LEFT_SHOOTER_ID, MotorType.kBrushless);
         leftShooter.restoreFactoryDefaults();
         leftShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
         leftShooter.setInverted(Constants.Shooter.SHOOTER_INVERT);
         leftEncoder = leftShooter.getEncoder();
 
-        rightShooter = new CANSparkMax(Constants.Shooter.RIGHT_SHOOTER_ID, MotorType.kBrushless);
+        rightShooter = new CANSparkFlex(Constants.Shooter.RIGHT_SHOOTER_ID, MotorType.kBrushless);
         rightShooter.restoreFactoryDefaults();
         rightShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
         rightShooter.setInverted(Constants.Shooter.SHOOTER_INVERT);
@@ -46,42 +44,12 @@ public class Shooter extends SubsystemBase {
         rightPidController.setP(Constants.Shooter.SHOOTER_P);
         rightPidController.setI(Constants.Shooter.SHOOTER_I);
         rightPidController.setD(Constants.Shooter.SHOOTER_D);
-
-        shooterAngler = new CANSparkMax(Constants.Shooter.ANGLER_ID, MotorType.kBrushless);
-        shooterAngler.restoreFactoryDefaults();
-        shooterAngler.setSmartCurrentLimit(Constants.Shooter.ANGLER_CURRENT_LIMIT);
-        shooterAngler.setInverted(Constants.Shooter.ANGLER_INVERT);
-        anglerPID = new PIDController(0, 0, 0);
-        anglerPID.setP(Constants.Shooter.ANGLER_P);
-        anglerPID.setI(Constants.Shooter.ANGLER_I);
-        anglerPID.setD(Constants.Shooter.ANGLER_D);
-        anglerEncoder = shooterAngler.getEncoder();
-
-        target = Constants.Shooter.ANGLER_UPPER_LIMIT;
     }
 
     public void shoot(double speed) {
         //TODO make sure this works lolololol
         leftPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
         rightPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
-    }
-
-    public void tiltShooter(double angle) {
-        //TODO: not sure if this is the correct conversion
-        double angleToRot = angle * Constants.Shooter.ANGLER_ROTATION_CONSTANT;
-
-        if (angleToRot < anglerEncoder.getPosition() && anglerEncoder.getPosition() < Constants.Shooter.ANGLER_LOWER_LIMIT) {
-            angleToRot = Constants.Shooter.ANGLER_LOWER_LIMIT;
-        } else if (angleToRot > anglerEncoder.getPosition() && anglerEncoder.getPosition() > Constants.Shooter.ANGLER_UPPER_LIMIT) {
-            angleToRot = Constants.Shooter.ANGLER_UPPER_LIMIT;
-        }
-        target = angleToRot;
-        shooterAngler.set(anglerPID.calculate(anglerEncoder.getPosition(), angleToRot));
-    }
-
-    public void holdTilt() {
-        target = Math.max(target, Constants.Shooter.ANGLER_LOWER_LIMIT);
-        shooterAngler.set(anglerPID.calculate(anglerEncoder.getPosition(), target));
     }
 
 }
