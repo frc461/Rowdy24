@@ -31,12 +31,13 @@ public class Limelight extends SubsystemBase {
         return tagPose[0];
     }
 
+    //Y+ is upwards
     public double getRY(){
         refreshValues();
         return tagPose[1];
     }
 
-    //Z+ is perpendicular to the plane of the tag (Z+ is away from tag on data side, Z- is away on non data side)
+    //Z+ is perpendicular to the plane of the limelight (Z+ is towards tag on data side, Z- is on other side of robot)
     public double getRZ(){
         refreshValues();
         return tagPose[2];

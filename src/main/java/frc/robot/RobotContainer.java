@@ -27,7 +27,6 @@ public class RobotContainer {
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     //private final Shooter shooter = new Shooter();
-    //private final Carriage carriage = new Carriage();
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -140,11 +139,17 @@ public class RobotContainer {
         // elevatorStow.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
         // TODO: verify this trig
-        // revShooter.whileTrue(Commands.sequence(new InstantCommand(()-> shooter.tiltShooter(Math.atan((limelight.getRY()+0.6096)/limelight.getRX()))), 
-        // new InstantCommand(()-> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER))));
+//         revShooter.whileTrue(Commands.sequence(
+//                 new InstantCommand(() -> shooter.tiltShooter(Math.atan((limelight.getRY()+0.6096)/limelight.getRZ()))),
+//                 new InstantCommand(() -> shooter.shoot(
+//                         Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER
+//                 ))
+//         ));
 
-        // revShooter.whileFalse(Commands.parallel(new InstantCommand(()-> shooter.shoot(0)), 
-        // new InstantCommand(() -> shooter.holdTilt()))); // TODO: could make the shooter run at nonzero speed all the time
+//         revShooter.whileFalse(Commands.parallel(
+//                 new InstantCommand(()-> shooter.shoot(0)),
+//                 new InstantCommand(() -> shooter.holdTilt())
+//         )); // TODO: could make the shooter run at nonzero speed all the time
     }
 
     // smartdashboard prints

@@ -45,25 +45,30 @@ public class TeleopLimelightTurret extends Command {
         double strafeVal = MathUtil.applyDeadband(strafe.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
-        PIDController rotController = new PIDController(
-                Constants.Limelight.LIMELIGHT_P,
-                Constants.Limelight.LIMELIGHT_I,
-                Constants.Limelight.LIMELIGHT_D
-        );
-        rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
+        try (
+                PIDController rotController = new PIDController(
+                        Constants.Limelight.LIMELIGHT_P,
+                        Constants.Limelight.LIMELIGHT_I,
+                        Constants.Limelight.LIMELIGHT_D
+                )
+        ) {
+            rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
-        // TODO: Calculate more accurate target using RX and RZ angle values, then get rid of varied P in PID
+            // TODO: verify angle
+            double rotate = rotController.calculate(
+                    swerve.getYaw(),
+                    swerve.getYaw() + (limelight.getRX() < 0 ? -1 : 1) * Math.atan(
+                            Math.pow(limelight.getRX(), 2) / Math.pow(limelight.getRZ(), 2)
+                    )
+            );
 
-        
-        double rotate = rotController.calculate(swerve.getYaw(), swerve.getYaw() + 15 * limelight.getRX());
-
-        /* Drive */
-        swerve.drive(
-            new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
-            -rotate,
-            !robotCentric.getAsBoolean(),
-            true
-        );
+            /* Drive */
+            swerve.drive(
+                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
+                    -rotate,
+                    !robotCentric.getAsBoolean(),
+                    true
+            );
+        }
     }
- 
 }

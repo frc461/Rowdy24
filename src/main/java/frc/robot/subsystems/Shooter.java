@@ -80,9 +80,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void holdTilt() {
-        if(target < Constants.Shooter.ANGLER_LOWER_LIMIT){
-            target = Constants.Shooter.ANGLER_LOWER_LIMIT;
-        }
+        target = Math.max(target, Constants.Shooter.ANGLER_LOWER_LIMIT);
         shooterAngler.set(anglerPID.calculate(anglerEncoder.getPosition(), target));
     }
 
