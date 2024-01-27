@@ -1,12 +1,14 @@
 package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
+import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeCarriage extends SubsystemBase{
-    private final CANSparkMax intake;
+    private final CANSparkFlex intake;
     private final CANSparkMax carriage;
     
     //TODO: ask tech to put beam breaks in these places
@@ -17,9 +19,11 @@ public class IntakeCarriage extends SubsystemBase{
     private boolean hasPiece = false;
 
     public IntakeCarriage() {
-        intake = new CANSparkMax(Constants.Intake.INTAKE_ID, MotorType.kBrushed);
+        intake = new CANSparkFlex(Constants.Intake.INTAKE_ID, MotorType.kBrushless);
+
         intake.restoreFactoryDefaults();
-        intake.setInverted(true);
+        intake.setSmartCurrentLimit(50);
+        intake.setInverted(false);
 
         carriage = new CANSparkMax(Constants.Carriage.CARRIAGE_ID, MotorType.kBrushless);
         carriage.restoreFactoryDefaults();

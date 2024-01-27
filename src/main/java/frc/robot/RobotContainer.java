@@ -1,5 +1,8 @@
 package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
+
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -80,6 +83,8 @@ public class RobotContainer {
     */
 
     public RobotContainer() {
+        NamedCommands.registerCommand("intake", new AutoIntake(intakeCarriage));
+        
         swerve.setDefaultCommand(
             new TeleopSwerve(
                 swerve,
@@ -122,16 +127,16 @@ public class RobotContainer {
                 robotCentric)
         );
 
-        intakeButton.whileTrue(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(1)),
+        intakeButton.whileTrue(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(0.75)),
         new InstantCommand(()-> intakeCarriage.setCarriageSpeed(1))));
 
-        intakeButton.whileFalse(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-0.1)),
+        intakeButton.whileFalse(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-0.15)),
         new InstantCommand(()-> intakeCarriage.setCarriageSpeed(0))));
 
-        outtakeButton.whileTrue(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-1)),
+        outtakeButton.whileTrue(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-0.75)),
         new InstantCommand(()-> intakeCarriage.setCarriageSpeed(-1))));
 
-        outtakeButton.whileFalse(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-0.1)),
+        outtakeButton.whileFalse(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-0.15)),
         new InstantCommand(()-> intakeCarriage.setCarriageSpeed(0))));
 
         // TODO: add button to set elevator to shooting preset as well as amp and stow (there are three levels)
