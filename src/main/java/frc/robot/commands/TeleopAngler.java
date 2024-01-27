@@ -23,7 +23,7 @@ public class TeleopAngler extends Command{
   public void execute() {
     double motionVal = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.STICK_DEADBAND);
     if (motionVal != 0) {
-      angler.moveTilt(motionVal);
+      angler.moveAngle(motionVal);
     } else {
       angler.holdTilt();
     }

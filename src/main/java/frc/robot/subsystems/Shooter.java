@@ -26,13 +26,13 @@ public class Shooter extends SubsystemBase {
         leftShooter = new CANSparkFlex(Constants.Shooter.LEFT_SHOOTER_ID, MotorType.kBrushless);
         leftShooter.restoreFactoryDefaults();
         leftShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
-        leftShooter.setInverted(Constants.Shooter.SHOOTER_INVERT);
+        leftShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
         leftEncoder = leftShooter.getEncoder();
 
         rightShooter = new CANSparkFlex(Constants.Shooter.RIGHT_SHOOTER_ID, MotorType.kBrushless);
         rightShooter.restoreFactoryDefaults();
         rightShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
-        rightShooter.setInverted(Constants.Shooter.SHOOTER_INVERT);
+        rightShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
         rightEncoder = rightShooter.getEncoder();
 
         leftPidController = leftShooter.getPIDController();
@@ -44,12 +44,34 @@ public class Shooter extends SubsystemBase {
         rightPidController.setP(Constants.Shooter.SHOOTER_P);
         rightPidController.setI(Constants.Shooter.SHOOTER_I);
         rightPidController.setD(Constants.Shooter.SHOOTER_D);
+
+        //leftPidController.setOutputRange(1, 1);
+        //rightPidController.setOutputRange(1, 1);
+
+        leftShooter.burnFlash();
+        rightShooter.burnFlash();
     }
 
     public void shoot(double speed) {
         //TODO make sure this works lolololol
-        leftPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
-        rightPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
+        if (speed <= 0) {
+            leftShooter.set(0);
+            rightShooter.set(0);
+        } else {
+            leftPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
+            rightPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
+            leftPidController.setOutputRange(0, 1);
+            // leftShooter.set(speed);
+            // rightShooter.set(speed);
+        }
+        
+    }
+
+    public double getLeftShooterSpeed(){
+        return leftEncoder.getVelocity();
+    }
+    public double getRightShooterSpeed(){
+        return rightEncoder.getVelocity();
     }
 
 }

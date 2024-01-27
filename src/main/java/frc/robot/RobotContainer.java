@@ -26,11 +26,11 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-    private final Elevator elevator = new Elevator();
+    //private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
-    private final Angler angler = new Angler();
+    // private final Angler angler = new Angler();
 
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -96,19 +96,19 @@ public class RobotContainer {
             )
         );
         
-        shooter.setDefaultCommand(
-            new TeleopAngler(
-                angler,
-                () -> -operator.getRawAxis(anglerAxis)
-            )
-        );
+        // angler.setDefaultCommand(
+        //     new TeleopAngler(
+        //         angler,
+        //         () -> -operator.getRawAxis(anglerAxis)
+        //     )
+        // );
 
-        elevator.setDefaultCommand(
-            new TeleopElevator(
-                    elevator,
-                () -> -operator.getRawAxis(elevatorAxis)
-            )
-        );
+        // elevator.setDefaultCommand(
+        //     new TeleopElevator(
+        //             elevator,
+        //         () -> -operator.getRawAxis(elevatorAxis)
+        //     )
+        // );
 
         // Configure the button bindings
         configureButtonBindings();
@@ -154,7 +154,7 @@ public class RobotContainer {
         // TODO: verify this trig
         revShooter.whileTrue(
             new InstantCommand(
-                () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER)
+                () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED) //+ limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER)
         ));
 
         revShooter.whileFalse(
@@ -171,10 +171,10 @@ public class RobotContainer {
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
 
         // elevator debug
-        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
-        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
-        SmartDashboard.putNumber("Elevator Power", elevator.elevatorPower());
-        SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
+        // SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
+        // SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
+        // SmartDashboard.putNumber("Elevator Power", elevator.elevatorPower());
+        // SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
 
         // limelight debug
         SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());
@@ -184,8 +184,12 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight X", limelight.getRX());
         SmartDashboard.putNumber("Limelight Y", limelight.getRY());
         SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
+        SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
+        SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
 
-        SmartDashboard.putNumber("Angler encoder", angler.getEncoder());
+        
+
+        // SmartDashboard.putNumber("Angler encoder", angler.getEncoder());
     }
 
     /**

@@ -1,5 +1,4 @@
 package frc.robot.subsystems;
-
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
@@ -19,10 +18,7 @@ public class Angler extends SubsystemBase{
         shooterAngler.restoreFactoryDefaults();
         shooterAngler.setSmartCurrentLimit(Constants.Shooter.ANGLER_CURRENT_LIMIT);
         shooterAngler.setInverted(Constants.Shooter.ANGLER_INVERT);
-        anglerPID = new PIDController(0, 0, 0);
-        anglerPID.setP(Constants.Shooter.ANGLER_P);
-        anglerPID.setI(Constants.Shooter.ANGLER_I);
-        anglerPID.setD(Constants.Shooter.ANGLER_D);
+        anglerPID = new PIDController(Constants.Shooter.ANGLER_P, Constants.Shooter.ANGLER_I, Constants.Shooter.ANGLER_D);
         anglerEncoder = shooterAngler.getAbsoluteEncoder(Type.kDutyCycle);
         target = Constants.Shooter.ANGLER_UPPER_LIMIT;
     }
@@ -40,7 +36,7 @@ public class Angler extends SubsystemBase{
         shooterAngler.set(anglerPID.calculate(anglerEncoder.getPosition(), angleToRot));
     }
 
-    public void moveTilt(double movementVector) {
+    public void moveAngle(double movementVector) {
         if(movementVector < 0 && anglerEncoder.getPosition() < Constants.Shooter.ANGLER_LOWER_LIMIT) {
             target = Constants.Shooter.ANGLER_LOWER_LIMIT;
             holdTilt();
