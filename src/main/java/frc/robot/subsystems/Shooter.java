@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
 
     public void tiltShooter(double angle) {
         //TODO: not sure if this is the correct conversion
-        double angleToRot = (angle*42)/(360);
+        double angleToRot = angle * Constants.Shooter.ANGLER_ROTATION_CONSTANT;
 
         if (angleToRot < anglerEncoder.getPosition() && anglerEncoder.getPosition() < Constants.Shooter.ANGLER_LOWER_LIMIT) {
             angleToRot = Constants.Shooter.ANGLER_LOWER_LIMIT;

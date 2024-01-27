@@ -12,9 +12,17 @@ public final class Constants {
     public static final double MINIMUM_ANGLE = -180.0;
     public static final double MAXIMUM_ANGLE = 180.0;
 
+    public static final class Auto {
+        public static final double AUTO_DRIVE_P = 0.1;
+        public static final double AUTO_DRIVE_I = 0.0;
+        public static final double AUTO_DRIVE_D = 0.0;
+        public static final double AUTO_ANGLE_P = 0.1;
+        public static final double AUTO_ANGLE_I = 0.0;
+        public static final double AUTO_ANGLE_D = 0.0;
+    }
+
     public static final class Elevator {
         public static final int ELEVATOR_ID = 31;
-        public static final int ELEVATOR_SWITCH_ID = 3;
         public static final int ELEVATOR_CURRENT_LIMIT = 70;
         public static final boolean ELEVATOR_INVERT = true;
         public static final double ELEVATOR_P = 0.097;
@@ -22,8 +30,9 @@ public final class Constants {
         public static final double ELEVATOR_D = 0.0;
         public static final double ELEVATOR_LOWER_LIMIT = 0;
         public static final double ELEVATOR_UPPER_LIMIT = 61;
-        public static final double ELEVATOR_AMP = 61;
-        public static final double ELEVATOR_STOW = 0;
+        public static final double ELEVATOR_AMP = 61.0;
+        public static final double ELEVATOR_SHOOT = 30.5;
+        public static final double ELEVATOR_STOW = 0.0;
     }
 
     public static final class Limelight {
@@ -40,21 +49,22 @@ public final class Constants {
         public static final int LEFT_SHOOTER_ID = 61;
         public static final int RIGHT_SHOOTER_ID = 62;
         public static final int ANGLER_ID = 63;
-        public static final double SHOOTER_P = 1;
+        public static final double SHOOTER_P = 1.0;
         public static final double SHOOTER_I = 0.0;
         public static final double SHOOTER_D = 0.0;
         public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final boolean SHOOTER_INVERT = false;
-        public static final double BASE_SHOOTER_SPEED = 1000;
+        public static final double BASE_SHOOTER_SPEED = 1000.0;
         public static final double DISTANCE_MULTIPLIER = 0.1;
-        public static final double ANGLER_P = 1;
+        public static final double ANGLER_P = 1.0;
         public static final double ANGLER_I = 0.0;
         public static final double ANGLER_D = 0.0;
         public static final int ANGLER_CURRENT_LIMIT = 60;
         public static final boolean ANGLER_INVERT = false;
         //TODO: change this
-        public static final int ANGLER_LOWER_LIMIT = 0;
-        public static final int ANGLER_UPPER_LIMIT = 10;
+        public static final double ANGLER_ROTATION_CONSTANT = 42.0 / 360.0;
+        public static final double ANGLER_LOWER_LIMIT = 0;
+        public static final double ANGLER_UPPER_LIMIT = 10;
     }
 
     public static final class Carriage {
@@ -189,14 +199,5 @@ public final class Constants {
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS = 
                 new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
-    }
-
-    public static final class Auto {
-        public static final double AUTO_DRIVE_P = 0.1;
-        public static final double AUTO_DRIVE_I = 0.0;
-        public static final double AUTO_DRIVE_D = 0.0;
-        public static final double AUTO_ANGLE_P = 0.1;
-        public static final double AUTO_ANGLE_I = 0.0;
-        public static final double AUTO_ANGLE_D = 0.0;
     }
 }

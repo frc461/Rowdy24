@@ -16,7 +16,7 @@ public class Elevator extends SubsystemBase {
             Constants.Elevator.ELEVATOR_D
     );
     private final RelativeEncoder encoder;
-    private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_SWITCH_ID); // limit switch that re-zeros the elevator encoder
+    private final DigitalInput elevatorSwitch;
     private double position;
     private double target;
 
@@ -25,6 +25,7 @@ public class Elevator extends SubsystemBase {
         encoder = elevator.getEncoder();
         position = encoder.getPosition();
         target = encoder.getPosition();
+        elevatorSwitch = new DigitalInput(3); // limit switch that re-zeros the elevator encoder
 
         elevator.restoreFactoryDefaults();
         elevator.setSmartCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);

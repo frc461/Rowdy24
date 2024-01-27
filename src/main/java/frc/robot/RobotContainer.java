@@ -43,7 +43,7 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Operator Buttons */
-    private final JoystickButton stowElevator = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton elevatorStow = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kB.value);
     private final JoystickButton revShooter = new JoystickButton(operator, XboxController.Button.kX.value);
     private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
@@ -135,10 +135,11 @@ public class RobotContainer {
         outtakeButton.whileFalse(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-0.1)),
         new InstantCommand(()-> intakeCarriage.setCarriageSpeed(0))));
 
+        // TODO: add button to set elevator to shooting preset as well as amp and stow (there are three levels)
         // elevatorAmp.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
-        // stowElevator.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
+        // elevatorStow.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
-        //TODO: verify this trig
+        // TODO: verify this trig
         // revShooter.whileTrue(Commands.sequence(new InstantCommand(()-> shooter.tiltShooter(Math.atan((limelight.getRY()+0.6096)/limelight.getRX()))), 
         // new InstantCommand(()-> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER))));
 
