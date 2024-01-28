@@ -65,8 +65,7 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton driverRightBumper = new JoystickButton(driver,
-            XboxController.Button.kRightBumper.value);
+    private final JoystickButton driverRightBumper = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
     private final POVButton driverZero = new POVButton(driver, 0);
     private final POVButton driverNinety = new POVButton(driver, 90);
@@ -92,7 +91,9 @@ public class RobotContainer {
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis),
                         () -> -driver.getRawAxis(rotationAxis),
-                        robotCentric));
+                        robotCentric
+                )
+        );
 
         // angler.setDefaultCommand(
         // new TeleopAngler(
@@ -130,19 +131,28 @@ public class RobotContainer {
                 swerve,
                 () -> -driver.getRawAxis(translationAxis),
                 () -> -driver.getRawAxis(strafeAxis),
-                robotCentric));
+                robotCentric)
+        );
 
-        intakeButton.whileTrue(Commands.parallel(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.75)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(1))));
+        intakeButton.whileTrue(Commands.parallel(
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.75)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(1))
+        ));
 
-        intakeButton.whileFalse(Commands.parallel(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.15)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))));
+        intakeButton.whileFalse(Commands.parallel(
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.15)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
+        ));
 
-        outtakeButton.whileTrue(Commands.parallel(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.75)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(-1))));
+        outtakeButton.whileTrue(Commands.parallel(
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.75)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(-1))
+        ));
 
-        outtakeButton.whileFalse(Commands.parallel(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.15)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))));
+        outtakeButton.whileFalse(Commands.parallel(
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.15)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
+        ));
 
         // TODO: add button to set elevator to shooting preset as well as amp and stow
         // (there are three levels)
@@ -154,13 +164,11 @@ public class RobotContainer {
         // TODO: verify this trig
         revShooter.whileTrue(
                 new InstantCommand(
-                        () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED) // +
-                                                                                  // limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER)
+                        () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED) // + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER)
                 ));
 
         revShooter.whileFalse(
-                new InstantCommand(() -> shooter.shoot(0))); // TODO: could make the shooter run at nonzero speed all
-                                                             // the time
+                new InstantCommand(() -> shooter.shoot(0))); // TODO: could make the shooter run at nonzero speed all the time
     }
 
     // smartdashboard prints

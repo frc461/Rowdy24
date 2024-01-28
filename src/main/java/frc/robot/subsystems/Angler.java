@@ -19,8 +19,11 @@ public class Angler extends SubsystemBase {
         shooterAngler.restoreFactoryDefaults();
         shooterAngler.setSmartCurrentLimit(Constants.Shooter.ANGLER_CURRENT_LIMIT);
         shooterAngler.setInverted(Constants.Shooter.ANGLER_INVERT);
-        anglerPID = new PIDController(Constants.Shooter.ANGLER_P, Constants.Shooter.ANGLER_I,
-                Constants.Shooter.ANGLER_D);
+        anglerPID = new PIDController(
+                Constants.Shooter.ANGLER_P,
+                Constants.Shooter.ANGLER_I,
+                Constants.Shooter.ANGLER_D
+        );
         anglerEncoder = shooterAngler.getAbsoluteEncoder(Type.kDutyCycle);
         target = Constants.Shooter.ANGLER_UPPER_LIMIT;
     }
@@ -62,5 +65,4 @@ public class Angler extends SubsystemBase {
     public double getEncoder() {
         return anglerEncoder.getPosition();
     }
-
 }

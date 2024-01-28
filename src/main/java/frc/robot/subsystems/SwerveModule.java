@@ -36,8 +36,11 @@ public class SwerveModule {
     private SwerveModulePosition currentPosition = new SwerveModulePosition();
     private SwerveModuleState currentState = new SwerveModuleState();
 
-    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.DRIVE_S,
-            Constants.Swerve.DRIVE_V, Constants.Swerve.DRIVE_A);
+    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
+            Constants.Swerve.DRIVE_S,
+            Constants.Swerve.DRIVE_V,
+            Constants.Swerve.DRIVE_A
+    );
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants) {
         this.moduleNumber = moduleNumber;
@@ -81,7 +84,8 @@ public class SwerveModule {
                     desiredState.speedMetersPerSecond,
                     CANSparkMax.ControlType.kVelocity,
                     0,
-                    feedforward.calculate(desiredState.speedMetersPerSecond));
+                    feedforward.calculate(desiredState.speedMetersPerSecond)
+            );
         }
     }
 
@@ -150,14 +154,10 @@ public class SwerveModule {
     // everything below here is fine.
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(
-                driveEncoder.getVelocity(),
-                getAngle());
+        return new SwerveModuleState(driveEncoder.getVelocity(), getAngle());
     }
 
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(
-                driveEncoder.getPosition(),
-                getAngle());
+        return new SwerveModulePosition(driveEncoder.getPosition(), getAngle());
     }
 }

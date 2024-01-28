@@ -30,10 +30,10 @@ public class Swerve extends SubsystemBase {
         zeroGyro();
 
         mSwerveMods = new SwerveModule[] {
-                new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
-                new SwerveModule(1, Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS),
-                new SwerveModule(2, Constants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS),
-                new SwerveModule(3, Constants.Swerve.Mod3.SWERVE_MODULE_CONSTANTS)
+            new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
+            new SwerveModule(1, Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS),
+            new SwerveModule(2, Constants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS),
+            new SwerveModule(3, Constants.Swerve.Mod3.SWERVE_MODULE_CONSTANTS)
         };
 
         /*
@@ -44,8 +44,11 @@ public class Swerve extends SubsystemBase {
         Timer.delay(1.0);
         resetModulesToAbsolute();
 
-        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.SWERVE_KINEMATICS, getHeading(),
-                getModulePositions());
+        swerveOdometry = new SwerveDriveOdometry(
+                Constants.Swerve.SWERVE_KINEMATICS,
+                getHeading(),
+                getModulePositions()
+        );
 
         AutoBuilder.configureHolonomic(
                 this::getPose, // Robot pose supplier
@@ -54,28 +57,29 @@ public class Swerve extends SubsystemBase {
                                                                                              // MUST BE ROBOT RELATIVE
                 speeds -> {
                     // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                    SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS
-                            .toSwerveModuleStates(speeds);
+                    SwerveModuleState[] swerveModuleStates =
+                            Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
                     setModuleStates(swerveModuleStates);
                 },
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
                                                  // Constants class
-                        new PIDConstants(
+                        new PIDConstants( // Translation PID constants
                                 Constants.Auto.AUTO_DRIVE_P,
                                 Constants.Auto.AUTO_DRIVE_I,
-                                Constants.Auto.AUTO_DRIVE_D), // Translation PID constants
-                        new PIDConstants(
+                                Constants.Auto.AUTO_DRIVE_D
+                        ),
+                        new PIDConstants( // Rotation PID constants
                                 Constants.Auto.AUTO_ANGLE_P,
                                 Constants.Auto.AUTO_ANGLE_I,
-                                Constants.Auto.AUTO_ANGLE_D), // Rotation PID constants
+                                Constants.Auto.AUTO_ANGLE_D
+                        ),
                         Constants.Swerve.MAX_SPEED, // Max module speed, in m/s
                         Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to
                                                           // furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red
-                    // alliance
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
                     // This will flip the path being followed to the red side of the field.
                     // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
                     var alliance = DriverStation.getAlliance();
@@ -88,13 +92,11 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Position", mod.getPosition().distanceMeters);
-
         }
     }
 
@@ -104,11 +106,14 @@ public class Swerve extends SubsystemBase {
                         translation.getX(),
                         translation.getY(),
                         rotation,
-                        getHeading())
+                        getHeading()
+                )
                         : new ChassisSpeeds(
                                 translation.getX(),
                                 translation.getY(),
-                                rotation));
+                                rotation
+                )
+        );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
 
         for (SwerveModule mod : mSwerveMods) {
@@ -176,14 +181,18 @@ public class Swerve extends SubsystemBase {
 
     // Rotates by a passed amount of degrees
     public void rotateDegrees(double target) {
-        PIDController rotController = new PIDController(
-                Constants.Swerve.ANGLE_P,
-                Constants.Swerve.ANGLE_I,
-                Constants.Swerve.ANGLE_D);
-        rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
+        try (
+                PIDController rotController = new PIDController(
+                        Constants.Swerve.ANGLE_P,
+                        Constants.Swerve.ANGLE_I,
+                        Constants.Swerve.ANGLE_D
+                )
+        ) {
+            rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
-        double rotate = rotController.calculate(getYaw(), getYaw() + target);
+            double rotate = rotController.calculate(getYaw(), getYaw() + target);
 
-        drive(new Translation2d(0, 0), rotate, false, true);
+            drive(new Translation2d(0, 0), rotate, false, true);
+        }
     }
 }

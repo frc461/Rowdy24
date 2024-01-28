@@ -10,10 +10,7 @@ import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
     private final CANSparkMax elevator;
-    private final PIDController pidController = new PIDController(
-            Constants.Elevator.ELEVATOR_P,
-            Constants.Elevator.ELEVATOR_I,
-            Constants.Elevator.ELEVATOR_D);
+    private final PIDController pidController;
     private final RelativeEncoder encoder;
     private final DigitalInput elevatorSwitch;
     private double position;
@@ -29,6 +26,12 @@ public class Elevator extends SubsystemBase {
         elevator.restoreFactoryDefaults();
         elevator.setSmartCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
         elevator.setInverted(Constants.Elevator.ELEVATOR_INVERT);
+
+        pidController = new PIDController(
+                Constants.Elevator.ELEVATOR_P,
+                Constants.Elevator.ELEVATOR_I,
+                Constants.Elevator.ELEVATOR_D
+        );
     }
 
     @Override
