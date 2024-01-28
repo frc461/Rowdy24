@@ -1,8 +1,7 @@
 package frc.robot;
+
 import edu.wpi.first.wpilibj2.command.*;
-
 import com.pathplanner.lib.auto.NamedCommands;
-
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -26,7 +25,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-    //private final Elevator elevator = new Elevator();
+    // private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
@@ -66,7 +65,8 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton driverRightBumper = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton driverRightBumper = new JoystickButton(driver,
+            XboxController.Button.kRightBumper.value);
 
     private final POVButton driverZero = new POVButton(driver, 0);
     private final POVButton driverNinety = new POVButton(driver, 90);
@@ -80,34 +80,32 @@ public class RobotContainer {
     /* Variables */
 
     /**
-    * The container for the robot. Contains subsystems, IO devices, and commands.
-    */
+     * The container for the robot. Contains subsystems, IO devices, and commands.
+     */
 
     public RobotContainer() {
         NamedCommands.registerCommand("intake", new AutoIntake(intakeCarriage));
-        
+
         swerve.setDefaultCommand(
-            new TeleopSwerve(
-                swerve,
-                () -> -driver.getRawAxis(translationAxis),
-                () -> -driver.getRawAxis(strafeAxis),
-                () -> -driver.getRawAxis(rotationAxis),
-                robotCentric
-            )
-        );
-        
+                new TeleopSwerve(
+                        swerve,
+                        () -> -driver.getRawAxis(translationAxis),
+                        () -> -driver.getRawAxis(strafeAxis),
+                        () -> -driver.getRawAxis(rotationAxis),
+                        robotCentric));
+
         // angler.setDefaultCommand(
-        //     new TeleopAngler(
-        //         angler,
-        //         () -> -operator.getRawAxis(anglerAxis)
-        //     )
+        // new TeleopAngler(
+        // angler,
+        // () -> -operator.getRawAxis(anglerAxis)
+        // )
         // );
 
         // elevator.setDefaultCommand(
-        //     new TeleopElevator(
-        //             elevator,
-        //         () -> -operator.getRawAxis(elevatorAxis)
-        //     )
+        // new TeleopElevator(
+        // elevator,
+        // () -> -operator.getRawAxis(elevatorAxis)
+        // )
         // );
 
         // Configure the button bindings
@@ -115,13 +113,13 @@ public class RobotContainer {
     }
 
     /**
-    * Use this method to define your button->command mappings. Buttons can be
-    * created by
-    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-    * it to a {@link
-    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-    */
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
 
     private void configureButtonBindings() {
         /* Driver Buttons */
@@ -132,34 +130,37 @@ public class RobotContainer {
                 swerve,
                 () -> -driver.getRawAxis(translationAxis),
                 () -> -driver.getRawAxis(strafeAxis),
-                robotCentric)
-        );
+                robotCentric));
 
-        intakeButton.whileTrue(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(0.75)),
-        new InstantCommand(()-> intakeCarriage.setCarriageSpeed(1))));
+        intakeButton.whileTrue(Commands.parallel(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.75)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(1))));
 
-        intakeButton.whileFalse(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-0.15)),
-        new InstantCommand(()-> intakeCarriage.setCarriageSpeed(0))));
+        intakeButton.whileFalse(Commands.parallel(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.15)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))));
 
-        outtakeButton.whileTrue(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-0.75)),
-        new InstantCommand(()-> intakeCarriage.setCarriageSpeed(-1))));
+        outtakeButton.whileTrue(Commands.parallel(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.75)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(-1))));
 
-        outtakeButton.whileFalse(Commands.parallel(new InstantCommand(()-> intakeCarriage.setIntakeSpeed(-0.15)),
-        new InstantCommand(()-> intakeCarriage.setCarriageSpeed(0))));
+        outtakeButton.whileFalse(Commands.parallel(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.15)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))));
 
-        // TODO: add button to set elevator to shooting preset as well as amp and stow (there are three levels)
-        // elevatorAmp.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
-        // elevatorStow.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
+        // TODO: add button to set elevator to shooting preset as well as amp and stow
+        // (there are three levels)
+        // elevatorAmp.onTrue(new InstantCommand(() ->
+        // elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
+        // elevatorStow.onTrue(new InstantCommand(() ->
+        // elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
         // TODO: verify this trig
         revShooter.whileTrue(
-            new InstantCommand(
-                () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED) //+ limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER)
-        ));
+                new InstantCommand(
+                        () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED) // +
+                                                                                  // limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER)
+                ));
 
         revShooter.whileFalse(
-                new InstantCommand(()-> shooter.shoot(0))
-        ); // TODO: could make the shooter run at nonzero speed all the time
+                new InstantCommand(() -> shooter.shoot(0))); // TODO: could make the shooter run at nonzero speed all
+                                                             // the time
     }
 
     // smartdashboard prints
@@ -174,7 +175,8 @@ public class RobotContainer {
         // SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
         // SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
         // SmartDashboard.putNumber("Elevator Power", elevator.elevatorPower());
-        // SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
+        // SmartDashboard.putBoolean("Elevator Limit Triggered?",
+        // elevator.elevatorSwitchTriggered());
 
         // limelight debug
         SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());
@@ -187,16 +189,14 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
 
-        
-
         // SmartDashboard.putNumber("Angler encoder", angler.getEncoder());
     }
 
     /**
-    * Use this to pass the autonomous command to the main {@link Robot} class.
-    *
-    * @return the command to run in autonomous
-    */
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
 
     public Command getAutonomousCommand() {
         return null;

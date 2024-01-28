@@ -1,14 +1,12 @@
 package frc.robot.subsystems;
+
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import com.revrobotics.CANSparkBase;
 
 public class Shooter extends SubsystemBase {
 
@@ -17,7 +15,6 @@ public class Shooter extends SubsystemBase {
 
     private final SparkPIDController leftPidController;
     private final SparkPIDController rightPidController;
-
 
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
@@ -45,32 +42,31 @@ public class Shooter extends SubsystemBase {
         rightPidController.setI(Constants.Shooter.SHOOTER_I);
         rightPidController.setD(Constants.Shooter.SHOOTER_D);
 
-        //leftPidController.setOutputRange(1, 1);
-        //rightPidController.setOutputRange(1, 1);
+        leftPidController.setOutputRange(0, 1);
+        rightPidController.setOutputRange(0, 1);
 
         leftShooter.burnFlash();
         rightShooter.burnFlash();
     }
 
     public void shoot(double speed) {
-        //TODO make sure this works lolololol
         if (speed <= 0) {
             leftShooter.set(0);
             rightShooter.set(0);
         } else {
-            leftPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
-            rightPidController.setReference(speed, CANSparkMax.ControlType.kVelocity);
-            leftPidController.setOutputRange(0, 1);
+            leftPidController.setReference(speed, CANSparkBase.ControlType.kVelocity);
+            rightPidController.setReference(speed, CANSparkBase.ControlType.kVelocity);
             // leftShooter.set(speed);
             // rightShooter.set(speed);
         }
-        
+
     }
 
-    public double getLeftShooterSpeed(){
+    public double getLeftShooterSpeed() {
         return leftEncoder.getVelocity();
     }
-    public double getRightShooterSpeed(){
+
+    public double getRightShooterSpeed() {
         return rightEncoder.getVelocity();
     }
 

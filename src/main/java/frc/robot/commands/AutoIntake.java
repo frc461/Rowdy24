@@ -1,14 +1,13 @@
 package frc.robot.commands;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeCarriage;
 
-
-public class AutoIntake extends Command{
+public class AutoIntake extends Command {
 
     private final IntakeCarriage intake;
 
-
-    public AutoIntake(IntakeCarriage intakeCarriage){
+    public AutoIntake(IntakeCarriage intakeCarriage) {
         this.intake = intakeCarriage;
         addRequirements(intake);
     }

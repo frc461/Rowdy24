@@ -1,11 +1,11 @@
 package frc.robot.subsystems;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
@@ -13,8 +13,7 @@ public class Elevator extends SubsystemBase {
     private final PIDController pidController = new PIDController(
             Constants.Elevator.ELEVATOR_P,
             Constants.Elevator.ELEVATOR_I,
-            Constants.Elevator.ELEVATOR_D
-    );
+            Constants.Elevator.ELEVATOR_D);
     private final RelativeEncoder encoder;
     private final DigitalInput elevatorSwitch;
     private double position;
@@ -40,12 +39,15 @@ public class Elevator extends SubsystemBase {
     public double getPosition() {
         return position;
     }
+
     public double getTarget() {
         return target;
     }
+
     public double elevatorPower() {
         return elevator.getAppliedOutput();
     }
+
     public boolean elevatorSwitchTriggered() {
         return !elevatorSwitch.get();
     }
@@ -66,8 +68,7 @@ public class Elevator extends SubsystemBase {
             target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
             holdHeight();
             return;
-        }
-        else if (axisValue > 0 && position >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
+        } else if (axisValue > 0 && position >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
             target = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
             holdHeight();
             return;
