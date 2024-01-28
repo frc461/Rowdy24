@@ -66,6 +66,10 @@ public final class Constants {
         public static final double ANGLER_ROTATION_CONSTANT = 42.0 / 360.0;
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 10;
+
+        public static final int FEEDER_ID = 59;
+        public static final int FEEDER_CURRENT_LIMIT = 50;
+        public static final boolean FEEDER_INVERT = false;
     }
 
     public static final class Carriage {
