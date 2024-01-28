@@ -51,9 +51,6 @@ public final class Constants {
         public static final int RIGHT_SHOOTER_ID = 61;
         public static final int ANGLER_ID = 62;
         // TODO: less p (code example p is much smaller)
-        public static final double SHOOTER_P = 0.003;
-        public static final double SHOOTER_I = 0.001;
-        public static final double SHOOTER_D = 0.05;
         public static final int SHOOTER_CURRENT_LIMIT = 50;
         public static final boolean SHOOTER_INVERT = false;
         public static final double BASE_SHOOTER_SPEED = 5000.0;

@@ -16,9 +16,6 @@ public class Shooter extends SubsystemBase {
 
     private final CANSparkMax feeder;
 
-    private final SparkPIDController leftPidController;
-    private final SparkPIDController rightPidController;
-
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
     private double currentSpeed = 0;
@@ -35,19 +32,6 @@ public class Shooter extends SubsystemBase {
         rightShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
         rightShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
         rightEncoder = rightShooter.getExternalEncoder(7168);
-
-        leftPidController = leftShooter.getPIDController();
-        leftPidController.setP(Constants.Shooter.SHOOTER_P);
-        leftPidController.setI(Constants.Shooter.SHOOTER_I);
-        leftPidController.setD(Constants.Shooter.SHOOTER_D);
-
-        rightPidController = rightShooter.getPIDController();
-        rightPidController.setP(Constants.Shooter.SHOOTER_P);
-        rightPidController.setI(Constants.Shooter.SHOOTER_I);
-        rightPidController.setD(Constants.Shooter.SHOOTER_D);
-
-        leftPidController.setOutputRange(0, 1);
-        rightPidController.setOutputRange(0, 1);
 
         leftShooter.burnFlash();
         rightShooter.burnFlash();
@@ -73,11 +57,9 @@ public class Shooter extends SubsystemBase {
             rightShooter.set(0);
             currentSpeed = 0;
         } else {
-            leftPidController.setReference(speed, CANSparkBase.ControlType.kVelocity);
-            rightPidController.setReference(speed, CANSparkBase.ControlType.kVelocity);
+            leftShooter.set(speed);
+            rightShooter.set(speed);
             currentSpeed = speed;
-            // leftShooter.set(speed);
-            // rightShooter.set(speed);
         }
 
     }

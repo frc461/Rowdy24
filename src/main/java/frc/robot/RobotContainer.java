@@ -154,8 +154,7 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
 
-        // TODO: add button to set elevator to shooting preset as well as amp and stow
-        // (there are three levels)
+        // TODO: add button to set elevator to shooting preset as well as amp and stow (there are three levels)
         // elevatorAmp.onTrue(new InstantCommand(() ->
         // elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
         // elevatorStow.onTrue(new InstantCommand(() ->
@@ -164,7 +163,8 @@ public class RobotContainer {
         // TODO: verify this trig
         revShooter.whileTrue(
                 new InstantCommand(
-                        () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED) // + limelight.getRZ()*Constants.Shooter.DISTANCE_MULTIPLIER)
+                        () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                                limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER)
                 ));
 
         revShooter.whileFalse(
