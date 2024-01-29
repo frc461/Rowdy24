@@ -5,8 +5,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+
 import com.revrobotics.CANSparkBase;
 
 public class Shooter extends SubsystemBase {
@@ -18,7 +23,6 @@ public class Shooter extends SubsystemBase {
 
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
-    private double currentSpeed = 0;
 
     public Shooter() {
         leftShooter = new CANSparkFlex(Constants.Shooter.LEFT_SHOOTER_ID, MotorType.kBrushless);
@@ -55,11 +59,19 @@ public class Shooter extends SubsystemBase {
         if (speed <= 0) {
             leftShooter.set(0);
             rightShooter.set(0);
-            currentSpeed = 0;
         } else {
             leftShooter.set(speed);
             rightShooter.set(speed);
-            currentSpeed = speed;
+
+            //is the shooter up to speed? if so, alert the operator
+            if(leftEncoder.getVelocity() <= speed + Constants.Shooter.SHOOTER_SPEED_TOLARANCE && leftEncoder.getVelocity() >= speed - Constants.Shooter.SHOOTER_SPEED_TOLARANCE){
+                SmartDashboard.putBoolean("Shooter Ready", true);
+                RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
+            }else{
+                RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+                SmartDashboard.putBoolean("Shooter Ready", false);
+            }
+
         }
 
     }

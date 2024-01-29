@@ -32,8 +32,8 @@ public class RobotContainer {
     // private final Angler angler = new Angler();
 
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
-    private final Joystick operator = new Joystick(1);
+    public final static Joystick driver = new Joystick(0);
+    public final static Joystick operator = new Joystick(1);
 
     /* Operate Controls */
     private final int anglerAxis = XboxController.Axis.kLeftY.value;
@@ -45,7 +45,7 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Operator Buttons */
-    private final JoystickButton elevatorStow = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton operatorStow = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kB.value);
     private final JoystickButton revShooter = new JoystickButton(operator, XboxController.Button.kX.value);
     private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
@@ -65,7 +65,7 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton driverRightBumper = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton driverStowButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
     private final POVButton driverZero = new POVButton(driver, 0);
     private final POVButton driverNinety = new POVButton(driver, 90);
@@ -124,6 +124,11 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         /* Driver Buttons */
+
+        // driverStowButton.onTrue(Commands.parallel(
+        //     new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+        // ));
+
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
 
         driverLimelight.whileTrue(new TeleopLimelightTurret(
@@ -157,8 +162,8 @@ public class RobotContainer {
         // TODO: add button to set elevator to shooting preset as well as amp and stow (there are three levels)
         // elevatorAmp.onTrue(new InstantCommand(() ->
         // elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
-        // elevatorStow.onTrue(new InstantCommand(() ->
-        // elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
+
+        // operatorStow.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
         // TODO: verify this trig
         revShooter.whileTrue(
@@ -194,6 +199,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight X", limelight.getRX());
         SmartDashboard.putNumber("Limelight Y", limelight.getRY());
         SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
+
+        //shooter debug
         SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
 
