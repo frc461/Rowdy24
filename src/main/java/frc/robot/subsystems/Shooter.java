@@ -64,6 +64,7 @@ public class Shooter extends SubsystemBase {
             rightShooter.set(speed);
 
             //is the shooter up to speed? if so, alert the operator
+            //TODO: this might be problematic in auto...
             if(leftEncoder.getVelocity() <= speed + Constants.Shooter.SHOOTER_SPEED_TOLARANCE && leftEncoder.getVelocity() >= speed - Constants.Shooter.SHOOTER_SPEED_TOLARANCE){
                 SmartDashboard.putBoolean("Shooter Ready", true);
                 RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
