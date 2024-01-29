@@ -4,15 +4,11 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-
-import com.revrobotics.CANSparkBase;
 
 public class Shooter extends SubsystemBase {
 
@@ -23,6 +19,7 @@ public class Shooter extends SubsystemBase {
 
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
+    double currentSpeed = 0;
 
     public Shooter() {
         leftShooter = new CANSparkFlex(Constants.Shooter.LEFT_SHOOTER_ID, MotorType.kBrushless);
@@ -48,7 +45,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // if (getLeftShooterSpeed() >= currentSpeed - 50 && getRightShooterSpeed() >= currentSpeed - 50) {
+        // if (getLeftShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE && getRightShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE) {
         //     feeder.set(0.5);
         // } else {
         //     feeder.set(0);
@@ -56,25 +53,19 @@ public class Shooter extends SubsystemBase {
     }
 
     public void shoot(double speed) {
-        if (speed <= 0) {
-            leftShooter.set(0);
-            rightShooter.set(0);
-        } else {
-            leftShooter.set(speed);
-            rightShooter.set(speed);
+        leftShooter.set(speed);
+        rightShooter.set(speed);
+        currentSpeed = speed * 6750;
 
-            //is the shooter up to speed? if so, alert the operator
-            //TODO: this might be problematic in auto...
-            if(leftEncoder.getVelocity() <= speed + Constants.Shooter.SHOOTER_SPEED_TOLARANCE && leftEncoder.getVelocity() >= speed - Constants.Shooter.SHOOTER_SPEED_TOLARANCE){
-                SmartDashboard.putBoolean("Shooter Ready", true);
-                RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
-            }else{
-                RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0);
-                SmartDashboard.putBoolean("Shooter Ready", false);
-            }
-
+        //is the shooter up to speed? if so, alert the operator
+        //TODO: this might be problematic in auto...
+        if (leftEncoder.getVelocity() <= speed + Constants.Shooter.SHOOTER_SPEED_TOLERANCE && leftEncoder.getVelocity() >= speed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE){
+            SmartDashboard.putBoolean("Shooter Ready", true);
+            RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
+        } else{
+            RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+            SmartDashboard.putBoolean("Shooter Ready", false);
         }
-
     }
 
     public double getLeftShooterSpeed() {

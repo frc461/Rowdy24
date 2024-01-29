@@ -54,10 +54,10 @@ public final class Constants {
         public static final int SHOOTER_CURRENT_LIMIT = 50;
         public static final boolean SHOOTER_INVERT = false;
         //baseline shooter speed in RPM
-        public static final double BASE_SHOOTER_SPEED = 5000.0;
+        public static final double BASE_SHOOTER_SPEED = 5000/6750;
         // +/-tolerance for considering if the shooter is up to speed
-        public static final double SHOOTER_SPEED_TOLARANCE = 100; //TODO: make sure this is acceptable
-        public static final double DISTANCE_MULTIPLIER = 0.1;
+        public static final double SHOOTER_SPEED_TOLERANCE = 100; //TODO: make sure this is acceptable
+        public static final double DISTANCE_MULTIPLIER = 0.001; //TODO: check this
         public static final double ANGLER_P = 0.6;
         public static final double ANGLER_I = 0.1;
         public static final double ANGLER_D = 0.5;
