@@ -64,7 +64,6 @@ public final class Constants {
         public static final double SHOOTER_D = 0.0;
         public static final double SHOOTER_FF = 0.0075;
 
-
         public static final double ANGLER_P = 0.6;
         public static final double ANGLER_I = 0.1;
         public static final double ANGLER_D = 0.5;
