@@ -42,8 +42,6 @@ public class RobotContainer {
     private final int elevatorAxis = XboxController.Axis.kRightY.value;
     private final int revShooter = XboxController.Axis.kRightTrigger.value;
 
-
-
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
