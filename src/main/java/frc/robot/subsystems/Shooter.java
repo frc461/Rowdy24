@@ -85,6 +85,7 @@ public class Shooter extends SubsystemBase {
         //     RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0);
         //     SmartDashboard.putBoolean("Shooter Ready", false);
         // }
+
         rightController.setReference(speed, ControlType.kVelocity);
         leftController.setReference(speed, ControlType.kVelocity);
     }

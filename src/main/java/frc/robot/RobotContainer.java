@@ -100,7 +100,7 @@ public class RobotContainer {
         shooter.setDefaultCommand(
                 new InstantCommand(
                         () -> {
-                                if (operator.getRawAxis(revShooter) >= Constants.STICK_DEADBAND) {
+                                if (operator.getRawAxis(revShooter) >= Constants.TRIGGER_DEADBAND) {
                                         shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
                                                 limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER);
                                 } else {
