@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -38,6 +40,9 @@ public class RobotContainer {
     /* Operate Controls */
     private final int anglerAxis = XboxController.Axis.kLeftY.value;
     private final int elevatorAxis = XboxController.Axis.kRightY.value;
+    private final int revShooter = XboxController.Axis.kRightTrigger.value;
+
+
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -47,7 +52,6 @@ public class RobotContainer {
     /* Operator Buttons */
     private final JoystickButton operatorStow = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kB.value);
-    private final JoystickButton revShooter = new JoystickButton(operator, XboxController.Button.kX.value);
     private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
 
     private final JoystickButton outtakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
@@ -92,6 +96,19 @@ public class RobotContainer {
                         () -> -driver.getRawAxis(strafeAxis),
                         () -> -driver.getRawAxis(rotationAxis),
                         robotCentric
+                )
+        );
+
+        shooter.setDefaultCommand(
+                new InstantCommand(
+                        () -> {
+                                if (operator.getRawAxis(revShooter) >= Constants.STICK_DEADBAND) {
+                                        shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                                                limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER);
+                                } else {
+                                        shooter.shoot(0);
+                                }
+                        }
                 )
         );
 
@@ -166,14 +183,6 @@ public class RobotContainer {
         // operatorStow.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
         // TODO: verify this trig
-        revShooter.whileTrue(
-                new InstantCommand(
-                        () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                                limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER)
-                ));
-
-        revShooter.whileFalse(
-                new InstantCommand(() -> shooter.shoot(0))); // TODO: could make the shooter run at nonzero speed all the time
     }
 
     // smartdashboard prints
