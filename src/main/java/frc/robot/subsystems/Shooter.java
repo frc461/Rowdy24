@@ -21,7 +21,7 @@ public class Shooter extends SubsystemBase {
 
     private final SparkPIDController leftController, rightController;
 
-    private final CANSparkMax feeder;
+  //  private final CANSparkMax feeder;
 
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
@@ -56,10 +56,10 @@ public class Shooter extends SubsystemBase {
         leftShooter.burnFlash();
         rightShooter.burnFlash();
 
-        feeder = new CANSparkMax(Constants.Shooter.FEEDER_ID, MotorType.kBrushed);
-        feeder.restoreFactoryDefaults();
-        feeder.setSmartCurrentLimit(Constants.Shooter.FEEDER_CURRENT_LIMIT);
-        feeder.setInverted(Constants.Shooter.FEEDER_INVERT);
+        // feeder = new CANSparkMax(Constants.Shooter.FEEDER_ID, MotorType.kBrushed);
+        // feeder.restoreFactoryDefaults();
+        // feeder.setSmartCurrentLimit(Constants.Shooter.FEEDER_CURRENT_LIMIT);
+        // feeder.setInverted(Constants.Shooter.FEEDER_INVERT);
     }
 
     @Override
@@ -85,9 +85,16 @@ public class Shooter extends SubsystemBase {
         //     RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0);
         //     SmartDashboard.putBoolean("Shooter Ready", false);
         // }
+        
+        //rightController.setOutputRange(1, -0.1);
 
-        rightController.setReference(speed, ControlType.kVelocity);
-        leftController.setReference(speed, ControlType.kVelocity);
+        rightController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+        leftController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+    }
+
+    public void setIdle(double speed){
+        rightShooter.set(speed);
+        leftShooter.set(speed);
     }
 
     public double getLeftShooterSpeed() {

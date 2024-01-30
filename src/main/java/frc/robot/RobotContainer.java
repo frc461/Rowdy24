@@ -97,18 +97,18 @@ public class RobotContainer {
                 )
         );
 
-        shooter.setDefaultCommand(
-                new InstantCommand(
-                        () -> {
-                                if (operator.getRawAxis(revShooter) >= Constants.TRIGGER_DEADBAND) {
-                                        shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                                                limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER);
-                                } else {
-                                        shooter.shoot(0);
-                                }
-                        }
-                )
-        );
+        // shooter.setDefaultCommand(
+        //         new InstantCommand(
+        //                 () -> {
+        //                         if (operator.getRawAxis(revShooter) >= Constants.TRIGGER_DEADBAND) {
+        //                                 shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+        //                                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER);
+        //                         } else {
+        //                                 shooter.shoot(0);
+        //                         }
+        //                 }
+        //         )
+        // );
 
         // angler.setDefaultCommand(
         // new TeleopAngler(
@@ -145,6 +145,10 @@ public class RobotContainer {
         // ));
 
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
+
+        operatorNinety.whileTrue(new InstantCommand(()->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED)));
+        operatorNinety.whileFalse(new InstantCommand(()->shooter.shoot(0)));
+               
 
         driverLimelight.whileTrue(new TeleopLimelightTurret(
                 limelight,

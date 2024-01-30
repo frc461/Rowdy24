@@ -60,10 +60,10 @@ public final class Constants {
         public static final double SHOOTER_SPEED_TOLERANCE = 100; //TODO: make sure this is acceptable
         public static final double DISTANCE_MULTIPLIER = 0.1; //TODO: check this
 
-        public static final double SHOOTER_P = 0.1; //was 0.003
-        public static final double SHOOTER_I = 0.0;
-        public static final double SHOOTER_D = 0.0;
-        public static final double SHOOTER_FF = 0.0075;
+        public static final double SHOOTER_P = 0.00062; //was 0.003
+        public static final double SHOOTER_I = 0.000000001;
+        public static final double SHOOTER_D = 0.0005;
+        public static final double SHOOTER_FF = 0.1;
 
         public static final double ANGLER_P = 0.6;
         public static final double ANGLER_I = 0.1;
