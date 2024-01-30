@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -15,7 +16,7 @@ public class Shooter extends SubsystemBase {
 
     private final SparkPIDController leftController, rightController;
 
-  //  private final CANSparkMax feeder;
+   private final CANSparkMax feeder;
 
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
@@ -50,10 +51,10 @@ public class Shooter extends SubsystemBase {
         leftShooter.burnFlash();
         rightShooter.burnFlash();
 
-        // feeder = new CANSparkMax(Constants.Shooter.FEEDER_ID, MotorType.kBrushed);
-        // feeder.restoreFactoryDefaults();
-        // feeder.setSmartCurrentLimit(Constants.Shooter.FEEDER_CURRENT_LIMIT);
-        // feeder.setInverted(Constants.Shooter.FEEDER_INVERT);
+        feeder = new CANSparkMax(Constants.Shooter.FEEDER_ID, MotorType.kBrushed);
+        feeder.restoreFactoryDefaults();
+        feeder.setSmartCurrentLimit(Constants.Shooter.FEEDER_CURRENT_LIMIT);
+        feeder.setInverted(Constants.Shooter.FEEDER_INVERT);
     }
 
     @Override
@@ -66,10 +67,6 @@ public class Shooter extends SubsystemBase {
     }
 
     public void shoot(double speed, boolean idleShooter) {
-        // leftShooter.set(speed);
-        // rightShooter.set(speed);
-        // currentSpeed = speed * 6750;
-
         // //is the shooter up to speed? if so, alert the operator
         // //TODO: this might be problematic in auto...
         // if (leftEncoder.getVelocity() <= speed + Constants.Shooter.SHOOTER_SPEED_TOLERANCE && leftEncoder.getVelocity() >= speed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE){
@@ -79,8 +76,6 @@ public class Shooter extends SubsystemBase {
         //     RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0);
         //     SmartDashboard.putBoolean("Shooter Ready", false);
         // }
-        
-        //rightController.setOutputRange(1, -0.1);
 
         if (idleShooter) {
             leftShooter.set(speed);

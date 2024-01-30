@@ -100,19 +100,6 @@ public class RobotContainer {
                 )
         );
 
-        // shooter.setDefaultCommand(
-        //         new InstantCommand(
-        //                 () -> {
-        //                         if (operator.getRawAxis(revShooter) >= Constants.TRIGGER_DEADBAND) {
-        //                                 shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-        //                                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER);
-        //                         } else {
-        //                                 shooter.shoot(0);
-        //                         }
-        //                 }
-        //         )
-        // );
-
         // angler.setDefaultCommand(
         // new TeleopAngler(
         // angler,
@@ -189,7 +176,7 @@ public class RobotContainer {
 
         BooleanEvent revShooterNotPressed = revShooterPressed.negate();
         revShooterNotPressed.ifHigh(
-                () -> shooter.shoot(.3, true)
+                () -> shooter.shoot(Constants.Shooter.IDLE_SHOOTER_SPEED, true)
         );
 
         // TODO: add button to set elevator to shooting preset as well as amp and stow (there are three levels)
