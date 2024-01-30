@@ -1,18 +1,12 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class Shooter extends SubsystemBase {
 
@@ -71,7 +65,7 @@ public class Shooter extends SubsystemBase {
         // }
     }
 
-    public void shoot(double speed) {
+    public void shoot(double speed, boolean idleShooter) {
         // leftShooter.set(speed);
         // rightShooter.set(speed);
         // currentSpeed = speed * 6750;
@@ -88,13 +82,13 @@ public class Shooter extends SubsystemBase {
         
         //rightController.setOutputRange(1, -0.1);
 
-        rightController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
-        leftController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
-    }
-
-    public void setIdle(double speed){
-        rightShooter.set(speed);
-        leftShooter.set(speed);
+        if (idleShooter) {
+            leftShooter.set(speed);
+            rightShooter.set(speed);
+        } else {
+            rightController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+            leftController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+        }
     }
 
     public double getLeftShooterSpeed() {

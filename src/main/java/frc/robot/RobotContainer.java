@@ -184,12 +184,12 @@ public class RobotContainer {
         BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
         revShooterPressed.ifHigh(
                 () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER)
+                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
         );
 
         BooleanEvent revShooterNotPressed = revShooterPressed.negate();
         revShooterNotPressed.ifHigh(
-                () -> shooter.shoot(0)
+                () -> shooter.shoot(.3, true)
         );
 
         // TODO: add button to set elevator to shooting preset as well as amp and stow (there are three levels)
