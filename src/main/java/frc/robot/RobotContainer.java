@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.*;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -11,6 +12,7 @@ import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -79,6 +81,7 @@ public class RobotContainer {
     private final DigitalOutput lightNine = new DigitalOutput(9);
 
     /* Variables */
+    private final EventLoop eventLoop = new EventLoop();
 
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
@@ -128,6 +131,10 @@ public class RobotContainer {
         configureButtonBindings();
     }
 
+    public void periodic() {
+        eventLoop.poll();
+    }
+
     /**
      * Use this method to define your button->command mappings. Buttons can be
      * created by
@@ -145,10 +152,6 @@ public class RobotContainer {
         // ));
 
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
-
-        operatorNinety.whileTrue(new InstantCommand(()->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED)));
-        operatorNinety.whileFalse(new InstantCommand(()->shooter.shoot(0)));
-               
 
         driverLimelight.whileTrue(new TeleopLimelightTurret(
                 limelight,
@@ -177,6 +180,17 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.15)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
+
+        BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
+        revShooterPressed.ifHigh(
+                () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER)
+        );
+
+        BooleanEvent revShooterNotPressed = revShooterPressed.negate();
+        revShooterNotPressed.ifHigh(
+                () -> shooter.shoot(0)
+        );
 
         // TODO: add button to set elevator to shooting preset as well as amp and stow (there are three levels)
         // elevatorAmp.onTrue(new InstantCommand(() ->
