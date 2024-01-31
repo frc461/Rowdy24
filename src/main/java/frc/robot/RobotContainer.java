@@ -29,11 +29,13 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-    // private final Elevator elevator = new Elevator();
+     private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
     // private final Angler angler = new Angler();
+
+    boolean autoSubsystems = true;
 
     /* Controllers */
     public final static Joystick driver = new Joystick(0);
@@ -57,7 +59,7 @@ public class RobotContainer {
     private final JoystickButton outtakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
     private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
 
-    private final POVButton operatorZero = new POVButton(operator, 0);
+    private final POVButton toggleAutoSubsystems = new POVButton(operator, 0);
     private final POVButton operatorNinety = new POVButton(operator, 90);
     private final POVButton operatorOneEighty = new POVButton(operator, 180);
     private final POVButton operatorTwoSeventy = new POVButton(operator, 270);
@@ -119,6 +121,10 @@ public class RobotContainer {
     }
 
     public void periodic() {
+
+        
+
+        
         eventLoop.poll();
     }
 
@@ -140,6 +146,10 @@ public class RobotContainer {
 
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
 
+        toggleAutoSubsystems.onTrue(new InstantCommand(()->{
+                autoSubsystems = !autoSubsystems;
+        }));
+
         driverLimelight.whileTrue(new TeleopLimelightTurret(
                 limelight,
                 swerve,
@@ -153,10 +163,11 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(1))
         ));
 
-        intakeButton.whileFalse(Commands.parallel(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.15)),
+        intakeButton.whileFalse(new InstantCommand(()->
+                Commands.parallel(
+                new InstantCommand(() ->  intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
-        ));
+        )));
 
         outtakeButton.whileTrue(Commands.parallel(
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.75)),
@@ -164,7 +175,7 @@ public class RobotContainer {
         ));
 
         outtakeButton.whileFalse(Commands.parallel(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.15)),
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
 
@@ -176,12 +187,13 @@ public class RobotContainer {
 
         BooleanEvent revShooterNotPressed = revShooterPressed.negate();
         revShooterNotPressed.ifHigh(
-                () -> shooter.shoot(Constants.Shooter.IDLE_SHOOTER_SPEED, true)
+                () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)
         );
 
         // TODO: add button to set elevator to shooting preset as well as amp and stow (there are three levels)
-        // elevatorAmp.onTrue(new InstantCommand(() ->
-        // elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)));
+        elevatorAmp.onTrue(new InstantCommand(() ->
+                elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
+        ));
 
         // operatorStow.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
 
