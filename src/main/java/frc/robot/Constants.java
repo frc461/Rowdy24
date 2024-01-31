@@ -9,6 +9,7 @@ import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
+    // TODO: TUNE EVERYTHING!!!!!!!!!
     public static final double STICK_DEADBAND = 0.1;
     public static final double TRIGGER_DEADBAND = 0.5;
     public static final double MINIMUM_ANGLE = -180.0;
@@ -51,7 +52,6 @@ public final class Constants {
         public static final int LEFT_SHOOTER_ID = 39;
         public static final int RIGHT_SHOOTER_ID = 61;
         public static final int ANGLER_ID = 62;
-        // TODO: less p (code example p is much smaller)
         public static final int SHOOTER_CURRENT_LIMIT = 50;
         public static final boolean SHOOTER_INVERT = false;
         //baseline shooter speed in RPM

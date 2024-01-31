@@ -7,12 +7,10 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -204,14 +202,17 @@ public class RobotContainer {
                 () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)
         );
 
-        // TODO: add button to set elevator to shooting preset as well as amp and stow (there are three levels)
+        driverStowButton.onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+        );
+
+        operatorStowButton.onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+        );
+
         elevatorAmp.onTrue(new InstantCommand(() ->
                 elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
         ));
-
-        // operatorStow.onTrue(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)));
-
-        // TODO: verify this trig
     }
 
     // smartdashboard prints

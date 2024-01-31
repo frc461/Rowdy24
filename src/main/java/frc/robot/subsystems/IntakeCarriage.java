@@ -11,7 +11,7 @@ public class IntakeCarriage extends SubsystemBase {
     private final CANSparkFlex intake;
     private final CANSparkMax carriage;
 
-    // TODO: ask tech to put beam breaks in these places
+    // TODO: Implement beam break logic Please!
     DigitalInput carriageBeam = new DigitalInput(0); // end of carriage (on shooter side)
     DigitalInput ampBeam = new DigitalInput(1); // entrance of carriage (which is the amp shooter)
     DigitalInput shooterBeam = new DigitalInput(2); // completely exit through shooter
