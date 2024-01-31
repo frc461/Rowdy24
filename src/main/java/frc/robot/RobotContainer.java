@@ -52,10 +52,10 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Operator Buttons */
-    private final JoystickButton operatorStow = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton operatorStowButton = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kB.value);
     private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
-    private final JoystickButton operatorX = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton operatorAutoShootButton = new JoystickButton(operator, XboxController.Button.kX.value);
 
     private final JoystickButton outtakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
     private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
@@ -141,9 +141,13 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
 
-        // driverStowButton.onTrue(Commands.parallel(
-        //     new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-        // ));
+        driverStowButton.onTrue(
+            new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+        );
+
+        operatorStowButton.onTrue(
+            new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+        );
 
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
 
@@ -164,11 +168,10 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(1))
         ));
 
-        intakeButton.whileFalse(new InstantCommand(()->
-                Commands.parallel(
+        intakeButton.whileFalse(Commands.parallel(
                 new InstantCommand(() ->  intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
-        )));
+        ));
 
         outtakeButton.whileTrue(Commands.parallel(
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.75)),
@@ -179,6 +182,8 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
+
+        //operatorAutoShootButton.onTrue();
 
         outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.75)));
 
