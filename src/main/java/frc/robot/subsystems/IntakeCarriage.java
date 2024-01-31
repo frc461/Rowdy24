@@ -60,13 +60,15 @@ public class IntakeCarriage extends SubsystemBase {
     }
 
     public void setIntakeSpeed(double speed) {
-        if (speed <= 0) {
-            intake.set(speed);
-        } else if (!hasPiece) {
+        if (speed <= 0 || !hasPiece) {
             intake.set(speed);
         } else {
             intake.set(-0.15);
         }
+    }
+
+    public void overrideIntakeSpeed(double speed) {
+        intake.set(speed);
     }
 
     public void setCarriageSpeed(double speed) {

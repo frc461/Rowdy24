@@ -55,6 +55,7 @@ public class RobotContainer {
     private final JoystickButton operatorStow = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kB.value);
     private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
+    private final JoystickButton operatorX = new JoystickButton(operator, XboxController.Button.kX.value);
 
     private final JoystickButton outtakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
     private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
@@ -67,7 +68,7 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton driverA = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kB.value);
-    private final JoystickButton driverX = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton outtakeButtonDriver = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
     private final JoystickButton driverLimelight = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
@@ -178,6 +179,10 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
+
+        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.75)));
+
+        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)));
 
         BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
         revShooterPressed.ifHigh(
