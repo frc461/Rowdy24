@@ -34,7 +34,6 @@ public final class Constants {
         public static final double ELEVATOR_LOWER_LIMIT = 0;
         public static final double ELEVATOR_UPPER_LIMIT = 61;
         public static final double ELEVATOR_AMP = 61.0;
-        public static final double ELEVATOR_SHOOT = 30.5; // in-between level to shoot at speakers, check CAD
         public static final double ELEVATOR_STOW = 0.0;
     }
 

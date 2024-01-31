@@ -33,8 +33,6 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter();
     // private final Angler angler = new Angler();
 
-    boolean autoSubsystems = true;
-
     /* Controllers */
     public final static Joystick driver = new Joystick(0);
     public final static Joystick operator = new Joystick(1);
@@ -53,7 +51,7 @@ public class RobotContainer {
     private final JoystickButton operatorStowButton = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kB.value);
     private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
-    private final JoystickButton operatorAutoShootButton = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton operatorX = new JoystickButton(operator, XboxController.Button.kX.value);
 
     private final JoystickButton outtakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
     private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
@@ -83,6 +81,7 @@ public class RobotContainer {
 
     /* Variables */
     private final EventLoop eventLoop = new EventLoop();
+    private boolean autoSubsystems = true;
 
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
@@ -139,19 +138,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
 
-        driverStowButton.onTrue(
-            new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-        );
-
-        operatorStowButton.onTrue(
-            new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-        );
-
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
 
-        toggleAutoSubsystems.onTrue(new InstantCommand(()->{
-                autoSubsystems = !autoSubsystems;
-        }));
+        toggleAutoSubsystems.onTrue(new InstantCommand(() -> autoSubsystems = !autoSubsystems));
 
         driverLimelight.whileTrue(new TeleopLimelightTurret(
                 limelight,
@@ -180,12 +169,6 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
-
-//        operatorAutoShootButton.onTrue(Commands.sequence(
-//                new TeleopLimelightTurret(limelight, swerve),
-//                new InstantCommand(() -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-//                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false))
-//        ));
 
         outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.75)));
 
