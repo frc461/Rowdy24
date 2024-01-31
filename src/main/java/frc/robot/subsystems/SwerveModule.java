@@ -14,8 +14,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import frc.lib.util.SwerveModuleConstants;
-import frc.lib.util.CANSparkMaxUtil.Usage;
-import frc.lib.util.CANSparkMaxUtil;
+import frc.lib.util.CANSparkUtil.Usage;
+import frc.lib.util.CANSparkUtil;
 import frc.lib.math.OptimizeModuleState;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -115,7 +115,7 @@ public class SwerveModule {
     private void configAngleMotor(){
         
         angleMotor.restoreFactoryDefaults();
-        CANSparkMaxUtil.setCANSparkMaxBusUsage(angleMotor, Usage.kPositionOnly);
+        CANSparkUtil.setCANSparkMaxBusUsage(angleMotor, Usage.kPositionOnly);
         angleMotor.setSmartCurrentLimit(Constants.Swerve.ANGLE_CONTINUOUS_SUPPLY_CURRENT_LIMIT);
         angleMotor.setInverted(Constants.Swerve.ANGLE_MOTOR_INVERT);
         angleMotor.setIdleMode(Constants.Swerve.ANGLE_NEUTRAL_MODE);
@@ -132,7 +132,7 @@ public class SwerveModule {
     private void configDriveMotor(){        
 
         driveMotor.restoreFactoryDefaults();
-        CANSparkMaxUtil.setCANSparkMaxBusUsage(driveMotor, Usage.kAll);
+        CANSparkUtil.setCANSparkMaxBusUsage(driveMotor, Usage.kAll);
         driveMotor.setSmartCurrentLimit(Constants.Swerve.DRIVE_CONTINUOUS_SUPPLY_CURRENT_LIMIT);
         driveMotor.setInverted(Constants.Swerve.DRIVE_MOTOR_INVERT);
         driveMotor.setIdleMode(Constants.Swerve.DRIVE_NEUTRAL_MODE);

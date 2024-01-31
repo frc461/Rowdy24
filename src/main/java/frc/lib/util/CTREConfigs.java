@@ -22,11 +22,11 @@ public final class CTREConfigs {
         angleSupplyLimit.withSupplyCurrentThreshold(Constants.Swerve.ANGLE_PEAK_SUPPLY_CURRENT_LIMIT);
         angleSupplyLimit.withSupplyTimeThreshold(Constants.Swerve.ANGLE_PEAK_SUPPLY_CURRENT_DURATION);
 
-        swerveAngleFXConfig.Slot0.kP = Constants.Swerve.ANGLE_P;
-        swerveAngleFXConfig.Slot0.kI = Constants.Swerve.ANGLE_I;
-        swerveAngleFXConfig.Slot0.kD = Constants.Swerve.ANGLE_D;
-        swerveAngleFXConfig.Slot0.kV = Constants.Swerve.ANGLE_F;
-        swerveAngleFXConfig.CurrentLimits = angleSupplyLimit;
+        swerveAngleFXConfig.Slot0.withKP(Constants.Swerve.ANGLE_P);
+        swerveAngleFXConfig.Slot0.withKI(Constants.Swerve.ANGLE_I);
+        swerveAngleFXConfig.Slot0.withKD(Constants.Swerve.ANGLE_D);
+        swerveAngleFXConfig.Slot0.withKV(Constants.Swerve.ANGLE_F);
+        swerveAngleFXConfig.withCurrentLimits(angleSupplyLimit);
 
         /* Swerve Drive Motor Configuration */
         CurrentLimitsConfigs driveSupplyLimit = new CurrentLimitsConfigs();
@@ -36,15 +36,17 @@ public final class CTREConfigs {
         driveSupplyLimit.withSupplyCurrentThreshold(Constants.Swerve.DRIVE_PEAK_SUPPLY_CURRENT_LIMIT);
         driveSupplyLimit.withSupplyTimeThreshold(Constants.Swerve.DRIVE_PEAK_SUPPLY_CURRENT_DURATION);
 
-        swerveDriveFXConfig.Slot0.kP = Constants.Swerve.DRIVE_P;
-        swerveDriveFXConfig.Slot0.kI = Constants.Swerve.DRIVE_I;
-        swerveDriveFXConfig.Slot0.kD = Constants.Swerve.DRIVE_D;
-        swerveDriveFXConfig.Slot0.kV = Constants.Swerve.DRIVE_F;
-        swerveDriveFXConfig.CurrentLimits = driveSupplyLimit;
-        swerveDriveFXConfig.OpenLoopRamps = new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(
-                Constants.Swerve.OPEN_LOOP_RAMP);
-        swerveDriveFXConfig.ClosedLoopRamps = new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(
-                Constants.Swerve.CLOSED_LOOP_RAMP);
+        swerveDriveFXConfig.Slot0.withKP(Constants.Swerve.DRIVE_P);
+        swerveDriveFXConfig.Slot0.withKI(Constants.Swerve.DRIVE_I);
+        swerveDriveFXConfig.Slot0.withKD(Constants.Swerve.DRIVE_D);
+        swerveDriveFXConfig.Slot0.withKV(Constants.Swerve.DRIVE_F);
+        swerveDriveFXConfig.withCurrentLimits(driveSupplyLimit);
+        swerveDriveFXConfig.withOpenLoopRamps(
+                new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(Constants.Swerve.OPEN_LOOP_RAMP)
+        );
+        swerveDriveFXConfig.withClosedLoopRamps(
+                new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(Constants.Swerve.CLOSED_LOOP_RAMP)
+        );
         
         /* Swerve CANCoder Configuration */
         MagnetSensorConfigs sensorConfigs = new MagnetSensorConfigs();

@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel;
 
 /** Sets motor usage for a Spark Max motor controller */
-public class CANSparkMaxUtil {
+public class CANSparkUtil {
   public enum Usage {
     kAll,
     kPositionOnly,
