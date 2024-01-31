@@ -183,7 +183,11 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
 
-        //operatorAutoShootButton.onTrue();
+//        operatorAutoShootButton.onTrue(Commands.sequence(
+//                new TeleopLimelightTurret(limelight, swerve),
+//                new InstantCommand(() -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+//                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false))
+//        ));
 
         outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.75)));
 

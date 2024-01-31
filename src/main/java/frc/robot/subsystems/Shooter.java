@@ -66,6 +66,14 @@ public class Shooter extends SubsystemBase {
         // }
     }
 
+    public double getLeftShooterSpeed() {
+        return leftEncoder.getVelocity();
+    }
+
+    public double getRightShooterSpeed() {
+        return rightEncoder.getVelocity();
+    }
+
     public void shoot(double speed, boolean idleShooter) {
         // //is the shooter up to speed? if so, alert the operator
         // //TODO: this might be problematic in auto...
@@ -85,13 +93,4 @@ public class Shooter extends SubsystemBase {
             leftController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
         }
     }
-
-    public double getLeftShooterSpeed() {
-        return leftEncoder.getVelocity();
-    }
-
-    public double getRightShooterSpeed() {
-        return rightEncoder.getVelocity();
-    }
-
 }

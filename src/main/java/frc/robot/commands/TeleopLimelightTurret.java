@@ -27,6 +27,15 @@ public class TeleopLimelightTurret extends Command {
         addRequirements(this.limelight, swerve);
     }
 
+    public TeleopLimelightTurret(Limelight limelight, Swerve swerve) {
+        this.limelight = limelight;
+        this.swerve = swerve;
+        this.translation = () -> 0.0;
+        this.strafe = () -> 0.0;
+        this.robotCentric = () -> false;
+        addRequirements(this.limelight, swerve);
+    }
+
     /*
      * how to go to apriltag:
      * find tag (duh)
