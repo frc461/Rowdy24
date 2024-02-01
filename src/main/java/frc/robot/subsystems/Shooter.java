@@ -11,29 +11,29 @@ import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
 
-    private final CANSparkFlex leftShooter;
-    private final CANSparkFlex rightShooter;
+    private final CANSparkMax leftShooter;
+    private final CANSparkMax rightShooter;
 
     private final SparkPIDController leftController, rightController;
 
-   private final CANSparkMax feeder;
+    //private final CANSparkMax feeder;
 
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
     double currentSpeed = 0;
 
     public Shooter() {
-        leftShooter = new CANSparkFlex(Constants.Shooter.LEFT_SHOOTER_ID, MotorType.kBrushless);
+        leftShooter = new CANSparkMax(Constants.Shooter.LEFT_SHOOTER_ID, MotorType.kBrushless);
         leftShooter.restoreFactoryDefaults();
         leftShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
         leftShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
-        leftEncoder = leftShooter.getExternalEncoder(7168);
+        leftEncoder = leftShooter.getEncoder();
 
-        rightShooter = new CANSparkFlex(Constants.Shooter.RIGHT_SHOOTER_ID, MotorType.kBrushless);
+        rightShooter = new CANSparkMax(Constants.Shooter.RIGHT_SHOOTER_ID, MotorType.kBrushless);
         rightShooter.restoreFactoryDefaults();
         rightShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
         rightShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
-        rightEncoder = rightShooter.getExternalEncoder(7168);
+        rightEncoder = rightShooter.getEncoder();
 
         rightController = rightShooter.getPIDController();
         leftController = leftShooter.getPIDController();
@@ -51,10 +51,10 @@ public class Shooter extends SubsystemBase {
         leftShooter.burnFlash();
         rightShooter.burnFlash();
 
-        feeder = new CANSparkMax(Constants.Shooter.FEEDER_ID, MotorType.kBrushed);
-        feeder.restoreFactoryDefaults();
-        feeder.setSmartCurrentLimit(Constants.Shooter.FEEDER_CURRENT_LIMIT);
-        feeder.setInverted(Constants.Shooter.FEEDER_INVERT);
+        // feeder = new CANSparkMax(Constants.Shooter.FEEDER_ID, MotorType.kBrushed);
+        // feeder.restoreFactoryDefaults();
+        // feeder.setSmartCurrentLimit(Constants.Shooter.FEEDER_CURRENT_LIMIT);
+        // feeder.setInverted(Constants.Shooter.FEEDER_INVERT);
     }
 
     @Override
