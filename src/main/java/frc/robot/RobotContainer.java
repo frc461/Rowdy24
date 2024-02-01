@@ -1,10 +1,14 @@
 package frc.robot;
+
+import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.*;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -23,238 +27,217 @@ import frc.robot.subsystems.*;
  */
 
 public class RobotContainer {
-  /* Subsystems */
-  public final Swerve s_Swerve = new Swerve();
-  private final Elevator s_Elevator = new Elevator();
-  private final Intake s_Intake = new Intake();
-  private final Wrist s_Wrist = new Wrist(s_Elevator.getEncoder());
-  private final Limelight limelight = new Limelight();
-  private final SendableChooser<Command> chooser;
+    /* Subsystems */
+    private final Swerve swerve = new Swerve();
+     private final Elevator elevator = new Elevator();
+    private final Limelight limelight = new Limelight();
+    private final IntakeCarriage intakeCarriage = new IntakeCarriage();
+    private final Shooter shooter = new Shooter();
+    // private final Angler angler = new Angler();
 
-  public double intakeVec = 0;
+    /* Controllers */
+    public final static Joystick driver = new Joystick(0);
+    public final static Joystick operator = new Joystick(1);
 
-  public Command autoCode = Commands.sequence(new PrintCommand("no auto selected"));
+    /* Operate Controls */
+    private final int anglerAxis = XboxController.Axis.kLeftY.value;
+    private final int elevatorAxis = XboxController.Axis.kRightY.value;
+    private final int revShooter = XboxController.Axis.kRightTrigger.value;
 
-  /* Controllers */
-  private final Joystick driver = new Joystick(0);
-  private final Joystick operator = new Joystick(1);
+    /* Drive Controls */
+    private final int translationAxis = XboxController.Axis.kLeftY.value;
+    private final int strafeAxis = XboxController.Axis.kLeftX.value;
+    private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-  /* Drive Controls */
-  private final int translationAxis = XboxController.Axis.kLeftY.value;
-  private final int strafeAxis = XboxController.Axis.kLeftX.value;
-  private final int rotationAxis = XboxController.Axis.kRightX.value;
+    /* Operator Buttons */
+    private final JoystickButton operatorStowButton = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
+    private final JoystickButton operatorX = new JoystickButton(operator, XboxController.Button.kX.value);
 
-  // op controls
-  private final int wristAxis = XboxController.Axis.kLeftY.value;
-  private final int elevatorAxis = XboxController.Axis.kRightY.value;
+    private final JoystickButton outtakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
 
-  private final JoystickButton e_presButton_0 = new JoystickButton(operator, XboxController.Button.kY.value);
-  private final JoystickButton e_presButton_1 = new JoystickButton(operator, XboxController.Button.kX.value);
-  private final JoystickButton e_presButton_2 = new JoystickButton(operator, XboxController.Button.kA.value);
-  private final JoystickButton e_presButton_3 = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final POVButton toggleAutoSubsystems = new POVButton(operator, 0);
+    private final POVButton operatorNinety = new POVButton(operator, 90);
+    private final POVButton operatorOneEighty = new POVButton(operator, 180);
+    private final POVButton operatorTwoSeventy = new POVButton(operator, 270);
 
-  private final POVButton w_preset_0 = new POVButton(operator, 0);
-  private final POVButton w_preset_1 = new POVButton(operator, 90);
-  private final POVButton w_preset_2 = new POVButton(operator, 180);
-  private final POVButton operator_stowButton = new POVButton(operator, 270);
+    /* Driver Buttons */
+    private final JoystickButton driverA = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton outtakeButtonDriver = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
-  /* Driver Buttons */
-  private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-  private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton driver_stowButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-  private final JoystickButton driver_limelightButton = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton driverLimelight = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton driverStowButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
-  private final POVButton driver_stowButton2 = new POVButton(operator, 270);
-  // private final JoystickButton xModeButton = new JoystickButton(driver,
-  // XboxController.Button.kX.value);
+    private final POVButton driverZero = new POVButton(driver, 0);
+    private final POVButton driverNinety = new POVButton(driver, 90);
+    private final POVButton driverOneEighty = new POVButton(driver, 180);
+    private final POVButton driverTwoSeventy = new POVButton(driver, 270);
 
-  /* LED Initialization Code */
-  private DigitalOutput LEDzero = new DigitalOutput(8);
-  private DigitalOutput LEDone = new DigitalOutput(9);
+    /* LED Initialization */
+    private final DigitalOutput lightEight = new DigitalOutput(8);
+    private final DigitalOutput lightNine = new DigitalOutput(9);
 
-  /* Variables */
+    /* Variables */
+    private final EventLoop eventLoop = new EventLoop();
+    private boolean autoSubsystems = true; //Disables/enables automatic subsystem functions (e.g. auto-intake)
+    private final SendableChooser<Command> chooser;
 
-  /**
-   * The container for the robot. Contains subsystems, IO devices, and commands.
-   */
-  public RobotContainer() {
-    
-    s_Swerve.setDefaultCommand(
-        new TeleopSwerve(
-            s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()));
+    /**
+     * The container for the robot. Contains subsystems, IO devices, and commands.
+     */
 
-    s_Elevator.setDefaultCommand(
-        new TeleopElevator(
-            s_Elevator,
-            () -> -operator.getRawAxis(elevatorAxis)));
+    public RobotContainer() {
+        NamedCommands.registerCommand("intake", new AutoIntake(intakeCarriage));
 
-    s_Wrist.setDefaultCommand(
-        new TeleopWrist(
-            s_Wrist,
-            () -> -operator.getRawAxis(wristAxis)));
+        swerve.setDefaultCommand(
+                new TeleopSwerve(
+                        swerve,
+                        () -> -driver.getRawAxis(translationAxis),
+                        () -> -driver.getRawAxis(strafeAxis),
+                        () -> -driver.getRawAxis(rotationAxis),
+                        robotCentric
+                )
+        );
 
-    s_Intake.setDefaultCommand(
-        new TeleopIntake(
-            s_Intake,
-            operator));
+        // angler.setDefaultCommand(
+        // new TeleopAngler(
+        // angler,
+        // () -> -operator.getRawAxis(anglerAxis)
+        // )
+        // );
 
-    limelight.setDefaultCommand(
-        new TeleopLimelight(limelight)
-    );
+        // elevator.setDefaultCommand(
+        // new TeleopElevator(
+        // elevator,
+        // () -> -operator.getRawAxis(elevatorAxis)
+        // )
+        // );
 
-    // Configure the button bindings
-    configureButtonBindings();
-    chooser = AutoBuilder.buildAutoChooser("defaultAuto");
-    SmartDashboard.putData("Auto Choices", chooser);
-  }
+        // Configure the button bindings
+        configureButtonBindings();
+        chooser = AutoBuilder.buildAutoChooser("defaultAuto");
+        SmartDashboard.putData("Auto Choices", chooser);
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-   * it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
+    }
 
-  private void configureButtonBindings() {
-    /* Driver Buttons (and op buttons) */
-      
-    w_preset_0.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT)));
-    w_preset_1.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_MID_LIMIT)));
-    w_preset_2.onTrue(new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_LOWER_LIMIT)));
+    public void periodic() {
+        eventLoop.poll();
+    }
 
-    e_presButton_0.onTrue( // Preset to score high cone
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(true)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighScore)),
-            new WaitCommand(.25),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighConeScore)))
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
 
-    );
+    private void configureButtonBindings() {
+        /* Driver Buttons */
 
-    e_presButton_1.onTrue( // Preset to score mid cone
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(true)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidScore)),
-            new WaitCommand(.1),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidConeScore))));
+        zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
 
-    e_presButton_2.onTrue( // Preset to pick up fallen cone
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(false)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorConePickup)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup))));
+        toggleAutoSubsystems.onTrue(new InstantCommand(() -> autoSubsystems = !autoSubsystems));
 
-    e_presButton_3.onTrue( // Preset to pick up cone from single substation
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(false)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristConePickup2))));
+        driverLimelight.whileTrue(new TeleopLimelightTurret(
+                limelight,
+                swerve,
+                () -> -driver.getRawAxis(translationAxis),
+                () -> -driver.getRawAxis(strafeAxis),
+                robotCentric)
+        );
 
-    w_preset_0.onTrue( // Preset to score high cube
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(true)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorHighCubeScore)),
-            new WaitCommand(.25),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristHighCubeScore))));
-
-    w_preset_1.onTrue( // Preset to pick up cube
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(true)),
-            new InstantCommand(() -> LEDone.set(false)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristCubePickup))
-        // Set lights Purple
+        intakeButton.whileTrue(Commands.parallel(
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.75)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(1))
         ));
 
-    w_preset_2.onTrue( // Preset to score mid cube
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(true)),
-            new InstantCommand(() -> LEDone.set(true)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorMidCubeScore)),
-            new WaitCommand(.1),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.wristMidCubeScore))));
+        intakeButton.whileFalse(Commands.parallel(
+                new InstantCommand(() ->  intakeCarriage.setIntakeSpeed(/*autoSubsystems ? -0.15 : */0)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
+        ));
 
-    operator_stowButton.onTrue(
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(false)),
-            new InstantCommand(() -> LEDone.set(false)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))));
+        outtakeButton.whileTrue(Commands.parallel(
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.75)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(-1))
+        ));
 
-    driver_stowButton2.onTrue(
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(false)),
-            new InstantCommand(() -> LEDone.set(false)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))));
+        outtakeButton.whileFalse(Commands.parallel(
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(/*autoSubsystems ? -0.15 : */0)),
+                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
+        ));
 
-    driver_stowButton.onTrue(
-        Commands.sequence(
-            new InstantCommand(() -> LEDzero.set(false)),
-            new InstantCommand(() -> LEDone.set(false)),
-            new InstantCommand(() -> s_Elevator.setHeight(Constants.elevatorBot)),
-            new InstantCommand(() -> s_Wrist.setRotation(Constants.WRIST_UPPER_LIMIT))));
+        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.75)));
 
+        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(/*autoSubsystems ? -0.15 : */0)));
 
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
+        revShooterPressed.ifHigh(
+                () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
+        );
 
-    //driver_limelightButton.whileTrue(Commands.sequence(new LimelightFollow(limelight, s_Swerve)));
-    driver_limelightButton.whileTrue(new LimelightFollow(
-            limelight,
-            s_Swerve,
-            () -> -driver.getRawAxis(translationAxis),
-            () -> -driver.getRawAxis(strafeAxis),
-            () -> -driver.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean()));
+        BooleanEvent revShooterNotPressed = revShooterPressed.negate();
+        revShooterNotPressed.ifHigh(
+                () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)
+        );
 
-  }
+        driverStowButton.onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+        );
 
-  public void printValues() { // all of the SmartDashboard prints:
-    SmartDashboard.putNumber("bpftX", limelight.botPoseX);
-    SmartDashboard.putNumber("bpftZ", limelight.botPoseZ);
-    SmartDashboard.putNumber("Limelight updates", limelight.updates);
-    SmartDashboard.putBoolean("Pov pressed", e_presButton_0.getAsBoolean());
-    SmartDashboard.putNumber("Elevator Position", s_Elevator.getEncoder().getPosition());
-    SmartDashboard.putNumber("Elevator Target", s_Elevator.getTarget());
-    SmartDashboard.putBoolean("elevator limit triggered?", s_Elevator.elevatorSwitchTriggered());
-    SmartDashboard.putNumber("Wrist Position", s_Wrist.getEncoder().getPosition());
-    SmartDashboard.putNumber("Wrist Target", s_Wrist.getTarget());
-    SmartDashboard.putBoolean("cube beam broken?: ", s_Intake.cubeBeamBroken());
-    SmartDashboard.putBoolean("cone beam broken?", s_Intake.coneBeamBroken());
-    SmartDashboard.putNumber("intake speed", s_Intake.getSpeed());
-    SmartDashboard.putNumber("yaw", s_Swerve.gyro.getYaw());
-    SmartDashboard.putNumber("pitch", s_Swerve.gyro.getPitch());
-    SmartDashboard.putNumber("roll", s_Swerve.gyro.getRoll());
-    SmartDashboard.putNumber("elevatorPower", s_Elevator.elevatorPower());
-    SmartDashboard.putNumber("rollLimelight", limelight.getRoll());
-    SmartDashboard.putNumber("yawLimelight", limelight.getYaw());
-    SmartDashboard.putNumber("pitchLimelight", limelight.getPitch());
-    SmartDashboard.putNumber("odometry x", s_Swerve.getPose().getX());
-    SmartDashboard.putNumber("odometry y", s_Swerve.getPose().getY());
-    SmartDashboard.putData("Field", s_Swerve.getField2d());
-    SmartDashboard.putNumber("RX", limelight.getRX());
-    SmartDashboard.putNumber("RY", limelight.getRY());
-    SmartDashboard.putNumber("RZ", limelight.getRZ());
-  }
+        operatorStowButton.onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+        );
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+        elevatorAmp.onTrue(new InstantCommand(() ->
+                elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
+        ));
+    }
 
-  public Command getAutonomousCommand() {
-    return chooser.getSelected();
-  }
+    // smartdashboard prints
+    public void printValues() {
+        // robot position
+        SmartDashboard.putString("Robot Pose2d", swerve.getPose().getTranslation().toString());
+        SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
+        SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
+        SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
+
+        // elevator debug
+        // SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
+        // SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
+        // SmartDashboard.putNumber("Elevator Power", elevator.elevatorPower());
+        // SmartDashboard.putBoolean("Elevator Limit Triggered?",
+        // elevator.elevatorSwitchTriggered());
+
+        // limelight debug
+        SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());
+        SmartDashboard.putNumber("Limelight Yaw", limelight.getYaw());
+        SmartDashboard.putNumber("Limelight Pitch", limelight.getPitch());
+        SmartDashboard.putNumber("Limelight Roll", limelight.getRoll());
+        SmartDashboard.putNumber("Limelight X", limelight.getRX());
+        SmartDashboard.putNumber("Limelight Y", limelight.getRY());
+        SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
+
+        //shooter debug
+        SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
+        SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
+
+        // SmartDashboard.putNumber("Angler encoder", angler.getEncoder());
+    }
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+
+    public Command getAutonomousCommand() {
+        return chooser.getSelected();
+    }
 }
