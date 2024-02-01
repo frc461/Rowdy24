@@ -87,12 +87,12 @@ public class SwerveModule {
 
     public void setAngle(SwerveModuleState desiredState){
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
-        angleController.setReference(angle.getRotations(), ControlType.kPosition);
+        angleController.setReference(angle.getDegrees(), ControlType.kPosition);
         lastAngle = angle;
     }
 
     private Rotation2d getAngle(){
-        return Rotation2d.fromRotations(integratedAngleEncoder.getPosition());
+        return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
     }
 
     public Rotation2d getCanCoder(){
@@ -100,8 +100,8 @@ public class SwerveModule {
     }
 
     public void resetToAbsolute(){
-        double absolutePosition = this.getCanCoder().getRotations() - angleOffset.getRotations();
-        angleMotor.getEncoder().setPosition(absolutePosition);
+        double absolutePosition = this.getCanCoder().getDegrees() - angleOffset.getDegrees();
+        integratedAngleEncoder.setPosition(absolutePosition);
     }
 
     private void configAngleEncoder(){
