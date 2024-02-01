@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -22,6 +23,7 @@ public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveModule[] mSwerveMods;
     private final Pigeon2 gyro;
+    final Field2d m_field = new Field2d();
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
@@ -92,12 +94,17 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
+        m_field.setRobotPose(swerveOdometry.getPoseMeters());
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Position", mod.getPosition().distanceMeters);
         }
+    }
+
+    public Field2d getField2d() {
+        return m_field;
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {

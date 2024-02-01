@@ -2,12 +2,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.*;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -82,6 +84,7 @@ public class RobotContainer {
     /* Variables */
     private final EventLoop eventLoop = new EventLoop();
     private boolean autoSubsystems = true; //Disables/enables automatic subsystem functions (e.g. auto-intake)
+    private final SendableChooser<Command> chooser;
 
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
@@ -116,13 +119,12 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+        chooser = AutoBuilder.buildAutoChooser("defaultAuto");
+        SmartDashboard.putData("Auto Choices", chooser);
+
     }
 
     public void periodic() {
-
-        
-
-        
         eventLoop.poll();
     }
 
@@ -236,6 +238,6 @@ public class RobotContainer {
      */
 
     public Command getAutonomousCommand() {
-        return null;
+        return chooser.getSelected();
     }
 }
