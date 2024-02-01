@@ -61,14 +61,14 @@ public class SwerveModule {
                 Constants.Swerve.DRIVE_S, Constants.Swerve.DRIVE_V, Constants.Swerve.DRIVE_A
         );
 
-        lastAngle = getState().angle;
+        lastAngle = getAngle();
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
         /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
         desiredState = OptimizeModuleState.optimize(desiredState, getState().angle);
-        setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
+        setAngle(desiredState);
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
@@ -85,22 +85,22 @@ public class SwerveModule {
         }
     }
 
+    public Rotation2d getAngle(){
+        return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
+    }
+
+    public Rotation2d getAbsoluteAngle(){
+        return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValueAsDouble());
+    }
+
     public void setAngle(SwerveModuleState desiredState){
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         angleController.setReference(angle.getDegrees(), ControlType.kPosition);
         lastAngle = angle;
     }
 
-    private Rotation2d getAngle(){
-        return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
-    }
-
-    public Rotation2d getCanCoder(){
-        return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValueAsDouble());
-    }
-
     public void resetToAbsolute(){
-        double absolutePosition = this.getCanCoder().getDegrees() - angleOffset.getDegrees();
+        double absolutePosition = getAbsoluteAngle().getDegrees() - angleOffset.getDegrees();
         integratedAngleEncoder.setPosition(absolutePosition);
     }
 
