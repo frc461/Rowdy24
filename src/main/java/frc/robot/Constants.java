@@ -48,7 +48,7 @@ public final class Constants {
     }
 
     public static final class Shooter {
-        public static final int LEFT_SHOOTER_ID = 39;
+        public static final int LEFT_SHOOTER_ID = 60;
         public static final int RIGHT_SHOOTER_ID = 61;
         public static final int ANGLER_ID = 62;
         public static final int SHOOTER_CURRENT_LIMIT = 50;
@@ -65,14 +65,14 @@ public final class Constants {
         public static final double SHOOTER_D = 0.0005;
         public static final double SHOOTER_FF = 0.1;
 
-        public static final double ANGLER_P = 0.6;
-        public static final double ANGLER_I = 0.1;
-        public static final double ANGLER_D = 0.5;
+        public static final double ANGLER_P = 0.5;
+        public static final double ANGLER_I = 0;
+        public static final double ANGLER_D = 0;
         public static final int ANGLER_CURRENT_LIMIT = 60;
         public static final boolean ANGLER_INVERT = false;
         public static final double ANGLER_ROTATION_CONSTANT = 42.0 / 360.0;
-        public static final double ANGLER_LOWER_LIMIT = 0;
-        public static final double ANGLER_UPPER_LIMIT = 10;
+        public static final double ANGLER_LOWER_LIMIT = 0.478;
+        public static final double ANGLER_UPPER_LIMIT = 1;
 
         public static final int FEEDER_ID = 59;
         public static final int FEEDER_CURRENT_LIMIT = 50;

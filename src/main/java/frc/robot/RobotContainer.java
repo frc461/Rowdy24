@@ -33,7 +33,7 @@ public class RobotContainer {
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
-    // private final Angler angler = new Angler();
+    private final Angler angler = new Angler();
 
     /* Controllers */
     public final static Joystick driver = new Joystick(0);
@@ -103,12 +103,12 @@ public class RobotContainer {
                 )
         );
 
-        // angler.setDefaultCommand(
-        // new TeleopAngler(
-        // angler,
-        // () -> -operator.getRawAxis(anglerAxis)
-        // )
-        // );
+        angler.setDefaultCommand(
+        new TeleopAngler(
+        angler,
+        () -> -operator.getRawAxis(anglerAxis)
+        )
+        );
 
         // elevator.setDefaultCommand(
         // new TeleopElevator(
@@ -198,6 +198,7 @@ public class RobotContainer {
         elevatorAmp.onTrue(new InstantCommand(() ->
                 elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
         ));
+        operatorX.onTrue(new InstantCommand(()->angler.tiltShooter(0.9)));
     }
 
     // smartdashboard prints
@@ -228,7 +229,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
 
-        // SmartDashboard.putNumber("Angler encoder", angler.getEncoder());
+        SmartDashboard.putNumber("Angler encoder", angler.getEncoder());
     }
 
     /**
