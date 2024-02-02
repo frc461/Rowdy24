@@ -13,7 +13,7 @@ import frc.robot.subsystems.IntakeCarriage;
 
 public class Shooter extends SubsystemBase {
 
-    private final IntakeCarriage intakeCarriage = new IntakeCarriage();
+    //private final IntakeCarriage intakeCarriage = new IntakeCarriage();
 
     private final CANSparkMax leftShooter;
     private final CANSparkMax rightShooter;
@@ -63,11 +63,11 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (getLeftShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE && getRightShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE) {
-            intakeCarriage.setCarriageSpeed(0.5);
-        } else {
-            intakeCarriage.setCarriageSpeed(0);
-        }
+        // if (getLeftShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE && getRightShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE) {
+        //     intakeCarriage.setCarriageSpeed(0.5);
+        // } else {
+        //     intakeCarriage.setCarriageSpeed(0);
+        // }
     }
 
     public double getLeftShooterSpeed() {

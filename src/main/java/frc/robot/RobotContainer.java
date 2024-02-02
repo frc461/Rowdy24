@@ -229,6 +229,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
 
+        SmartDashboard.putNumber("Angler conversion",angler.getConversion());
         SmartDashboard.putNumber("Angler encoder", angler.getEncoder());
     }
 
