@@ -15,6 +15,7 @@ public class AutoIntake extends Command {
     @Override
     public void execute() {
         intake.setIntakeSpeed(0.75);
+        intake.setCarriageSpeed(0.75);
     }
 
 }

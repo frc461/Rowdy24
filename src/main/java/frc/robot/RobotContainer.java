@@ -92,6 +92,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         NamedCommands.registerCommand("intake", new AutoIntake(intakeCarriage));
+        NamedCommands.registerCommand("shoot", new AutoShooter(shooter));
 
         swerve.setDefaultCommand(
                 new TeleopSwerve(
