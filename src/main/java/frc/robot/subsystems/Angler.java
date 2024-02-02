@@ -16,7 +16,7 @@ public class Angler extends SubsystemBase {
 
     public Angler() {
         shooterAngler = new CANSparkMax(Constants.Shooter.ANGLER_ID, MotorType.kBrushless);
-        shooterAngler.restoreFactoryDefaults();
+        //shooterAngler.restoreFactoryDefaults();
         shooterAngler.setSmartCurrentLimit(Constants.Shooter.ANGLER_CURRENT_LIMIT);
         shooterAngler.setInverted(Constants.Shooter.ANGLER_INVERT);
         anglerPID = new PIDController(
@@ -25,12 +25,13 @@ public class Angler extends SubsystemBase {
                 Constants.Shooter.ANGLER_D
         );
         anglerEncoder = shooterAngler.getAbsoluteEncoder(Type.kDutyCycle);
+        //anglerEncoder.setInverted(true);
         target = Constants.Shooter.ANGLER_UPPER_LIMIT;
     }
 
     public void tiltShooter(double angle) {
         // TODO: not sure if this is the correct conversion
-        double angleToRot = angle * Constants.Shooter.ANGLER_ROTATION_CONSTANT;
+        double angleToRot = angle; //* Constants.Shooter.ANGLER_ROTATION_CONSTANT;
 
         if (angleToRot < anglerEncoder.getPosition()
                 && anglerEncoder.getPosition() < Constants.Shooter.ANGLER_LOWER_LIMIT) {
