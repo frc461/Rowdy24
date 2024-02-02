@@ -158,7 +158,7 @@ public class RobotContainer {
         ));
 
         intakeButton.whileFalse(Commands.parallel(
-                new InstantCommand(() ->  intakeCarriage.setIntakeSpeed(/*autoSubsystems ? -0.15 : */0)),
+                new InstantCommand(() ->  intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
 
@@ -168,13 +168,13 @@ public class RobotContainer {
         ));
 
         outtakeButton.whileFalse(Commands.parallel(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(/*autoSubsystems ? -0.15 : */0)),
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
 
         outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.75)));
 
-        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(/*autoSubsystems ? -0.15 : */0)));
+        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)));
 
         BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
         revShooterPressed.ifHigh(
