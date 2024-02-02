@@ -26,6 +26,7 @@ public class Angler extends SubsystemBase {
         );
         anglerEncoder = shooterAngler.getAbsoluteEncoder(Type.kDutyCycle);
         //anglerEncoder.setInverted(true);
+        anglerEncoder.setPositionConversionFactor(Constants.Shooter.ANGLE_ENCODER_CONVERSION);
         target = Constants.Shooter.ANGLER_UPPER_LIMIT;
     }
 

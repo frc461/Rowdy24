@@ -8,8 +8,12 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.IntakeCarriage;
 
 public class Shooter extends SubsystemBase {
+
+    private final IntakeCarriage intakeCarriage = new IntakeCarriage();
 
     private final CANSparkMax leftShooter;
     private final CANSparkMax rightShooter;
@@ -59,11 +63,11 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // if (getLeftShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE && getRightShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE) {
-        //     feeder.set(0.5);
-        // } else {
-        //     feeder.set(0);
-        // }
+        if (getLeftShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE && getRightShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE) {
+            intakeCarriage.setCarriageSpeed(0.5);
+        } else {
+            intakeCarriage.setCarriageSpeed(0);
+        }
     }
 
     public double getLeftShooterSpeed() {
@@ -84,7 +88,8 @@ public class Shooter extends SubsystemBase {
         //     RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0);
         //     SmartDashboard.putBoolean("Shooter Ready", false);
         // }
-
+        currentSpeed = speed;
+            
         if (idleShooter) {
             leftShooter.set(speed);
             rightShooter.set(speed);
