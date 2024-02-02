@@ -66,7 +66,7 @@ public class SwerveModule {
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
         /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
-        desiredState = OptimizeModuleState.optimize(desiredState, getState().angle);
+        desiredState = OptimizeModuleState.optimize(desiredState, getAngle());
         setSpeed(desiredState, isOpenLoop);
         setAngle(desiredState);
     }
