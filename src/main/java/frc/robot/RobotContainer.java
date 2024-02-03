@@ -178,8 +178,11 @@ public class RobotContainer {
 
         BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
         revShooterPressed.ifHigh(
-                () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
+                () -> Commands.sequence(
+                new InstantCommand(() -> angler.setAngle(Math.atan((limelight.getRY()+0.6096)/limelight.getRX()))),
+                new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false))
+                )
         );
 
         BooleanEvent revShooterNotPressed = revShooterPressed.negate();
