@@ -3,82 +3,106 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.SparkLimitSwitch;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Angler extends SubsystemBase {
     private final CANSparkMax shooterAngler;
-    private final SparkPIDController anglerPID;
+    //private final SparkPIDController anglerPID;
     private double target;
+    private double position;
 
-    private RelativeEncoder anglerEncoder;
+    private PIDController pidController;
+    private RelativeEncoder neoEncoder;
 
+
+    @Override
+    public void periodic() {
+       // if(lowerSwitchTriggered()){neoEncoder.setPosition(0);}
+        
+    }
     public Angler() {
         shooterAngler = new CANSparkMax(Constants.Shooter.ANGLER_ID, MotorType.kBrushless);
         //shooterAngler.restoreFactoryDefaults();
         shooterAngler.setSmartCurrentLimit(Constants.Shooter.ANGLER_CURRENT_LIMIT);
-        shooterAngler.setInverted(Constants.Shooter.ANGLER_INVERT);
+        shooterAngler.setInverted(Constants.Shooter.ANGLER_INVERT); 
+        // anglerPID = shooterAngler.getPIDController();
+        // anglerPID.setP(Constants.Shooter.ANGLER_P);
+        // anglerPID.setI(Constants.Shooter.ANGLER_I);
+        // anglerPID.setD(Constants.Shooter.ANGLER_D);
 
-        anglerEncoder = shooterAngler.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 8192);
+        pidController = new PIDController(0, 0, 0);
 
-        anglerPID = shooterAngler.getPIDController();
-        anglerPID.setP(Constants.Shooter.ANGLER_P);
-        anglerPID.setI(Constants.Shooter.ANGLER_I);
-        anglerPID.setD(Constants.Shooter.ANGLER_D);
+        pidController.setP(Constants.Shooter.ANGLER_P);
+        pidController.setI(Constants.Shooter.ANGLER_I);
+        pidController.setD(Constants.Shooter.ANGLER_D);
 
-        anglerPID.setFeedbackDevice(anglerEncoder);
+        neoEncoder = shooterAngler.getEncoder();
+        neoEncoder.setPosition(0);
+        
 
-        //anglerEncoder = shooterAngler.getAbsoluteEncoder(Type.kDutyCycle);
-        //anglerEncoder.setInverted(true);
-        //anglerEncoder.setPositionConversionFactor(Constants.Shooter.ANGLE_ENCODER_CONVERSION);
-        //anglerEncoder.setZeroOffset();
+        //anglerPID.setFeedbackDevice(neoEncoder);
 
-
-        target = Constants.Shooter.ANGLER_UPPER_LIMIT;
+        target = 0;//Constants.Shooter.ANGLER_UPPER_LIMIT;
     }
 
-    public void tiltShooter(double angle) {
-        // TODO: not sure if this is the correct conversion
-        double angleToRot = angle / Constants.Shooter.ANGLER_ROTATION_CONSTANT;
 
-        if (angleToRot < anglerEncoder.getPosition()
-                && anglerEncoder.getPosition() < Constants.Shooter.ANGLER_LOWER_LIMIT) {
-            angleToRot = Constants.Shooter.ANGLER_LOWER_LIMIT;
-        } else if (angleToRot > anglerEncoder.getPosition()
-                && anglerEncoder.getPosition() > Constants.Shooter.ANGLER_UPPER_LIMIT) {
-            angleToRot = Constants.Shooter.ANGLER_UPPER_LIMIT;
-        }
-        target = angleToRot;
-        anglerPID.setReference(angleToRot, ControlType.kPosition);
+    public boolean lowerSwitchTriggered(){
+        return shooterAngler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed).isPressed();
     }
 
-    public void moveAngle(double movementVector) {
-        if (movementVector < 0 && anglerEncoder.getPosition() < Constants.Shooter.ANGLER_LOWER_LIMIT) {
-            target = Constants.Shooter.ANGLER_LOWER_LIMIT;
-            holdTilt();
-            return;
-        } else if (movementVector > 0 && anglerEncoder.getPosition() > Constants.Shooter.ANGLER_UPPER_LIMIT) {
-            target = Constants.Shooter.ANGLER_UPPER_LIMIT;
-            holdTilt();
-            return;
-        }
-        shooterAngler.set(movementVector);
-        target = anglerEncoder.getPosition();
+    public boolean upperSwitchTriggered(){
+        return shooterAngler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
     }
 
     public void holdTilt() {
-        target = Math.max(target, Constants.Shooter.ANGLER_LOWER_LIMIT);
-        anglerPID.setReference(target, ControlType.kPosition);
+        shooterAngler.set(pidController.calculate(neoEncoder.getPosition(), target));
+        SmartDashboard.putNumber("Angler PID Power", pidController.calculate(neoEncoder.getPosition(), target));
+        //setTolerance
     }
 
-    public double getEncoder() {
-        return anglerEncoder.getPosition();
+    public void checkLimitSwitch(){
+        if(upperSwitchTriggered()){neoEncoder.setPosition(Constants.Shooter.ANGLER_UPPER_LIMIT);}
+        if(lowerSwitchTriggered()){neoEncoder.setPosition(Constants.Shooter.ANGLER_LOWER_LIMIT);}
     }
-    public double getConversion(){
-        return anglerEncoder.getPositionConversionFactor();
+
+    public void moveAngle(double axisValue) {
+        target = neoEncoder.getPosition();
+        if (axisValue < 0 && lowerSwitchTriggered()){
+            target = Constants.Shooter.ANGLER_LOWER_LIMIT;
+            holdTilt();
+            SmartDashboard.putString("Limit", "Upper");
+            return;
+        } else if (axisValue > 0 && upperSwitchTriggered()) {
+            target = Constants.Shooter.ANGLER_UPPER_LIMIT;
+            holdTilt();
+            SmartDashboard.putString("Limit", "Upper");
+            return;
+        }
+        SmartDashboard.putString("Limit", "Not at limit");
+        shooterAngler.set(axisValue);
+    }
+
+    public void setAngle(double angle) {
+        if (angle < neoEncoder.getPosition() && lowerSwitchTriggered()) {
+            neoEncoder.setPosition(Constants.Shooter.ANGLER_LOWER_LIMIT);
+            angle = Constants.Shooter.ANGLER_LOWER_LIMIT;
+        } else if (angle > neoEncoder.getPosition() && neoEncoder.getPosition() > Constants.Shooter.ANGLER_UPPER_LIMIT) {
+            angle = Constants.Shooter.ANGLER_UPPER_LIMIT;
+        }
+        shooterAngler.set(pidController.calculate(neoEncoder.getPosition(), angle));
+        target = angle;
+    }
+    public double getEncoder() {
+        return  neoEncoder.getPosition(); 
+        
+        
+        //anglerEncoder.getPosition();
     }
 }

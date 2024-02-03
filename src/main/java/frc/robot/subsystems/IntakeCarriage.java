@@ -13,8 +13,8 @@ public class IntakeCarriage extends SubsystemBase {
 
     // TODO: Implement beam break logic Please!
     DigitalInput carriageBeam = new DigitalInput(0); // end of carriage (on shooter side)
-    DigitalInput ampBeam = new DigitalInput(1); // entrance of carriage (which is the amp shooter)
-    DigitalInput shooterBeam = new DigitalInput(2); // completely exit through shooter
+    DigitalInput ampBeam = new DigitalInput(7); // entrance of carriage (which is the amp shooter)
+    DigitalInput shooterBeam = new DigitalInput(6); // completely exit through shooter
 
     private boolean hasPiece = false;
 

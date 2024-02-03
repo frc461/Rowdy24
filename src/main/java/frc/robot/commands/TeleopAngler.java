@@ -20,9 +20,11 @@ public class TeleopAngler extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double motionVal = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.STICK_DEADBAND);
-        if (motionVal != 0) {
-            angler.moveAngle(motionVal);
+
+        angler.checkLimitSwitch();
+
+        if (MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.STICK_DEADBAND) != 0.0) {
+            angler.moveAngle(motionSup.getAsDouble());
         } else {
             angler.holdTilt();
         }

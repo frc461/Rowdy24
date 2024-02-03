@@ -29,7 +29,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-     private final Elevator elevator = new Elevator();
+//private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
@@ -83,7 +83,7 @@ public class RobotContainer {
 
     /* Variables */
     private final EventLoop eventLoop = new EventLoop();
-    private boolean autoSubsystems = true; //Disables/enables automatic subsystem functions (e.g. auto-intake)
+    private boolean autoSubsystems = false; //Disables/enables automatic subsystem functions (e.g. auto-intake)
     private final SendableChooser<Command> chooser;
 
     /**
@@ -187,18 +187,18 @@ public class RobotContainer {
                 () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)
         );
 
-        driverStowButton.onTrue(
-                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-        );
+        // driverStowButton.onTrue(
+        //         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+        // );
 
-        operatorStowButton.onTrue(
-                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-        );
+        // operatorStowButton.onTrue(
+        //         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+        // );
 
-        elevatorAmp.onTrue(new InstantCommand(() ->
-                elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
-        ));
-        operatorX.onTrue(new InstantCommand(()->angler.tiltShooter(0.9)));
+        // elevatorAmp.onTrue(new InstantCommand(() ->
+        //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
+        // ));
+       operatorX.onTrue(new InstantCommand(()->angler.setAngle(15)));
     }
 
     // smartdashboard prints
@@ -229,7 +229,6 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
 
-        SmartDashboard.putNumber("Angler conversion",angler.getConversion());
         SmartDashboard.putNumber("Angler encoder", angler.getEncoder());
     }
 
