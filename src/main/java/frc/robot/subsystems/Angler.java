@@ -45,7 +45,9 @@ public class Angler extends SubsystemBase {
 
         neoEncoder = shooterAngler.getEncoder();
         neoEncoder.setPosition(0);
-        
+        while(!lowerSwitchTriggered()){
+            shooterAngler.set(-0.5);
+        }
 
         //anglerPID.setFeedbackDevice(neoEncoder);
 
@@ -54,11 +56,16 @@ public class Angler extends SubsystemBase {
 
 
     public boolean lowerSwitchTriggered(){
-        return shooterAngler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed).isPressed();
+        return shooterAngler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
     }
 
     public boolean upperSwitchTriggered(){
         return shooterAngler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
+    }
+
+    public void checkLimitSwitch(){
+        if(upperSwitchTriggered()){neoEncoder.setPosition(Constants.Shooter.ANGLER_UPPER_LIMIT);}
+        if(lowerSwitchTriggered()){neoEncoder.setPosition(Constants.Shooter.ANGLER_LOWER_LIMIT);}
     }
 
     public void holdTilt() {
@@ -67,26 +74,17 @@ public class Angler extends SubsystemBase {
         //setTolerance
     }
 
-    public void checkLimitSwitch(){
-        if(upperSwitchTriggered()){neoEncoder.setPosition(Constants.Shooter.ANGLER_UPPER_LIMIT);}
-        if(lowerSwitchTriggered()){neoEncoder.setPosition(Constants.Shooter.ANGLER_LOWER_LIMIT);}
-    }
-
     public void moveAngle(double axisValue) {
         target = neoEncoder.getPosition();
         if (axisValue < 0 && lowerSwitchTriggered()){
             target = Constants.Shooter.ANGLER_LOWER_LIMIT;
             holdTilt();
-            SmartDashboard.putString("Limit", "Upper");
-            return;
         } else if (axisValue > 0 && upperSwitchTriggered()) {
             target = Constants.Shooter.ANGLER_UPPER_LIMIT;
             holdTilt();
-            SmartDashboard.putString("Limit", "Upper");
-            return;
+        }else{
+            shooterAngler.set(axisValue);
         }
-        SmartDashboard.putString("Limit", "Not at limit");
-        shooterAngler.set(axisValue);
     }
 
     public void setAngle(double angle) {

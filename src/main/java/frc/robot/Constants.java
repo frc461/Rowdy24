@@ -64,13 +64,11 @@ public final class Constants {
         public static final double SHOOTER_I = 0.000000001;
         public static final double SHOOTER_D = 0.0005;
         public static final double SHOOTER_FF = 0.1;
-        public static final double ANGLER_P = 0.25;
-        public static final double ANGLER_I = 0.0;
-        public static final double ANGLER_D = 0.1;
-        public static final int ANGLER_CURRENT_LIMIT = 60;
+        public static final double ANGLER_P = 0.035;
+        public static final double ANGLER_I = 0.00009;
+        public static final double ANGLER_D = 0.0001;
+        public static final int ANGLER_CURRENT_LIMIT = 35;
         public static final boolean ANGLER_INVERT = false;
-        public static final double ANGLER_ROTATION_CONSTANT = 1.0/8.0;
-        public static final double ANGLE_ENCODER_CONVERSION = 1;
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
 
