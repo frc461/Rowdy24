@@ -35,15 +35,7 @@ public class TeleopLimelightTurret extends Command {
         this.robotCentric = () -> false;
         addRequirements(this.limelight, swerve);
     }
-
-    /*
-     * how to go to apriltag:
-     * find tag (duh)
-     * find position of tag relative to robot
-     * rotate from current position to tag using rotation PID controller
-     * variate PID magnitude by distance factor
-     * allow turret mode ("locked" rotation to tag)
-     */
+    
     @Override
     public void execute() {
         limelight.refreshValues();

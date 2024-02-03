@@ -29,7 +29,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-//private final Elevator elevator = new Elevator();
+    //private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
@@ -83,7 +83,7 @@ public class RobotContainer {
 
     /* Variables */
     private final EventLoop eventLoop = new EventLoop();
-    private boolean autoSubsystems = false; //Disables/enables automatic subsystem functions (e.g. auto-intake)
+    private boolean autoSubsystems = true; // Disables/enables automatic subsystem functions (e.g. auto-intake)
     private final SendableChooser<Command> chooser;
 
     /**
@@ -104,24 +104,24 @@ public class RobotContainer {
         );
 
         angler.setDefaultCommand(
-        new TeleopAngler(
-        angler,
-        () -> -operator.getRawAxis(anglerAxis)
-        )
+                new TeleopAngler(
+                        angler,
+                        () -> -operator.getRawAxis(anglerAxis)
+                )
         );
 
         // elevator.setDefaultCommand(
-        // new TeleopElevator(
-        // elevator,
-        // () -> -operator.getRawAxis(elevatorAxis)
-        // )
+        //         new TeleopElevator(
+        //                 elevator,
+        //                 () -> -operator.getRawAxis(elevatorAxis)
+        //         )
         // );
 
         // Configure the button bindings
         configureButtonBindings();
+
         chooser = AutoBuilder.buildAutoChooser("defaultAuto");
         SmartDashboard.putData("Auto Choices", chooser);
-
     }
 
     public void periodic() {
@@ -141,7 +141,7 @@ public class RobotContainer {
         /* Driver Buttons */
 
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
-
+        
         toggleAutoSubsystems.onTrue(new InstantCommand(() -> autoSubsystems = !autoSubsystems));
 
         driverLimelight.whileTrue(new TeleopLimelightTurret(
@@ -153,7 +153,7 @@ public class RobotContainer {
         );
 
         intakeButton.whileTrue(Commands.parallel(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.75)),
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.9)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(1))
         ));
 
@@ -163,7 +163,7 @@ public class RobotContainer {
         ));
 
         outtakeButton.whileTrue(Commands.parallel(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.75)),
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.9)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(-1))
         ));
 
@@ -172,7 +172,7 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
 
-        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.75)));
+        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
 
         outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)));
 
@@ -198,7 +198,7 @@ public class RobotContainer {
         // elevatorAmp.onTrue(new InstantCommand(() ->
         //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
         // ));
-       operatorX.onTrue(new InstantCommand(()->angler.setAngle(15)));
+       operatorX.onTrue(new InstantCommand(() -> angler.setAngle(10.88))); // podium shot
     }
 
     // smartdashboard prints

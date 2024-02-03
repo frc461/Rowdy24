@@ -11,19 +11,19 @@ public class TeleopAngler extends Command {
     private DoubleSupplier motionSup;
 
     public TeleopAngler(Angler angler, DoubleSupplier motionSup) {
-        // Use addRequirements() here to declare subsystem dependencies.
         this.angler = angler;
         this.motionSup = motionSup;
         addRequirements(angler);
     }
 
-    // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        double axisValue = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.STICK_DEADBAND);
 
-        angler.checkLimitSwitch();
+        // check limit switches
+        angler.checkLimitSwitches();
 
-        if (MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.STICK_DEADBAND) != 0.0) {
+        if (axisValue!= 0.0) {
             angler.moveAngle(motionSup.getAsDouble());
         } else {
             angler.holdTilt();

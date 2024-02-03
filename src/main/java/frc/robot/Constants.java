@@ -48,8 +48,8 @@ public final class Constants {
     }
 
     public static final class Shooter {
-        public static final int LEFT_SHOOTER_ID = 60; //BOTTOM WHEEL
-        public static final int RIGHT_SHOOTER_ID = 61; //TOP WHEEL
+        public static final int BOTTOM_SHOOTER_ID = 60; //BOTTOM WHEEL
+        public static final int TOP_SHOOTER_ID = 61; //TOP WHEEL
         public static final int ANGLER_ID = 62;
         public static final int SHOOTER_CURRENT_LIMIT = 50;
         public static final boolean SHOOTER_INVERT = false;
@@ -84,8 +84,7 @@ public final class Constants {
     public static final class Swerve {
         public static final double GYRO_OFFSET = 0;
         public static final int PIGEON_ID = 51;
-        public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW- (DO NOT USE, ENABLES
-                                                         // ROBOT-CENTRIC)
+        public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW- (DO NOT USE, ENABLES ROBOT-CENTRIC)
 
         public static final COTSFalconSwerveConstants CHOSEN_MODULE =
                 COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L3);

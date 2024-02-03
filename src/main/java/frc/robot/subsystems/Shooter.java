@@ -1,64 +1,51 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.IntakeCarriage;
 
 public class Shooter extends SubsystemBase {
+    private final CANSparkMax bottomShooter;
+    private final CANSparkMax topShooter;
 
-    //private final IntakeCarriage intakeCarriage = new IntakeCarriage();
+    private final SparkPIDController bottomController, topController;
 
-    private final CANSparkMax leftShooter;
-    private final CANSparkMax rightShooter;
-
-    private final SparkPIDController leftController, rightController;
-
-    //private final CANSparkMax feeder;
-
-    private final RelativeEncoder leftEncoder;
-    private final RelativeEncoder rightEncoder;
+    private final RelativeEncoder bottomEncoder;
+    private final RelativeEncoder topEncoder;
     double currentSpeed = 0;
 
     public Shooter() {
-        leftShooter = new CANSparkMax(Constants.Shooter.LEFT_SHOOTER_ID, MotorType.kBrushless);
-        leftShooter.restoreFactoryDefaults();
-        leftShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
-        leftShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
-        leftEncoder = leftShooter.getEncoder();
+        bottomShooter = new CANSparkMax(Constants.Shooter.BOTTOM_SHOOTER_ID, MotorType.kBrushless);
+        bottomShooter.restoreFactoryDefaults();
+        bottomShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
+        bottomShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
+        bottomEncoder = bottomShooter.getEncoder();
 
-        rightShooter = new CANSparkMax(Constants.Shooter.RIGHT_SHOOTER_ID, MotorType.kBrushless);
-        rightShooter.restoreFactoryDefaults();
-        rightShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
-        rightShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
-        rightEncoder = rightShooter.getEncoder();
+        topShooter = new CANSparkMax(Constants.Shooter.TOP_SHOOTER_ID, MotorType.kBrushless);
+        topShooter.restoreFactoryDefaults();
+        topShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
+        topShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
+        topEncoder = topShooter.getEncoder();
 
-        rightController = rightShooter.getPIDController();
-        leftController = leftShooter.getPIDController();
+        topController = topShooter.getPIDController();
+        bottomController = bottomShooter.getPIDController();
 
-        rightController.setP(Constants.Shooter.SHOOTER_P);
-        rightController.setI(Constants.Shooter.SHOOTER_I);
-        rightController.setD(Constants.Shooter.SHOOTER_D);
-        rightController.setFF(Constants.Shooter.SHOOTER_FF);
+        topController.setP(Constants.Shooter.SHOOTER_P);
+        topController.setI(Constants.Shooter.SHOOTER_I);
+        topController.setD(Constants.Shooter.SHOOTER_D);
+        topController.setFF(Constants.Shooter.SHOOTER_FF);
 
-        leftController.setP(Constants.Shooter.SHOOTER_P);
-        leftController.setI(Constants.Shooter.SHOOTER_I);
-        leftController.setD(Constants.Shooter.SHOOTER_D);
-        leftController.setFF(Constants.Shooter.SHOOTER_FF);
+        bottomController.setP(Constants.Shooter.SHOOTER_P);
+        bottomController.setI(Constants.Shooter.SHOOTER_I);
+        bottomController.setD(Constants.Shooter.SHOOTER_D);
+        bottomController.setFF(Constants.Shooter.SHOOTER_FF);
         
-        leftShooter.burnFlash();
-        rightShooter.burnFlash();
-
-        // feeder = new CANSparkMax(Constants.Shooter.FEEDER_ID, MotorType.kBrushed);
-        // feeder.restoreFactoryDefaults();
-        // feeder.setSmartCurrentLimit(Constants.Shooter.FEEDER_CURRENT_LIMIT);
-        // feeder.setInverted(Constants.Shooter.FEEDER_INVERT);
+        bottomShooter.burnFlash();
+        topShooter.burnFlash();
     }
 
     @Override
@@ -71,11 +58,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getLeftShooterSpeed() {
-        return leftEncoder.getVelocity();
+        return bottomEncoder.getVelocity();
     }
 
     public double getRightShooterSpeed() {
-        return rightEncoder.getVelocity();
+        return topEncoder.getVelocity();
     }
 
     public void shoot(double speed, boolean idleShooter) {
@@ -91,11 +78,11 @@ public class Shooter extends SubsystemBase {
         currentSpeed = speed;
             
         if (idleShooter) {
-            leftShooter.set(speed);
-            rightShooter.set(speed);
+            bottomShooter.set(speed);
+            topShooter.set(speed);
         } else {
-            rightController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
-            leftController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+            topController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+            bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
         }
     }
 }

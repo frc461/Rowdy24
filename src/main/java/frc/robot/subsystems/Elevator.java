@@ -13,13 +13,11 @@ public class Elevator extends SubsystemBase {
     private final PIDController pidController;
     private final RelativeEncoder encoder;
     private final DigitalInput elevatorSwitch;
-    private double position;
     private double target;
 
     public Elevator() {
         elevator = new CANSparkMax(Constants.Elevator.ELEVATOR_ID, MotorType.kBrushless);
         encoder = elevator.getEncoder();
-        position = encoder.getPosition();
         target = encoder.getPosition();
         elevatorSwitch = new DigitalInput(4); // limit switch that re-zeros the elevator encoder
 
@@ -34,13 +32,8 @@ public class Elevator extends SubsystemBase {
         );
     }
 
-    @Override
-    public void periodic() {
-        position = encoder.getPosition();
-    }
-
     public double getPosition() {
-        return position;
+        return encoder.getPosition();
     }
 
     public double getTarget() {
@@ -62,16 +55,16 @@ public class Elevator extends SubsystemBase {
     }
 
     public void holdHeight() {
-        elevator.set(pidController.calculate(position, target));
+        elevator.set(pidController.calculate(encoder.getPosition(), target));
     }
 
     public void moveElevator(double axisValue) {
-        target = position;
+        target = encoder.getPosition();
         if (axisValue < 0 && elevatorSwitchTriggered()) {
             target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
             holdHeight();
             return;
-        } else if (axisValue > 0 && position >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
+        } else if (axisValue > 0 && encoder.getPosition() >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
             target = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
             holdHeight();
             return;

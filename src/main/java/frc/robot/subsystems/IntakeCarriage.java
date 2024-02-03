@@ -20,7 +20,6 @@ public class IntakeCarriage extends SubsystemBase {
 
     public IntakeCarriage() {
         intake = new CANSparkFlex(Constants.Intake.INTAKE_ID, MotorType.kBrushless);
-
         intake.restoreFactoryDefaults();
         intake.setSmartCurrentLimit(80);
         intake.setInverted(false);
