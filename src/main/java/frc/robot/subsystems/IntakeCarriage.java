@@ -19,12 +19,12 @@ public class IntakeCarriage extends SubsystemBase {
     private boolean hasPiece = false;
 
     public IntakeCarriage() {
-        intake = new CANSparkFlex(Constants.Intake.INTAKE_ID, MotorType.kBrushless);
+        intake = new CANSparkFlex(Constants.IntakeCarriage.INTAKE_ID, MotorType.kBrushless);
         intake.restoreFactoryDefaults();
         intake.setSmartCurrentLimit(80);
         intake.setInverted(false);
 
-        carriage = new CANSparkMax(Constants.Carriage.CARRIAGE_ID, MotorType.kBrushed);
+        carriage = new CANSparkMax(Constants.IntakeCarriage.CARRIAGE_ID, MotorType.kBrushed);
         carriage.restoreFactoryDefaults();
         carriage.setInverted(true);
     }

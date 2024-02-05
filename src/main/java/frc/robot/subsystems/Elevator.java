@@ -17,19 +17,26 @@ public class Elevator extends SubsystemBase {
 
     public Elevator() {
         elevator = new CANSparkMax(Constants.Elevator.ELEVATOR_ID, MotorType.kBrushless);
-        encoder = elevator.getEncoder();
-        target = encoder.getPosition();
         elevatorSwitch = new DigitalInput(4); // limit switch that re-zeros the elevator encoder
 
         elevator.restoreFactoryDefaults();
         elevator.setSmartCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
         elevator.setInverted(Constants.Elevator.ELEVATOR_INVERT);
 
+        encoder = elevator.getEncoder();
+        encoder.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
+
+        while (!elevatorSwitchTriggered()) {
+            elevator.set(-0.5);
+        }
+
         pidController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
                 Constants.Elevator.ELEVATOR_I,
                 Constants.Elevator.ELEVATOR_D
         );
+
+        target = encoder.getPosition();
     }
 
     public double getPosition() {

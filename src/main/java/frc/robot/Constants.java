@@ -24,6 +24,18 @@ public final class Constants {
         public static final double AUTO_ANGLE_D = 0.0;
     }
 
+    public static final class Angler {
+
+        public static final int ANGLER_ID = 62;
+        public static final double ANGLER_P = 0.035;
+        public static final double ANGLER_I = 0.00009;
+        public static final double ANGLER_D = 0.0001;
+        public static final int ANGLER_CURRENT_LIMIT = 35;
+        public static final boolean ANGLER_INVERT = false;
+        public static final double ANGLER_LOWER_LIMIT = 0;
+        public static final double ANGLER_UPPER_LIMIT = 20;
+    }
+
     public static final class Elevator {
         public static final int ELEVATOR_ID = 31;
         public static final int ELEVATOR_CURRENT_LIMIT = 70;
@@ -37,20 +49,20 @@ public final class Constants {
         public static final double ELEVATOR_STOW = 0.0;
     }
 
+    public static final class IntakeCarriage {
+        public static final int INTAKE_ID = 41;
+        public static final int CARRIAGE_ID = 42;
+    }
+
     public static final class Limelight {
         public static final double LIMELIGHT_P = 0.3;
         public static final double LIMELIGHT_I = 0.0008;
         public static final double LIMELIGHT_D = 0.001;
     }
 
-    public static final class Intake {
-        public static final int INTAKE_ID = 41;
-    }
-
     public static final class Shooter {
         public static final int BOTTOM_SHOOTER_ID = 60; //BOTTOM WHEEL
         public static final int TOP_SHOOTER_ID = 61; //TOP WHEEL
-        public static final int ANGLER_ID = 62;
         public static final int SHOOTER_CURRENT_LIMIT = 50;
         public static final boolean SHOOTER_INVERT = false;
         //baseline shooter speed in RPM
@@ -59,26 +71,13 @@ public final class Constants {
         // +/-tolerance for considering if the shooter is up to speed
         public static final double SHOOTER_SPEED_TOLERANCE = 100; //TODO: make sure this is acceptable
         public static final double DISTANCE_MULTIPLIER = 0.1; //TODO: check this
-
         public static final double SHOOTER_P = 0.00062; //was 0.003
         public static final double SHOOTER_I = 0.000000001;
         public static final double SHOOTER_D = 0.0005;
         public static final double SHOOTER_FF = 0.1;
-        public static final double ANGLER_P = 0.035;
-        public static final double ANGLER_I = 0.00009;
-        public static final double ANGLER_D = 0.0001;
-        public static final int ANGLER_CURRENT_LIMIT = 35;
-        public static final boolean ANGLER_INVERT = false;
-        public static final double ANGLER_LOWER_LIMIT = 0;
-        public static final double ANGLER_UPPER_LIMIT = 20;
-
         public static final int FEEDER_ID = 59;
         public static final int FEEDER_CURRENT_LIMIT = 50;
         public static final boolean FEEDER_INVERT = false;
-    }
-
-    public static final class Carriage {
-        public static final int CARRIAGE_ID = 42;
     }
 
     public static final class Swerve {

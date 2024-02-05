@@ -10,30 +10,44 @@ import frc.robot.Constants;
 
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
+    private final PIDController pidController;
+    private final RelativeEncoder encoder;
     private double target;
-    private PIDController pidController;
-    private RelativeEncoder encoder;
 
     public Angler() {
-        angler = new CANSparkMax(Constants.Shooter.ANGLER_ID, MotorType.kBrushless);
-        angler.setSmartCurrentLimit(Constants.Shooter.ANGLER_CURRENT_LIMIT);
-        angler.setInverted(Constants.Shooter.ANGLER_INVERT); 
+        angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
 
-        pidController = new PIDController(0, 0, 0);
-        pidController.setP(Constants.Shooter.ANGLER_P);
-        pidController.setI(Constants.Shooter.ANGLER_I);
-        pidController.setD(Constants.Shooter.ANGLER_D);
+        angler.restoreFactoryDefaults();
+        angler.setSmartCurrentLimit(Constants.Angler.ANGLER_CURRENT_LIMIT);
+        angler.setInverted(Constants.Angler.ANGLER_INVERT);
 
         encoder = angler.getEncoder();
-        encoder.setPosition(0);
+        encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
         
         while(!lowerSwitchTriggered()) {
             angler.set(-0.5);
         }
 
-        target = Constants.Shooter.ANGLER_LOWER_LIMIT;
+        pidController = new PIDController(
+                Constants.Angler.ANGLER_P,
+                Constants.Angler.ANGLER_I,
+                Constants.Angler.ANGLER_D
+        );
+
+        target = encoder.getPosition();
     }
 
+    public double getPosition() {
+        return encoder.getPosition();
+    }
+
+    public double getTarget() {
+        return target;
+    }
+
+    public double elevatorPower() {
+        return angler.getAppliedOutput();
+    }
 
     public boolean lowerSwitchTriggered() { 
         return angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
@@ -45,10 +59,10 @@ public class Angler extends SubsystemBase {
 
     public void checkLimitSwitches() {
         if (upperSwitchTriggered()) {
-            encoder.setPosition(Constants.Shooter.ANGLER_UPPER_LIMIT);
+            encoder.setPosition(Constants.Angler.ANGLER_UPPER_LIMIT);
         }
         if (lowerSwitchTriggered()) {
-            encoder.setPosition(Constants.Shooter.ANGLER_LOWER_LIMIT);
+            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
         }
     }
 
@@ -59,10 +73,10 @@ public class Angler extends SubsystemBase {
     public void moveAngle(double axisValue) {
         target = encoder.getPosition();
         if (axisValue < 0 && lowerSwitchTriggered()){
-            target = Constants.Shooter.ANGLER_LOWER_LIMIT;
+            target = Constants.Angler.ANGLER_LOWER_LIMIT;
             holdTilt();
         } else if (axisValue > 0 && upperSwitchTriggered()) {
-            target = Constants.Shooter.ANGLER_UPPER_LIMIT;
+            target = Constants.Angler.ANGLER_UPPER_LIMIT;
             holdTilt();
         }else{
             angler.set(axisValue);
@@ -71,16 +85,12 @@ public class Angler extends SubsystemBase {
 
     public void setAngle(double angle) {
         if (angle < encoder.getPosition() && lowerSwitchTriggered()) {
-            encoder.setPosition(Constants.Shooter.ANGLER_LOWER_LIMIT);
-            angle = Constants.Shooter.ANGLER_LOWER_LIMIT;
-        } else if (angle > encoder.getPosition() && encoder.getPosition() > Constants.Shooter.ANGLER_UPPER_LIMIT) {
-            angle = Constants.Shooter.ANGLER_UPPER_LIMIT;
+            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
+            angle = Constants.Angler.ANGLER_LOWER_LIMIT;
+        } else if (angle > encoder.getPosition() && encoder.getPosition() > Constants.Angler.ANGLER_UPPER_LIMIT) {
+            angle = Constants.Angler.ANGLER_UPPER_LIMIT;
         }
         angler.set(pidController.calculate(encoder.getPosition(), angle));
         target = angle;
-    }
-
-    public double getEncoder() {
-        return encoder.getPosition(); 
     }
 }
