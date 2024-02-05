@@ -91,7 +91,7 @@ public class RobotContainer {
      */
 
     public RobotContainer() {
-        NamedCommands.registerCommand("intake", new AutoIntake(intakeCarriage));
+        NamedCommands.registerCommand("intake", new AutoIntakeCarriage(intakeCarriage));
 
         swerve.setDefaultCommand(
                 new TeleopSwerve(
@@ -232,7 +232,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
 
-        SmartDashboard.putNumber("Angler encoder", angler.getEncoder());
+        SmartDashboard.putNumber("Angler encoder", angler.getPosition());
     }
 
     /**
