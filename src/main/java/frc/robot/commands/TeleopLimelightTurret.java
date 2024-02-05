@@ -58,7 +58,7 @@ public class TeleopLimelightTurret extends Command {
             double rotate = rotController.calculate(
                     swerve.getYaw(),
                     swerve.getYaw() + (limelight.getRX() < 0 ? -1 : 1) * Math.atan(
-                            Math.pow(limelight.getRX(), 2) / Math.pow(limelight.getRZ(), 2)
+                            limelight.getRX() / limelight.getRZ()
                     )
             );
 
