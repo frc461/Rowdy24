@@ -178,11 +178,8 @@ public class RobotContainer {
 
         BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
         revShooterPressed.ifHigh(
-                () -> Commands.sequence(
-                new InstantCommand(() -> angler.setAngle(Math.atan((limelight.getRY()+0.6096)/limelight.getRX()))),
-                new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false))
-                )
+                () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
         );
 
         BooleanEvent revShooterNotPressed = revShooterPressed.negate();
@@ -201,7 +198,7 @@ public class RobotContainer {
         // elevatorAmp.onTrue(new InstantCommand(() ->
         //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
         // ));
-       operatorX.onTrue(new InstantCommand(() -> angler.setAngle(10.88))); // podium shot
+       operatorX.onTrue(new InstantCommand(() -> angler.setAngle(-6.2*limelight.getRZ() + 32.3))); // podium shot
     }
 
     // smartdashboard prints

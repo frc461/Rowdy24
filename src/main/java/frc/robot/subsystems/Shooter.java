@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -9,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
-    private final CANSparkMax bottomShooter;
-    private final CANSparkMax topShooter;
+    private final CANSparkFlex bottomShooter;
+    private final CANSparkFlex topShooter;
 
     private final SparkPIDController bottomController, topController;
 
@@ -19,13 +20,13 @@ public class Shooter extends SubsystemBase {
     double currentSpeed = 0;
 
     public Shooter() {
-        bottomShooter = new CANSparkMax(Constants.Shooter.BOTTOM_SHOOTER_ID, MotorType.kBrushless);
+        bottomShooter = new CANSparkFlex(Constants.Shooter.BOTTOM_SHOOTER_ID, MotorType.kBrushless);
         bottomShooter.restoreFactoryDefaults();
         bottomShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
         bottomShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
         bottomEncoder = bottomShooter.getEncoder();
 
-        topShooter = new CANSparkMax(Constants.Shooter.TOP_SHOOTER_ID, MotorType.kBrushless);
+        topShooter = new CANSparkFlex(Constants.Shooter.TOP_SHOOTER_ID, MotorType.kBrushless);
         topShooter.restoreFactoryDefaults();
         topShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
         topShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
