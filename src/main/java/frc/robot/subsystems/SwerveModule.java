@@ -62,7 +62,7 @@ public class SwerveModule {
                 Constants.Swerve.DRIVE_S, Constants.Swerve.DRIVE_V, Constants.Swerve.DRIVE_A
         );
 
-        lastAngle = getAngle();
+        lastAngle = Rotation2d.fromDegrees(getAbsoluteAngle().getDegrees() - angleOffset.getDegrees());
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
