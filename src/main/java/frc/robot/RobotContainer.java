@@ -172,6 +172,8 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
 
+       // operatorOneEighty.onTrue(new inst)
+
         outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
 
         outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)));

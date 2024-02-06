@@ -17,23 +17,21 @@ public class TeleopLimelightTurret extends Command {
     private final DoubleSupplier strafe;
     private final BooleanSupplier robotCentric;
 
-    public TeleopLimelightTurret(Limelight limelight, Swerve swerve, DoubleSupplier translation,
-                    DoubleSupplier strafeSup, BooleanSupplier robotCentric) {
+     PIDController rotController = new PIDController(
+                Constants.Limelight.LIMELIGHT_P,
+                Constants.Limelight.LIMELIGHT_I,
+                Constants.Limelight.LIMELIGHT_D
+        );
+
+    public TeleopLimelightTurret(Limelight limelight, Swerve swerve, DoubleSupplier translation, DoubleSupplier strafeSup, BooleanSupplier robotCentric) {
         this.limelight = limelight;
         this.swerve = swerve;
         this.translation = translation;
         this.strafe = strafeSup;
         this.robotCentric = robotCentric;
         addRequirements(this.limelight, swerve);
-    }
+        rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
-    public TeleopLimelightTurret(Limelight limelight, Swerve swerve) {
-        this.limelight = limelight;
-        this.swerve = swerve;
-        this.translation = () -> 0.0;
-        this.strafe = () -> 0.0;
-        this.robotCentric = () -> false;
-        addRequirements(this.limelight, swerve);
     }
     
     @Override
@@ -45,28 +43,18 @@ public class TeleopLimelightTurret extends Command {
         double strafeVal = MathUtil.applyDeadband(strafe.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
-        try (
-                PIDController rotController = new PIDController(
-                        Constants.Limelight.LIMELIGHT_P,
-                        Constants.Limelight.LIMELIGHT_I,
-                        Constants.Limelight.LIMELIGHT_D
-                )
-            ) {
-            rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
-            // TODO: verify angle
-            double rotate = rotController.calculate(
-                    swerve.getYaw(),
-                    limelight.getRX()
-            );
+        double rotate = rotController.calculate(swerve.getYaw(), swerve.getYaw() + 15 * limelight.getRX());
 
-            /* Drive */
-            swerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
-                    -rotate,
-                    !robotCentric.getAsBoolean(),
-                    true
-            );
+        /* Drive */
+        swerve.drive(
+            new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
+            -rotate,
+            !robotCentric.getAsBoolean(),
+            true
+        );
+
+
         }
-    }
+
 }
