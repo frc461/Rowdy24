@@ -42,8 +42,20 @@ public class TeleopLimelightTurret extends Command {
         double strafeVal = MathUtil.applyDeadband(strafe.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
+        try (
+                PIDController rotController = new PIDController(
+                        0.0001,
+                        Constants.Limelight.LIMELIGHT_I,
+                        Constants.Limelight.LIMELIGHT_D
+                )
+            ) {
+            rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
-        double rotate = rotController.calculate(swerve.getYaw(), swerve.getYaw() + 15 * limelight.getRX());
+            // TODO: verify angle
+            double rotate = rotController.calculate(
+                    swerve.getYaw(),
+                    limelight.getRX()
+            );
 
         /* Drive */
         swerve.drive(
@@ -55,5 +67,5 @@ public class TeleopLimelightTurret extends Command {
 
 
         }
-
+    }
 }
