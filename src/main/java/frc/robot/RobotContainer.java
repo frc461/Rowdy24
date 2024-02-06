@@ -242,6 +242,7 @@ public class RobotContainer {
      */
 
     public Command getAutonomousCommand() {
+        // TODO: work on paths
         return chooser.getSelected();
     }
 }
