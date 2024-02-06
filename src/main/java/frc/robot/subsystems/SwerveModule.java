@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.util.SwerveModuleConstants;
 import frc.lib.util.CANSparkUtil.Usage;
 import frc.lib.util.CANSparkUtil;
@@ -89,6 +90,10 @@ public class SwerveModule {
         return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
     }
 
+    public Rotation2d getLastAngle(boolean alt) {
+        return alt ? Rotation2d.fromDegrees(0) : lastAngle;
+    }
+
     public Rotation2d getAbsoluteAngle(){
         return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValueAsDouble());
     }
@@ -111,7 +116,7 @@ public class SwerveModule {
     }
 
     private void configAngleMotor(){
-        
+
         angleMotor.restoreFactoryDefaults();
         CANSparkUtil.setCANSparkMaxBusUsage(angleMotor, Usage.kPositionOnly);
         angleMotor.setSmartCurrentLimit(Constants.Swerve.ANGLE_CONTINUOUS_SUPPLY_CURRENT_LIMIT);
@@ -127,7 +132,7 @@ public class SwerveModule {
         resetToAbsolute();
     }
 
-    private void configDriveMotor(){        
+    private void configDriveMotor(){
 
         driveMotor.restoreFactoryDefaults();
         CANSparkUtil.setCANSparkMaxBusUsage(driveMotor, Usage.kAll);
@@ -149,14 +154,14 @@ public class SwerveModule {
 
     public SwerveModuleState getState(){
         return new SwerveModuleState(
-            driveEncoder.getVelocity(), 
+            driveEncoder.getVelocity(),
             getAngle()
-        ); 
+        );
     }
 
     public SwerveModulePosition getPosition(){
         return new SwerveModulePosition(
-            driveEncoder.getPosition(), 
+            driveEncoder.getPosition(),
             getAngle()
         );
     }

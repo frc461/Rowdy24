@@ -21,13 +21,13 @@ import frc.robot.Constants;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
-    private final SwerveModule[] mSwerveMods;
+    private final SwerveModule[] swerveMods;
     private final Pigeon2 gyro;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
 
-        mSwerveMods = new SwerveModule[] {
+        swerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
             new SwerveModule(1, Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS),
             new SwerveModule(2, Constants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS),
@@ -38,7 +38,7 @@ public class Swerve extends SubsystemBase {
          * See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
          */
         Timer.delay(1.0);
-        resetModulesToAbsolute();
+//        resetModulesToAbsolute();
 
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
@@ -83,12 +83,13 @@ public class Swerve extends SubsystemBase {
     public void periodic(){
         swerveOdometry.update(getHeading(), getModulePositions());
 
-        for(SwerveModule mod : mSwerveMods){
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder (Absolute)", mod.getAbsoluteAngle().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated (Relative)", mod.getAngle().getDegrees());
+        for(SwerveModule mod : swerveMods){
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Relative", mod.getAngle().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Position", mod.getPosition().distanceMeters);
-
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " lastAngle", mod.getLastAngle(false).getDegrees());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " lastAngle2", mod.getLastAngle(true).getDegrees());
         }
     }
 
@@ -129,14 +130,14 @@ public class Swerve extends SubsystemBase {
     }
     public SwerveModuleState[] getModuleStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
-        for(SwerveModule mod : mSwerveMods){
+        for(SwerveModule mod : swerveMods){
             states[mod.moduleNumber] = mod.getState();
         }
         return states;
     }
     public SwerveModulePosition[] getModulePositions(){
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
-        for(SwerveModule mod : mSwerveMods){
+        for(SwerveModule mod : swerveMods){
             positions[mod.moduleNumber] = mod.getPosition();
         }
         return positions;
@@ -149,7 +150,7 @@ public class Swerve extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.MAX_SPEED);
 
-        for(SwerveModule mod : mSwerveMods){
+        for(SwerveModule mod : swerveMods){
             mod.setDesiredState(desiredStates[mod.moduleNumber], isOpenLoop);
         }
     }
@@ -163,7 +164,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void resetModulesToAbsolute(){
-        for (SwerveModule mod : mSwerveMods){
+        for (SwerveModule mod : swerveMods){
             mod.resetToAbsolute();
         }
     }

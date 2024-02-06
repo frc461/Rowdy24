@@ -15,10 +15,10 @@ public class SwerveModuleConstants {
      * @param canCoderID ID of the CANcoder
      * @param angleOffset Angle offset of the module
      */
-    public SwerveModuleConstants(int driveMotorID, int angleMotorID, int canCoderID, Rotation2d angleOffset) {
+    public SwerveModuleConstants(int driveMotorID, int angleMotorID, int canCoderID, Rotation2d angleOffset, boolean antiXMode) {
         this.driveMotorID = driveMotorID;
         this.angleMotorID = angleMotorID;
         this.cancoderID = canCoderID;
-        this.angleOffset = angleOffset;
+        this.angleOffset = antiXMode ? Rotation2d.fromDegrees(angleOffset.getDegrees() + 90.0) : angleOffset;
     }
 }
