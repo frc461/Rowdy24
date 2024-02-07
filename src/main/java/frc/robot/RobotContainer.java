@@ -29,7 +29,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-     private final Elevator elevator = new Elevator();
+    private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
@@ -91,9 +91,11 @@ public class RobotContainer {
      */
 
     public RobotContainer() {
+        // Configure named commands
         NamedCommands.registerCommand("intake", new AutoIntake(intakeCarriage));
         NamedCommands.registerCommand("shoot", new AutoShooter(shooter));
 
+        // Configure default commands
         swerve.setDefaultCommand(
                 new TeleopSwerve(
                         swerve,
@@ -120,6 +122,8 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+
+        // Configure auto
         chooser = AutoBuilder.buildAutoChooser("defaultAuto");
         SmartDashboard.putData("Auto Choices", chooser);
 
