@@ -44,7 +44,7 @@ public class TeleopLimelightTurret extends Command {
         /* Calculate Rotation Magnitude */
         try (
                 PIDController rotController = new PIDController(
-                        0.0001,
+                        Constants.Limelight.LIMELIGHT_P,
                         Constants.Limelight.LIMELIGHT_I,
                         Constants.Limelight.LIMELIGHT_D
                 )
