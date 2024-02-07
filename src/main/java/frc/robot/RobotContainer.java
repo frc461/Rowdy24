@@ -152,22 +152,22 @@ public class RobotContainer {
                 robotCentric)
         );
 
-        intakeButton.whileTrue(Commands.parallel(
+        intakeButton.whileTrue(new ParallelCommandGroup(
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.9)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(1))
         ));
 
-        intakeButton.whileFalse(Commands.parallel(
+        intakeButton.whileFalse(new ParallelCommandGroup(
                 new InstantCommand(() ->  intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
 
-        outtakeButton.whileTrue(Commands.parallel(
+        outtakeButton.whileTrue(new ParallelCommandGroup(
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.9)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(-1))
         ));
 
-        outtakeButton.whileFalse(Commands.parallel(
+        outtakeButton.whileFalse(new ParallelCommandGroup(
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
@@ -230,7 +230,7 @@ public class RobotContainer {
         //shooter debug
         SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
-
+        
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
     }
 
