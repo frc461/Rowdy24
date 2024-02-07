@@ -24,10 +24,6 @@ public class Angler extends SubsystemBase {
         encoder = angler.getEncoder();
         encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
         
-        while(!lowerSwitchTriggered()) {
-            angler.set(-0.5);
-        }
-
         pidController = new PIDController(
                 Constants.Angler.ANGLER_P,
                 Constants.Angler.ANGLER_I,
