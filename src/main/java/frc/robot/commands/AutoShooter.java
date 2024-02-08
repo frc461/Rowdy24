@@ -14,7 +14,7 @@ public class AutoShooter extends Command {
 
     @Override
     public void execute() {
-        shooter.setSpeed(0.8);
+        shooter.setSpeed(1.0);
     }
 
 }

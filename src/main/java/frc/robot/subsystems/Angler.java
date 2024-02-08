@@ -68,13 +68,13 @@ public class Angler extends SubsystemBase {
 
     public void moveAngle(double axisValue) {
         target = encoder.getPosition();
-        if (axisValue < 0 && lowerSwitchTriggered()){
+        if (axisValue < 0 && lowerSwitchTriggered()) {
             target = Constants.Angler.ANGLER_LOWER_LIMIT;
             holdTilt();
         } else if (axisValue > 0 && upperSwitchTriggered()) {
             target = Constants.Angler.ANGLER_UPPER_LIMIT;
             holdTilt();
-        }else{
+        } else {
             angler.set(axisValue);
         }
     }

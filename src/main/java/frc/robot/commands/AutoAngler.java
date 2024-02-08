@@ -3,7 +3,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Angler;
 
-
 public class AutoAngler extends Command {
 
     private final Angler angler;
@@ -16,8 +15,7 @@ public class AutoAngler extends Command {
     }
 
     @Override
-    public void execute() 
-    {
+    public void execute() {
        angler.setAngle(36.3 * Math.pow(limelight.getRZ(), -1.17));
     }
 

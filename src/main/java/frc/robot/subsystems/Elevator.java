@@ -26,10 +26,6 @@ public class Elevator extends SubsystemBase {
         encoder = elevator.getEncoder();
         encoder.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
 
-        while (!elevatorSwitchTriggered()) {
-            elevator.set(-0.5);
-        }
-
         pidController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
                 Constants.Elevator.ELEVATOR_I,
