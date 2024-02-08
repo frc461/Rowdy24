@@ -12,34 +12,30 @@ import frc.robot.subsystems.Limelight;
 public class TeleopLimelightTurret extends Command {
     private final Limelight limelight;
     private final Swerve swerve;
-    private final DoubleSupplier translation;
-    private final DoubleSupplier strafe;
-    private final BooleanSupplier robotCentric;
+    private final DoubleSupplier translationSup;
+    private final DoubleSupplier strafeSup;
+    private final BooleanSupplier robotCentricSup;
 
-     PIDController rotController = new PIDController(
-                Constants.Limelight.LIMELIGHT_P,
-                Constants.Limelight.LIMELIGHT_I,
-                Constants.Limelight.LIMELIGHT_D
-        );
-
-    public TeleopLimelightTurret(Limelight limelight, Swerve swerve, DoubleSupplier translation, DoubleSupplier strafeSup, BooleanSupplier robotCentric) {
+    public TeleopLimelightTurret(
+            Limelight limelight,
+            Swerve swerve,
+            DoubleSupplier translationSup,
+            DoubleSupplier strafeSup,
+            BooleanSupplier robotCentricSup
+    ) {
         this.limelight = limelight;
         this.swerve = swerve;
-        this.translation = translation;
-        this.strafe = strafeSup;
-        this.robotCentric = robotCentric;
+        this.translationSup = translationSup;
+        this.strafeSup = strafeSup;
+        this.robotCentricSup = robotCentricSup;
         addRequirements(this.limelight, swerve);
-        rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
-
     }
     
     @Override
     public void execute() {
-        limelight.refreshValues();
-
         /* Apply Deadband */
-        double translationVal = MathUtil.applyDeadband(translation.getAsDouble(), Constants.STICK_DEADBAND);
-        double strafeVal = MathUtil.applyDeadband(strafe.getAsDouble(), Constants.STICK_DEADBAND);
+        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.STICK_DEADBAND);
+        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
         try (
@@ -48,24 +44,22 @@ public class TeleopLimelightTurret extends Command {
                         Constants.Limelight.LIMELIGHT_I,
                         Constants.Limelight.LIMELIGHT_D
                 )
-            ) {
+        ) {
             rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
             // TODO: verify angle
             double rotate = rotController.calculate(
                     swerve.getYaw(),
-                    limelight.getRX()
+                    swerve.getYaw() + limelight.getRX() * 15
             );
 
-        /* Drive */
-        swerve.drive(
-            new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
-            -limelight.getRX()*5,
-            !robotCentric.getAsBoolean(),
-            true
-        );
-
-
+            /* Drive */
+            swerve.drive(
+                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
+                -rotate,
+                !robotCentricSup.getAsBoolean(),
+                true
+            );
         }
     }
 }
