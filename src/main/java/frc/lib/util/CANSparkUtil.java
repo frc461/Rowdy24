@@ -10,7 +10,7 @@ public class CANSparkUtil {
     kPositionOnly,
     kVelocityOnly,
     kMinimal
-  };
+  }
 
   /**
    * This function allows reducing a Spark Max's CAN bus utilization by reducing the periodic status

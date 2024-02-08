@@ -22,11 +22,11 @@ public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveModule[] swerveMods;
     private final Pigeon2 gyro;
-    final Field2d m_field = new Field2d();
+    final Field2d field = new Field2d();
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
-        gyro.configFactoryDefault();
+        gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
 
         swerveMods = new SwerveModule[] {
@@ -92,7 +92,7 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        m_field.setRobotPose(swerveOdometry.getPoseMeters());
+        field.setRobotPose(swerveOdometry.getPoseMeters());
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -103,7 +103,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public Field2d getField2d() {
-        return m_field;
+        return field;
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {

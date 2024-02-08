@@ -89,10 +89,6 @@ public class SwerveModule {
         return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
     }
 
-    public Rotation2d getLastAngle(boolean alt) {
-        return alt ? Rotation2d.fromDegrees(0) : lastAngle;
-    }
-
     public Rotation2d getAbsoluteAngle(){
         return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValueAsDouble());
     }
