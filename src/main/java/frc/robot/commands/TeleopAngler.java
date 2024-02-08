@@ -21,14 +21,11 @@ public class TeleopAngler extends Command {
         /* Apply Deadband */
         double axisValue = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.STICK_DEADBAND);
 
-        /* Check Limit Switches */
-        angler.checkLimitSwitches();
-
         /* Move Angler */
         if (axisValue != 0.0) {
             angler.moveAngle(axisValue);
         } else {
-            angler.holdTilt();
+            angler.holdTarget();
         }
     }
 }

@@ -16,13 +16,10 @@ public class Angler extends SubsystemBase {
 
     public Angler() {
         angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
-
         angler.restoreFactoryDefaults();
         angler.setSmartCurrentLimit(Constants.Angler.ANGLER_CURRENT_LIMIT);
         angler.setInverted(Constants.Angler.ANGLER_INVERT);
-
         encoder = angler.getEncoder();
-        encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
         
         pidController = new PIDController(
                 Constants.Angler.ANGLER_P,
@@ -30,7 +27,7 @@ public class Angler extends SubsystemBase {
                 Constants.Angler.ANGLER_D
         );
 
-        target = encoder.getPosition();
+        target = 0.0;
     }
 
     public double getPosition() {
@@ -41,7 +38,7 @@ public class Angler extends SubsystemBase {
         return target;
     }
 
-    public double elevatorPower() {
+    public double anglerPower() {
         return angler.getAppliedOutput();
     }
 
@@ -62,31 +59,32 @@ public class Angler extends SubsystemBase {
         }
     }
 
-    public void holdTilt() {
+    public void holdTarget() {
+        checkLimitSwitches();
         angler.set(pidController.calculate(encoder.getPosition(), target));
     }
 
     public void moveAngle(double axisValue) {
-        target = encoder.getPosition();
+        checkLimitSwitches();
         if (axisValue < 0 && lowerSwitchTriggered()) {
             target = Constants.Angler.ANGLER_LOWER_LIMIT;
-            holdTilt();
+            holdTarget();
         } else if (axisValue > 0 && upperSwitchTriggered()) {
             target = Constants.Angler.ANGLER_UPPER_LIMIT;
-            holdTilt();
+            holdTarget();
         } else {
             angler.set(axisValue);
+            target = encoder.getPosition();
         }
     }
 
-    public void setAngle(double angle) {
-        if (angle < encoder.getPosition() && lowerSwitchTriggered()) {
-            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
-            angle = Constants.Angler.ANGLER_LOWER_LIMIT;
-        } else if (angle > encoder.getPosition() && encoder.getPosition() > Constants.Angler.ANGLER_UPPER_LIMIT) {
-            angle = Constants.Angler.ANGLER_UPPER_LIMIT;
-        }
-        angler.set(pidController.calculate(encoder.getPosition(), angle));
-        target = angle;
+    public void setAngle(double encoderVal) {
+        checkLimitSwitches();
+        encoderVal = (encoderVal < encoder.getPosition() && lowerSwitchTriggered()) ?
+                Constants.Angler.ANGLER_LOWER_LIMIT :
+                (encoderVal > encoder.getPosition() && upperSwitchTriggered()) ?
+                Constants.Angler.ANGLER_UPPER_LIMIT : encoderVal;
+        target = encoderVal;
+        holdTarget();
     }
 }
