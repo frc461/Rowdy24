@@ -26,7 +26,7 @@ public class Limelight extends SubsystemBase {
         return updates;
     }
 
-    // X+ is to the right if you are looking at the tag
+    // X+ is to the right when looking at the tag
     public double getRX() {
         refreshValues();
         return tagPose[0];

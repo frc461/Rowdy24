@@ -50,7 +50,9 @@ public class TeleopLimelightTurret extends Command {
             // TODO: verify angle
             double rotate = rotController.calculate(
                     swerve.getYaw(),
-                    swerve.getYaw() + limelight.getRX() * 15
+                    swerve.getYaw() + Math.atan(
+                            limelight.getRX() / limelight.getRZ()
+                    ) * 180 / Math.PI
             );
 
             /* Drive */
