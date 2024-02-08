@@ -3,7 +3,7 @@ package frc.lib.math;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
-public class OnboardModuleState {
+public class OptimizeModuleState {
 
   /**
    * Minimize the change in heading the desired swerve module state would require by potentially
@@ -22,7 +22,7 @@ public class OnboardModuleState {
     double delta = targetAngle - currentAngle.getDegrees();
     if (Math.abs(delta) > 90) {
       targetSpeed = -targetSpeed;
-      targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
+      targetAngle = delta > 90 ? (targetAngle - 180) : (targetAngle + 180);
     }
     return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
   }

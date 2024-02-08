@@ -94,13 +94,13 @@ public class RobotContainer {
         NamedCommands.registerCommand("intake", new AutoIntakeCarriage(intakeCarriage));
 
         swerve.setDefaultCommand(
-                new TeleopSwerve(
-                        swerve,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
-                        robotCentric
-                )
+            new TeleopSwerve(
+                swerve,
+                () -> -driver.getRawAxis(translationAxis),
+                () -> -driver.getRawAxis(strafeAxis),
+                () -> driver.getRawAxis(rotationAxis),
+                robotCentric
+            )
         );
 
         angler.setDefaultCommand(
@@ -141,7 +141,7 @@ public class RobotContainer {
         /* Driver Buttons */
 
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
-        
+
         toggleAutoSubsystems.onTrue(new InstantCommand(() -> autoSubsystems = !autoSubsystems));
 
         driverLimelight.whileTrue(new TeleopLimelightTurret(
@@ -230,7 +230,7 @@ public class RobotContainer {
         //shooter debug
         SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
-        
+
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
     }
 
