@@ -1,55 +1,57 @@
 package frc.lib.util;
 
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import com.ctre.phoenix.sensors.SensorTimeBase;
+import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import frc.robot.Constants;
 
 public final class CTREConfigs {
     public TalonFXConfiguration swerveAngleFXConfig;
     public TalonFXConfiguration swerveDriveFXConfig;
-    public CANCoderConfiguration swerveCanCoderConfig;
+    public CANcoderConfiguration swerveCanCoderConfig;
 
     public CTREConfigs(){
         swerveAngleFXConfig = new TalonFXConfiguration();
         swerveDriveFXConfig = new TalonFXConfiguration();
-        swerveCanCoderConfig = new CANCoderConfiguration();
+        swerveCanCoderConfig = new CANcoderConfiguration();
 
         /* Swerve Angle Motor Configurations */
-        SupplyCurrentLimitConfiguration angleSupplyLimit = new SupplyCurrentLimitConfiguration(
-            Constants.Swerve.ANGLE_ENABLE_CURRENT_LIMIT,
-            Constants.Swerve.ANGLE_CONTINUOUS_CURRENT_LIMIT,
-            Constants.Swerve.ANGLE_PEAK_CURRENT_LIMIT,
-            Constants.Swerve.ANGLE_PEAK_CURRENT_DURATION);
+        CurrentLimitsConfigs angleSupplyLimit = new CurrentLimitsConfigs();
 
-        swerveAngleFXConfig.slot0.kP = Constants.Swerve.ANGLE_P;
-        swerveAngleFXConfig.slot0.kI = Constants.Swerve.ANGLE_I;
-        swerveAngleFXConfig.slot0.kD = Constants.Swerve.ANGLE_D;
-        swerveAngleFXConfig.slot0.kF = Constants.Swerve.ANGLE_F;
-        swerveAngleFXConfig.supplyCurrLimit = angleSupplyLimit;
+        angleSupplyLimit.withSupplyCurrentLimitEnable(Constants.Swerve.ANGLE_ENABLE_SUPPLY_CURRENT_LIMIT);
+        angleSupplyLimit.withSupplyCurrentLimit(Constants.Swerve.ANGLE_CONTINUOUS_SUPPLY_CURRENT_LIMIT);
+        angleSupplyLimit.withSupplyCurrentThreshold(Constants.Swerve.ANGLE_PEAK_SUPPLY_CURRENT_LIMIT);
+        angleSupplyLimit.withSupplyTimeThreshold(Constants.Swerve.ANGLE_PEAK_SUPPLY_CURRENT_DURATION);
+
+        swerveAngleFXConfig.Slot0.withKP(Constants.Swerve.ANGLE_P);
+        swerveAngleFXConfig.Slot0.withKI(Constants.Swerve.ANGLE_I);
+        swerveAngleFXConfig.Slot0.withKD(Constants.Swerve.ANGLE_D);
+        swerveAngleFXConfig.Slot0.withKV(Constants.Swerve.ANGLE_F);
+        swerveAngleFXConfig.withCurrentLimits(angleSupplyLimit);
 
         /* Swerve Drive Motor Configuration */
-        SupplyCurrentLimitConfiguration driveSupplyLimit = new SupplyCurrentLimitConfiguration(
-            Constants.Swerve.DRIVE_ENABLE_CURRENT_LIMIT,
-            Constants.Swerve.DRIVE_CONTINUOUS_CURRENT_LIMIT,
-            Constants.Swerve.DRIVE_PEAK_CURRENT_LIMIT,
-            Constants.Swerve.DRIVE_PEAK_CURRENT_DURATION);
+        CurrentLimitsConfigs driveSupplyLimit = new CurrentLimitsConfigs();
 
-        swerveDriveFXConfig.slot0.kP = Constants.Swerve.DRIVE_P;
-        swerveDriveFXConfig.slot0.kI = Constants.Swerve.DRIVE_I;
-        swerveDriveFXConfig.slot0.kD = Constants.Swerve.DRIVE_D;
-        swerveDriveFXConfig.slot0.kF = Constants.Swerve.DRIVE_F;
-        swerveDriveFXConfig.supplyCurrLimit = driveSupplyLimit;
-        swerveDriveFXConfig.openloopRamp = Constants.Swerve.OPEN_LOOP_RAMP;
-        swerveDriveFXConfig.closedloopRamp = Constants.Swerve.CLOSED_LOOP_RAMP;
+        driveSupplyLimit.withSupplyCurrentLimitEnable(Constants.Swerve.DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT);
+        driveSupplyLimit.withSupplyCurrentLimit(Constants.Swerve.DRIVE_CONTINUOUS_SUPPLY_CURRENT_LIMIT);
+        driveSupplyLimit.withSupplyCurrentThreshold(Constants.Swerve.DRIVE_PEAK_SUPPLY_CURRENT_LIMIT);
+        driveSupplyLimit.withSupplyTimeThreshold(Constants.Swerve.DRIVE_PEAK_SUPPLY_CURRENT_DURATION);
+
+        swerveDriveFXConfig.Slot0.withKP(Constants.Swerve.DRIVE_P);
+        swerveDriveFXConfig.Slot0.withKI(Constants.Swerve.DRIVE_I);
+        swerveDriveFXConfig.Slot0.withKD(Constants.Swerve.DRIVE_D);
+        swerveDriveFXConfig.Slot0.withKV(Constants.Swerve.DRIVE_F);
+        swerveDriveFXConfig.withCurrentLimits(driveSupplyLimit);
+        swerveDriveFXConfig.withOpenLoopRamps(
+                new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(Constants.Swerve.OPEN_LOOP_RAMP)
+        );
+        swerveDriveFXConfig.withClosedLoopRamps(
+                new ClosedLoopRampsConfigs().withDutyCycleClosedLoopRampPeriod(Constants.Swerve.CLOSED_LOOP_RAMP)
+        );
         
         /* Swerve CANCoder Configuration */
-        swerveCanCoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
-        swerveCanCoderConfig.sensorDirection = Constants.Swerve.CANCODER_INVERT;
-        swerveCanCoderConfig.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
-        swerveCanCoderConfig.sensorTimeBase = SensorTimeBase.PerSecond;
+        MagnetSensorConfigs sensorConfigs = new MagnetSensorConfigs();
+        sensorConfigs.withAbsoluteSensorRange(AbsoluteSensorRangeValue.Unsigned_0To1);
+        sensorConfigs.withSensorDirection(Constants.Swerve.CANCODER_SENSOR_DIRECTION);
+        swerveCanCoderConfig.withMagnetSensor(sensorConfigs);
     }
 }

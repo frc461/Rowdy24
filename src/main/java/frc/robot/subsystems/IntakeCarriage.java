@@ -13,19 +13,18 @@ public class IntakeCarriage extends SubsystemBase {
 
     // TODO: Implement beam break logic Please!
     DigitalInput carriageBeam = new DigitalInput(0); // end of carriage (on shooter side)
-    DigitalInput ampBeam = new DigitalInput(1); // entrance of carriage (which is the amp shooter)
-    DigitalInput shooterBeam = new DigitalInput(2); // completely exit through shooter
+    DigitalInput ampBeam = new DigitalInput(7); // entrance of carriage (which is the amp shooter)
+    DigitalInput shooterBeam = new DigitalInput(6); // completely exit through shooter
 
     private boolean hasPiece = false;
 
     public IntakeCarriage() {
-        intake = new CANSparkFlex(Constants.Intake.INTAKE_ID, MotorType.kBrushless);
-
+        intake = new CANSparkFlex(Constants.IntakeCarriage.INTAKE_ID, MotorType.kBrushless);
         intake.restoreFactoryDefaults();
         intake.setSmartCurrentLimit(80);
         intake.setInverted(false);
 
-        carriage = new CANSparkMax(Constants.Carriage.CARRIAGE_ID, MotorType.kBrushed);
+        carriage = new CANSparkMax(Constants.IntakeCarriage.CARRIAGE_ID, MotorType.kBrushed);
         carriage.restoreFactoryDefaults();
         carriage.setInverted(true);
     }
@@ -60,11 +59,12 @@ public class IntakeCarriage extends SubsystemBase {
     }
 
     public void setIntakeSpeed(double speed) {
-        if (speed <= 0 || !hasPiece) {
-            intake.set(speed);
-        } else {
-            intake.set(-0.15);
-        }
+        // if (speed <= 0 || !hasPiece) {
+        //     intake.set(speed);
+        // } else {
+        //     intake.set(-0.15);
+        // }
+        intake.set(speed);
     }
 
     public void overrideIntakeSpeed(double speed) {

@@ -2,68 +2,89 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkLimitSwitch;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Angler extends SubsystemBase {
-    private final CANSparkMax shooterAngler;
-    private final PIDController anglerPID;
-    private final SparkAbsoluteEncoder anglerEncoder;
+    private final CANSparkMax angler;
+    private final PIDController pidController;
+    private final RelativeEncoder encoder;
     private double target;
 
     public Angler() {
-        shooterAngler = new CANSparkMax(Constants.Shooter.ANGLER_ID, MotorType.kBrushless);
-        //shooterAngler.restoreFactoryDefaults();
-        shooterAngler.setSmartCurrentLimit(Constants.Shooter.ANGLER_CURRENT_LIMIT);
-        shooterAngler.setInverted(Constants.Shooter.ANGLER_INVERT);
-        anglerPID = new PIDController(
-                Constants.Shooter.ANGLER_P,
-                Constants.Shooter.ANGLER_I,
-                Constants.Shooter.ANGLER_D
+        angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
+        angler.restoreFactoryDefaults();
+        angler.setSmartCurrentLimit(Constants.Angler.ANGLER_CURRENT_LIMIT);
+        angler.setInverted(Constants.Angler.ANGLER_INVERT);
+        encoder = angler.getEncoder();
+        
+        pidController = new PIDController(
+                Constants.Angler.ANGLER_P,
+                Constants.Angler.ANGLER_I,
+                Constants.Angler.ANGLER_D
         );
-        anglerEncoder = shooterAngler.getAbsoluteEncoder(Type.kDutyCycle);
-        //anglerEncoder.setInverted(true);
-        target = Constants.Shooter.ANGLER_UPPER_LIMIT;
+
+        target = 0.0;
     }
 
-    public void tiltShooter(double angle) {
-        // TODO: not sure if this is the correct conversion
-        double angleToRot = angle; //* Constants.Shooter.ANGLER_ROTATION_CONSTANT;
+    public double getPosition() {
+        return encoder.getPosition();
+    }
 
-        if (angleToRot < anglerEncoder.getPosition()
-                && anglerEncoder.getPosition() < Constants.Shooter.ANGLER_LOWER_LIMIT) {
-            angleToRot = Constants.Shooter.ANGLER_LOWER_LIMIT;
-        } else if (angleToRot > anglerEncoder.getPosition()
-                && anglerEncoder.getPosition() > Constants.Shooter.ANGLER_UPPER_LIMIT) {
-            angleToRot = Constants.Shooter.ANGLER_UPPER_LIMIT;
+    public double getTarget() {
+        return target;
+    }
+
+    public double anglerPower() {
+        return angler.getAppliedOutput();
+    }
+
+    public boolean lowerSwitchTriggered() { 
+        return angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
+    }
+
+    public boolean upperSwitchTriggered() {
+        return angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
+    }
+
+    public void checkLimitSwitches() {
+        if (upperSwitchTriggered()) {
+            encoder.setPosition(Constants.Angler.ANGLER_UPPER_LIMIT);
         }
-        target = angleToRot;
-        shooterAngler.set(anglerPID.calculate(anglerEncoder.getPosition(), angleToRot));
-    }
-
-    public void moveAngle(double movementVector) {
-        if (movementVector < 0 && anglerEncoder.getPosition() < Constants.Shooter.ANGLER_LOWER_LIMIT) {
-            target = Constants.Shooter.ANGLER_LOWER_LIMIT;
-            holdTilt();
-            return;
-        } else if (movementVector > 0 && anglerEncoder.getPosition() > Constants.Shooter.ANGLER_UPPER_LIMIT) {
-            target = Constants.Shooter.ANGLER_UPPER_LIMIT;
-            holdTilt();
-            return;
+        if (lowerSwitchTriggered()) {
+            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
         }
-        shooterAngler.set(movementVector);
-        target = anglerEncoder.getPosition();
     }
 
-    public void holdTilt() {
-        target = Math.max(target, Constants.Shooter.ANGLER_LOWER_LIMIT);
-        shooterAngler.set(anglerPID.calculate(anglerEncoder.getPosition(), target));
+    public void holdTarget() {
+        checkLimitSwitches();
+        angler.set(pidController.calculate(encoder.getPosition(), target));
     }
 
-    public double getEncoder() {
-        return anglerEncoder.getPosition();
+    public void moveAngle(double axisValue) {
+        checkLimitSwitches();
+        if (axisValue < 0 && lowerSwitchTriggered()) {
+            target = Constants.Angler.ANGLER_LOWER_LIMIT;
+            holdTarget();
+        } else if (axisValue > 0 && upperSwitchTriggered()) {
+            target = Constants.Angler.ANGLER_UPPER_LIMIT;
+            holdTarget();
+        } else {
+            angler.set(axisValue);
+            target = encoder.getPosition();
+        }
+    }
+
+    public void setAngle(double encoderVal) {
+        checkLimitSwitches();
+        encoderVal = (encoderVal < encoder.getPosition() && lowerSwitchTriggered()) ?
+                Constants.Angler.ANGLER_LOWER_LIMIT :
+                (encoderVal > encoder.getPosition() && upperSwitchTriggered()) ?
+                Constants.Angler.ANGLER_UPPER_LIMIT : encoderVal;
+        target = encoderVal;
+        holdTarget();
     }
 }

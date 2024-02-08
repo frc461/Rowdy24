@@ -38,7 +38,24 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "start",
+      "name": "shoot",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "intake",
       "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
@@ -47,30 +64,7 @@
             {
               "type": "named",
               "data": {
-                "name": "shoot"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
                 "name": "intake"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "shoot 2nd note",
-      "waypointRelativePos": 1.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "shoot"
               }
             }
           ]
@@ -92,7 +86,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 60.0,
+    "rotation": -30.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

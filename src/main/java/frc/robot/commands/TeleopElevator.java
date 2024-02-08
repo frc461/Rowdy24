@@ -12,23 +12,20 @@ public class TeleopElevator extends Command {
 
     public TeleopElevator(Elevator elevator, DoubleSupplier motionSup) {
         this.elevator = elevator;
-        addRequirements(elevator);
         this.motionSup = motionSup;
+        addRequirements(elevator);
     }
 
     @Override
     public void execute() {
-        /* Get Values, Deadband */
+        /* Apply Deadband */
         double axisValue = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.STICK_DEADBAND);
 
-        /* Check for limit switch */
-        elevator.checkLimitSwitches();
-
-        /* Drive */
+        /* Move Elevator */
         if (axisValue != 0) {
             elevator.moveElevator(axisValue);
         } else {
-            elevator.holdHeight();
+            elevator.holdTarget();
         }
     }
 }
