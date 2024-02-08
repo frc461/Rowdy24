@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.*;
+
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -34,6 +36,7 @@ public class RobotContainer {
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
     private final Angler angler = new Angler();
+
 
     /* Controllers */
     public final static Joystick driver = new Joystick(0);
@@ -83,7 +86,7 @@ public class RobotContainer {
 
     /* Variables */
     private final EventLoop eventLoop = new EventLoop();
-    private boolean autoSubsystems = true; // Disables/enables automatic subsystem functions (e.g. auto-intake)
+    private boolean autoSubsystems = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
     private final SendableChooser<Command> chooser;
 
     /**
@@ -92,8 +95,10 @@ public class RobotContainer {
 
     public RobotContainer() {
         NamedCommands.registerCommand("intake", new AutoIntakeCarriage(intakeCarriage));
+        NamedCommands.registerCommand("shoot", new AutoShooter(shooter));
 
         swerve.setDefaultCommand(
+<<<<<<< Updated upstream
             new TeleopSwerve(
                 swerve,
                 () -> -driver.getRawAxis(translationAxis),
@@ -101,6 +106,15 @@ public class RobotContainer {
                 () -> driver.getRawAxis(rotationAxis),
                 robotCentric
             )
+=======
+                new TeleopSwerve(
+                        swerve,
+                        () -> -driver.getRawAxis(translationAxis),
+                        () -> -driver.getRawAxis(strafeAxis),
+                        () -> driver.getRawAxis(rotationAxis),
+                        robotCentric
+                )
+>>>>>>> Stashed changes
         );
 
         angler.setDefaultCommand(
@@ -171,23 +185,26 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
+        
+        //operatorNinety.whileTrue(new AutoShooter(shooter));
 
-       // operatorOneEighty.onTrue(new inst)
+        operatorOneEighty.onTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));
+        operatorOneEighty.onFalse(new InstantCommand(() ->shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)));
 
         outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
-
         outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)));
 
-        BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
-        revShooterPressed.ifHigh(
-                () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
-        );
+        // BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
+        // revShooterPressed.ifHigh(
+        //         () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+        //                 limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
+        // );
 
-        BooleanEvent revShooterNotPressed = revShooterPressed.negate();
-        revShooterNotPressed.ifHigh(
-                () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)
-        );
+        // BooleanEvent revShooterNotPressed = revShooterPressed.negate();
+        // revShooterNotPressed.ifHigh(
+        //         () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)
+        // );
 
         // driverStowButton.onTrue(
         //         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
@@ -242,6 +259,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // TODO: work on paths
+        swerve.gyro.setYaw(90);
         return chooser.getSelected();
     }
 }

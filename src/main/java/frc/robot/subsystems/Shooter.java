@@ -85,4 +85,9 @@ public class Shooter extends SubsystemBase {
             bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
         }
     }
+
+    public void setSpeed(double speed) {
+        topShooter.set(speed);
+        bottomShooter.set(speed);
+    }
 }

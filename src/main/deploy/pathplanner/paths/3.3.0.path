@@ -31,14 +31,31 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 180.0,
+      "rotationDegrees": 0.0,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "start",
+      "name": "shoot",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "intake",
       "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
@@ -47,30 +64,7 @@
             {
               "type": "named",
               "data": {
-                "name": "shoot"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
                 "name": "intake"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "shoot 2nd note",
-      "waypointRelativePos": 1.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "shoot"
               }
             }
           ]
@@ -86,13 +80,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -120.0,
+    "rotation": -30.0,
     "velocity": 0
   },
   "useDefaultConstraints": false
