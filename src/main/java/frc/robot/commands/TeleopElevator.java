@@ -21,14 +21,11 @@ public class TeleopElevator extends Command {
         /* Apply Deadband */
         double axisValue = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.STICK_DEADBAND);
 
-        /* Check Limit Switches */
-        elevator.checkLimitSwitches();
-
         /* Move Elevator */
         if (axisValue != 0) {
             elevator.moveElevator(axisValue);
         } else {
-            elevator.holdHeight();
+            elevator.holdTarget();
         }
     }
 }

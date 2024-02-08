@@ -17,14 +17,12 @@ public class Elevator extends SubsystemBase {
 
     public Elevator() {
         elevator = new CANSparkMax(Constants.Elevator.ELEVATOR_ID, MotorType.kBrushless);
-        elevatorSwitch = new DigitalInput(4); // limit switch that re-zeros the elevator encoder
-
         elevator.restoreFactoryDefaults();
         elevator.setSmartCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
         elevator.setInverted(Constants.Elevator.ELEVATOR_INVERT);
-
         encoder = elevator.getEncoder();
-        encoder.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
+
+        elevatorSwitch = new DigitalInput(4); // limit switch that re-zeros the elevator encoder
 
         pidController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
@@ -32,7 +30,7 @@ public class Elevator extends SubsystemBase {
                 Constants.Elevator.ELEVATOR_D
         );
 
-        target = encoder.getPosition();
+        target = 0.0;
     }
 
     public double getPosition() {
@@ -51,38 +49,39 @@ public class Elevator extends SubsystemBase {
         return !elevatorSwitch.get();
     }
 
-    public void checkLimitSwitches() {
+    public void checkLimitSwitch() {
         if (elevatorSwitchTriggered()) {
             encoder.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
         }
     }
 
-    public void holdHeight() {
+    public void holdTarget() {
+        checkLimitSwitch();
         elevator.set(pidController.calculate(encoder.getPosition(), target));
     }
 
     public void moveElevator(double axisValue) {
-        target = encoder.getPosition();
+        checkLimitSwitch();
         if (axisValue < 0 && elevatorSwitchTriggered()) {
             target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
-            holdHeight();
-            return;
+            holdTarget();
         } else if (axisValue > 0 && encoder.getPosition() >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
             target = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
-            holdHeight();
-            return;
+            holdTarget();
+        } else {
+            elevator.set(axisValue);
+            target = encoder.getPosition();
         }
-        elevator.set(axisValue);
     }
 
     public void setHeight(double height) {
+        checkLimitSwitch();
         if (height < encoder.getPosition() && elevatorSwitchTriggered()) {
-            encoder.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
             height = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
         } else if (height > encoder.getPosition() && encoder.getPosition() > Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
             height = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
         }
-        elevator.set(pidController.calculate(encoder.getPosition(), height));
         target = height;
+        holdTarget();
     }
 }
