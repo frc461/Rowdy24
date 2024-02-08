@@ -207,7 +207,7 @@ public class RobotContainer {
         // elevatorAmp.onTrue(new InstantCommand(() ->
         //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
         // ));
-       operatorX.onTrue(new InstantCommand(() -> angler.setAngle(36.3*Math.pow(limelight.getRZ(), -1.17)))); // podium shot
+       operatorX.onTrue(new InstantCommand(() -> angler.setAngle(36.3*Math.pow(limelight.getRZ(), -1.17)))); // aim via limelight
     }
 
     // smartdashboard prints

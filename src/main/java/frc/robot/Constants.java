@@ -27,7 +27,6 @@ public final class Constants {
     }
 
     public static final class Angler {
-
         public static final int ANGLER_ID = 62;
         public static final double ANGLER_P = 0.035;
         public static final double ANGLER_I = 0.00009;
