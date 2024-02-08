@@ -38,7 +38,7 @@ public class Swerve extends SubsystemBase {
          * See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
          */
         Timer.delay(1.0);
-//        resetModulesToAbsolute();
+        resetModulesToAbsolute();
 
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
