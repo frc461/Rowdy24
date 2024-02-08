@@ -185,16 +185,16 @@ public class RobotContainer {
         outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
         outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)));
 
-        // BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
-        // revShooterPressed.ifHigh(
-        //         () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-        //                 limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
-        // );
+         BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
+         revShooterPressed.ifHigh(
+                 () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
+         );
 
-        // BooleanEvent revShooterNotPressed = revShooterPressed.negate();
-        // revShooterNotPressed.ifHigh(
-        //         () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)
-        // );
+         BooleanEvent revShooterNotPressed = revShooterPressed.negate();
+         revShooterNotPressed.ifHigh(
+                 () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)
+         );
 
         // driverStowButton.onTrue(
         //         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))

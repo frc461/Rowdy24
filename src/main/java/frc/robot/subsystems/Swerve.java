@@ -113,11 +113,10 @@ public class Swerve extends SubsystemBase {
                         translation.getY(),
                         rotation,
                         getHeading()
-                )
-                        : new ChassisSpeeds(
-                                translation.getX(),
-                                translation.getY(),
-                                rotation
+                ) : new ChassisSpeeds(
+                        translation.getX(),
+                        translation.getY(),
+                        rotation
                 )
         );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
