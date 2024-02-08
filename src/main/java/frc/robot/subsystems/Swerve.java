@@ -21,7 +21,7 @@ import frc.robot.Constants;
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveModule[] swerveMods;
-    private final Pigeon2 gyro;
+    public final Pigeon2 gyro;
     final Field2d field = new Field2d();
 
     public Swerve() {

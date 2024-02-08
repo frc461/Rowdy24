@@ -98,15 +98,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("shoot", new AutoShooter(shooter));
 
         swerve.setDefaultCommand(
-<<<<<<< Updated upstream
-            new TeleopSwerve(
-                swerve,
-                () -> -driver.getRawAxis(translationAxis),
-                () -> -driver.getRawAxis(strafeAxis),
-                () -> driver.getRawAxis(rotationAxis),
-                robotCentric
-            )
-=======
                 new TeleopSwerve(
                         swerve,
                         () -> -driver.getRawAxis(translationAxis),
@@ -114,7 +105,6 @@ public class RobotContainer {
                         () -> driver.getRawAxis(rotationAxis),
                         robotCentric
                 )
->>>>>>> Stashed changes
         );
 
         angler.setDefaultCommand(
@@ -217,7 +207,7 @@ public class RobotContainer {
         // elevatorAmp.onTrue(new InstantCommand(() ->
         //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
         // ));
-       operatorX.onTrue(new InstantCommand(() -> angler.setAngle(-6.2*limelight.getRZ() + 32.3))); // podium shot
+       operatorX.onTrue(new InstantCommand(() -> angler.setAngle(36.3*Math.pow(limelight.getRZ(), -1.17)))); // podium shot
     }
 
     // smartdashboard prints
