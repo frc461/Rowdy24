@@ -60,7 +60,7 @@ public class TeleopLimelightTurret extends Command {
         /* Drive */
         swerve.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
-            -rotate,
+            -limelight.getRX()*5,
             !robotCentric.getAsBoolean(),
             true
         );
