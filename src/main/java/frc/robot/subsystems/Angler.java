@@ -8,8 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-import java.util.function.DoubleSupplier;
-
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
     private final PIDController pidController;
@@ -32,7 +30,7 @@ public class Angler extends SubsystemBase {
         target = 0.0;
     }
 
-    public double getPosition() {
+    public double getPosition() { 
         return encoder.getPosition();
     }
 

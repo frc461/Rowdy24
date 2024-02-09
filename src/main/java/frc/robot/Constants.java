@@ -72,7 +72,7 @@ public final class Constants {
         public static final int SHOOTER_CURRENT_LIMIT = 50;
         public static final boolean SHOOTER_INVERT = false;
         //baseline shooter speed in RPM
-        public static final double BASE_SHOOTER_SPEED = 6000;
+        public static final double BASE_SHOOTER_SPEED = 6750;
         public static final double IDLE_SHOOTER_SPEED = 0.3;
         // +/-tolerance for considering if the shooter is up to speed
         public static final double SHOOTER_SPEED_TOLERANCE = 100; //TODO: make sure this is acceptable
