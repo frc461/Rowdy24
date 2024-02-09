@@ -56,9 +56,9 @@ public final class Constants {
     }
 
     public static final class Limelight {
-        public static final double LIMELIGHT_P = 0.3;
-        public static final double LIMELIGHT_I = 0.0008;
-        public static final double LIMELIGHT_D = 0.001;
+        public static final double LIMELIGHT_P = 0.07;
+        public static final double LIMELIGHT_I = 0.01;
+        public static final double LIMELIGHT_D = 0;
     }
 
     public static final class Shooter {
