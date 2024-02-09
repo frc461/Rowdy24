@@ -91,7 +91,7 @@ public class Angler extends SubsystemBase {
     }
 
     public void setAlignedAngle(double x, double z) {
-        double dist = Math.pow(Math.pow(z, 2) + Math.pow(x, 2), 0.5);
+        double dist = Math.hypot(x, z);
         if (dist < Constants.Angler.UPPER_BOUND_LIMIT) {
             setAngle(Math.min(
                     Constants.Angler.TIGHT_BOUND_COEFFICIENT *

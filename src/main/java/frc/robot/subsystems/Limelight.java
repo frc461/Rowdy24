@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -58,6 +59,12 @@ public class Limelight extends SubsystemBase {
     public double getRoll() {
         refreshValues();
         return tagPose[5];
+    }
+
+    // returns lateral angle of tag from center of limelight in degrees
+    public double getLateralOffset() {
+        refreshValues();
+        return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees());
     }
 
     public void refreshValues() {

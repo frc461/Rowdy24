@@ -3,6 +3,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
@@ -49,9 +50,7 @@ public class TeleopLimelightTurret extends Command {
 
             double rotate = rotController.calculate(
                     swerve.getYaw(),
-                    swerve.getYaw() + Math.atan(
-                            limelight.getRX() / limelight.getRZ()
-                    ) * 180 / Math.PI
+                    swerve.getYaw() + limelight.getLateralOffset()
             );
 
             /* Drive */
