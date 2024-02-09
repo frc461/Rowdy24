@@ -16,7 +16,13 @@ public class AutoAngler extends Command {
 
     @Override
     public void execute() {
-       angler.setAngle(36.3 * Math.pow(limelight.getRZ(), -1.17));
+        double z = limelight.getRZ();
+        double x = limelight.getRX();
+        double dist = Math.pow(Math.pow(z, 2) + Math.pow(x, 2), 0.5);
+        if (z < 2.38) {
+            angler.setAngle(Math.min(43.9 * Math.pow(dist, -1.3), 20));
+        } else {
+            angler.setAngle(Math.min(49.8*Math.pow(dist, -1.31), 20));
+        }
     }
-
 }

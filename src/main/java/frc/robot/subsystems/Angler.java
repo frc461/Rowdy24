@@ -8,6 +8,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import java.util.function.DoubleSupplier;
+
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
     private final PIDController pidController;
@@ -65,6 +67,7 @@ public class Angler extends SubsystemBase {
     }
 
     public void moveAngle(double axisValue) {
+        target = encoder.getPosition();
         checkLimitSwitches();
         if (axisValue < 0 && lowerSwitchTriggered()) {
             target = Constants.Angler.ANGLER_LOWER_LIMIT;
@@ -74,7 +77,6 @@ public class Angler extends SubsystemBase {
             holdTarget();
         } else {
             angler.set(axisValue);
-            target = encoder.getPosition();
         }
     }
 
@@ -86,5 +88,9 @@ public class Angler extends SubsystemBase {
                 Constants.Angler.ANGLER_UPPER_LIMIT : encoderVal;
         target = encoderVal;
         holdTarget();
+    }
+
+    public void setAngle(DoubleSupplier encoderVal) {
+        setAngle(encoderVal.getAsDouble());
     }
 }

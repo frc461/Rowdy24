@@ -3,8 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.*;
 
-import java.util.function.DoubleSupplier;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -97,7 +95,7 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("intake", new AutoIntakeCarriage(intakeCarriage));
         NamedCommands.registerCommand("shoot", new AutoShooter(shooter));
-        NamedCommands.registerCommand("allign", new AutoAllign(swerve, angler, limelight));
+        NamedCommands.registerCommand("align", new AutoAlign(swerve, angler, limelight));
 
 
         swerve.setDefaultCommand(
@@ -210,7 +208,18 @@ public class RobotContainer {
         // elevatorAmp.onTrue(new InstantCommand(() ->
         //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
         // ));
-       operatorX.onTrue(new InstantCommand(() -> angler.setAngle(36.3*Math.pow(limelight.getRZ(), -1.17)))); // aim via limelight
+       operatorX.onTrue(new InstantCommand(() -> angler.setAngle( () -> {
+           double z = limelight.getRZ();
+           double x = limelight.getRX();
+           double dist = Math.pow(Math.pow(z, 2) + Math.pow(x, 2), 0.5);
+
+           if (z < 2.38) {
+               return Math.min(43.9 * Math.pow(dist, -1.3), 20);
+           } else {
+               return Math.min(49.8*Math.pow(dist, -1.31), 20);
+           }
+       })));
+                // aim via limelight
     }
 
     // smartdashboard prints
