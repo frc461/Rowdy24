@@ -90,7 +90,18 @@ public class Angler extends SubsystemBase {
         holdTarget();
     }
 
-    public void setAngle(DoubleSupplier encoderVal) {
-        setAngle(encoderVal.getAsDouble());
+    public void setAlignedAngle(double x, double z) {
+        double dist = Math.pow(Math.pow(z, 2) + Math.pow(x, 2), 0.5);
+        if (dist < Constants.Angler.UPPER_BOUND_LIMIT) {
+            setAngle(Math.min(
+                    Constants.Angler.TIGHT_BOUND_COEFFICIENT *
+                            Math.pow(dist, Constants.Angler.TIGHT_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
+            ));
+        } else {
+            setAngle(Math.min(
+                    Constants.Angler.UPPER_BOUND_COEFFICIENT *
+                            Math.pow(dist, Constants.Angler.UPPER_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
+            ));
+        }
     }
 }

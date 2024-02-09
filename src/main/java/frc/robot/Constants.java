@@ -35,6 +35,11 @@ public final class Constants {
         public static final boolean ANGLER_INVERT = false;
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
+        public static final double UPPER_BOUND_LIMIT = 2.38;
+        public static final double UPPER_BOUND_COEFFICIENT = 49.8;
+        public static final double UPPER_BOUND_SERIES = -1.31;
+        public static final double TIGHT_BOUND_COEFFICIENT = 43.9;
+        public static final double TIGHT_BOUND_SERIES = -1.3;
     }
 
     public static final class Elevator {

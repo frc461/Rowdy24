@@ -208,18 +208,7 @@ public class RobotContainer {
         // elevatorAmp.onTrue(new InstantCommand(() ->
         //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
         // ));
-       operatorX.onTrue(new InstantCommand(() -> angler.setAngle( () -> {
-           double z = limelight.getRZ();
-           double x = limelight.getRX();
-           double dist = Math.pow(Math.pow(z, 2) + Math.pow(x, 2), 0.5);
-
-           if (z < 2.38) {
-               return Math.min(43.9 * Math.pow(dist, -1.3), 20);
-           } else {
-               return Math.min(49.8*Math.pow(dist, -1.31), 20);
-           }
-       })));
-                // aim via limelight
+       operatorX.onTrue(new InstantCommand(() -> angler.setAlignedAngle(limelight.getRX(), limelight.getRZ()))); // aim via limelight
     }
 
     // smartdashboard prints
