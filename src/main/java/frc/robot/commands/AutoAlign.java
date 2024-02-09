@@ -1,6 +1,8 @@
 package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.Limelight;
@@ -8,13 +10,13 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.Constants;
 import frc.robot.subsystems.Angler;
 
-public class AutoAllign extends Command {
+public class AutoAlign extends Command {
 
     private final Angler angler;
     private final Limelight limelight;
     private final Swerve swerve;
 
-    public AutoAllign(Swerve swerve, Angler angler, Limelight limelight) {
+    public AutoAlign(Swerve swerve, Angler angler, Limelight limelight) {
         this.angler = angler;
         this.limelight = limelight;
         this.swerve = swerve;
@@ -23,10 +25,12 @@ public class AutoAllign extends Command {
 
     @Override
     public void execute() {
-    
-        //TODO actually make this work
-       angler.setAngle(0);
-       
+        //TODO: VERIFY METHODS
+
+        /* Calculate angler pitch-wise trajectory */
+        angler.setAlignedAngle(limelight.getRX(), limelight.getRZ());
+
+        /* Use PID to turret-aim to speaker while moving with current swerve module states */
         try (
                 PIDController rotController = new PIDController(
                         Constants.Limelight.LIMELIGHT_P,
@@ -36,33 +40,20 @@ public class AutoAllign extends Command {
         ) {
             rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
-            // TODO: verify angle
+            ChassisSpeeds speeds = Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(swerve.getModuleStates());
+
             double rotate = rotController.calculate(
                     swerve.getYaw(),
-                    swerve.getYaw() + Math.atan(
-                            limelight.getRX() / limelight.getRZ()
-                    ) * 180 / Math.PI
+                    swerve.getYaw() + limelight.getLateralOffset()
             );
 
             /* Drive */
             swerve.drive(
-                new Translation2d(0, 0).times(Constants.Swerve.MAX_SPEED),
-                -rotate,
+                new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond),
+                rotate,
                 true,
                 true
             );
         }
-
-
-
-
-
-
-
-
-
-
-
     }
-
 }
