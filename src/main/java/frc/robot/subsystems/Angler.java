@@ -94,7 +94,7 @@ public class Angler extends SubsystemBase {
             if (dist < Constants.Angler.UPPER_BOUND_LIMIT) {
                 setAngle(Math.min(
                         Constants.Angler.TIGHT_BOUND_COEFFICIENT *
-                                Math.pow(dist, Constants.Angler.TIGHT_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
+                                Math.pow(dist, Constants.Angler.TIGHT_BOUND_SERIES) - 0.3, Constants.Angler.ANGLER_UPPER_LIMIT
                 ));
             } else {
                 setAngle(Math.min(

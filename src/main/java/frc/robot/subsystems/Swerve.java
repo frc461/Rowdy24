@@ -161,7 +161,7 @@ public class Swerve extends SubsystemBase {
 
     // TODO: FIX SWERVE SCUFFEDNESS
     public void zeroGyro() {
-        gyro.setYaw(270);
+        gyro.setYaw(90);
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {

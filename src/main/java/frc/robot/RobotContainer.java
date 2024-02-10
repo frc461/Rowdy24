@@ -186,9 +186,9 @@ public class RobotContainer {
         
         
         //operatorNinety.whileTrue(new AutoShooter(shooter));
-        operatorStowButton.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+        operatorOneEighty.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
                          limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));
-        operatorStowButton.whileFalse(new InstantCommand(() ->shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)));
+        operatorOneEighty.whileFalse(new InstantCommand(() ->shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)));
 
         outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
         outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)));
