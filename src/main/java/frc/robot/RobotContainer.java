@@ -95,7 +95,7 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("intake", new AutoIntakeCarriage(intakeCarriage));
         NamedCommands.registerCommand("shoot", new AutoShooter(shooter));
-        NamedCommands.registerCommand("align", new AutoAlign(swerve, angler, limelight));
+        NamedCommands.registerCommand("align", new AutoAlign(angler, limelight));
 
 
         swerve.setDefaultCommand(
@@ -178,24 +178,25 @@ public class RobotContainer {
         ));
         
         //operatorNinety.whileTrue(new AutoShooter(shooter));
+        driverA.whileTrue(new AutoAlign(angler, limelight));
 
-        operatorOneEighty.onTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+        operatorStowButton.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
                          limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));
-        operatorOneEighty.onFalse(new InstantCommand(() ->shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)));
+        operatorStowButton.whileFalse(new InstantCommand(() ->shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)));
 
         outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
         outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)));
 
-         BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
-         revShooterPressed.ifHigh(
-                 () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
-         );
+        //  BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
+        //  revShooterPressed.ifHigh(
+        //          () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+        //                  limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
+        //  );
 
-         BooleanEvent revShooterNotPressed = revShooterPressed.negate();
-         revShooterNotPressed.ifHigh(
-                 () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)
-         );
+        //  BooleanEvent revShooterNotPressed = revShooterPressed.negate();
+        //  revShooterNotPressed.ifHigh(
+        //          () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)
+        //  );
 
         // driverStowButton.onTrue(
         //         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
@@ -250,7 +251,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // TODO: work on paths
-        swerve.gyro.setYaw(90);
+        //swerve.gyro.setYaw(90);
         return chooser.getSelected();
     }
 }

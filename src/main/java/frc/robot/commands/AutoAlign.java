@@ -13,13 +13,11 @@ public class AutoAlign extends Command {
 
     private final Angler angler;
     private final Limelight limelight;
-    private final Swerve swerve;
 
-    public AutoAlign(Swerve swerve, Angler angler, Limelight limelight) {
+    public AutoAlign(Angler angler, Limelight limelight) {
         this.angler = angler;
         this.limelight = limelight;
-        this.swerve = swerve;
-        addRequirements(swerve, angler, limelight);
+        addRequirements(angler, limelight);
     }
 
     @Override
@@ -30,29 +28,5 @@ public class AutoAlign extends Command {
         angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.getTag());
 
         /* Use PID to turret-aim to speaker while moving with current swerve module states */
-        try (
-                PIDController rotController = new PIDController(
-                        Constants.Limelight.LIMELIGHT_P,
-                        Constants.Limelight.LIMELIGHT_I,
-                        Constants.Limelight.LIMELIGHT_D
-                )
-        ) {
-            rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
-
-            ChassisSpeeds speeds = Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(swerve.getModuleStates());
-
-            double rotate = rotController.calculate(
-                    swerve.getYaw(),
-                    swerve.getYaw() + limelight.getLateralOffset()
-            );
-
-            /* Drive */
-            swerve.drive(
-                new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond),
-                rotate,
-                true,
-                true
-            );
-        }
     }
 }
