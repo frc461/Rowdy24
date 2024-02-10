@@ -36,9 +36,9 @@ public final class Constants {
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
         public static final double UPPER_BOUND_LIMIT = 2.38;
-        public static final double UPPER_BOUND_COEFFICIENT = 49.8;
+        public static final double UPPER_BOUND_COEFFICIENT = 50.8;
         public static final double UPPER_BOUND_SERIES = -1.31;
-        public static final double TIGHT_BOUND_COEFFICIENT = 43.9;
+        public static final double TIGHT_BOUND_COEFFICIENT = 40.9; // 43.9
         public static final double TIGHT_BOUND_SERIES = -1.3;
     }
 
@@ -64,7 +64,7 @@ public final class Constants {
         public static final double LIMELIGHT_P = 0.07;
         public static final double LIMELIGHT_I = 0.03;
         public static final double LIMELIGHT_D = 0;
-        public static final double YAW_OFFSET = -10;
+        public static final double YAW_OFFSET = -10.5;
     }
 
     public static final class Shooter {

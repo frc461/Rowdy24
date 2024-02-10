@@ -178,8 +178,6 @@ public class RobotContainer {
         ));
         
         //operatorNinety.whileTrue(new AutoShooter(shooter));
-        driverA.whileTrue(new AutoAlign(angler, limelight));
-
         operatorStowButton.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
                          limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));
         operatorStowButton.whileFalse(new InstantCommand(() ->shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)));

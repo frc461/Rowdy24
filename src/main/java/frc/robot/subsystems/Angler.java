@@ -99,7 +99,7 @@ public class Angler extends SubsystemBase {
             } else {
                 setAngle(Math.min(
                         Constants.Angler.UPPER_BOUND_COEFFICIENT *
-                                Math.pow(dist, Constants.Angler.UPPER_BOUND_SERIES) + 0.5, Constants.Angler.ANGLER_UPPER_LIMIT
+                                Math.pow(dist, Constants.Angler.UPPER_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
                 ));
             }
         }

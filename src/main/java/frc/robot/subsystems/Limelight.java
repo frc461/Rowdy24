@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
     private final DoubleArraySubscriber tagPoseTopic;
@@ -68,7 +69,7 @@ public class Limelight extends SubsystemBase {
     // returns lateral angle of tag from center of limelight in degrees
     public double getLateralOffset() {
         refreshValues();
-        return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees());
+        return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees() + Constants.Limelight.YAW_OFFSET / tagPose[2]);
     }
 
     public void refreshValues() {

@@ -50,7 +50,7 @@ public class TeleopLimelightTurret extends Command {
 
                 double rotate = rotController.calculate(
                         swerve.getYaw(),
-                        swerve.getYaw() + Constants.Limelight.YAW_OFFSET + limelight.getLateralOffset()
+                        swerve.getYaw() + limelight.getLateralOffset()
                 );
 
                 /* Drive */
