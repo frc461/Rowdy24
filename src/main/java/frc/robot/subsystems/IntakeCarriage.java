@@ -24,7 +24,7 @@ public class IntakeCarriage extends SubsystemBase {
         intake.setSmartCurrentLimit(80);
         intake.setInverted(false);
 
-        carriage = new CANSparkMax(Constants.IntakeCarriage.CARRIAGE_ID, MotorType.kBrushed);
+        carriage = new CANSparkMax(Constants.IntakeCarriage.CARRIAGE_ID, MotorType.kBrushless);
         carriage.restoreFactoryDefaults();
         carriage.setInverted(true);
     }
