@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.lib.util.COTSFalconSwerveConstants.driveGearRatios;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -39,6 +41,11 @@ public class RobotContainer {
 
     /* Controllers */
     public final static Joystick driver = new Joystick(0);
+
+//probably not useful
+//     private final CommandXboxController driver2 =
+//     new CommandXboxController(0);
+
     public final static Joystick operator = new Joystick(1);
 
     /* Operate Controls */
@@ -88,6 +95,9 @@ public class RobotContainer {
     private boolean autoSubsystems = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
     private final SendableChooser<Command> chooser;
 
+    
+
+
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
      */
@@ -96,7 +106,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("intake", new AutoIntakeCarriage(intakeCarriage));
         NamedCommands.registerCommand("shoot", new AutoShooter(shooter));
         NamedCommands.registerCommand("align", new AutoAlign(angler, limelight));
-
 
         swerve.setDefaultCommand(
                 new TeleopSwerve(
@@ -176,6 +185,8 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
+
+        
         
         //operatorNinety.whileTrue(new AutoShooter(shooter));
         operatorStowButton.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
@@ -195,6 +206,7 @@ public class RobotContainer {
         //  revShooterNotPressed.ifHigh(
         //          () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)
         //  );
+
 
         // driverStowButton.onTrue(
         //         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
