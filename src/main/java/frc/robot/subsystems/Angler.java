@@ -88,9 +88,9 @@ public class Angler extends SubsystemBase {
         holdTarget();
     }
 
-    public void setAlignedAngle(double x, double z, double tag) {
+    public void setAlignedAngle(double x, double z, boolean tag) {
         double dist = Math.hypot(x, z);
-        if(tag == 1) {
+        if(tag) {
             if (dist < Constants.Angler.UPPER_BOUND_LIMIT) {
                 setAngle(Math.min(
                         Constants.Angler.TIGHT_BOUND_COEFFICIENT *

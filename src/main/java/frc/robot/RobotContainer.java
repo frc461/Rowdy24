@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -12,10 +11,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.lib.util.COTSFalconSwerveConstants.driveGearRatios;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -219,7 +216,7 @@ public class RobotContainer {
         // elevatorAmp.onTrue(new InstantCommand(() ->
         //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
         // ));
-       operatorX.onTrue(new InstantCommand(() -> angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.getTag()))); // aim via limelight
+       operatorX.onTrue(new InstantCommand(() -> angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()))); // aim via limelight
     }
 
     // smartdashboard prints

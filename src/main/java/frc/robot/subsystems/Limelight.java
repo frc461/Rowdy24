@@ -24,8 +24,9 @@ public class Limelight extends SubsystemBase {
         refreshValues();
     }
 
-    public double getTag() {
-        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+    public boolean tagExists() {
+        refreshValues();
+        return !(getTable().getEntry("tv").getDouble(0) == 0);
     }
 
     public int getUpdates() {
@@ -70,6 +71,11 @@ public class Limelight extends SubsystemBase {
     public double getLateralOffset() {
         refreshValues();
         return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees() + Constants.Limelight.YAW_OFFSET / tagPose[2]);
+    }
+
+    public NetworkTable getTable() {
+        refreshValues();
+        return table;
     }
 
     public void refreshValues() {

@@ -38,7 +38,7 @@ public class TeleopLimelightTurret extends Command {
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
-        if(limelight.getTag() == 1) { 
+        if(limelight.tagExists()) {
             try (
                     PIDController rotController = new PIDController(
                             Constants.Limelight.LIMELIGHT_P,
