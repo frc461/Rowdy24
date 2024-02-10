@@ -88,18 +88,20 @@ public class Angler extends SubsystemBase {
         holdTarget();
     }
 
-    public void setAlignedAngle(double x, double z) {
+    public void setAlignedAngle(double x, double z, double tag) {
         double dist = Math.hypot(x, z);
-        if (dist < Constants.Angler.UPPER_BOUND_LIMIT) {
-            setAngle(Math.min(
-                    Constants.Angler.TIGHT_BOUND_COEFFICIENT *
-                            Math.pow(dist, Constants.Angler.TIGHT_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
-            ));
-        } else {
-            setAngle(Math.min(
-                    Constants.Angler.UPPER_BOUND_COEFFICIENT *
-                            Math.pow(dist, Constants.Angler.UPPER_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
-            ));
+        if(tag == 1) {
+            if (dist < Constants.Angler.UPPER_BOUND_LIMIT) {
+                setAngle(Math.min(
+                        Constants.Angler.TIGHT_BOUND_COEFFICIENT *
+                                Math.pow(dist, Constants.Angler.TIGHT_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
+                ));
+            } else {
+                setAngle(Math.min(
+                        Constants.Angler.UPPER_BOUND_COEFFICIENT *
+                                Math.pow(dist, Constants.Angler.UPPER_BOUND_SERIES) + 0.5, Constants.Angler.ANGLER_UPPER_LIMIT
+                ));
+            }
         }
     }
 }

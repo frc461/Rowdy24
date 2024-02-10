@@ -38,27 +38,29 @@ public class TeleopLimelightTurret extends Command {
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
-        try (
-                PIDController rotController = new PIDController(
-                        Constants.Limelight.LIMELIGHT_P,
-                        Constants.Limelight.LIMELIGHT_I,
-                        Constants.Limelight.LIMELIGHT_D
-                )
-        ) {
-            rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
+        if(limelight.getTag() == 1) { 
+            try (
+                    PIDController rotController = new PIDController(
+                            Constants.Limelight.LIMELIGHT_P,
+                            Constants.Limelight.LIMELIGHT_I,
+                            Constants.Limelight.LIMELIGHT_D
+                    )
+            ) {
+                rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
-            double rotate = rotController.calculate(
-                    swerve.getYaw(),
-                    swerve.getYaw() + limelight.getLateralOffset()
-            );
+                double rotate = rotController.calculate(
+                        swerve.getYaw(),
+                        swerve.getYaw() + Constants.Limelight.YAW_OFFSET + limelight.getLateralOffset()
+                );
 
-            /* Drive */
-            swerve.drive(
-                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
-                rotate,
-                !robotCentricSup.getAsBoolean(),
-                true
-            );
+                /* Drive */
+                swerve.drive(
+                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
+                    rotate,
+                    !robotCentricSup.getAsBoolean(),
+                    true
+                );
+            }
         }
     }
 }

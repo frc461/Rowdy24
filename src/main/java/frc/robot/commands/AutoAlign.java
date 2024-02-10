@@ -27,7 +27,7 @@ public class AutoAlign extends Command {
         //TODO: VERIFY METHODS
 
         /* Calculate angler pitch-wise trajectory */
-        angler.setAlignedAngle(limelight.getRX(), limelight.getRZ());
+        angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.getTag());
 
         /* Use PID to turret-aim to speaker while moving with current swerve module states */
         try (

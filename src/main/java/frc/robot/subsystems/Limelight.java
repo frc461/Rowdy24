@@ -23,6 +23,10 @@ public class Limelight extends SubsystemBase {
         refreshValues();
     }
 
+    public double getTag() {
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+    }
+
     public int getUpdates() {
         return updates;
     }

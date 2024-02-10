@@ -16,6 +16,6 @@ public class TeleopAnglerAlign extends Command {
 
     @Override
     public void execute() {
-        angler.setAlignedAngle(limelight.getRX(), limelight.getRZ());
+        angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.getTag());
     }
 }

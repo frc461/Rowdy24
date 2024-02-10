@@ -62,17 +62,18 @@ public final class Constants {
 
     public static final class Limelight {
         public static final double LIMELIGHT_P = 0.07;
-        public static final double LIMELIGHT_I = 0.01;
+        public static final double LIMELIGHT_I = 0.03;
         public static final double LIMELIGHT_D = 0;
+        public static final double YAW_OFFSET = -10;
     }
 
     public static final class Shooter {
         public static final int BOTTOM_SHOOTER_ID = 60; //BOTTOM WHEEL
         public static final int TOP_SHOOTER_ID = 61; //TOP WHEEL
-        public static final int SHOOTER_CURRENT_LIMIT = 50;
+        public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final boolean SHOOTER_INVERT = false;
         //baseline shooter speed in RPM
-        public static final double BASE_SHOOTER_SPEED = 6750;
+        public static final double BASE_SHOOTER_SPEED = 6000;
         public static final double IDLE_SHOOTER_SPEED = 0.3;
         // +/-tolerance for considering if the shooter is up to speed
         public static final double SHOOTER_SPEED_TOLERANCE = 100; //TODO: make sure this is acceptable
