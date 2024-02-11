@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.59,
-      "y": 4.48
+      "x": 2.0,
+      "y": 5.5
     },
-    "rotation": -150.0
+    "rotation": -90.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1.1.0"
+            "pathName": "Copy of default"
           }
         }
       ]

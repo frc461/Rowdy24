@@ -109,7 +109,7 @@ public class RobotContainer {
                         swerve,
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis),
-                        () -> driver.getRawAxis(rotationAxis),
+                        () -> -driver.getRawAxis(rotationAxis),
                         robotCentric
                 )
         );
