@@ -47,6 +47,12 @@
             {
               "type": "named",
               "data": {
+                "name": "align"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
                 "name": "intake"
               }
             },
@@ -61,7 +67,7 @@
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "align",
       "waypointRelativePos": 1.0,
       "command": {
         "type": "parallel",

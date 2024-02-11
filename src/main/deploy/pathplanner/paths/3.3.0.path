@@ -39,11 +39,23 @@
   "eventMarkers": [
     {
       "name": "shoot",
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
           "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "align"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "intake"
+              }
+            },
             {
               "type": "named",
               "data": {
@@ -55,8 +67,8 @@
       }
     },
     {
-      "name": "intake",
-      "waypointRelativePos": 0.0,
+      "name": "align",
+      "waypointRelativePos": 0.9,
       "command": {
         "type": "parallel",
         "data": {
@@ -64,7 +76,7 @@
             {
               "type": "named",
               "data": {
-                "name": "intake"
+                "name": "align"
               }
             }
           ]
