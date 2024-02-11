@@ -18,8 +18,9 @@ public final class Constants {
     public static final double MAXIMUM_ANGLE = 180.0;
 
     public static final class Auto {
+        //TODO tune
         public static final double AUTO_DRIVE_P = 0.1;
-        public static final double AUTO_DRIVE_I = 0.0;
+        public static final double AUTO_DRIVE_I = 0.001;
         public static final double AUTO_DRIVE_D = 0.0;
         public static final double AUTO_ANGLE_P = 0.1;
         public static final double AUTO_ANGLE_I = 0.0;
