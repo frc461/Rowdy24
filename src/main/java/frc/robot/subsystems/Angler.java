@@ -30,7 +30,7 @@ public class Angler extends SubsystemBase {
         target = 0.0;
     }
 
-    public double getPosition() {
+    public double getPosition() { 
         return encoder.getPosition();
     }
 
@@ -65,6 +65,7 @@ public class Angler extends SubsystemBase {
     }
 
     public void moveAngle(double axisValue) {
+        target = encoder.getPosition();
         checkLimitSwitches();
         if (axisValue < 0 && lowerSwitchTriggered()) {
             target = Constants.Angler.ANGLER_LOWER_LIMIT;
@@ -74,7 +75,6 @@ public class Angler extends SubsystemBase {
             holdTarget();
         } else {
             angler.set(axisValue);
-            target = encoder.getPosition();
         }
     }
 
@@ -86,5 +86,22 @@ public class Angler extends SubsystemBase {
                 Constants.Angler.ANGLER_UPPER_LIMIT : encoderVal;
         target = encoderVal;
         holdTarget();
+    }
+
+    public void setAlignedAngle(double x, double z, boolean tag) {
+        double dist = Math.hypot(x, z);
+        if(tag) {
+            if (dist < Constants.Angler.UPPER_BOUND_LIMIT) {
+                setAngle(Math.min(
+                        Constants.Angler.TIGHT_BOUND_COEFFICIENT *
+                                Math.pow(dist, Constants.Angler.TIGHT_BOUND_SERIES) - 0.3, Constants.Angler.ANGLER_UPPER_LIMIT
+                ));
+            } else {
+                setAngle(Math.min(
+                        Constants.Angler.UPPER_BOUND_COEFFICIENT *
+                                Math.pow(dist, Constants.Angler.UPPER_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
+                ));
+            }
+        }
     }
 }

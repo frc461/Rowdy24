@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -39,6 +38,11 @@ public class RobotContainer {
 
     /* Controllers */
     public final static Joystick driver = new Joystick(0);
+
+//probably not useful
+//     private final CommandXboxController driver2 =
+//     new CommandXboxController(0);
+
     public final static Joystick operator = new Joystick(1);
 
     /* Operate Controls */
@@ -88,6 +92,9 @@ public class RobotContainer {
     private boolean autoSubsystems = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
     private final SendableChooser<Command> chooser;
 
+    
+
+
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
      */
@@ -95,6 +102,7 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("intake", new AutoIntakeCarriage(intakeCarriage));
         NamedCommands.registerCommand("shoot", new AutoShooter(shooter));
+        NamedCommands.registerCommand("align", new AutoAlign(angler, limelight));
 
         swerve.setDefaultCommand(
                 new TeleopSwerve(
@@ -174,26 +182,28 @@ public class RobotContainer {
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
+
+        
         
         //operatorNinety.whileTrue(new AutoShooter(shooter));
-
-        operatorOneEighty.onTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+        operatorOneEighty.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
                          limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));
-        operatorOneEighty.onFalse(new InstantCommand(() ->shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)));
+        operatorOneEighty.whileFalse(new InstantCommand(() ->shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)));
 
         outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
         outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)));
 
-         BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
-         revShooterPressed.ifHigh(
-                 () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
-         );
+        //  BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
+        //  revShooterPressed.ifHigh(
+        //          () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+        //                  limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
+        //  );
 
-         BooleanEvent revShooterNotPressed = revShooterPressed.negate();
-         revShooterNotPressed.ifHigh(
-                 () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)
-         );
+        //  BooleanEvent revShooterNotPressed = revShooterPressed.negate();
+        //  revShooterNotPressed.ifHigh(
+        //          () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)
+        //  );
+
 
         // driverStowButton.onTrue(
         //         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
@@ -206,7 +216,7 @@ public class RobotContainer {
         // elevatorAmp.onTrue(new InstantCommand(() ->
         //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
         // ));
-       operatorX.onTrue(new InstantCommand(() -> angler.setAngle(36.3*Math.pow(limelight.getRZ(), -1.17)))); // aim via limelight
+       operatorX.onTrue(new InstantCommand(() -> angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()))); // aim via limelight
     }
 
     // smartdashboard prints
@@ -248,7 +258,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // TODO: work on paths
-        swerve.gyro.setYaw(90);
+        //swerve.gyro.setYaw(90);
         return chooser.getSelected();
     }
 }

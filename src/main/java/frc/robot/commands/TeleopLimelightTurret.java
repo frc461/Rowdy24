@@ -38,30 +38,29 @@ public class TeleopLimelightTurret extends Command {
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
-        try (
-                PIDController rotController = new PIDController(
-                        Constants.Limelight.LIMELIGHT_P,
-                        Constants.Limelight.LIMELIGHT_I,
-                        Constants.Limelight.LIMELIGHT_D
-                )
-        ) {
-            rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
+        if(limelight.tagExists()) {
+            try (
+                    PIDController rotController = new PIDController(
+                            Constants.Limelight.LIMELIGHT_P,
+                            Constants.Limelight.LIMELIGHT_I,
+                            Constants.Limelight.LIMELIGHT_D
+                    )
+            ) {
+                rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
-            // TODO: verify angle
-            double rotate = rotController.calculate(
-                    swerve.getYaw(),
-                    swerve.getYaw() + Math.atan(
-                            limelight.getRX() / limelight.getRZ()
-                    ) * 180 / Math.PI
-            );
+                double rotate = rotController.calculate(
+                        swerve.getYaw(),
+                        swerve.getYaw() + limelight.getLateralOffset()
+                );
 
-            /* Drive */
-            swerve.drive(
-                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
-                -rotate,
-                !robotCentricSup.getAsBoolean(),
-                true
-            );
+                /* Drive */
+                swerve.drive(
+                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
+                    rotate,
+                    !robotCentricSup.getAsBoolean(),
+                    true
+                );
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -73,7 +72,7 @@ public class Swerve extends SubsystemBase {
                                 Constants.Auto.AUTO_ANGLE_I,
                                 Constants.Auto.AUTO_ANGLE_D
                         ),
-                        Constants.Swerve.MAX_SPEED, // Max module speed, in m/s
+                        Constants.Swerve.MAX_SPEED - 2, // Max module speed, in m/s
                         Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to
                                                           // furthest module.
                         new ReplanningConfig(true, true) // Default path replanning config. See the API for the options here
@@ -119,8 +118,6 @@ public class Swerve extends SubsystemBase {
                         rotation
                 )
         );
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.MAX_SPEED);
-
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
@@ -162,8 +159,9 @@ public class Swerve extends SubsystemBase {
         return positions;
     }
 
+    // TODO: FIX SWERVE SCUFFEDNESS
     public void zeroGyro() {
-        gyro.setYaw(90);
+        gyro.setYaw(-90);
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {
@@ -185,23 +183,6 @@ public class Swerve extends SubsystemBase {
     public void resetModulesToAbsolute() {
         for (SwerveModule mod : swerveMods) {
             mod.resetToAbsolute();
-        }
-    }
-
-    // Rotates by a passed amount of degrees
-    public void rotateDegrees(double target) {
-        try (
-                PIDController rotController = new PIDController(
-                        Constants.Swerve.ANGLE_P,
-                        Constants.Swerve.ANGLE_I,
-                        Constants.Swerve.ANGLE_D
-                )
-        ) {
-            rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
-
-            double rotate = rotController.calculate(getYaw(), getYaw() + target);
-
-            drive(new Translation2d(0, 0), rotate, false, true);
         }
     }
 }

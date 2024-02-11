@@ -18,10 +18,11 @@ public final class Constants {
     public static final double MAXIMUM_ANGLE = 180.0;
 
     public static final class Auto {
-        public static final double AUTO_DRIVE_P = 0.1;
+        //TODO tune
+        public static final double AUTO_DRIVE_P = 0.0;
         public static final double AUTO_DRIVE_I = 0.0;
         public static final double AUTO_DRIVE_D = 0.0;
-        public static final double AUTO_ANGLE_P = 0.1;
+        public static final double AUTO_ANGLE_P = 0.2;
         public static final double AUTO_ANGLE_I = 0.0;
         public static final double AUTO_ANGLE_D = 0.0;
     }
@@ -35,6 +36,11 @@ public final class Constants {
         public static final boolean ANGLER_INVERT = false;
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
+        public static final double UPPER_BOUND_LIMIT = 2.26;
+        public static final double UPPER_BOUND_COEFFICIENT = 51.8;
+        public static final double UPPER_BOUND_SERIES = -1.31;
+        public static final double TIGHT_BOUND_COEFFICIENT = 40.9; // 43.9
+        public static final double TIGHT_BOUND_SERIES = -1.3;
     }
 
     public static final class Elevator {
@@ -56,15 +62,16 @@ public final class Constants {
     }
 
     public static final class Limelight {
-        public static final double LIMELIGHT_P = 0.3;
-        public static final double LIMELIGHT_I = 0.0008;
-        public static final double LIMELIGHT_D = 0.001;
+        public static final double LIMELIGHT_P = 0.07;
+        public static final double LIMELIGHT_I = 0.03;
+        public static final double LIMELIGHT_D = 0;
+        public static final double YAW_OFFSET = -10.5;
     }
 
     public static final class Shooter {
         public static final int BOTTOM_SHOOTER_ID = 60; //BOTTOM WHEEL
         public static final int TOP_SHOOTER_ID = 61; //TOP WHEEL
-        public static final int SHOOTER_CURRENT_LIMIT = 50;
+        public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final boolean SHOOTER_INVERT = false;
         //baseline shooter speed in RPM
         public static final double BASE_SHOOTER_SPEED = 6000;
