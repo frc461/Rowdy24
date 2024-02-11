@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
     private final DoubleArraySubscriber tagPoseTopic;
@@ -22,11 +24,16 @@ public class Limelight extends SubsystemBase {
         refreshValues();
     }
 
+    public boolean tagExists() {
+        refreshValues();
+        return !(getTable().getEntry("tv").getDouble(0) == 0);
+    }
+
     public int getUpdates() {
         return updates;
     }
 
-    // X+ is to the right if you are looking at the tag
+    // X+ is to the right when looking at the tag
     public double getRX() {
         refreshValues();
         return tagPose[0];
@@ -58,6 +65,17 @@ public class Limelight extends SubsystemBase {
     public double getRoll() {
         refreshValues();
         return tagPose[5];
+    }
+
+    // returns lateral angle of tag from center of limelight in degrees
+    public double getLateralOffset() {
+        refreshValues();
+        return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees() + Constants.Limelight.YAW_OFFSET / tagPose[2]);
+    }
+
+    public NetworkTable getTable() {
+        refreshValues();
+        return table;
     }
 
     public void refreshValues() {

@@ -1,6 +1,8 @@
 package frc.robot;
 
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkBase.IdleMode;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -16,12 +18,29 @@ public final class Constants {
     public static final double MAXIMUM_ANGLE = 180.0;
 
     public static final class Auto {
-        public static final double AUTO_DRIVE_P = 0.1;
+        //TODO tune
+        public static final double AUTO_DRIVE_P = 0.0;
         public static final double AUTO_DRIVE_I = 0.0;
         public static final double AUTO_DRIVE_D = 0.0;
-        public static final double AUTO_ANGLE_P = 0.1;
+        public static final double AUTO_ANGLE_P = 0.2;
         public static final double AUTO_ANGLE_I = 0.0;
         public static final double AUTO_ANGLE_D = 0.0;
+    }
+
+    public static final class Angler {
+        public static final int ANGLER_ID = 62;
+        public static final double ANGLER_P = 0.035;
+        public static final double ANGLER_I = 0.00009;
+        public static final double ANGLER_D = 0.0001;
+        public static final int ANGLER_CURRENT_LIMIT = 35;
+        public static final boolean ANGLER_INVERT = false;
+        public static final double ANGLER_LOWER_LIMIT = 0;
+        public static final double ANGLER_UPPER_LIMIT = 20;
+        public static final double UPPER_BOUND_LIMIT = 2.26;
+        public static final double UPPER_BOUND_COEFFICIENT = 51.8;
+        public static final double UPPER_BOUND_SERIES = -1.31;
+        public static final double TIGHT_BOUND_COEFFICIENT = 40.9; // 43.9
+        public static final double TIGHT_BOUND_SERIES = -1.3;
     }
 
     public static final class Elevator {
@@ -37,57 +56,42 @@ public final class Constants {
         public static final double ELEVATOR_STOW = 0.0;
     }
 
-    public static final class Limelight {
-        public static final double LIMELIGHT_P = 0.3;
-        public static final double LIMELIGHT_I = 0.0008;
-        public static final double LIMELIGHT_D = 0.001;
+    public static final class IntakeCarriage {
+        public static final int INTAKE_ID = 41;
+        public static final int CARRIAGE_ID = 42;
     }
 
-    public static final class Intake {
-        public static final int INTAKE_ID = 41;
+    public static final class Limelight {
+        public static final double LIMELIGHT_P = 0.07;
+        public static final double LIMELIGHT_I = 0.03;
+        public static final double LIMELIGHT_D = 0;
+        public static final double YAW_OFFSET = -10.5;
     }
 
     public static final class Shooter {
-        public static final int LEFT_SHOOTER_ID = 39;
-        public static final int RIGHT_SHOOTER_ID = 61;
-        public static final int ANGLER_ID = 62;
-        public static final int SHOOTER_CURRENT_LIMIT = 50;
+        public static final int BOTTOM_SHOOTER_ID = 60; //BOTTOM WHEEL
+        public static final int TOP_SHOOTER_ID = 61; //TOP WHEEL
+        public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final boolean SHOOTER_INVERT = false;
         //baseline shooter speed in RPM
-        public static final double BASE_SHOOTER_SPEED = 5000;
+        public static final double BASE_SHOOTER_SPEED = 6000;
         public static final double IDLE_SHOOTER_SPEED = 0.3;
         // +/-tolerance for considering if the shooter is up to speed
         public static final double SHOOTER_SPEED_TOLERANCE = 100; //TODO: make sure this is acceptable
-        public static final double DISTANCE_MULTIPLIER = 0.1; //TODO: check this
-
+        public static final double DISTANCE_MULTIPLIER = 10; //TODO: check this
         public static final double SHOOTER_P = 0.00062; //was 0.003
         public static final double SHOOTER_I = 0.000000001;
         public static final double SHOOTER_D = 0.0005;
         public static final double SHOOTER_FF = 0.1;
-
-        public static final double ANGLER_P = 0.6;
-        public static final double ANGLER_I = 0.1;
-        public static final double ANGLER_D = 0.5;
-        public static final int ANGLER_CURRENT_LIMIT = 60;
-        public static final boolean ANGLER_INVERT = false;
-        public static final double ANGLER_ROTATION_CONSTANT = 42.0 / 360.0;
-        public static final double ANGLER_LOWER_LIMIT = 0;
-        public static final double ANGLER_UPPER_LIMIT = 10;
-
         public static final int FEEDER_ID = 59;
         public static final int FEEDER_CURRENT_LIMIT = 50;
         public static final boolean FEEDER_INVERT = false;
     }
 
-    public static final class Carriage {
-        public static final int CARRIAGE_ID = 42;
-    }
-
     public static final class Swerve {
         public static final double GYRO_OFFSET = 0;
         public static final int PIGEON_ID = 51;
-        public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW- (DO NOT USE, ENABLES
-                                                         // ROBOT-CENTRIC)
+        public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW- (DO NOT USE, ENABLES ROBOT-CENTRIC)
 
         public static final COTSFalconSwerveConstants CHOSEN_MODULE =
                 COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L3);
@@ -123,18 +127,18 @@ public final class Constants {
         public static final boolean DRIVE_MOTOR_INVERT = CHOSEN_MODULE.driveMotorInvert;
 
         /* Angle Encoder Invert */
-        public static final boolean CANCODER_INVERT = CHOSEN_MODULE.canCoderInvert;
+        public static final SensorDirectionValue CANCODER_SENSOR_DIRECTION = CHOSEN_MODULE.canCoderInvert;
 
         /* Swerve Current Limiting */
-        public static final int ANGLE_CONTINUOUS_CURRENT_LIMIT = 25;
-        public static final int ANGLE_PEAK_CURRENT_LIMIT = 40;
-        public static final double ANGLE_PEAK_CURRENT_DURATION = 0.1;
-        public static final boolean ANGLE_ENABLE_CURRENT_LIMIT = true;
+        public static final int ANGLE_CONTINUOUS_SUPPLY_CURRENT_LIMIT = 25;
+        public static final int ANGLE_PEAK_SUPPLY_CURRENT_LIMIT = 40;
+        public static final double ANGLE_PEAK_SUPPLY_CURRENT_DURATION = 0.1;
+        public static final boolean ANGLE_ENABLE_SUPPLY_CURRENT_LIMIT = true;
 
-        public static final int DRIVE_CONTINUOUS_CURRENT_LIMIT = 35;
-        public static final int DRIVE_PEAK_CURRENT_LIMIT = 60;
-        public static final double DRIVE_PEAK_CURRENT_DURATION = 0.1;
-        public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
+        public static final int DRIVE_CONTINUOUS_SUPPLY_CURRENT_LIMIT = 35;
+        public static final int DRIVE_PEAK_SUPPLY_CURRENT_LIMIT = 60;
+        public static final double DRIVE_PEAK_SUPPLY_CURRENT_DURATION = 0.1;
+        public static final boolean DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT = true;
 
         /*
          * These values are used by the drive falcon to ramp in open loop and closed
@@ -187,7 +191,7 @@ public final class Constants {
             public static final int DRIVE_MOTOR_ID = 1;
             public static final int ANGLE_MOTOR_ID = 11;
             public static final int CANCODER_ID = 21;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(-142.768 + 0); // 127.3 original value
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(308.32+90); // 127.3 original value
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
@@ -197,7 +201,7 @@ public final class Constants {
             public static final int DRIVE_MOTOR_ID = 2;
             public static final int ANGLE_MOTOR_ID = 12;
             public static final int CANCODER_ID = 22;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(352.178 + 0);
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(81.73+90);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
@@ -207,7 +211,7 @@ public final class Constants {
             public static final int DRIVE_MOTOR_ID = 3;
             public static final int ANGLE_MOTOR_ID = 13;
             public static final int CANCODER_ID = 23;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(308.847 + 0);
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(38.759+90);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
@@ -217,7 +221,7 @@ public final class Constants {
             public static final int DRIVE_MOTOR_ID = 4;
             public static final int ANGLE_MOTOR_ID = 14;
             public static final int CANCODER_ID = 24;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(241.523 + 0);
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(331.699+90);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }

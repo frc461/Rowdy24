@@ -7,25 +7,25 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Angler;
 
 public class TeleopAngler extends Command {
-    private Angler angler;
-    private DoubleSupplier motionSup;
+    private final Angler angler;
+    private final DoubleSupplier motionSup;
 
     public TeleopAngler(Angler angler, DoubleSupplier motionSup) {
-        // Use addRequirements() here to declare subsystem dependencies.
         this.angler = angler;
         this.motionSup = motionSup;
         addRequirements(angler);
     }
 
-    // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double motionVal = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.STICK_DEADBAND);
-        if (motionVal != 0) {
-            angler.moveAngle(motionVal);
-        } else {
-            angler.holdTilt();
-        }
+        /* Apply Deadband */
+        double axisValue = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.STICK_DEADBAND);
 
+        /* Move Angler */
+        if (axisValue != 0.0) {
+            angler.moveAngle(axisValue);
+        } else {
+            angler.holdTarget();
+        }
     }
 }

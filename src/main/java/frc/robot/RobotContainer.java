@@ -1,7 +1,7 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.*;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -29,14 +29,20 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-     private final Elevator elevator = new Elevator();
+    //private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
-    // private final Angler angler = new Angler();
+    private final Angler angler = new Angler();
+
 
     /* Controllers */
     public final static Joystick driver = new Joystick(0);
+
+//probably not useful
+//     private final CommandXboxController driver2 =
+//     new CommandXboxController(0);
+
     public final static Joystick operator = new Joystick(1);
 
     /* Operate Controls */
@@ -83,45 +89,50 @@ public class RobotContainer {
 
     /* Variables */
     private final EventLoop eventLoop = new EventLoop();
-    private boolean autoSubsystems = true; //Disables/enables automatic subsystem functions (e.g. auto-intake)
+    private boolean autoSubsystems = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
     private final SendableChooser<Command> chooser;
+
+    
+
 
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
      */
 
     public RobotContainer() {
-        NamedCommands.registerCommand("intake", new AutoIntake(intakeCarriage));
+        NamedCommands.registerCommand("intake", new AutoIntakeCarriage(intakeCarriage));
+        NamedCommands.registerCommand("shoot", new AutoShooter(shooter));
+        NamedCommands.registerCommand("align", new AutoAlign(angler, limelight));
 
         swerve.setDefaultCommand(
                 new TeleopSwerve(
                         swerve,
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
+                        () -> driver.getRawAxis(rotationAxis),
                         robotCentric
                 )
         );
 
-        // angler.setDefaultCommand(
-        // new TeleopAngler(
-        // angler,
-        // () -> -operator.getRawAxis(anglerAxis)
-        // )
-        // );
+        angler.setDefaultCommand(
+                new TeleopAngler(
+                        angler,
+                        () -> -operator.getRawAxis(anglerAxis)
+                )
+        );
 
         // elevator.setDefaultCommand(
-        // new TeleopElevator(
-        // elevator,
-        // () -> -operator.getRawAxis(elevatorAxis)
-        // )
+        //         new TeleopElevator(
+        //                 elevator,
+        //                 () -> -operator.getRawAxis(elevatorAxis)
+        //         )
         // );
 
         // Configure the button bindings
         configureButtonBindings();
+
         chooser = AutoBuilder.buildAutoChooser("defaultAuto");
         SmartDashboard.putData("Auto Choices", chooser);
-
     }
 
     public void periodic() {
@@ -152,52 +163,60 @@ public class RobotContainer {
                 robotCentric)
         );
 
-        intakeButton.whileTrue(Commands.parallel(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.75)),
+        intakeButton.whileTrue(new ParallelCommandGroup(
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.9)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(1))
         ));
 
-        intakeButton.whileFalse(Commands.parallel(
-                new InstantCommand(() ->  intakeCarriage.setIntakeSpeed(/*autoSubsystems ? -0.15 : */0)),
+        intakeButton.whileFalse(new ParallelCommandGroup(
+                new InstantCommand(() ->  intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
 
-        outtakeButton.whileTrue(Commands.parallel(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.75)),
+        outtakeButton.whileTrue(new ParallelCommandGroup(
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.9)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(-1))
         ));
 
-        outtakeButton.whileFalse(Commands.parallel(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(/*autoSubsystems ? -0.15 : */0)),
+        outtakeButton.whileFalse(new ParallelCommandGroup(
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
         ));
 
-        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.75)));
+        
+        
+        //operatorNinety.whileTrue(new AutoShooter(shooter));
+        operatorOneEighty.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));
+        operatorOneEighty.whileFalse(new InstantCommand(() ->shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)));
 
-        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(/*autoSubsystems ? -0.15 : */0)));
+        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
+        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)));
 
-        BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
-        revShooterPressed.ifHigh(
-                () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
-        );
+        //  BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
+        //  revShooterPressed.ifHigh(
+        //          () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+        //                  limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
+        //  );
 
-        BooleanEvent revShooterNotPressed = revShooterPressed.negate();
-        revShooterNotPressed.ifHigh(
-                () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)
-        );
+        //  BooleanEvent revShooterNotPressed = revShooterPressed.negate();
+        //  revShooterNotPressed.ifHigh(
+        //          () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)
+        //  );
 
-        driverStowButton.onTrue(
-                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-        );
 
-        operatorStowButton.onTrue(
-                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-        );
+        // driverStowButton.onTrue(
+        //         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+        // );
 
-        elevatorAmp.onTrue(new InstantCommand(() ->
-                elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
-        ));
+        // operatorStowButton.onTrue(
+        //         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+        // );
+
+        // elevatorAmp.onTrue(new InstantCommand(() ->
+        //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
+        // ));
+       operatorX.onTrue(new InstantCommand(() -> angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()))); // aim via limelight
     }
 
     // smartdashboard prints
@@ -228,7 +247,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
 
-        // SmartDashboard.putNumber("Angler encoder", angler.getEncoder());
+        SmartDashboard.putNumber("Angler encoder", angler.getPosition());
     }
 
     /**
@@ -238,6 +257,8 @@ public class RobotContainer {
      */
 
     public Command getAutonomousCommand() {
+        // TODO: work on paths
+        //swerve.gyro.setYaw(90);
         return chooser.getSelected();
     }
 }
