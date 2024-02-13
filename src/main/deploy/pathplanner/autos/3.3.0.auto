@@ -12,9 +12,52 @@
     "data": {
       "commands": [
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "align"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "carriage"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "3.3.0"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "align"
           }
         }
       ]

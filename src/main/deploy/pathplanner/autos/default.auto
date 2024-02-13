@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.0,
-      "y": 5.5
+      "x": 1.2573386284213324,
+      "y": 5.518768403277548
     },
     "rotation": -90.0
   },
@@ -12,9 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "default"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "default"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "constantAlign"
+                }
+              }
+            ]
           }
         }
       ]

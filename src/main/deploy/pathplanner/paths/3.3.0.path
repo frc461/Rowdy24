@@ -16,74 +16,43 @@
     },
     {
       "anchor": {
-        "x": 3.2453880092945377,
-        "y": 6.986512690617974
+        "x": 3.0275897518619677,
+        "y": 7.071277839238143
       },
       "prevControl": {
-        "x": 1.9371501613373598,
-        "y": 6.953316823300314
+        "x": 1.7189308075855745,
+        "y": 7.071277839238143
+      },
+      "nextControl": {
+        "x": 3.4555625509355288,
+        "y": 7.071277839238143
+      },
+      "isLocked": false,
+      "linkedName": "0.3.0"
+    },
+    {
+      "anchor": {
+        "x": 3.0275897518619677,
+        "y": 6.332052095383812
+      },
+      "prevControl": {
+        "x": 3.4677222763037765,
+        "y": 6.358376683567041
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "0.3.0"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.55,
+      "waypointRelativePos": 0.5,
       "rotationDegrees": -90.0,
       "rotateFast": true
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "shoot",
-      "waypointRelativePos": 0.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "align"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "shoot"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "align",
-      "waypointRelativePos": 0.9,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "align"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -92,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0,
+    "rotation": -65.0,
     "rotateFast": false
   },
   "reversed": false,

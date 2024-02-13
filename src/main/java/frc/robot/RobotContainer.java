@@ -92,17 +92,24 @@ public class RobotContainer {
     private boolean autoSubsystems = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
     private final SendableChooser<Command> chooser;
 
-    
-
-
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
      */
 
+    public void startUp(){
+        intakeCarriage.setCarriageSpeed(0);
+        intakeCarriage.setIntakeSpeed(0);
+    }
+
     public RobotContainer() {
-        NamedCommands.registerCommand("intake", new AutoIntakeCarriage(intakeCarriage));
-        NamedCommands.registerCommand("shoot", new AutoShooter(shooter));
-        NamedCommands.registerCommand("align", new AutoAlign(angler, limelight));
+        NamedCommands.registerCommand("intake", new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.9)));
+        NamedCommands.registerCommand("carriage", new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0.9)));
+        NamedCommands.registerCommand("shoot", new InstantCommand(() -> shooter.setSpeed(1.0)));
+        NamedCommands.registerCommand("align", new InstantCommand(() -> 
+                angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()
+        )));
+
+        NamedCommands.registerCommand("constantAlign", new AutoAlign(angler, limelight));
 
         swerve.setDefaultCommand(
                 new TeleopSwerve(
