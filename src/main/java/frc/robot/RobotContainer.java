@@ -104,6 +104,7 @@ public class RobotContainer {
     public RobotContainer() {
         NamedCommands.registerCommand("intake", new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.9)));
         NamedCommands.registerCommand("carriage", new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0.9)));
+        NamedCommands.registerCommand("stopIntake", new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0)));
         NamedCommands.registerCommand("shoot", new InstantCommand(() -> shooter.setSpeed(1.0)));
         NamedCommands.registerCommand("align", new InstantCommand(() -> 
                 angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()
