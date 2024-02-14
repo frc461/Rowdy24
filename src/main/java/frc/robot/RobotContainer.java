@@ -108,7 +108,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("align", new InstantCommand(() -> 
                 angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()
         )));
-
+        NamedCommands.registerCommand("override shoot", new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(0.9)));
         NamedCommands.registerCommand("constantAlign", new AutoAlign(angler, limelight));
 
         swerve.setDefaultCommand(
@@ -233,6 +233,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
+        SmartDashboard.putBoolean("Beam Brake", intakeCarriage.getCarriageBeamBroken());
 
         // elevator debug
         // SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
