@@ -102,14 +102,14 @@ public class RobotContainer {
     }
 
     public RobotContainer() {
-        NamedCommands.registerCommand("intake", new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.9)));
-        NamedCommands.registerCommand("carriage", new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0.9)));
+        NamedCommands.registerCommand("intake", new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.5)));
+        NamedCommands.registerCommand("carriage", new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0.5)));
         NamedCommands.registerCommand("stopIntake", new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0)));
         NamedCommands.registerCommand("shoot", new InstantCommand(() -> shooter.setSpeed(1.0)));
         NamedCommands.registerCommand("align", new InstantCommand(() -> 
                 angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()
         )));
-        NamedCommands.registerCommand("override shoot", new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(0.9)));
+        NamedCommands.registerCommand("overrideCarriage", new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(0.9)));
         NamedCommands.registerCommand("constantAlign", new AutoAlign(angler, limelight));
 
         swerve.setDefaultCommand(
@@ -173,22 +173,22 @@ public class RobotContainer {
 
         intakeButton.whileTrue(new ParallelCommandGroup(
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.9)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(1))
+                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(1))
         ));
 
         intakeButton.whileFalse(new ParallelCommandGroup(
                 new InstantCommand(() ->  intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
+                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(0))
         ));
 
         outtakeButton.whileTrue(new ParallelCommandGroup(
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.9)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(-1))
+                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(-1))
         ));
 
         outtakeButton.whileFalse(new ParallelCommandGroup(
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
+                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(0))
         ));
 
         
