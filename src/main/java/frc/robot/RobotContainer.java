@@ -15,10 +15,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.TeleopAngler;
-import frc.robot.commands.TeleopIntakeCarriage;
-import frc.robot.commands.TeleopLimelightTurret;
-import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.MoveAnglerCommand;
+import frc.robot.commands.IntakeCarriageCommand;
+import frc.robot.commands.LimelightTurretCommand;
+import frc.robot.commands.TeleopSwerveCommand;
 import frc.robot.subsystems.*;
 
 /**
@@ -101,17 +101,22 @@ public class RobotContainer {
      */
 
     public RobotContainer() {
-        NamedCommands.registerCommand("intake", new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(0.7)));
-        NamedCommands.registerCommand("carriage", new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(0.6)));
-        NamedCommands.registerCommand("overrideCarriage", new InstantCommand(() -> intakeCarriage.setIntakeCarriageSpeed(0.9)));
-        NamedCommands.registerCommand("stopCarriage", new InstantCommand(() -> intakeCarriage.setIntakeCarriageSpeed(0)));
+        NamedCommands.registerCommand(
+                "intakeCarriage",
+                new IntakeCarriageCommand(
+                        intakeCarriage,
+                        0.9,
+                        1,
+                        idleMode
+                ).until(intakeCarriage::noteInSystem)
+        );
         NamedCommands.registerCommand("shoot", new InstantCommand(() -> shooter.overrideShooterSpeed(1.0)));
         NamedCommands.registerCommand("align", new InstantCommand(() -> 
                 angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists())
         ));
 
         swerve.setDefaultCommand(
-                new TeleopSwerve(
+                new TeleopSwerveCommand(
                         swerve,
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis),
@@ -121,7 +126,7 @@ public class RobotContainer {
         );
 
         angler.setDefaultCommand(
-                new TeleopAngler(
+                new MoveAnglerCommand(
                         angler,
                         () -> -operator.getRawAxis(anglerAxis)
                 )
@@ -173,7 +178,7 @@ public class RobotContainer {
                 )
         ));
 
-        driverLimelight.whileTrue(new TeleopLimelightTurret(
+        driverLimelight.whileTrue(new LimelightTurretCommand(
                 limelight,
                 swerve,
                 () -> -driver.getRawAxis(translationAxis),
@@ -181,14 +186,14 @@ public class RobotContainer {
                 robotCentric)
         );
 
-        intakeButton.whileTrue(new TeleopIntakeCarriage(
+        intakeButton.whileTrue(new IntakeCarriageCommand(
                 intakeCarriage,
                 0.9,
                 1,
                 idleMode
         ).until(intakeCarriage::noteInSystem));
 
-        outtakeButton.whileTrue(new TeleopIntakeCarriage(intakeCarriage, -0.9, -1, idleMode));
+        outtakeButton.whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
 
 //        operatorOneEighty.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
 //                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));
