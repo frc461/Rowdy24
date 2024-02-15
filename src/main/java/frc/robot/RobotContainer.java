@@ -15,10 +15,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.TeleopAnglerCommand;
-import frc.robot.commands.IntakeCarriageCommand;
-import frc.robot.commands.LimelightTurretCommand;
-import frc.robot.commands.TeleopSwerveCommand;
+import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
 /**
@@ -186,12 +183,7 @@ public class RobotContainer {
                 robotCentric)
         );
 
-        intakeButton.whileTrue(new IntakeCarriageCommand(
-                intakeCarriage,
-                0.9,
-                1,
-                idleMode
-        ).until(intakeCarriage::noteInSystem));
+        intakeButton.whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
 
         outtakeButton.whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
 
