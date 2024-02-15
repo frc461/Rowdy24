@@ -20,12 +20,12 @@
         "y": 6.594671767542587
       },
       "prevControl": {
-        "x": 1.9125418429916594,
-        "y": 6.408559406986563
+        "x": 1.9700491067648802,
+        "y": 6.449618528866687
       },
       "nextControl": {
-        "x": 2.434263825873623,
-        "y": 6.7697515489817714
+        "x": 2.434961796957019,
+        "y": 6.7687390495864905
       },
       "isLocked": false,
       "linkedName": null
@@ -67,7 +67,7 @@
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.2,
       "rotationDegrees": -90.0,
       "rotateFast": false
     }
@@ -76,7 +76,7 @@
   "eventMarkers": [
     {
       "name": "stop carriage",
-      "waypointRelativePos": 2,
+      "waypointRelativePos": 1.7999999999999998,
       "command": {
         "type": "parallel",
         "data": {

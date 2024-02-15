@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3168648534944944,
-        "y": 4.191638442716063
+        "x": 1.084212339720976,
+        "y": 4.287373940488622
       },
       "isLocked": false,
       "linkedName": "1.0.0"
@@ -20,12 +20,28 @@
         "y": 4.100016227810234
       },
       "prevControl": {
-        "x": 1.260287020574041,
-        "y": 4.167358112494004
+        "x": 2.027117494049803,
+        "y": 4.056665631849782
+      },
+      "nextControl": {
+        "x": 2.8887716394357192,
+        "y": 4.1253345757506255
+      },
+      "isLocked": false,
+      "linkedName": "0.1.0"
+    },
+    {
+      "anchor": {
+        "x": 2.3780197838173454,
+        "y": 4.379182188919934
+      },
+      "prevControl": {
+        "x": 2.774885582178572,
+        "y": 4.296519134704936
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "0.1.0"
+      "linkedName": "shoot 0.1"
     }
   ],
   "rotationTargets": [
@@ -33,13 +49,18 @@
       "waypointRelativePos": 0.5,
       "rotationDegrees": -90.0,
       "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 1.85,
+      "rotationDegrees": -120.0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "shoot",
-      "waypointRelativePos": 0,
+      "name": "stop carriage",
+      "waypointRelativePos": 1.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -47,36 +68,7 @@
             {
               "type": "named",
               "data": {
-                "name": "align"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "shoot"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "align",
-      "waypointRelativePos": 1.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "align"
+                "name": "stopCarriage"
               }
             }
           ]
@@ -92,7 +84,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0,
+    "rotation": -120.0,
     "rotateFast": false
   },
   "reversed": false,
