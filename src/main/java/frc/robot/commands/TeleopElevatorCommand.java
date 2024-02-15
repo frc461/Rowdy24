@@ -4,16 +4,16 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Angler;
+import frc.robot.subsystems.Elevator;
 
-public class MoveAnglerCommand extends Command {
-    private final Angler angler;
+public class TeleopElevatorCommand extends Command {
+    private final Elevator elevator;
     private final DoubleSupplier motionSup;
 
-    public MoveAnglerCommand(Angler angler, DoubleSupplier motionSup) {
-        this.angler = angler;
+    public TeleopElevatorCommand(Elevator elevator, DoubleSupplier motionSup) {
+        this.elevator = elevator;
         this.motionSup = motionSup;
-        addRequirements(angler);
+        addRequirements(elevator);
     }
 
     @Override
@@ -21,11 +21,11 @@ public class MoveAnglerCommand extends Command {
         /* Apply Deadband */
         double axisValue = MathUtil.applyDeadband(motionSup.getAsDouble(), Constants.STICK_DEADBAND);
 
-        /* Move Angler */
-        if (axisValue != 0.0) {
-            angler.moveAngle(axisValue);
+        /* Move Elevator */
+        if (axisValue != 0) {
+            elevator.moveElevator(axisValue);
         } else {
-            angler.holdTarget();
+            elevator.holdTarget();
         }
     }
 }
