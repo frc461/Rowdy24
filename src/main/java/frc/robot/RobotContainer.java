@@ -99,13 +99,22 @@ public class RobotContainer {
 
     public RobotContainer() {
         NamedCommands.registerCommand(
-                "intakeCarriage",
+                "intakeNote",
                 new IntakeCarriageCommand(
                         intakeCarriage,
                         0.9,
                         1,
                         idleMode
                 ).until(intakeCarriage::noteInSystem)
+        );
+        NamedCommands.registerCommand(
+                "carriageShoot",
+                new IntakeCarriageCommand(
+                        intakeCarriage,
+                        0.9,
+                        1,
+                        idleMode
+                ).until(() -> !intakeCarriage.noteInSystem())
         );
         NamedCommands.registerCommand(
                 "alignAngler",
