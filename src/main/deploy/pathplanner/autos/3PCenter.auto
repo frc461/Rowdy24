@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.36,
-      "y": 5.518768403277548
+      "x": 1.1892520467505387,
+      "y": 5.339933333895103
     },
     "rotation": -90.0
   },
@@ -63,19 +63,7 @@
         {
           "type": "named",
           "data": {
-            "name": "carriage"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.99
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "align"
+            "name": "stopCarriage"
           }
         },
         {
@@ -93,7 +81,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.0
           }
         },
         {
@@ -111,7 +99,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.0
           }
         },
         {

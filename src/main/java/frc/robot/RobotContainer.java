@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
 
+import org.ejml.equation.Function;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -102,15 +104,14 @@ public class RobotContainer {
     }
 
     public RobotContainer() {
-        NamedCommands.registerCommand("intake", new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.5)));
-        NamedCommands.registerCommand("carriage", new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0.5)));
-        NamedCommands.registerCommand("stopIntake", new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0)));
+        NamedCommands.registerCommand("intake", new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.7)));
+        NamedCommands.registerCommand("carriage", new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0.6)));
+        NamedCommands.registerCommand("stopCarriage", new InstantCommand(() -> intakeCarriage.overrideCarriageAuto(0)));
         NamedCommands.registerCommand("shoot", new InstantCommand(() -> shooter.setSpeed(1.0)));
         NamedCommands.registerCommand("align", new InstantCommand(() -> 
-                angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()
-        )));
-        NamedCommands.registerCommand("overrideCarriage", new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(0.9)));
-        NamedCommands.registerCommand("constantAlign", new AutoAlign(angler, limelight));
+                angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists())
+        ));
+        NamedCommands.registerCommand("overrideCarriage", new InstantCommand(() -> intakeCarriage.overrideCarriageAuto(0.9)));
 
         swerve.setDefaultCommand(
                 new TeleopSwerve(

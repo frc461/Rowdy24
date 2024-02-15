@@ -77,7 +77,7 @@ public class IntakeCarriage extends SubsystemBase {
     public void setCarriageSpeed(double speed) {
         if(!getCarriageBeamBroken()) {
             carriage.set(speed);
-            
+            intake.set(speed);
         }
         else {
             carriage.set(0);
@@ -86,6 +86,11 @@ public class IntakeCarriage extends SubsystemBase {
     }
 
     public void overrideCarriageSpeed(double speed) {
+        carriage.set(speed);
+    }
+
+    public void overrideCarriageAuto(double speed){
+        intake.set(speed);
         carriage.set(speed);
     }
 
