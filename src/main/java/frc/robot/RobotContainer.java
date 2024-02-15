@@ -1,20 +1,24 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.event.BooleanEvent;
-import edu.wpi.first.wpilibj2.command.*;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.*;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.TeleopAngler;
+import frc.robot.commands.TeleopIntakeCarriage;
+import frc.robot.commands.TeleopLimelightTurret;
+import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.*;
 
 /**
@@ -89,7 +93,6 @@ public class RobotContainer {
     private final DigitalOutput lightNine = new DigitalOutput(9);
 
     /* Variables */
-    private final EventLoop eventLoop;
     private boolean idleMode = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
     private final SendableChooser<Command> chooser;
 
@@ -136,13 +139,6 @@ public class RobotContainer {
 
         chooser = AutoBuilder.buildAutoChooser("defaultAuto");
         SmartDashboard.putData("Auto Choices", chooser);
-
-        // Event Loop
-        eventLoop = new EventLoop();
-    }
-
-    public void periodic() {
-        eventLoop.poll();
     }
 
     /**
@@ -196,16 +192,14 @@ public class RobotContainer {
 //        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
 //        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(idleMode ? -0.15 : 0)));
 
-        BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
-        revShooterPressed.ifHigh(
-              () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                      limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
-        );
+        (new Trigger(() -> operator.getRawAxis(revShooter) > Constants.TRIGGER_DEADBAND)).whileTrue(new InstantCommand(
+                () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, true)
+        ));
 
-        BooleanEvent revShooterNotPressed = revShooterPressed.negate();
-        revShooterNotPressed.ifHigh(
-              () -> shooter.shoot(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)
-        );
+        (new Trigger(() -> operator.getRawAxis(revShooter) <= Constants.TRIGGER_DEADBAND)).whileTrue(new InstantCommand(
+                () -> shooter.shoot(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, false)
+        ));
 
 
         // driverStowButton.onTrue(
