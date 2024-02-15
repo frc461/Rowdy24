@@ -1,8 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.*;
-
-import org.ejml.equation.Function;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -66,7 +65,7 @@ public class RobotContainer {
     private final JoystickButton outtakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
     private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
 
-    private final POVButton toggleAutoSubsystems = new POVButton(operator, 0);
+    private final POVButton toggleIdleMode = new POVButton(operator, 0);
     private final POVButton operatorNinety = new POVButton(operator, 90);
     private final POVButton operatorOneEighty = new POVButton(operator, 180);
     private final POVButton operatorTwoSeventy = new POVButton(operator, 270);
@@ -90,18 +89,13 @@ public class RobotContainer {
     private final DigitalOutput lightNine = new DigitalOutput(9);
 
     /* Variables */
-    private final EventLoop eventLoop = new EventLoop();
-    private boolean autoSubsystems = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
+    private final EventLoop eventLoop;
+    private boolean idleMode = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
     private final SendableChooser<Command> chooser;
 
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
      */
-
-    public void startUp(){
-        intakeCarriage.setCarriageSpeed(0);
-        intakeCarriage.setIntakeSpeed(0);
-    }
 
     public RobotContainer() {
         NamedCommands.registerCommand("intake", new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.7)));
@@ -142,6 +136,9 @@ public class RobotContainer {
 
         chooser = AutoBuilder.buildAutoChooser("defaultAuto");
         SmartDashboard.putData("Auto Choices", chooser);
+
+        // Event Loop
+        eventLoop = new EventLoop();
     }
 
     public void periodic() {
@@ -162,7 +159,7 @@ public class RobotContainer {
 
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
 
-        toggleAutoSubsystems.onTrue(new InstantCommand(() -> autoSubsystems = !autoSubsystems));
+        toggleIdleMode.onTrue(new InstantCommand(() -> idleMode = !idleMode));
 
         driverLimelight.whileTrue(new TeleopLimelightTurret(
                 limelight,
@@ -178,7 +175,7 @@ public class RobotContainer {
         ));
 
         intakeButton.whileFalse(new ParallelCommandGroup(
-                new InstantCommand(() ->  intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(idleMode ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(0))
         ));
 
@@ -188,30 +185,27 @@ public class RobotContainer {
         ));
 
         outtakeButton.whileFalse(new ParallelCommandGroup(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
+                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(idleMode ? -0.15 : 0)),
                 new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(0))
         ));
 
-        
-        
-        //operatorNinety.whileTrue(new AutoShooter(shooter));
-        operatorOneEighty.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));
-        operatorOneEighty.whileFalse(new InstantCommand(() ->shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED: 0, true)));
+//        operatorOneEighty.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+//                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));
+//        operatorOneEighty.whileFalse(new InstantCommand(() ->shooter.shoot(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)));
+//
+//        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
+//        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(idleMode ? -0.15 : 0)));
 
-        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
-        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)));
+        BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
+        revShooterPressed.ifHigh(
+              () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                      limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
+        );
 
-        //  BooleanEvent revShooterPressed = operator.axisGreaterThan(revShooter, Constants.TRIGGER_DEADBAND, eventLoop);
-        //  revShooterPressed.ifHigh(
-        //          () ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-        //                  limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)
-        //  );
-
-        //  BooleanEvent revShooterNotPressed = revShooterPressed.negate();
-        //  revShooterNotPressed.ifHigh(
-        //          () -> shooter.shoot(autoSubsystems ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)
-        //  );
+        BooleanEvent revShooterNotPressed = revShooterPressed.negate();
+        revShooterNotPressed.ifHigh(
+              () -> shooter.shoot(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)
+        );
 
 
         // driverStowButton.onTrue(
@@ -225,7 +219,7 @@ public class RobotContainer {
         // elevatorAmp.onTrue(new InstantCommand(() ->
         //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
         // ));
-       operatorX.onTrue(new InstantCommand(() -> angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()))); // aim via limelight
+        operatorX.onTrue(new InstantCommand(() -> angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()))); // aim via limelight
     }
 
     // smartdashboard prints
