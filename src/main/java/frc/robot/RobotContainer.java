@@ -155,7 +155,23 @@ public class RobotContainer {
 
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
 
-        toggleIdleMode.onTrue(new InstantCommand(() -> idleMode = !idleMode));
+        toggleIdleMode.onTrue(new SequentialCommandGroup(
+                new InstantCommand(() -> idleMode = !idleMode),
+                new ParallelCommandGroup(
+                        (new InstantCommand(
+                                () -> intakeCarriage.setIntakeIdle(idleMode),
+                                intakeCarriage
+                        )).withInterruptBehavior(
+                                Command.InterruptionBehavior.kCancelSelf
+                        ),
+                        (new InstantCommand(
+                                () -> shooter.setShooterIdle(idleMode),
+                                shooter
+                        )).withInterruptBehavior(
+                                Command.InterruptionBehavior.kCancelSelf
+                        )
+                )
+        ));
 
         driverLimelight.whileTrue(new TeleopLimelightTurret(
                 limelight,
