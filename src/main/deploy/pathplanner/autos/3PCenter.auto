@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6445593933841892,
-      "y": 6.546038494920592
+      "x": 1.1892520467505387,
+      "y": 5.339933333895103
     },
-    "rotation": -30.0
+    "rotation": -90.0
   },
   "command": {
     "type": "sequential",
@@ -18,13 +18,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "shoot"
+                  "name": "intake"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
+                  "name": "shoot"
                 }
               },
               {
@@ -57,13 +57,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3.3.0"
+            "pathName": "back"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopCarriage"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "overrideCarriage"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "toFirst"
           }
         },
         {
@@ -75,13 +99,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "overrideCarriage"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         }
       ]

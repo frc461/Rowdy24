@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
 
+import org.ejml.equation.Function;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -92,24 +94,31 @@ public class RobotContainer {
     private boolean autoSubsystems = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
     private final SendableChooser<Command> chooser;
 
-    
-
-
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
      */
 
+    public void startUp(){
+        intakeCarriage.setCarriageSpeed(0);
+        intakeCarriage.setIntakeSpeed(0);
+    }
+
     public RobotContainer() {
-        NamedCommands.registerCommand("intake", new AutoIntakeCarriage(intakeCarriage));
-        NamedCommands.registerCommand("shoot", new AutoShooter(shooter));
-        NamedCommands.registerCommand("align", new AutoAlign(angler, limelight));
+        NamedCommands.registerCommand("intake", new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.7)));
+        NamedCommands.registerCommand("carriage", new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0.6)));
+        NamedCommands.registerCommand("stopCarriage", new InstantCommand(() -> intakeCarriage.overrideCarriageAuto(0)));
+        NamedCommands.registerCommand("shoot", new InstantCommand(() -> shooter.setSpeed(1.0)));
+        NamedCommands.registerCommand("align", new InstantCommand(() -> 
+                angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists())
+        ));
+        NamedCommands.registerCommand("overrideCarriage", new InstantCommand(() -> intakeCarriage.overrideCarriageAuto(0.9)));
 
         swerve.setDefaultCommand(
                 new TeleopSwerve(
                         swerve,
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis),
-                        () -> driver.getRawAxis(rotationAxis),
+                        () -> -driver.getRawAxis(rotationAxis),
                         robotCentric
                 )
         );
@@ -165,22 +174,22 @@ public class RobotContainer {
 
         intakeButton.whileTrue(new ParallelCommandGroup(
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.9)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(1))
+                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(1))
         ));
 
         intakeButton.whileFalse(new ParallelCommandGroup(
                 new InstantCommand(() ->  intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
+                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(0))
         ));
 
         outtakeButton.whileTrue(new ParallelCommandGroup(
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.9)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(-1))
+                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(-1))
         ));
 
         outtakeButton.whileFalse(new ParallelCommandGroup(
                 new InstantCommand(() -> intakeCarriage.setIntakeSpeed(autoSubsystems ? -0.15 : 0)),
-                new InstantCommand(() -> intakeCarriage.setCarriageSpeed(0))
+                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(0))
         ));
 
         
@@ -226,6 +235,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
+        SmartDashboard.putBoolean("Beam Brake", intakeCarriage.getCarriageBeamBroken());
 
         // elevator debug
         // SmartDashboard.putNumber("Elevator Position", elevator.getPosition());

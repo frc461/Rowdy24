@@ -3,66 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2500135231751948,
-        "y": 5.53
+        "x": 1.1892520467505387,
+        "y": 5.339933333895103
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9562125466843525,
-        "y": 5.501436114168526
+        "x": 1.9479310996536683,
+        "y": 5.4371998791390945
       },
       "isLocked": false,
-      "linkedName": "2.0.0"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.2,
-        "y": 5.53
+        "x": 2.9011432430447806,
+        "y": 5.518768403277548
       },
       "prevControl": {
-        "x": 2.3990235091581296,
-        "y": 5.514738214846801
+        "x": 2.0743776084708565,
+        "y": 5.446926533663493
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "0.2.0"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "shoot",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "align"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "shoot"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
       "name": "align",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.95,
       "command": {
         "type": "parallel",
         "data": {

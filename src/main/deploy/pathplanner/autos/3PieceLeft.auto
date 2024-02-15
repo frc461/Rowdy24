@@ -2,23 +2,29 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.5861994662377946,
-      "y": 4.4839877357479825
+      "x": 0.6445593933841892,
+      "y": 6.623851731115785
     },
-    "rotation": -150.0
+    "rotation": -30.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
+        },
+        {
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
+                  "name": "align"
                 }
               },
               {
@@ -28,42 +34,43 @@
                 }
               },
               {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.75
+                }
+              },
+              {
                 "type": "named",
                 "data": {
-                  "name": "align"
+                  "name": "overrideCarriage"
                 }
               }
             ]
           }
         },
         {
-          "type": "wait",
+          "type": "parallel",
           "data": {
-            "waitTime": 1.0
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftStartBack"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "overrideCarriage"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "carriage"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1.1.0"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "pathName": "LeftRingAdjust"
           }
         },
         {
@@ -73,9 +80,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.75
           }
         },
         {
@@ -85,21 +98,22 @@
           }
         },
         {
-          "type": "wait",
+          "type": "parallel",
           "data": {
-            "waitTime": 1.0
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftRingToBackLeft"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "0.1.1"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "pathName": "BackLeftToShootPos"
           }
         },
         {
@@ -109,9 +123,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.75
           }
         },
         {
