@@ -165,25 +165,14 @@ public class RobotContainer {
                 robotCentric)
         );
 
-        intakeButton.whileTrue(new ParallelCommandGroup(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(0.9)),
-                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(1))
-        ));
+        intakeButton.whileTrue(new TeleopIntakeCarriage(
+                intakeCarriage,
+                0.9,
+                1,
+                idleMode
+        ).until(intakeCarriage::noteInSystem));
 
-        intakeButton.whileFalse(new ParallelCommandGroup(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(idleMode ? -0.15 : 0)),
-                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(0))
-        ));
-
-        outtakeButton.whileTrue(new ParallelCommandGroup(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(-0.9)),
-                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(-1))
-        ));
-
-        outtakeButton.whileFalse(new ParallelCommandGroup(
-                new InstantCommand(() -> intakeCarriage.setIntakeSpeed(idleMode ? -0.15 : 0)),
-                new InstantCommand(() -> intakeCarriage.overrideCarriageSpeed(0))
-        ));
+        outtakeButton.whileTrue(new TeleopIntakeCarriage(intakeCarriage, -0.9, -1, idleMode));
 
 //        operatorOneEighty.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
 //                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));
