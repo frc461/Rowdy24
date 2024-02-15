@@ -3,13 +3,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeCarriage;
 
-public class TeleopIntakeCarriage extends Command {
+public class IntakeCarriageCommand extends Command {
     private final IntakeCarriage intakeCarriage;
     private final double intakeSpeed;
     private final double carriageSpeed;
     private final boolean idleMode;
 
-    public TeleopIntakeCarriage(IntakeCarriage intakeCarriage, double intakeSpeed, double carriageSpeed, boolean idleMode) {
+    public IntakeCarriageCommand(IntakeCarriage intakeCarriage, double intakeSpeed, double carriageSpeed, boolean idleMode) {
         this.intakeCarriage = intakeCarriage;
         this.intakeSpeed = intakeSpeed;
         this.carriageSpeed = carriageSpeed;
