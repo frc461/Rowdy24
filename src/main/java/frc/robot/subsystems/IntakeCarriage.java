@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkFlex;
@@ -19,8 +18,6 @@ public class IntakeCarriage extends SubsystemBase {
 
     DigitalInput ampBeam = new DigitalInput(7); // entrance of carriage (which is the amp shooter)
     DigitalInput shooterBeam = new DigitalInput(6); // completely exit through shooter
-
-    private boolean hasPiece = false;
 
     public IntakeCarriage() {
         intake = new CANSparkFlex(Constants.IntakeCarriage.INTAKE_ID, MotorType.kBrushless);
@@ -50,49 +47,45 @@ public class IntakeCarriage extends SubsystemBase {
     }
 
     public boolean getAmpBeamBroken() {
-        return !ampBeam.get();
+        return ampBeam.get();
     }
 
     public boolean getShooterBeamBroken() {
-        return !shooterBeam.get();
+        return shooterBeam.get();
     }
 
     public boolean getCarriageBeamBroken() {
         return carriageBeam.get();
     }
 
-    public void setIntakeSpeed(double speed) {
-        // if (speed <= 0 || !hasPiece) {
-        //     intake.set(speed);
-        // } else {
-        //     intake.set(-0.15);
-        // }
-        intake.set(speed);
+    public boolean noteInSystem() {
+        return getAmpBeamBroken() || getShooterBeamBroken() || getCarriageBeamBroken();
     }
+
+    // TODO: INTEGRATE INTAKE AND CARRIAGE LOGIC
 
     public void overrideIntakeSpeed(double speed) {
         intake.set(speed);
-    }
-
-    public void setCarriageSpeed(double speed) {
-        if(!getCarriageBeamBroken()) {
-            carriage.set(speed);
-            intake.set(speed);
-        }
-        else {
-            carriage.set(0);
-            intake.set(0);
-        }
     }
 
     public void overrideCarriageSpeed(double speed) {
         carriage.set(speed);
     }
 
-    public void overrideCarriageAuto(double speed){
-        intake.set(speed);
-        carriage.set(speed);
+    public void setIntakeCarriageSpeed(double intakeSpeed, double carriageSpeed) {
+        intake.set(intakeSpeed);
+        carriage.set(carriageSpeed);
     }
 
-    
+    public void setIntakeCarriageSpeed(double speed){
+        setIntakeCarriageSpeed(speed, speed);
+    }
+
+    public void setIntakeIdle(boolean idleMode) {
+        intake.set(idleMode ? Constants.IntakeCarriage.IDLE_INTAKE_SPEED : 0);
+    }
+
+    public void setCarriageIdle() {
+        carriage.set(0);
+    }
 }

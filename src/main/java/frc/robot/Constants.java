@@ -59,6 +59,7 @@ public final class Constants {
     public static final class IntakeCarriage {
         public static final int INTAKE_ID = 41;
         public static final int CARRIAGE_ID = 42;
+        public static final double IDLE_INTAKE_SPEED = -0.15;
     }
 
     public static final class Limelight {
