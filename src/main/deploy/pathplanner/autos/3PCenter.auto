@@ -18,13 +18,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
+                  "name": "carriageShoot"
                 }
               },
               {
@@ -37,24 +31,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "overrideCarriage"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "back"
@@ -63,25 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "stopCarriage"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "overrideCarriage"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
           }
         },
         {
@@ -97,21 +55,9 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "overrideCarriage"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "carriageShoot"
           }
         }
       ]

@@ -75,8 +75,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "stop carriage",
-      "waypointRelativePos": 1.7999999999999998,
+      "name": "intakeNote",
+      "waypointRelativePos": 0.35,
       "command": {
         "type": "parallel",
         "data": {
@@ -84,7 +84,7 @@
             {
               "type": "named",
               "data": {
-                "name": "stopCarriage"
+                "name": "intakeNote"
               }
             }
           ]
