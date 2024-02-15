@@ -13,6 +13,7 @@ public class Angler extends SubsystemBase {
     private final PIDController pidController;
     private final RelativeEncoder encoder;
     private double target;
+    private double error;
 
     public Angler() {
         angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
@@ -28,6 +29,12 @@ public class Angler extends SubsystemBase {
         );
 
         target = 0.0;
+        error = target - getPosition();
+    }
+
+    @Override
+    public void periodic() {
+        error = target - getPosition();
     }
 
     public double getPosition() { 
@@ -48,6 +55,10 @@ public class Angler extends SubsystemBase {
 
     public boolean upperSwitchTriggered() {
         return angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
+    }
+
+    public boolean minimalError() {
+        return error < 0.05;
     }
 
     public void checkLimitSwitches() {

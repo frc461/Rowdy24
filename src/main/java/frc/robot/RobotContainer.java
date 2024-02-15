@@ -107,10 +107,11 @@ public class RobotContainer {
                         idleMode
                 ).until(intakeCarriage::noteInSystem)
         );
+        NamedCommands.registerCommand(
+                "alignAngler",
+                new LimelightAlignAnglerCommand(angler, limelight).until(angler::minimalError)
+        );
         NamedCommands.registerCommand("shoot", new InstantCommand(() -> shooter.overrideShooterSpeed(1.0)));
-        NamedCommands.registerCommand("align", new InstantCommand(() -> 
-                angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists())
-        ));
 
         swerve.setDefaultCommand(
                 new TeleopSwerveCommand(
