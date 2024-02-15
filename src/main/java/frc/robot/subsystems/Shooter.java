@@ -65,7 +65,7 @@ public class Shooter extends SubsystemBase {
         return topEncoder.getVelocity();
     }
 
-    public void shoot(double speed, boolean idleShooter) {
+    public void shoot(double speed) {
         // //is the shooter up to speed? if so, alert the operator
         // //TODO: this might be problematic in auto...
         // if (leftEncoder.getVelocity() <= speed + Constants.Shooter.SHOOTER_SPEED_TOLERANCE && leftEncoder.getVelocity() >= speed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE){
@@ -76,17 +76,16 @@ public class Shooter extends SubsystemBase {
         //     SmartDashboard.putBoolean("Shooter Ready", false);
         // }
         currentSpeed = speed;
-            
-        if (idleShooter) {
-            bottomShooter.set(speed);
-            topShooter.set(speed);
-        } else {
-            topController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
-            bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
-        }
+        topController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+        bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
     }
 
-    public void setSpeed(double speed) {
+    public void setShooterIdle(boolean idleMode) {
+        bottomShooter.set(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0);
+        topShooter.set(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0);
+    }
+
+    public void overrideShooterSpeed(double speed) {
         topShooter.set(speed);
         bottomShooter.set(speed);
     }

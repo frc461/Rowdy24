@@ -194,11 +194,11 @@ public class RobotContainer {
 
         (new Trigger(() -> operator.getRawAxis(revShooter) > Constants.TRIGGER_DEADBAND)).whileTrue(new InstantCommand(
                 () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, true)
+                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER)
         ));
 
         (new Trigger(() -> operator.getRawAxis(revShooter) <= Constants.TRIGGER_DEADBAND)).whileTrue(new InstantCommand(
-                () -> shooter.shoot(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, false)
+                () -> shooter.setShooterIdle(idleMode)
         ));
 
 
