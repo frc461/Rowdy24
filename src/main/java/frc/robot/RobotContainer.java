@@ -107,6 +107,7 @@ public class RobotContainer {
                         idleMode
                 ).until(intakeCarriage::noteInSystem)
         );
+
         NamedCommands.registerCommand(
                 "carriageShoot",
                 new IntakeCarriageCommand(
@@ -116,11 +117,16 @@ public class RobotContainer {
                         idleMode
                 ).until(() -> !intakeCarriage.noteInSystem())
         );
+
         NamedCommands.registerCommand(
                 "alignAngler",
                 new LimelightAlignAnglerCommand(angler, limelight).until(angler::minimalError)
         );
-        NamedCommands.registerCommand("shoot", new InstantCommand(() -> shooter.overrideShooterSpeed(1.0)));
+
+        NamedCommands.registerCommand(
+                "shoot", 
+                new InstantCommand(() -> shooter.overrideShooterSpeed(1.0))
+        );
 
         swerve.setDefaultCommand(
                 new TeleopSwerveCommand(
@@ -257,8 +263,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
 
         //shooter debug
-        SmartDashboard.putNumber("Shooter Left", shooter.getLeftShooterSpeed());
-        SmartDashboard.putNumber("Shooter Right", shooter.getRightShooterSpeed());
+        SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
+        SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
 
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
     }

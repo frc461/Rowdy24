@@ -12,46 +12,27 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "align"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "overrideCarriage"
+            "name": "alignAngler"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "carriageShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeNote"
           }
         },
         {
@@ -61,33 +42,21 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "alignAngler"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "align"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "name": "carriageShoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "overrideCarriage"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "intakeNote"
           }
         },
         {
@@ -97,27 +66,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "alignAngler"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "align"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "overrideCarriage"
+            "name": "carriageShoot"
           }
         }
       ]

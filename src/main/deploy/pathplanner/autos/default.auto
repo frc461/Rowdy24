@@ -20,12 +20,6 @@
                 "data": {
                   "pathName": "default"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "constantAlign"
-                }
               }
             ]
           }

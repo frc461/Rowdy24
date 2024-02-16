@@ -57,11 +57,11 @@ public class Shooter extends SubsystemBase {
         // }
     }
 
-    public double getLeftShooterSpeed() {
+    public double getBottomShooterSpeed() {
         return bottomEncoder.getVelocity();
     }
 
-    public double getRightShooterSpeed() {
+    public double getTopShooterSpeed() {
         return topEncoder.getVelocity();
     }
 
