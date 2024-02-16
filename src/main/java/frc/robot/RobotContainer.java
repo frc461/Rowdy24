@@ -41,10 +41,6 @@ public class RobotContainer {
     /* Controllers */
     public final static Joystick driver = new Joystick(0);
 
-//probably not useful
-//     private final CommandXboxController driver2 =
-//     new CommandXboxController(0);
-
     public final static Joystick operator = new Joystick(1);
 
     /* Operate Controls */
@@ -98,6 +94,43 @@ public class RobotContainer {
      */
 
     public RobotContainer() {
+        // Register autonomous commands
+        registerAutoCommands();
+
+        // Configure autonomous path chooser
+        chooser = AutoBuilder.buildAutoChooser("defaultAuto");
+        SmartDashboard.putData("Auto Choices", chooser);
+
+        // Register default commands/controller axis commands
+        swerve.setDefaultCommand(
+                new TeleopSwerveCommand(
+                        swerve,
+                        () -> -driver.getRawAxis(translationAxis),
+                        () -> -driver.getRawAxis(strafeAxis),
+                        () -> -driver.getRawAxis(rotationAxis),
+                        robotCentric
+                )
+        );
+
+        angler.setDefaultCommand(
+                new TeleopAnglerCommand(
+                        angler,
+                        () -> -operator.getRawAxis(anglerAxis)
+                )
+        );
+
+//         elevator.setDefaultCommand(
+//                 new TeleopElevator(
+//                         elevator,
+//                         () -> -operator.getRawAxis(elevatorAxis)
+//                 )
+//         );
+
+        // Configure controller button bindings
+        configureButtonBindings();
+    }
+
+    public void registerAutoCommands() {
         NamedCommands.registerCommand(
                 "intakeNote",
                 new IntakeCarriageCommand(
@@ -127,36 +160,6 @@ public class RobotContainer {
                 "shoot", 
                 new InstantCommand(() -> shooter.overrideShooterSpeed(1.0))
         );
-
-        swerve.setDefaultCommand(
-                new TeleopSwerveCommand(
-                        swerve,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
-                        robotCentric
-                )
-        );
-
-        angler.setDefaultCommand(
-                new TeleopAnglerCommand(
-                        angler,
-                        () -> -operator.getRawAxis(anglerAxis)
-                )
-        );
-
-        // elevator.setDefaultCommand(
-        //         new TeleopElevator(
-        //                 elevator,
-        //                 () -> -operator.getRawAxis(elevatorAxis)
-        //         )
-        // );
-
-        // Configure the button bindings
-        configureButtonBindings();
-
-        chooser = AutoBuilder.buildAutoChooser("defaultAuto");
-        SmartDashboard.putData("Auto Choices", chooser);
     }
 
     /**
@@ -220,21 +223,21 @@ public class RobotContainer {
         ));
 
 
-        // driverStowButton.onTrue(
-        //         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-        // );
+//        driverStowButton.onTrue(
+//             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+//        );
+//
+//        operatorStowButton.onTrue(
+//             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+//        );
+//
+//        elevatorAmp.onTrue(new InstantCommand(() ->
+//             elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
+//        ));
 
-        // operatorStowButton.onTrue(
-        //         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-        // );
-
-        // elevatorAmp.onTrue(new InstantCommand(() ->
-        //         elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
-        // ));
         operatorX.onTrue(new InstantCommand(() -> angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()))); // aim via limelight
     }
 
-    // smartdashboard prints
     public void printValues() {
         // robot position
         SmartDashboard.putString("Robot Pose2d", swerve.getPose().getTranslation().toString());
@@ -246,12 +249,12 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
         SmartDashboard.putBoolean("note in system", intakeCarriage.noteInSystem());
 
-        // elevator debug
-        // SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
-        // SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
-        // SmartDashboard.putNumber("Elevator Power", elevator.elevatorPower());
-        // SmartDashboard.putBoolean("Elevator Limit Triggered?",
-        // elevator.elevatorSwitchTriggered());
+//        elevator debug
+//        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
+//        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
+//        SmartDashboard.putNumber("Elevator Power", elevator.elevatorPower());
+//        SmartDashboard.putBoolean("Elevator Limit Triggered?",
+//        elevator.elevatorSwitchTriggered());
 
         // limelight debug
         SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());
@@ -262,7 +265,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight Y", limelight.getRY());
         SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
 
-        //shooter debug
+        // shooter debug
         SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
 
@@ -270,7 +273,7 @@ public class RobotContainer {
     }
 
     /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
+     * Passes the autonomous command retrieved from the chooser to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
      */
