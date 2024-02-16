@@ -204,12 +204,12 @@ public class RobotContainer {
 //        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
 //        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(idleMode ? -0.15 : 0)));
 
-        (new Trigger(() -> operator.getRawAxis(revShooter) > Constants.TRIGGER_DEADBAND)).whileTrue(new InstantCommand(
+        new Trigger(() -> operator.getRawAxis(revShooter) > Constants.TRIGGER_DEADBAND).whileTrue(new InstantCommand(
                 () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER)
         ));
 
-        (new Trigger(() -> operator.getRawAxis(revShooter) <= Constants.TRIGGER_DEADBAND)).whileTrue(new InstantCommand(
+        new Trigger(() -> operator.getRawAxis(revShooter) <= Constants.TRIGGER_DEADBAND).whileTrue(new InstantCommand(
                 () -> shooter.setShooterIdle(idleMode)
         ));
 
