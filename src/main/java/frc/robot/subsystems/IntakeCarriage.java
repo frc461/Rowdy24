@@ -14,10 +14,10 @@ public class IntakeCarriage extends SubsystemBase {
     private final CANSparkMax carriage;
 
     // TODO: Implement beam break logic Please!
-    DigitalInput carriageBeam = new DigitalInput(2); // end of carriage (on shooter side)
+    DigitalInput carriageBeam = new DigitalInput(6); // end of carriage (on shooter side)
 
-    DigitalInput ampBeam = new DigitalInput(7); // entrance of carriage (which is the amp shooter)
-    DigitalInput shooterBeam = new DigitalInput(6); // completely exit through shooter
+    DigitalInput ampBeam = new DigitalInput(2); // entrance of carriage (which is the amp shooter)
+    DigitalInput shooterBeam = new DigitalInput(7); // completely exit through shooter
 
     public IntakeCarriage() {
         intake = new CANSparkFlex(Constants.IntakeCarriage.INTAKE_ID, MotorType.kBrushless);
@@ -51,15 +51,15 @@ public class IntakeCarriage extends SubsystemBase {
     }
 
     public boolean getShooterBeamBroken() {
-        return shooterBeam.get();
+        return !shooterBeam.get();
     }
 
     public boolean getCarriageBeamBroken() {
-        return carriageBeam.get();
+        return !carriageBeam.get();
     }
 
     public boolean noteInSystem() {
-        return getAmpBeamBroken() || getShooterBeamBroken() || getCarriageBeamBroken();
+        return getShooterBeamBroken() || getCarriageBeamBroken();
     }
 
     // TODO: INTEGRATE INTAKE AND CARRIAGE LOGIC

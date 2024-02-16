@@ -235,7 +235,10 @@ public class RobotContainer {
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
-        SmartDashboard.putBoolean("Beam Brake", intakeCarriage.getCarriageBeamBroken());
+        SmartDashboard.putBoolean("Beam Brake carriage", intakeCarriage.getCarriageBeamBroken());
+        SmartDashboard.putBoolean("Beam Brake amp", intakeCarriage.getAmpBeamBroken());
+        SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
+        SmartDashboard.putBoolean("note in system", intakeCarriage.noteInSystem());
 
         // elevator debug
         // SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
