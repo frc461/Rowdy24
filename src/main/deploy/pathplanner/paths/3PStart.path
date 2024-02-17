@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 2.9011432430447806,
+        "x": 2.9,
         "y": 5.518768403277548
       },
       "prevControl": {
-        "x": 2.074259172006675,
+        "x": 2.0731159289618946,
         "y": 5.44691624211694
       },
       "nextControl": null,
@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "align",
+      "name": "intake",
       "waypointRelativePos": 0.95,
       "command": {
         "type": "parallel",

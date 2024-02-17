@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "backCenter"
+            "pathName": "3PStart"
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "toFirstTest"
+            "pathName": "toFirstArchive"
           }
         },
         {
