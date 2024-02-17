@@ -15,7 +15,12 @@ public class LimelightAlignAnglerCommand extends Command {
     }
 
     @Override
-    public void execute() {
+    public void initialize() {
         angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists());
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 }
