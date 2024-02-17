@@ -140,6 +140,28 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
+                "autoShoot",
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> angler.setAlignedAngle(
+                                limelight.getRX(),
+                                limelight.getRZ(),
+                                limelight.tagExists()
+                        )),
+                        new RevUpShooterCommand(
+                                shooter,
+                                limelight,
+                                idleMode
+                        ).until(() -> !intakeCarriage.noteInSystem()),
+                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1,
+                                idleMode
+                        ).until(() -> !intakeCarriage.noteInSystem()))
+                )
+        );
+
+        NamedCommands.registerCommand(
                 "carriageShoot",
                 new IntakeCarriageCommand(
                         intakeCarriage,
