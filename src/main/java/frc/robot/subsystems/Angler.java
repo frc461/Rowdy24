@@ -29,7 +29,7 @@ public class Angler extends SubsystemBase {
         );
 
         target = 0.0;
-        error = target - getPosition();
+        error = 1000;
     }
 
     @Override
@@ -49,16 +49,16 @@ public class Angler extends SubsystemBase {
         return angler.getAppliedOutput();
     }
 
+    public double getError() {
+        return error;
+    }
+
     public boolean lowerSwitchTriggered() { 
         return angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
     }
 
     public boolean upperSwitchTriggered() {
         return angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
-    }
-
-    public boolean minimalError() {
-        return error < 0.05;
     }
 
     public void checkLimitSwitches() {

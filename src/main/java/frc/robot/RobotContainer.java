@@ -143,7 +143,7 @@ public class RobotContainer {
                 "carriageShoot",
                 new IntakeCarriageCommand(
                         intakeCarriage,
-                        0.9,
+                        0,
                         1,
                         idleMode
                 ).until(() -> !intakeCarriage.noteInSystem())
@@ -151,7 +151,11 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "alignAngler",
-                new LimelightAlignAnglerCommand(angler, limelight).until(angler::minimalError)
+                new InstantCommand(() -> angler.setAlignedAngle(
+                        limelight.getRX(),
+                        limelight.getRZ(),
+                        limelight.tagExists()
+                ))
         );
 
         NamedCommands.registerCommand(
@@ -217,7 +221,11 @@ public class RobotContainer {
 //        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(idleMode ? -0.15 : 0)));
 
         new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > Constants.TRIGGER_DEADBAND).onTrue(
-                new LimelightAlignAnglerCommand(angler, limelight)
+                new InstantCommand(() -> angler.setAlignedAngle(
+                        limelight.getRX(),
+                        limelight.getRZ(),
+                        limelight.tagExists()
+                ))
         );
 
         new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > Constants.TRIGGER_DEADBAND).whileTrue(
@@ -250,7 +258,11 @@ public class RobotContainer {
 //             elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
 //        ));
 
-        alignAngler.onTrue(new LimelightAlignAnglerCommand(angler, limelight).until(angler::minimalError)); // aim via limelight
+        alignAngler.onTrue(new InstantCommand(() -> angler.setAlignedAngle(
+                limelight.getRX(),
+                limelight.getRZ(),
+                limelight.tagExists()
+        ))); // aim via limelight
     }
 
     public void printValues() {
@@ -281,11 +293,14 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
 
         // shooter debug
+        SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
         SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
-        SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
+        SmartDashboard.putNumber("Shooter error", shooter.getError());
 
+        // angler debug
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
+        SmartDashboard.putNumber("Angler error", angler.getError());
     }
 
     /**

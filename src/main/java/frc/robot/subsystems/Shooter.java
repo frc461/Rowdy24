@@ -16,8 +16,8 @@ public class Shooter extends SubsystemBase {
 
     private final RelativeEncoder bottomEncoder;
     private final RelativeEncoder topEncoder;
-    private double target = 0;
-    private double error = 1000;
+    private double target;
+    private double error;
 
     public Shooter() {
         bottomShooter = new CANSparkFlex(Constants.Shooter.BOTTOM_SHOOTER_ID, MotorType.kBrushless);
@@ -47,6 +47,9 @@ public class Shooter extends SubsystemBase {
         
         bottomShooter.burnFlash();
         topShooter.burnFlash();
+
+        target = 0.0;
+        error = Math.abs(target - (getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
     }
 
     @Override
@@ -60,6 +63,10 @@ public class Shooter extends SubsystemBase {
 
     public double getTopShooterSpeed() {
         return topEncoder.getVelocity();
+    }
+
+    public double getError() {
+        return error;
     }
 
     public void shoot(double speed) {
