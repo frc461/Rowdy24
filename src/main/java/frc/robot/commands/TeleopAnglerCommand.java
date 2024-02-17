@@ -13,7 +13,7 @@ public class TeleopAnglerCommand extends Command {
     public TeleopAnglerCommand(Angler angler, DoubleSupplier motionSup) {
         this.angler = angler;
         this.motionSup = motionSup;
-        addRequirements(angler);
+        addRequirements(this.angler);
     }
 
     @Override

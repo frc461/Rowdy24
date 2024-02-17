@@ -11,7 +11,7 @@ public class LimelightAlignAnglerCommand extends Command {
     public LimelightAlignAnglerCommand(Angler angler, Limelight limelight) {
         this.angler = angler;
         this.limelight = limelight;
-        addRequirements(angler, limelight);
+        addRequirements(this.angler, this.limelight);
     }
 
     @Override

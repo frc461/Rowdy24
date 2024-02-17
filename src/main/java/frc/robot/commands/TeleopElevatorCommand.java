@@ -13,7 +13,7 @@ public class TeleopElevatorCommand extends Command {
     public TeleopElevatorCommand(Elevator elevator, DoubleSupplier motionSup) {
         this.elevator = elevator;
         this.motionSup = motionSup;
-        addRequirements(elevator);
+        addRequirements(this.elevator);
     }
 
     @Override

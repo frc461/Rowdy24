@@ -16,7 +16,7 @@ public class IntakeCarriageCommand extends Command {
         this.carriageSpeed = carriageSpeed;
         this.idleMode = idleMode;
         this.inCarriage = false;
-        addRequirements(intakeCarriage);
+        addRequirements(this.intakeCarriage);
     }
 
     @Override

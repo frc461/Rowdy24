@@ -27,7 +27,7 @@ public class TeleopSwerveCommand extends Command {
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
         this.robotCentricSup = robotCentricSup;
-        addRequirements(swerve);
+        addRequirements(this.swerve);
     }
 
     @Override
