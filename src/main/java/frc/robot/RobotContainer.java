@@ -8,10 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -57,7 +54,7 @@ public class RobotContainer {
     private final JoystickButton operatorStowButton = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kB.value);
     private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
-    private final JoystickButton operatorX = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton alignAngler = new JoystickButton(operator, XboxController.Button.kX.value);
 
     private final JoystickButton outtakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
     private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
@@ -202,7 +199,12 @@ public class RobotContainer {
                 robotCentric)
         );
 
-        intakeButton.whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
+        intakeButton.whileTrue(new IntakeCarriageCommand(
+                intakeCarriage,
+                0.9,
+                1,
+                idleMode
+        ).until(intakeCarriage::noteInSystem));
 
         outtakeButton.whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
 
@@ -235,7 +237,7 @@ public class RobotContainer {
 //             elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
 //        ));
 
-        operatorX.onTrue(new InstantCommand(() -> angler.setAlignedAngle(limelight.getRX(), limelight.getRZ(), limelight.tagExists()))); // aim via limelight
+        alignAngler.onTrue(new LimelightAlignAnglerCommand(angler, limelight).until(angler::minimalError)); // aim via limelight
     }
 
     public void printValues() {
@@ -268,6 +270,7 @@ public class RobotContainer {
         // shooter debug
         SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
+        SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
 
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
     }

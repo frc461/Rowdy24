@@ -34,9 +34,6 @@ public class IntakeCarriageCommand extends Command {
         } else {
             intakeCarriage.setIntakeCarriageSpeed(intakeSpeed, carriageSpeed);
         }
-        if (intakeCarriage.noteInSystem() & !inCarriage) {
-            cancel();
-        }
     }
 
     @Override
