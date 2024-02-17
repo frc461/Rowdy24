@@ -28,6 +28,18 @@
           "data": {
             "name": "autoShoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "0.2.4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoShoot"
+          }
         }
       ]
     }

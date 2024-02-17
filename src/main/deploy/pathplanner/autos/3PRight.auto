@@ -12,15 +12,33 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "autoShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "1.1.0"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "autoShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "0.1.1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoShoot"
           }
         }
       ]

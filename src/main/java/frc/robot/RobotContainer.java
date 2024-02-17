@@ -96,7 +96,7 @@ public class RobotContainer {
         registerAutoCommands();
 
         // Configure autonomous path chooser
-        chooser = AutoBuilder.buildAutoChooser("defaultAuto");
+        chooser = AutoBuilder.buildAutoChooser("default");
         SmartDashboard.putData("Auto Choices", chooser);
 
         // Register default commands/controller axis commands
