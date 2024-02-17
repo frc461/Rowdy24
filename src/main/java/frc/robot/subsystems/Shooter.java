@@ -16,7 +16,8 @@ public class Shooter extends SubsystemBase {
 
     private final RelativeEncoder bottomEncoder;
     private final RelativeEncoder topEncoder;
-    double currentSpeed = 0;
+    private double target = 0;
+    private double error = 1000;
 
     public Shooter() {
         bottomShooter = new CANSparkFlex(Constants.Shooter.BOTTOM_SHOOTER_ID, MotorType.kBrushless);
@@ -50,11 +51,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-//         if (getLeftShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE && getRightShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE) {
-//             intakeCarriage.setCarriageSpeed(0.5);
-//         } else {
-//             intakeCarriage.setCarriageSpeed(0);
-//         }
+        error = Math.abs(target - (getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
     }
 
     public double getBottomShooterSpeed() {
@@ -75,10 +72,13 @@ public class Shooter extends SubsystemBase {
         //     RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0);
         //     SmartDashboard.putBoolean("Shooter Ready", false);
         // }
-
-        currentSpeed = speed;
+        target = speed;
         topController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
         bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+    }
+
+    public boolean minimalError() {
+        return error < 300 && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 5000;
     }
 
     public void setShooterIdle(boolean idleMode) {

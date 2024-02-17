@@ -34,7 +34,7 @@ public class Angler extends SubsystemBase {
 
     @Override
     public void periodic() {
-        error = target - getPosition();
+        error = Math.abs(target - getPosition());
     }
 
     public double getPosition() { 
@@ -113,6 +113,8 @@ public class Angler extends SubsystemBase {
                                 Math.pow(dist, Constants.Angler.UPPER_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
                 ));
             }
+        } else {
+            target = getPosition();
         }
     }
 }
