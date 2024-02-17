@@ -43,7 +43,8 @@ public class RobotContainer {
     /* Operate Controls */
     private final int anglerAxis = XboxController.Axis.kLeftY.value;
     private final int elevatorAxis = XboxController.Axis.kRightY.value;
-    private final int revShooter = XboxController.Axis.kRightTrigger.value;
+    private final int revShoot = XboxController.Axis.kLeftTrigger.value;
+    private final int autoAlignRevShoot = XboxController.Axis.kRightTrigger.value;
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -215,14 +216,26 @@ public class RobotContainer {
 //        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
 //        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(idleMode ? -0.15 : 0)));
 
-        new Trigger(() -> operator.getRawAxis(revShooter) > Constants.TRIGGER_DEADBAND).whileTrue(new InstantCommand(
-                () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-                        limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER)
-        ));
+        new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > Constants.TRIGGER_DEADBAND).onTrue(
+                new LimelightAlignAnglerCommand(angler, limelight)
+        );
 
-        new Trigger(() -> operator.getRawAxis(revShooter) <= Constants.TRIGGER_DEADBAND).whileTrue(new InstantCommand(
-                () -> shooter.setShooterIdle(idleMode)
-        ));
+        new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > Constants.TRIGGER_DEADBAND).whileTrue(
+                new ParallelCommandGroup(
+                        new RevUpShooterCommand(shooter, limelight, idleMode),
+                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1,
+                                idleMode
+                        ))
+                )
+        );
+
+        new Trigger(() -> operator.getRawAxis(revShoot) > Constants.TRIGGER_DEADBAND).whileTrue(new RevUpShooterCommand(
+                shooter, limelight, idleMode
+                )
+        );
 
 
 //        driverStowButton.onTrue(
