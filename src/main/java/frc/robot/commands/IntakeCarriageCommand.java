@@ -8,18 +8,23 @@ public class IntakeCarriageCommand extends Command {
     private final double intakeSpeed;
     private final double carriageSpeed;
     private final boolean idleMode;
+    private boolean inCarriage;
 
     public IntakeCarriageCommand(IntakeCarriage intakeCarriage, double intakeSpeed, double carriageSpeed, boolean idleMode) {
         this.intakeCarriage = intakeCarriage;
         this.intakeSpeed = intakeSpeed;
         this.carriageSpeed = carriageSpeed;
         this.idleMode = idleMode;
+        this.inCarriage = false;
         addRequirements(intakeCarriage);
     }
 
     @Override
     public void initialize() {
         intakeCarriage.setIntakeCarriageSpeed(intakeSpeed, carriageSpeed);
+        if (intakeCarriage.noteInSystem()) {
+            inCarriage = true;
+        }
     }
 
     @Override
@@ -28,6 +33,9 @@ public class IntakeCarriageCommand extends Command {
             intakeCarriage.setIntakeIdle(idleMode);
         } else {
             intakeCarriage.setIntakeCarriageSpeed(intakeSpeed, carriageSpeed);
+        }
+        if (intakeCarriage.noteInSystem() & !inCarriage) {
+            cancel();
         }
     }
 
