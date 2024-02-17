@@ -12,34 +12,9 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "shoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "alignAngler"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "carriageShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeNote"
+            "name": "autoShoot"
           }
         },
         {
@@ -51,19 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "alignAngler"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "carriageShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeNote"
+            "name": "autoShoot"
           }
         },
         {
@@ -75,13 +38,7 @@
         {
           "type": "named",
           "data": {
-            "name": "alignAngler"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "carriageShoot"
+            "name": "autoShoot"
           }
         }
       ]
