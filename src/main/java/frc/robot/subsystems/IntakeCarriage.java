@@ -29,11 +29,6 @@ public class IntakeCarriage extends SubsystemBase {
         carriage.setInverted(true);
     }
 
-    @Override
-    public void periodic() {
-        SmartDashboard.putBoolean("beam break", getCarriageBeamBroken());
-    }
-
     public double getIntakeSpeed() {
         return intake.get();
     }

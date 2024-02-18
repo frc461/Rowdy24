@@ -76,7 +76,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean minimalError() {
-        return error < Constants.Shooter.SHOOTER_SPEED_TOLERANCE && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 5000;
+        return error < Constants.Shooter.SHOOTER_ERROR_TOLERANCE && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 5000;
     }
 
     public void setShooterIdle(boolean idleMode) {

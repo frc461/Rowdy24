@@ -162,16 +162,6 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
-                "carriageShoot",
-                new IntakeCarriageCommand(
-                        intakeCarriage,
-                        0,
-                        1,
-                        idleMode
-                ).until(() -> !intakeCarriage.noteInSystem())
-        );
-
-        NamedCommands.registerCommand(
                 "alignAngler",
                 new InstantCommand(() -> angler.setAlignedAngle(
                         limelight.getRX(),
@@ -181,8 +171,18 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
-                "shoot", 
+                "shoot",
                 new InstantCommand(() -> shooter.overrideShooterSpeed(1.0))
+        );
+
+        NamedCommands.registerCommand(
+                "carriageShoot",
+                new IntakeCarriageCommand(
+                        intakeCarriage,
+                        0,
+                        1,
+                        idleMode
+                ).until(() -> !intakeCarriage.noteInSystem())
         );
     }
 
@@ -197,7 +197,6 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         /* Driver Buttons */
-
         zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
 
         toggleIdleMode.onTrue(new SequentialCommandGroup(
@@ -236,13 +235,6 @@ public class RobotContainer {
         outtakeButton.whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
 
         overrideIntake.whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
-
-//        operatorOneEighty.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
-//                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));
-//        operatorOneEighty.whileFalse(new InstantCommand(() ->shooter.shoot(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0, true)));
-//
-//        outtakeButtonDriver.whileTrue(new InstantCommand(() -> intakeCarriage.overrideIntakeSpeed(-0.9)));
-//        outtakeButtonDriver.whileFalse(new InstantCommand(() -> intakeCarriage.setIntakeSpeed(idleMode ? -0.15 : 0)));
 
         new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > Constants.TRIGGER_DEADBAND).onTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
@@ -286,7 +278,7 @@ public class RobotContainer {
                 limelight.getRX(),
                 limelight.getRZ(),
                 limelight.tagExists()
-        ))); // aim via limelight
+        )));
     }
 
     public void printValues() {
@@ -334,8 +326,6 @@ public class RobotContainer {
      */
 
     public Command getAutonomousCommand() {
-        // TODO: work on paths
-        //swerve.gyro.setYaw(90);
         return chooser.getSelected();
     }
 }
