@@ -16,6 +16,7 @@ public class Elevator extends SubsystemBase {
     private double target;
 
     public Elevator() {
+        // TODO: REBUILD ELEVATOR SUBSYSTEM
         elevator = new CANSparkMax(Constants.Elevator.ELEVATOR_ID, MotorType.kBrushless);
         elevator.restoreFactoryDefaults();
         elevator.setSmartCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
