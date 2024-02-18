@@ -13,6 +13,7 @@ public class Angler extends SubsystemBase {
     private final PIDController pidController;
     private final RelativeEncoder encoder;
     private double target;
+    private double error;
 
     public Angler() {
         angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
@@ -28,6 +29,12 @@ public class Angler extends SubsystemBase {
         );
 
         target = 0.0;
+        error = 1000;
+    }
+
+    @Override
+    public void periodic() {
+        error = Math.abs(target - getPosition());
     }
 
     public double getPosition() { 
@@ -40,6 +47,10 @@ public class Angler extends SubsystemBase {
 
     public double anglerPower() {
         return angler.getAppliedOutput();
+    }
+
+    public double getError() {
+        return error;
     }
 
     public boolean lowerSwitchTriggered() { 
@@ -90,7 +101,7 @@ public class Angler extends SubsystemBase {
 
     public void setAlignedAngle(double x, double z, boolean tag) {
         double dist = Math.hypot(x, z);
-        if(tag) {
+        if (tag) {
             if (dist < Constants.Angler.UPPER_BOUND_LIMIT) {
                 setAngle(Math.min(
                         Constants.Angler.TIGHT_BOUND_COEFFICIENT *
@@ -102,6 +113,8 @@ public class Angler extends SubsystemBase {
                                 Math.pow(dist, Constants.Angler.UPPER_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
                 ));
             }
+        } else {
+            target = getPosition();
         }
     }
 }

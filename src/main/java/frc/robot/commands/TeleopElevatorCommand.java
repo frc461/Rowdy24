@@ -6,14 +6,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Elevator;
 
-public class TeleopElevator extends Command {
+public class TeleopElevatorCommand extends Command {
     private final Elevator elevator;
     private final DoubleSupplier motionSup;
 
-    public TeleopElevator(Elevator elevator, DoubleSupplier motionSup) {
+    public TeleopElevatorCommand(Elevator elevator, DoubleSupplier motionSup) {
         this.elevator = elevator;
         this.motionSup = motionSup;
-        addRequirements(elevator);
+        addRequirements(this.elevator);
     }
 
     @Override

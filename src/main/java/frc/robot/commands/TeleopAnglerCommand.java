@@ -6,14 +6,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Angler;
 
-public class TeleopAngler extends Command {
+public class TeleopAnglerCommand extends Command {
     private final Angler angler;
     private final DoubleSupplier motionSup;
 
-    public TeleopAngler(Angler angler, DoubleSupplier motionSup) {
+    public TeleopAnglerCommand(Angler angler, DoubleSupplier motionSup) {
         this.angler = angler;
         this.motionSup = motionSup;
-        addRequirements(angler);
+        addRequirements(this.angler);
     }
 
     @Override
