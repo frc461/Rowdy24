@@ -3,59 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6445593933841892,
-        "y": 6.546038494920592
+        "x": 0.7289749903573883,
+        "y": 6.70087383230322
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.046472863877797,
-        "y": 7.0909495477056605
+        "x": 1.130888460850996,
+        "y": 7.245784885088288
       },
       "isLocked": false,
       "linkedName": "3.0.0"
     },
     {
       "anchor": {
-        "x": 3.0275897518619677,
-        "y": 7.071277839238143
+        "x": 3.2453880092945377,
+        "y": 6.986512690617974
       },
       "prevControl": {
-        "x": 2.096715985098637,
-        "y": 6.963174630052964
-      },
-      "nextControl": {
-        "x": 3.2411665802516567,
-        "y": 7.0960807087365465
-      },
-      "isLocked": false,
-      "linkedName": "0.3.0"
-    },
-    {
-      "anchor": {
-        "x": 3.024121816762152,
-        "y": 6.55936085946246
-      },
-      "prevControl": {
-        "x": 3.088850788812689,
-        "y": 6.4840614681229365
+        "x": 1.9371501613373598,
+        "y": 6.953316823300314
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "shoot 0.3"
+      "linkedName": "0.3.0"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -90.0,
-      "rotateFast": true
+      "waypointRelativePos": 0.55,
+      "rotationDegrees": 90.0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
-      "waypointRelativePos": 0.75,
+      "name": "shoot",
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,7 +47,24 @@
             {
               "type": "named",
               "data": {
-                "name": "intakeNote"
+                "name": "shoot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "intake",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intake"
               }
             }
           ]
@@ -79,13 +80,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -65.0,
+    "rotation": 90.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -30.0,
+    "rotation": 60.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

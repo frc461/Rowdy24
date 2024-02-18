@@ -2,32 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6445593933841892,
-      "y": 6.546038494920592
+      "x": 0.73,
+      "y": 6.7
     },
-    "rotation": -30.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "align"
-                }
-              }
-            ]
+            "pathName": "3.3.0"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3.3.0"
+            "pathName": "0.3.5"
           }
         }
       ]

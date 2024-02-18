@@ -16,8 +16,7 @@ public class Shooter extends SubsystemBase {
 
     private final RelativeEncoder bottomEncoder;
     private final RelativeEncoder topEncoder;
-    private double target;
-    private double error;
+    double currentSpeed = 0;
 
     public Shooter() {
         bottomShooter = new CANSparkFlex(Constants.Shooter.BOTTOM_SHOOTER_ID, MotorType.kBrushless);
@@ -47,44 +46,47 @@ public class Shooter extends SubsystemBase {
         
         bottomShooter.burnFlash();
         topShooter.burnFlash();
-
-        target = 0.0;
-        error = Math.abs(target - (getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
     }
 
     @Override
     public void periodic() {
-        error = Math.abs(target - (getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
+        // if (getLeftShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE && getRightShooterSpeed() >= currentSpeed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE) {
+        //     intakeCarriage.setCarriageSpeed(0.5);
+        // } else {
+        //     intakeCarriage.setCarriageSpeed(0);
+        // }
     }
 
-    public double getBottomShooterSpeed() {
+    public double getLeftShooterSpeed() {
         return bottomEncoder.getVelocity();
     }
 
-    public double getTopShooterSpeed() {
+    public double getRightShooterSpeed() {
         return topEncoder.getVelocity();
     }
 
-    public double getError() {
-        return error;
+    public void shoot(double speed, boolean idleShooter) {
+        // //is the shooter up to speed? if so, alert the operator
+        // //TODO: this might be problematic in auto...
+        // if (leftEncoder.getVelocity() <= speed + Constants.Shooter.SHOOTER_SPEED_TOLERANCE && leftEncoder.getVelocity() >= speed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE){
+        //     SmartDashboard.putBoolean("Shooter Ready", true);
+        //     RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
+        // } else{
+        //     RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+        //     SmartDashboard.putBoolean("Shooter Ready", false);
+        // }
+        currentSpeed = speed;
+            
+        if (idleShooter) {
+            bottomShooter.set(speed);
+            topShooter.set(speed);
+        } else {
+            topController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+            bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+        }
     }
 
-    public void shoot(double speed) {
-        target = speed;
-        topController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
-        bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
-    }
-
-    public boolean minimalError() {
-        return error < Constants.Shooter.SHOOTER_SPEED_TOLERANCE && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 5000;
-    }
-
-    public void setShooterIdle(boolean idleMode) {
-        bottomShooter.set(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0);
-        topShooter.set(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0);
-    }
-
-    public void overrideShooterSpeed(double speed) {
+    public void setSpeed(double speed) {
         topShooter.set(speed);
         bottomShooter.set(speed);
     }

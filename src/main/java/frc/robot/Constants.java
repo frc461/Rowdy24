@@ -11,15 +11,17 @@ import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
+    // TODO: TUNE EVERYTHING!!!!!!!!!
     public static final double STICK_DEADBAND = 0.1;
     public static final double TRIGGER_DEADBAND = 0.5;
     public static final double MINIMUM_ANGLE = -180.0;
     public static final double MAXIMUM_ANGLE = 180.0;
 
     public static final class Auto {
-        public static final double AUTO_DRIVE_P = 0.1;
+        //TODO tune
+        public static final double AUTO_DRIVE_P = 0.0;
         public static final double AUTO_DRIVE_I = 0.0;
-        public static final double AUTO_DRIVE_D = 0.00001;
+        public static final double AUTO_DRIVE_D = 0.0;
         public static final double AUTO_ANGLE_P = 0.2;
         public static final double AUTO_ANGLE_I = 0.0;
         public static final double AUTO_ANGLE_D = 0.0;
@@ -57,7 +59,6 @@ public final class Constants {
     public static final class IntakeCarriage {
         public static final int INTAKE_ID = 41;
         public static final int CARRIAGE_ID = 42;
-        public static final double IDLE_INTAKE_SPEED = -0.15;
     }
 
     public static final class Limelight {
@@ -76,8 +77,8 @@ public final class Constants {
         public static final double BASE_SHOOTER_SPEED = 6000;
         public static final double IDLE_SHOOTER_SPEED = 0.3;
         // +/-tolerance for considering if the shooter is up to speed
-        public static final double SHOOTER_SPEED_TOLERANCE = 300;
-        public static final double DISTANCE_MULTIPLIER = 10;
+        public static final double SHOOTER_SPEED_TOLERANCE = 100; //TODO: make sure this is acceptable
+        public static final double DISTANCE_MULTIPLIER = 10; //TODO: check this
         public static final double SHOOTER_P = 0.00062; //was 0.003
         public static final double SHOOTER_I = 0.000000001;
         public static final double SHOOTER_D = 0.0005;
@@ -186,7 +187,7 @@ public final class Constants {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
-        public static final class Mod3 {
+        public static final class Mod0 {
             public static final int DRIVE_MOTOR_ID = 1;
             public static final int ANGLE_MOTOR_ID = 11;
             public static final int CANCODER_ID = 21;
@@ -196,7 +197,7 @@ public final class Constants {
         }
 
         /* Front Right Module - Module 1 */
-        public static final class Mod2 {
+        public static final class Mod1 {
             public static final int DRIVE_MOTOR_ID = 2;
             public static final int ANGLE_MOTOR_ID = 12;
             public static final int CANCODER_ID = 22;
@@ -206,7 +207,7 @@ public final class Constants {
         }
 
         /* Back Left Module - Module 2 */
-        public static final class Mod0 {
+        public static final class Mod3 {
             public static final int DRIVE_MOTOR_ID = 3;
             public static final int ANGLE_MOTOR_ID = 13;
             public static final int CANCODER_ID = 23;
@@ -216,7 +217,7 @@ public final class Constants {
         }
 
         /* Back Right Module - Module 3 */
-        public static final class Mod1 {
+        public static final class Mod2 {
             public static final int DRIVE_MOTOR_ID = 4;
             public static final int ANGLE_MOTOR_ID = 14;
             public static final int CANCODER_ID = 24;

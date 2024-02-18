@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -13,10 +11,12 @@ public class IntakeCarriage extends SubsystemBase {
     private final CANSparkFlex intake;
     private final CANSparkMax carriage;
 
-    DigitalInput carriageBeam = new DigitalInput(6); // end of carriage (on shooter side)
+    // TODO: Implement beam break logic Please!
+    DigitalInput carriageBeam = new DigitalInput(0); // end of carriage (on shooter side)
+    DigitalInput ampBeam = new DigitalInput(7); // entrance of carriage (which is the amp shooter)
+    DigitalInput shooterBeam = new DigitalInput(6); // completely exit through shooter
 
-    DigitalInput ampBeam = new DigitalInput(2); // entrance of carriage (which is the amp shooter)
-    DigitalInput shooterBeam = new DigitalInput(7); // completely exit through shooter
+    private boolean hasPiece = false;
 
     public IntakeCarriage() {
         intake = new CANSparkFlex(Constants.IntakeCarriage.INTAKE_ID, MotorType.kBrushless);
@@ -31,7 +31,11 @@ public class IntakeCarriage extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("beam break", getCarriageBeamBroken());
+        // if (getCarriageBeamBroken()) {
+        // hasPiece = true;
+        // } else if (getAmpBeamBroken() || getShooterBeamBroken()) {
+        // hasPiece = false;
+        // }
     }
 
     public double getIntakeSpeed() {
@@ -43,7 +47,7 @@ public class IntakeCarriage extends SubsystemBase {
     }
 
     public boolean getAmpBeamBroken() {
-        return ampBeam.get();
+        return !ampBeam.get();
     }
 
     public boolean getShooterBeamBroken() {
@@ -54,32 +58,20 @@ public class IntakeCarriage extends SubsystemBase {
         return !carriageBeam.get();
     }
 
-    public boolean noteInSystem() {
-        return getShooterBeamBroken() || getCarriageBeamBroken();
+    public void setIntakeSpeed(double speed) {
+        // if (speed <= 0 || !hasPiece) {
+        //     intake.set(speed);
+        // } else {
+        //     intake.set(-0.15);
+        // }
+        intake.set(speed);
     }
 
     public void overrideIntakeSpeed(double speed) {
         intake.set(speed);
     }
 
-    public void overrideCarriageSpeed(double speed) {
+    public void setCarriageSpeed(double speed) {
         carriage.set(speed);
-    }
-
-    public void setIntakeCarriageSpeed(double intakeSpeed, double carriageSpeed) {
-        intake.set(intakeSpeed);
-        carriage.set(carriageSpeed);
-    }
-
-    public void setIntakeCarriageSpeed(double speed){
-        setIntakeCarriageSpeed(speed, speed);
-    }
-
-    public void setIntakeIdle(boolean idleMode) {
-        intake.set(idleMode ? Constants.IntakeCarriage.IDLE_INTAKE_SPEED : 0);
-    }
-
-    public void setCarriageIdle() {
-        carriage.set(0);
     }
 }
