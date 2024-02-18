@@ -53,7 +53,7 @@ public class RobotContainer {
 
     /* Operator Buttons */
     private final JoystickButton operatorStowButton = new JoystickButton(operator, XboxController.Button.kA.value);
-    private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    private final JoystickButton overrideIntake = new JoystickButton(operator, XboxController.Button.kB.value);
     private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
     private final JoystickButton alignAngler = new JoystickButton(operator, XboxController.Button.kX.value);
 
@@ -234,6 +234,8 @@ public class RobotContainer {
         ).until(intakeCarriage::noteInSystem));
 
         outtakeButton.whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
+
+        overrideIntake.whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
 
 //        operatorOneEighty.whileTrue(new InstantCommand(() ->shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
 //                         limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER, false)));

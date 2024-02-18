@@ -70,22 +70,13 @@ public class Shooter extends SubsystemBase {
     }
 
     public void shoot(double speed) {
-        // //is the shooter up to speed? if so, alert the operator
-        // //TODO: this might be problematic in auto...
-        // if (leftEncoder.getVelocity() <= speed + Constants.Shooter.SHOOTER_SPEED_TOLERANCE && leftEncoder.getVelocity() >= speed - Constants.Shooter.SHOOTER_SPEED_TOLERANCE){
-        //     SmartDashboard.putBoolean("Shooter Ready", true);
-        //     RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0.5);
-        // } else{
-        //     RobotContainer.operator.setRumble(GenericHID.RumbleType.kBothRumble, 0);
-        //     SmartDashboard.putBoolean("Shooter Ready", false);
-        // }
         target = speed;
         topController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
         bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
     }
 
     public boolean minimalError() {
-        return error < 300 && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 5000;
+        return error < Constants.Shooter.SHOOTER_SPEED_TOLERANCE && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 5000;
     }
 
     public void setShooterIdle(boolean idleMode) {

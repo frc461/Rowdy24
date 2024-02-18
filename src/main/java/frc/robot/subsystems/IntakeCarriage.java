@@ -13,7 +13,6 @@ public class IntakeCarriage extends SubsystemBase {
     private final CANSparkFlex intake;
     private final CANSparkMax carriage;
 
-    // TODO: Implement beam break logic Please!
     DigitalInput carriageBeam = new DigitalInput(6); // end of carriage (on shooter side)
 
     DigitalInput ampBeam = new DigitalInput(2); // entrance of carriage (which is the amp shooter)
@@ -33,9 +32,6 @@ public class IntakeCarriage extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("beam break", getCarriageBeamBroken());
-        // } else if (getAmpBeamBroken() || getShooterBeamBroken()) {
-        // hasPiece = false;
-        // }
     }
 
     public double getIntakeSpeed() {
@@ -61,8 +57,6 @@ public class IntakeCarriage extends SubsystemBase {
     public boolean noteInSystem() {
         return getShooterBeamBroken() || getCarriageBeamBroken();
     }
-
-    // TODO: INTEGRATE INTAKE AND CARRIAGE LOGIC
 
     public void overrideIntakeSpeed(double speed) {
         intake.set(speed);

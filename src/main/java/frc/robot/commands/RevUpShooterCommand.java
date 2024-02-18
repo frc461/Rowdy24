@@ -5,8 +5,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 
-import java.awt.*;
-
 public class RevUpShooterCommand extends Command {
     private final Shooter shooter;
     private final Limelight limelight;
