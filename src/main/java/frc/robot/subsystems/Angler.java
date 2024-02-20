@@ -5,11 +5,14 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
+    private final DigitalInput lowerLimitSwitch = new DigitalInput(Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH_PORT);
+    private final DigitalInput upperLimitSwitch = new DigitalInput(Constants.Angler.ANGLER_UPPER_LIMIT_SWITCH_PORT);
     private final PIDController pidController;
     private final RelativeEncoder encoder;
     private double target;
@@ -54,11 +57,11 @@ public class Angler extends SubsystemBase {
     }
 
     public boolean lowerSwitchTriggered() { 
-        return angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
+        return lowerLimitSwitch.get();
     }
 
     public boolean upperSwitchTriggered() {
-        return angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
+        return upperLimitSwitch.get();
     }
 
     public void checkLimitSwitches() {

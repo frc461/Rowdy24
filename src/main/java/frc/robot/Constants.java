@@ -33,6 +33,8 @@ public final class Constants {
         public static final double ANGLER_D = 0.0001;
         public static final int ANGLER_CURRENT_LIMIT = 35;
         public static final boolean ANGLER_INVERT = false;
+        public static final int ANGLER_LOWER_LIMIT_SWITCH_PORT = 1;
+        public static final int ANGLER_UPPER_LIMIT_SWITCH_PORT = 0;
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
         public static final double UPPER_BOUND_LIMIT = 2.26;
@@ -45,6 +47,10 @@ public final class Constants {
     public static final class Elevator {
         public static final int ELEVATOR_ID = 31;
         public static final int ELEVATOR_CURRENT_LIMIT = 70;
+        public static final int ELEVATOR_LIMIT_SWITCH = 2;
+        public static final int ELEVATOR_SERVO_PORT = 1;
+        public static final double ELEVATOR_SERVO_CLAMPED_POS = 1;
+        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 1;
         public static final boolean ELEVATOR_INVERT = true;
         public static final double ELEVATOR_P = 0.097;
         public static final double ELEVATOR_I = 0.0;
@@ -59,6 +65,11 @@ public final class Constants {
         public static final int INTAKE_ID = 41;
         public static final int CARRIAGE_ID = 42;
         public static final double IDLE_INTAKE_SPEED = -0.15;
+        public static final int CARRIAGE_BEAM = 4;
+        public static final int SHOOTER_BEAM = 3;
+        public static final int AMP_BEAM = 5;
+
+
     }
 
     public static final class Limelight {

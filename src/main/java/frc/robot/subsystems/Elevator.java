@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -12,7 +13,8 @@ public class Elevator extends SubsystemBase {
     private final CANSparkMax elevator;
     private final PIDController pidController;
     private final RelativeEncoder encoder;
-    private final DigitalInput elevatorSwitch;
+    private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
+    private final Servo elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
     private double target;
 
     public Elevator() {
@@ -21,8 +23,6 @@ public class Elevator extends SubsystemBase {
         elevator.setSmartCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
         elevator.setInverted(Constants.Elevator.ELEVATOR_INVERT);
         encoder = elevator.getEncoder();
-
-        elevatorSwitch = new DigitalInput(4); // limit switch that re-zeros the elevator encoder
 
         pidController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
@@ -58,6 +58,10 @@ public class Elevator extends SubsystemBase {
     public void holdTarget() {
         checkLimitSwitch();
         elevator.set(pidController.calculate(encoder.getPosition(), target));
+    }
+
+    public void setClamp(boolean isClamped){
+        if (isClamped) elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS); else elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
     }
 
     public void moveElevator(double axisValue) {
