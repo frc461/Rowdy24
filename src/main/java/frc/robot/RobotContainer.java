@@ -217,7 +217,8 @@ public class RobotContainer {
                 )
         ));
 
-        driverLimelight.whileTrue(new LimelightTurretCommand(
+        driverLimelight.whileTrue(
+        new LimelightTurretCommand(
                 limelight,
                 swerve,
                 () -> -driver.getRawAxis(translationAxis),
@@ -260,6 +261,9 @@ public class RobotContainer {
                 shooter, limelight, idleMode
                 )
         );
+
+        
+        //operatorOneEighty.onTrue(new InstantCommand(()-> elevator.setClamp(true))); //toggle clamp
 
 
 //        driverStowButton.onTrue(
