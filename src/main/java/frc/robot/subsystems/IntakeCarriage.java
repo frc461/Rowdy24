@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,6 +24,7 @@ public class IntakeCarriage extends SubsystemBase {
         intake.restoreFactoryDefaults();
         intake.setSmartCurrentLimit(80);
         intake.setInverted(false);
+        intake.setIdleMode(IdleMode.kCoast);
 
         carriage = new CANSparkMax(Constants.IntakeCarriage.CARRIAGE_ID, MotorType.kBrushless);
         carriage.restoreFactoryDefaults();
