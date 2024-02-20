@@ -44,6 +44,10 @@ public final class Constants {
     public static final class Elevator {
         public static final int ELEVATOR_ID = 31;
         public static final int ELEVATOR_CURRENT_LIMIT = 70;
+        public static final int ELEVATOR_LIMIT_SWITCH = 2;
+        public static final int ELEVATOR_SERVO_PORT = 1;
+        public static final double ELEVATOR_SERVO_CLAMPED_POS = 1;
+        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 1;
         public static final boolean ELEVATOR_INVERT = true;
         public static final double ELEVATOR_P = 0.097;
         public static final double ELEVATOR_I = 0.0;
