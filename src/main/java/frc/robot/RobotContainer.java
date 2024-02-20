@@ -28,7 +28,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-    //private final Elevator elevator = new Elevator();
+    private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
@@ -297,11 +297,10 @@ public class RobotContainer {
         SmartDashboard.putBoolean("note in system", intakeCarriage.noteInSystem());
 
 //        elevator debug
-//        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
-//        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
-//        SmartDashboard.putNumber("Elevator Power", elevator.elevatorPower());
-//        SmartDashboard.putBoolean("Elevator Limit Triggered?",
-//        elevator.elevatorSwitchTriggered());
+       SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
+       SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
+       SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
+       SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
 
         // limelight debug
         SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());
