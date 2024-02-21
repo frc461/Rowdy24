@@ -39,7 +39,7 @@ public class IntakeCarriage extends SubsystemBase {
     }
 
     public boolean getAmpBeamBroken() {
-        return ampBeam.get();
+        return !ampBeam.get();
     }
 
     public boolean getShooterBeamBroken() {
