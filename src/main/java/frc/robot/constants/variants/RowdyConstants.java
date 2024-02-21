@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.constants.variants;
 
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -9,8 +9,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
+import frc.robot.constants.Configuration;
+import frc.robot.constants.RobotConstants;
 
-public final class AlphaBotConstants implements RobotConstants{
+public final class RowdyConstants implements RobotConstants {
     public static final double STICK_DEADBAND = 0.1;
     public static final double TRIGGER_DEADBAND = 0.5;
     public static final double MINIMUM_ANGLE = -180.0;
@@ -196,47 +198,47 @@ public final class AlphaBotConstants implements RobotConstants{
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
         public static final class Mod3 {
-            public static final int DRIVE_MOTOR_ID = 4;
-            public static final int ANGLE_MOTOR_ID = 14;
-            public static final int CANCODER_ID = 24;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(225.14); // 127.3 original value
+            public static final int DRIVE_MOTOR_ID = 1;
+            public static final int ANGLE_MOTOR_ID = 11;
+            public static final int CANCODER_ID = 21;
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(308.32+90); // 127.3 original value
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
 
         /* Front Right Module - Module 1 */
         public static final class Mod2 {
-            public static final int DRIVE_MOTOR_ID = 3;
-            public static final int ANGLE_MOTOR_ID = 13;
-            public static final int CANCODER_ID = 23;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(139.65);
+            public static final int DRIVE_MOTOR_ID = 2;
+            public static final int ANGLE_MOTOR_ID = 12;
+            public static final int CANCODER_ID = 22;
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(81.73+90);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
 
         /* Back Left Module - Module 2 */
         public static final class Mod0 {
-            public static final int DRIVE_MOTOR_ID = 1;
-            public static final int ANGLE_MOTOR_ID = 11;
-            public static final int CANCODER_ID = 21;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(300.32);
+            public static final int DRIVE_MOTOR_ID = 3;
+            public static final int ANGLE_MOTOR_ID = 13;
+            public static final int CANCODER_ID = 23;
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(38.759+90);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
 
         /* Back Right Module - Module 3 */
         public static final class Mod1 {
-            public static final int DRIVE_MOTOR_ID = 2;
-            public static final int ANGLE_MOTOR_ID = 12;
-            public static final int CANCODER_ID = 22;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(167.78);
+            public static final int DRIVE_MOTOR_ID = 4;
+            public static final int ANGLE_MOTOR_ID = 14;
+            public static final int CANCODER_ID = 24;
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(331.699+90);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
     }
     private Configuration configuration = new Configuration();
 
-    public AlphaBotConstants() {
+    public RowdyConstants() {
         configuration.auto_drive_p = Auto.AUTO_DRIVE_P;
         configuration.auto_drive_i = Auto.AUTO_DRIVE_I;
         configuration.auto_drive_d = Auto.AUTO_DRIVE_D;

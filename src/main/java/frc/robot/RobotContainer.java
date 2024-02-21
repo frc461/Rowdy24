@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
+import frc.robot.constants.variants.PracticeConstants;
 import frc.robot.subsystems.*;
 
 /**
@@ -236,7 +237,7 @@ public class RobotContainer {
 
         overrideIntake.whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
 
-        new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > AlphaBotConstants.TRIGGER_DEADBAND).onTrue(
+        new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > PracticeConstants.TRIGGER_DEADBAND).onTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
                         limelight.getRX(),
                         limelight.getRZ(),
@@ -244,7 +245,7 @@ public class RobotContainer {
                 ))
         );
 
-        new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > AlphaBotConstants.TRIGGER_DEADBAND).whileTrue(
+        new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > PracticeConstants.TRIGGER_DEADBAND).whileTrue(
                 new ParallelCommandGroup(
                         new RevUpShooterCommand(shooter, limelight, idleMode),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
@@ -256,7 +257,7 @@ public class RobotContainer {
                 )
         );
 
-        new Trigger(() -> operator.getRawAxis(revShoot) > AlphaBotConstants.TRIGGER_DEADBAND).whileTrue(new RevUpShooterCommand(
+        new Trigger(() -> operator.getRawAxis(revShoot) > PracticeConstants.TRIGGER_DEADBAND).whileTrue(new RevUpShooterCommand(
                 shooter, limelight, idleMode
                 )
         );

@@ -5,9 +5,9 @@ import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Configuration;
-import frc.robot.RobotConstants;
-import frc.robot.RobotIdentity;
+import frc.robot.constants.Configuration;
+import frc.robot.constants.RobotConstants;
+import frc.robot.constants.RobotIdentity;
 
 public class Limelight extends SubsystemBase {
     private final DoubleArraySubscriber tagPoseTopic;

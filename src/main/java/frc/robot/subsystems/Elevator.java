@@ -10,16 +10,16 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.AlphaBotConstants;
-import frc.robot.Configuration;
-import frc.robot.RobotConstants;
-import frc.robot.RobotIdentity;
+import frc.robot.constants.variants.PracticeConstants;
+import frc.robot.constants.Configuration;
+import frc.robot.constants.RobotConstants;
+import frc.robot.constants.RobotIdentity;
 
 public class Elevator extends SubsystemBase {
     private final TalonFX elevator;
     private final PIDController pidController;
-    private final DigitalInput elevatorSwitch = new DigitalInput(AlphaBotConstants.Elevator.ELEVATOR_LIMIT_SWITCH);
-    private final Servo elevatorClamp = new Servo(AlphaBotConstants.Elevator.ELEVATOR_SERVO_PORT);
+    private final DigitalInput elevatorSwitch = new DigitalInput(PracticeConstants.Elevator.ELEVATOR_LIMIT_SWITCH);
+    private final Servo elevatorClamp = new Servo(PracticeConstants.Elevator.ELEVATOR_SERVO_PORT);
     private double target;
     private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
     private final Configuration configuration = robot.getConfiguration();

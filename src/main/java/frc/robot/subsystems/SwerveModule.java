@@ -16,9 +16,9 @@ import frc.lib.util.CANSparkUtil.Usage;
 import frc.lib.util.CANSparkUtil;
 import frc.lib.math.OptimizeModuleState;
 import frc.robot.Robot;
-import frc.robot.RobotConstants;
-import frc.robot.RobotIdentity;
-import frc.robot.Configuration;
+import frc.robot.constants.RobotConstants;
+import frc.robot.constants.RobotIdentity;
+import frc.robot.constants.Configuration;
 
 public class SwerveModule {
     public int moduleNumber;

@@ -6,10 +6,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
-import frc.robot.AlphaBotConstants;
-import frc.robot.Configuration;
-import frc.robot.RobotConstants;
-import frc.robot.RobotIdentity;
+import frc.robot.constants.variants.PracticeConstants;
+import frc.robot.constants.Configuration;
+import frc.robot.constants.RobotConstants;
+import frc.robot.constants.RobotIdentity;
 import frc.robot.subsystems.Limelight;
 
 public class LimelightTurretCommand extends Command {
@@ -39,8 +39,8 @@ public class LimelightTurretCommand extends Command {
     @Override
     public void execute() {
         /* Apply Deadband */
-        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), AlphaBotConstants.STICK_DEADBAND);
-        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), AlphaBotConstants.STICK_DEADBAND);
+        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), PracticeConstants.STICK_DEADBAND);
+        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), PracticeConstants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
         if(limelight.tagExists()) {
@@ -51,7 +51,7 @@ public class LimelightTurretCommand extends Command {
                             configuration.limelight_d
                     )
             ) {
-                rotController.enableContinuousInput(AlphaBotConstants.MINIMUM_ANGLE, AlphaBotConstants.MAXIMUM_ANGLE);
+                rotController.enableContinuousInput(PracticeConstants.MINIMUM_ANGLE, PracticeConstants.MAXIMUM_ANGLE);
 
                 double rotate = rotController.calculate(
                         swerve.getYaw(),

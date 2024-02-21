@@ -1,9 +1,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Configuration;
-import frc.robot.RobotConstants;
-import frc.robot.RobotIdentity;
+import frc.robot.constants.Configuration;
+import frc.robot.constants.RobotConstants;
+import frc.robot.constants.RobotIdentity;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 

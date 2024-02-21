@@ -5,10 +5,10 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.AlphaBotConstants;
-import frc.robot.Configuration;
-import frc.robot.RobotConstants;
-import frc.robot.RobotIdentity;
+import frc.robot.constants.variants.PracticeConstants;
+import frc.robot.constants.Configuration;
+import frc.robot.constants.RobotConstants;
+import frc.robot.constants.RobotIdentity;
 import frc.robot.subsystems.Swerve;
 
 public class TeleopSwerveCommand extends Command {
@@ -38,9 +38,9 @@ public class TeleopSwerveCommand extends Command {
     @Override
     public void execute() {
         /* Get Values, Deadband */
-        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), AlphaBotConstants.STICK_DEADBAND);
-        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), AlphaBotConstants.STICK_DEADBAND);
-        double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), AlphaBotConstants.STICK_DEADBAND);
+        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), PracticeConstants.STICK_DEADBAND);
+        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), PracticeConstants.STICK_DEADBAND);
+        double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), PracticeConstants.STICK_DEADBAND);
 
         /* Drive */
         swerve.drive(

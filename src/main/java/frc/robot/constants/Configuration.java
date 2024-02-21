@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.constants;
 
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkBase.IdleMode;

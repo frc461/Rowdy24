@@ -1,8 +1,7 @@
-package frc.robot;
+package frc.robot.constants;
 
 import java.net.NetworkInterface;
 import java.util.Enumeration;
-import frc.robot.RobotIdentity;
 
 public class MacAddress {
     public static final String AlphaBot = "00-80-2F-33-9F-37";

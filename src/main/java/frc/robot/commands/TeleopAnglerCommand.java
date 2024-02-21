@@ -3,7 +3,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.AlphaBotConstants;
+import frc.robot.constants.variants.PracticeConstants;
 import frc.robot.subsystems.Angler;
 
 public class TeleopAnglerCommand extends Command {
@@ -19,7 +19,7 @@ public class TeleopAnglerCommand extends Command {
     @Override
     public void execute() {
         /* Apply Deadband */
-        double axisValue = MathUtil.applyDeadband(motionSup.getAsDouble(), AlphaBotConstants.STICK_DEADBAND);
+        double axisValue = MathUtil.applyDeadband(motionSup.getAsDouble(), PracticeConstants.STICK_DEADBAND);
 
         /* Move Angler */
         if (axisValue != 0.0) {
