@@ -83,11 +83,9 @@ public final class RowdyConstants implements RobotConstants {
         public static final int TOP_SHOOTER_ID = 61; //TOP WHEEL
         public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final boolean SHOOTER_INVERT = false;
-        //baseline shooter speed in RPM
-        public static final double BASE_SHOOTER_SPEED = 6000;
+        public static final double BASE_SHOOTER_SPEED = 6000; //baseline shooter speed in RPM
         public static final double IDLE_SHOOTER_SPEED = 0.3;
-        // +/-tolerance for considering if the shooter is up to speed
-        public static final double SHOOTER_ERROR_TOLERANCE = 300;
+        public static final double SHOOTER_ERROR_TOLERANCE = 300; // +/-tolerance for considering if the shooter is up to speed
         public static final double DISTANCE_MULTIPLIER = 10;
         public static final double SHOOTER_P = 0.00062; //was 0.003
         public static final double SHOOTER_I = 0.000000001;

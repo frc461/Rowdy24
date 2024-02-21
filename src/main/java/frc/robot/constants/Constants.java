@@ -75,13 +75,11 @@ public class Constants {
         public static int TOP_SHOOTER_ID; //top wheel
         public static int SHOOTER_CURRENT_LIMIT;
         public static boolean SHOOTER_INVERT;
-        //baselpeed in rpm
-        public static double BASE_SHOOTER_SPEED;
+        public static double BASE_SHOOTER_SPEED; //baseline shooter speed in rpm
         public static double IDLE_SHOOTER_SPEED;
-        // +/-tconsidering if the shooter is up to speed
-        public static double SHOOTER_ERROR_TOLERANCE;
+        public static double SHOOTER_ERROR_TOLERANCE; // +/-tolerance for considering if the shooter is up to speed
         public static double DISTANCE_MULTIPLIER;
-        public static double SHOOTER_P; //was 0.003
+        public static double SHOOTER_P;
         public static double SHOOTER_I;
         public static double SHOOTER_D;
         public static double SHOOTER_FF;
@@ -91,32 +89,38 @@ public class Constants {
     }
 
     public static final class Swerve {
-        /* swervalues */
         public static double GYRO_OFFSET;
         public static int PIGEON_ID;
         public static boolean INVERT_GYRO; // Always ensure Gyro is CCW+ CW- (DO NOT USE, ENABLES ROBOT-CENTRIC)
+
         public static COTSFalconSwerveConstants CHOSEN_MODULE;
+
         /* Drivetrain Constants */
         public static double TRACK_WIDTH;
         public static double WHEEL_BASE;
         public static double CENTER_TO_WHEEL;
         public static double WHEEL_CIRCUMFERENCE;
+
         /*
          * Swerve Kinematics
          * No need to ever change this unless you are not doing a traditional
          * rectangular/square 4 module swerve
          */
         public static SwerveDriveKinematics SWERVE_KINEMATICS;
+
         /* Swerve Voltage Compensation */
         public static double VOLTAGE_COMP;
-        /* modus */
+
+        /* Module Gear Ratios */
         public static double DRIVE_GEAR_RATIO;
         public static double ANGLE_GEAR_RATIO;
         public static boolean ANGLE_MOTOR_INVERT;
         public static boolean DRIVE_MOTOR_INVERT;
-        /* Anglert */
+
+        /* Angle Encoder Invert */
         public static SensorDirectionValue CANCODER_SENSOR_DIRECTION;
-        /* Swermiting */
+
+        /* Swerve Current Limiting */
         public static int ANGLE_CONTINUOUS_SUPPLY_CURRENT_LIMIT;
         public static int ANGLE_PEAK_SUPPLY_CURRENT_LIMIT;
         public static double ANGLE_PEAK_SUPPLY_CURRENT_DURATION;
@@ -125,45 +129,55 @@ public class Constants {
         public static int DRIVE_PEAK_SUPPLY_CURRENT_LIMIT;
         public static double DRIVE_PEAK_SUPPLY_CURRENT_DURATION;
         public static boolean DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT;
+
         /*
-         * thesused by the drive falcon to ramp in open loop and closed
-         * loop
-         * we fopen loop ramp (0.25) helps with tread wear, tipping, etc
+         * These values are used by the drive falcon to ramp in open loop and closed
+         * loop driving.
+         * We found a small open loop ramp (0.25) helps with tread wear, tipping, etc
          */
         public static double OPEN_LOOP_RAMP;
         public static double CLOSED_LOOP_RAMP;
-        /* anglalues */
+
+        /* Angle Motor PID Values */
         public static double ANGLE_P;
         public static double ANGLE_I;
         public static double ANGLE_D;
         public static double ANGLE_F;
-        /* drivalues */
+
+        /* Drive Motor PID Values */
         public static double DRIVE_P;
         public static double DRIVE_I;
         public static double DRIVE_D;
         public static double DRIVE_F;
+
         /*
-         * drivcterization values
-         * divies by 12 to convert from volts to percent output for ctre
+         * Drive Motor Characterization Values
+         * Divide SYSID values by 12 to convert from volts to percent output for CTRE
          */
         public static double DRIVE_S;
         public static double DRIVE_V;
         public static double DRIVE_A;
-        /* drivrsion factors */
+
+        /* Drive Motor Conversion Factors */
         public static double DRIVE_CONVERSION_POSITION_FACTOR;
         public static double DRIVE_CONVERSION_VELOCITY_FACTOR;
         public static double ANGLE_CONVERSION_FACTOR;
-        /** metd */
+
+        /* Swerve Profiling Values */
+        /** Meters per Second */
         public static double MAX_SPEED;
         public static double MAX_ACCEL;
-        /** radnd */
+
+        /** Radians per Second */
         public static double MAX_ANGULAR_VELOCITY;
+
+        /* Neutral Modes */
         public static IdleMode ANGLE_NEUTRAL_MODE;
         public static IdleMode DRIVE_NEUTRAL_MODE;
 
         /* Module Specific Constants */
+        /* Front Left Module - Module 0 */
         public static final class Mod0 {
-            /* Front Left Module - Module 0 */
             public static int DRIVE_MOTOR_ID_0;
             public static int ANGLE_MOTOR_ID_0;
             public static int CANCODER_ID_0;
@@ -172,8 +186,8 @@ public class Constants {
             public static SwerveModuleConstants SWERVE_MODULE_CONSTANTS_3;
         }
 
+        /* Front Right Module - Module 1 */
         public static final class Mod1 {
-            /* Front Right Module - Module 1 */
             public static int DRIVE_MOTOR_ID_1;
             public static int ANGLE_MOTOR_ID_1;
             public static int CANCODER_ID_1;
@@ -181,8 +195,8 @@ public class Constants {
             public static SwerveModuleConstants SWERVE_MODULE_CONSTANTS_1;
         }
 
+        /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            /* Back Left Module - Module 2 */
             public static int DRIVE_MOTOR_ID_2;
             public static int ANGLE_MOTOR_ID_2;
             public static int CANCODER_ID_2;
@@ -190,8 +204,8 @@ public class Constants {
             public static SwerveModuleConstants SWERVE_MODULE_CONSTANTS_2;
         }
 
+        /* Back Right Module - Module 3 */
         public static final class Mod3 {
-            /* Back Right Module - Module 3 */
             public static int DRIVE_MOTOR_ID_3;
             public static int ANGLE_MOTOR_ID_3;
             public static int CANCODER_ID_3;
