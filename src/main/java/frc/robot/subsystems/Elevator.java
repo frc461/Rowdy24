@@ -21,8 +21,6 @@ public class Elevator extends SubsystemBase {
     private final DigitalInput elevatorSwitch = new DigitalInput(PracticeConstants.Elevator.ELEVATOR_LIMIT_SWITCH);
     private final Servo elevatorClamp = new Servo(PracticeConstants.Elevator.ELEVATOR_SERVO_PORT);
     private double target;
-    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Constants constants = robot.getConfiguration();
 
     public Elevator() {
         elevator = new TalonFX(Constants.Elevator.ELEVATOR_ID);

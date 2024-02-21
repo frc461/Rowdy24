@@ -18,8 +18,6 @@ public class LimelightTurretCommand extends Command {
     private final DoubleSupplier translationSup;
     private final DoubleSupplier strafeSup;
     private final BooleanSupplier robotCentricSup;
-    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Constants constants = robot.getConfiguration();
 
     public LimelightTurretCommand(
             Limelight limelight,
@@ -39,8 +37,8 @@ public class LimelightTurretCommand extends Command {
     @Override
     public void execute() {
         /* Apply Deadband */
-        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), PracticeConstants.STICK_DEADBAND);
-        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), PracticeConstants.STICK_DEADBAND);
+        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.STICK_DEADBAND);
+        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
         if(limelight.tagExists()) {
@@ -51,7 +49,7 @@ public class LimelightTurretCommand extends Command {
                             Constants.Limelight.LIMELIGHT_D
                     )
             ) {
-                rotController.enableContinuousInput(PracticeConstants.MINIMUM_ANGLE, PracticeConstants.MAXIMUM_ANGLE);
+                rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
 
                 double rotate = rotController.calculate(
                         swerve.getYaw(),

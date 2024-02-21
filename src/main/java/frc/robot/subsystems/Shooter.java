@@ -19,8 +19,7 @@ public class Shooter extends SubsystemBase {
     private final RelativeEncoder bottomEncoder;
     private final RelativeEncoder topEncoder;
     private double target;
-    private double error;    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Constants constants = robot.getConfiguration();
+    private double error;
 
     public Shooter() {
         bottomShooter = new CANSparkFlex(Constants.Shooter.BOTTOM_SHOOTER_ID, MotorType.kBrushless);

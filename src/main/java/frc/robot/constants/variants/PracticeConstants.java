@@ -234,9 +234,13 @@ public final class PracticeConstants implements RobotConstants {
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
     }
-    private Constants constants = new Constants();
 
     public PracticeConstants() {
+        Constants.STICK_DEADBAND = STICK_DEADBAND;
+        Constants.TRIGGER_DEADBAND = TRIGGER_DEADBAND;
+        Constants.MINIMUM_ANGLE = MINIMUM_ANGLE;
+        Constants.MAXIMUM_ANGLE = MAXIMUM_ANGLE;
+
         Constants.Auto.AUTO_DRIVE_P = Auto.AUTO_DRIVE_P;
         Constants.Auto.AUTO_DRIVE_I = Auto.AUTO_DRIVE_I;
         Constants.Auto.AUTO_DRIVE_D = Auto.AUTO_DRIVE_D;
@@ -367,9 +371,5 @@ public final class PracticeConstants implements RobotConstants {
         Constants.Swerve.Mod1.CANCODER_ID_1 = Swerve.Mod1.CANCODER_ID;
         Constants.Swerve.Mod1.ANGLE_OFFSET_1 = Swerve.Mod1.ANGLE_OFFSET;
         Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS_1 = Swerve.Mod1.SWERVE_MODULE_CONSTANTS;
-    }
-    @Override
-    public Constants getConfiguration() {
-        return constants;
     }
 }

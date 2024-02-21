@@ -13,8 +13,6 @@ import frc.robot.constants.RobotIdentity;
 public class IntakeCarriage extends SubsystemBase {
     private final CANSparkFlex intake;
     private final CANSparkMax carriage;
-    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Constants constants = robot.getConfiguration();
 
     DigitalInput carriageBeam = new DigitalInput(6); // end of carriage (on shooter side)
 

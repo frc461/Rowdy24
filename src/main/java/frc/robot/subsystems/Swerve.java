@@ -24,8 +24,6 @@ public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveModule[] swerveMods;
     public final Pigeon2 gyro;
-    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Constants constants = robot.getConfiguration();
     final Field2d field = new Field2d();
 
     // TODO: Once robot is finished, swerve gyro angles will need to be fixed
@@ -130,7 +128,7 @@ public class Swerve extends SubsystemBase {
 
     public double getYaw() {
         return (Constants.Swerve.INVERT_GYRO) ?
-                PracticeConstants.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
+                Constants.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
                 gyro.getYaw().getValueAsDouble();
     }
 

@@ -37,9 +37,6 @@ public class SwerveModule {
     private final SparkPIDController angleController;
     private final SimpleMotorFeedforward feedforward;
 
-    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Constants constants = robot.getConfiguration();
-
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants) {
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;

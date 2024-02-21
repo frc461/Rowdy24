@@ -11,8 +11,6 @@ public class RevUpShooterCommand extends Command {
     private final Shooter shooter;
     private final Limelight limelight;
     private final boolean idleMode;
-    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Constants constants = robot.getConfiguration();
 
     public RevUpShooterCommand(Shooter shooter, Limelight limelight, boolean idleMode) {
         this.shooter = shooter;

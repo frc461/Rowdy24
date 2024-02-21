@@ -15,8 +15,6 @@ public class Angler extends SubsystemBase {
     private final RelativeEncoder encoder;
     private double target;
     private double error;
-    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Constants constants = robot.getConfiguration();
 
     public Angler() {
         angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);

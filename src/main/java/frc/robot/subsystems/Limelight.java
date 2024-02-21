@@ -13,8 +13,7 @@ public class Limelight extends SubsystemBase {
     private final DoubleArraySubscriber tagPoseTopic;
     private NetworkTable table;
     private double[] tagPose;
-    private int updates;    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Constants constants = robot.getConfiguration();
+    private int updates;
 
     public Limelight() {
         table = NetworkTableInstance.getDefault().getTable("limelight");

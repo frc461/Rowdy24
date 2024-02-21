@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.util.CTREConfigs;
+import frc.robot.constants.RobotIdentity;
+import frc.robot.constants.variants.PracticeConstants;
+import frc.robot.constants.variants.RowdyConstants;
 
 /**
 * The VM is configured to automatically run this class, and to call the
@@ -34,6 +37,11 @@ public class Robot extends TimedRobot {
          * and put our autonomous chooser on the dashboard.
          */
         robotContainer = new RobotContainer();
+        switch (RobotIdentity.getIdentity()) {
+            case PRACTICE -> new PracticeConstants();
+            case ROWDY -> new RowdyConstants();
+            default -> new RowdyConstants();
+        }
     }
 
     /**

@@ -4,8 +4,6 @@ import frc.robot.constants.variants.PracticeConstants;
 import frc.robot.constants.variants.RowdyConstants;
 
 public interface RobotConstants {
-    Constants getConfiguration();
-
     static RobotConstants getRobotConstants(RobotIdentity robot) {
         return switch (robot) {
             case PRACTICE -> new PracticeConstants();

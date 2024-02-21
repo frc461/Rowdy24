@@ -11,8 +11,6 @@ public final class CTREConfigs {
     public TalonFXConfiguration swerveAngleFXConfig;
     public TalonFXConfiguration swerveDriveFXConfig;
     public CANcoderConfiguration swerveCanCoderConfig;
-    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Constants constants = robot.getConfiguration();
 
     public CTREConfigs(){
         swerveAngleFXConfig = new TalonFXConfiguration();

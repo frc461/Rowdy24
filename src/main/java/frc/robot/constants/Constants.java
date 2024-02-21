@@ -8,7 +8,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
-public class Constants {
+public final class Constants {
+    public static double STICK_DEADBAND;
+    public static double TRIGGER_DEADBAND;
+    public static double MINIMUM_ANGLE;
+    public static double MAXIMUM_ANGLE;
 
     public static final class Auto {
         public static double AUTO_DRIVE_P;

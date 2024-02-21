@@ -17,8 +17,6 @@ public class TeleopSwerveCommand extends Command {
     private final DoubleSupplier strafeSup;
     private final DoubleSupplier rotationSup;
     private final BooleanSupplier robotCentricSup;
-    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Constants constants = robot.getConfiguration();
 
     public TeleopSwerveCommand(
             Swerve swerve,
@@ -38,9 +36,9 @@ public class TeleopSwerveCommand extends Command {
     @Override
     public void execute() {
         /* Get Values, Deadband */
-        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), PracticeConstants.STICK_DEADBAND);
-        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), PracticeConstants.STICK_DEADBAND);
-        double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), PracticeConstants.STICK_DEADBAND);
+        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.STICK_DEADBAND);
+        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.STICK_DEADBAND);
+        double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Drive */
         swerve.drive(
