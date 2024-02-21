@@ -6,7 +6,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Configuration;
+import frc.robot.constants.Constants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotIdentity;
 
@@ -20,33 +20,33 @@ public class Shooter extends SubsystemBase {
     private final RelativeEncoder topEncoder;
     private double target;
     private double error;    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Configuration configuration = robot.getConfiguration();
+    private final Constants constants = robot.getConfiguration();
 
     public Shooter() {
-        bottomShooter = new CANSparkFlex(configuration.bottom_shooter_id, MotorType.kBrushless);
+        bottomShooter = new CANSparkFlex(Constants.Shooter.BOTTOM_SHOOTER_ID, MotorType.kBrushless);
         bottomShooter.restoreFactoryDefaults();
-        bottomShooter.setSmartCurrentLimit(configuration.shooter_current_limit);
-        bottomShooter.setInverted(!configuration.shooter_invert);
+        bottomShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
+        bottomShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
         bottomEncoder = bottomShooter.getEncoder();
 
-        topShooter = new CANSparkFlex(configuration.top_shooter_id, MotorType.kBrushless);
+        topShooter = new CANSparkFlex(Constants.Shooter.TOP_SHOOTER_ID, MotorType.kBrushless);
         topShooter.restoreFactoryDefaults();
-        topShooter.setSmartCurrentLimit(configuration.shooter_current_limit);
-        topShooter.setInverted(!configuration.shooter_invert);
+        topShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
+        topShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
         topEncoder = topShooter.getEncoder();
 
         topController = topShooter.getPIDController();
         bottomController = bottomShooter.getPIDController();
 
-        topController.setP(configuration.shooter_p);
-        topController.setI(configuration.shooter_i);
-        topController.setD(configuration.shooter_d);
-        topController.setFF(configuration.shooter_ff);
+        topController.setP(Constants.Shooter.SHOOTER_P);
+        topController.setI(Constants.Shooter.SHOOTER_I);
+        topController.setD(Constants.Shooter.SHOOTER_D);
+        topController.setFF(Constants.Shooter.SHOOTER_FF);
 
-        bottomController.setP(configuration.shooter_p);
-        bottomController.setI(configuration.shooter_i);
-        bottomController.setD(configuration.shooter_d);
-        bottomController.setFF(configuration.shooter_ff);
+        bottomController.setP(Constants.Shooter.SHOOTER_P);
+        bottomController.setI(Constants.Shooter.SHOOTER_I);
+        bottomController.setD(Constants.Shooter.SHOOTER_D);
+        bottomController.setFF(Constants.Shooter.SHOOTER_FF);
         
         bottomShooter.burnFlash();
         topShooter.burnFlash();
@@ -74,17 +74,17 @@ public class Shooter extends SubsystemBase {
 
     public void shoot(double speed) {
         target = speed;
-        topController.setReference(speed, ControlType.kVelocity, 0, configuration.shooter_ff);
-        bottomController.setReference(speed, ControlType.kVelocity, 0, configuration.shooter_ff);
+        topController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+        bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
     }
 
     public boolean minimalError() {
-        return error < configuration.shooter_error_tolerance && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 5000;
+        return error < Constants.Shooter.SHOOTER_ERROR_TOLERANCE && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 5000;
     }
 
     public void setShooterIdle(boolean idleMode) {
-        bottomShooter.set(idleMode ? configuration.idle_shooter_speed : 0);
-        topShooter.set(idleMode ? configuration.idle_shooter_speed : 0);
+        bottomShooter.set(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0);
+        topShooter.set(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0);
     }
 
     public void overrideShooterSpeed(double speed) {

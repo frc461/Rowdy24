@@ -6,7 +6,7 @@ public enum RobotIdentity {
 
     public static RobotIdentity getIdentity() {
         String mac = MacAddress.getMACAddress();
-        if (!mac.equals("")) {
+        if (!mac.isEmpty()) {
             if (mac.equals(MacAddress.AlphaBot)) {
                 return PRACTICE;
             }

@@ -6,7 +6,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.variants.PracticeConstants;
-import frc.robot.constants.Configuration;
+import frc.robot.constants.Constants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotIdentity;
 import frc.robot.subsystems.Swerve;
@@ -18,7 +18,7 @@ public class TeleopSwerveCommand extends Command {
     private final DoubleSupplier rotationSup;
     private final BooleanSupplier robotCentricSup;
     private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Configuration configuration = robot.getConfiguration();
+    private final Constants constants = robot.getConfiguration();
 
     public TeleopSwerveCommand(
             Swerve swerve,
@@ -44,8 +44,8 @@ public class TeleopSwerveCommand extends Command {
 
         /* Drive */
         swerve.drive(
-                new Translation2d(translationVal, strafeVal).times(configuration.max_speed),
-                rotationVal * configuration.max_angular_velocity,
+                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
+                rotationVal * Constants.Swerve.MAX_ANGULAR_VELOCITY,
                 !robotCentricSup.getAsBoolean(),
                 true
         );

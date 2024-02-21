@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
 import frc.robot.constants.variants.PracticeConstants;
-import frc.robot.constants.Configuration;
+import frc.robot.constants.Constants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotIdentity;
 import frc.robot.subsystems.Limelight;
@@ -19,7 +19,7 @@ public class LimelightTurretCommand extends Command {
     private final DoubleSupplier strafeSup;
     private final BooleanSupplier robotCentricSup;
     private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Configuration configuration = robot.getConfiguration();
+    private final Constants constants = robot.getConfiguration();
 
     public LimelightTurretCommand(
             Limelight limelight,
@@ -46,9 +46,9 @@ public class LimelightTurretCommand extends Command {
         if(limelight.tagExists()) {
             try (
                     PIDController rotController = new PIDController(
-                            configuration.limelight_p,
-                            configuration.limelight_i,
-                            configuration.limelight_d
+                            Constants.Limelight.LIMELIGHT_P,
+                            Constants.Limelight.LIMELIGHT_I,
+                            Constants.Limelight.LIMELIGHT_D
                     )
             ) {
                 rotController.enableContinuousInput(PracticeConstants.MINIMUM_ANGLE, PracticeConstants.MAXIMUM_ANGLE);
@@ -60,7 +60,7 @@ public class LimelightTurretCommand extends Command {
 
                 /* Drive */
                 swerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(configuration.max_speed),
+                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
                     -rotate,
                     !robotCentricSup.getAsBoolean(),
                     true

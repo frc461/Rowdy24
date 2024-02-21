@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Configuration;
+import frc.robot.constants.Constants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotIdentity;
 
@@ -14,7 +14,7 @@ public class IntakeCarriage extends SubsystemBase {
     private final CANSparkFlex intake;
     private final CANSparkMax carriage;
     private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
-    private final Configuration configuration = robot.getConfiguration();
+    private final Constants constants = robot.getConfiguration();
 
     DigitalInput carriageBeam = new DigitalInput(6); // end of carriage (on shooter side)
 
@@ -22,12 +22,12 @@ public class IntakeCarriage extends SubsystemBase {
     DigitalInput shooterBeam = new DigitalInput(7); // completely exit through shooter
 
     public IntakeCarriage() {
-        intake = new CANSparkFlex(configuration.intake_id, MotorType.kBrushless);
+        intake = new CANSparkFlex(Constants.IntakeCarriage.INTAKE_ID, MotorType.kBrushless);
         intake.restoreFactoryDefaults();
         intake.setSmartCurrentLimit(80);
         intake.setInverted(false);
 
-        carriage = new CANSparkMax(configuration.carriage_id, MotorType.kBrushless);
+        carriage = new CANSparkMax(Constants.IntakeCarriage.CARRIAGE_ID, MotorType.kBrushless);
         carriage.restoreFactoryDefaults();
         carriage.setInverted(true);
     }
@@ -74,7 +74,7 @@ public class IntakeCarriage extends SubsystemBase {
     }
 
     public void setIntakeIdle(boolean idleMode) {
-        intake.set(idleMode ? configuration.idle_intake_speed : 0);
+        intake.set(idleMode ? Constants.IntakeCarriage.IDLE_INTAKE_SPEED : 0);
     }
 
     public void setCarriageIdle() {
