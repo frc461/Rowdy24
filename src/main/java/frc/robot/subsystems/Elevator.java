@@ -1,9 +1,8 @@
 package frc.robot.subsystems;
 
-import java.beans.Encoder;
-
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -11,7 +10,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -25,8 +23,8 @@ public class Elevator extends SubsystemBase {
 
     public Elevator() {
         elevator =  new TalonFX(Constants.Elevator.ELEVATOR_ID);
-        
         elevator.setNeutralMode(NeutralModeValue.Brake);
+        elevator.getConfigurator().apply(new TalonFXConfiguration());
         var talonFXConfigurator = elevator.getConfigurator();
         talonFXConfigurator.apply(new VoltageConfigs().withPeakForwardVoltage(60));
         talonFXConfigurator.apply(new MotorOutputConfigs().withInverted(InvertedValue.CounterClockwise_Positive));

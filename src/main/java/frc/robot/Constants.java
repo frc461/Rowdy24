@@ -52,7 +52,7 @@ public final class Constants {
         public static final double ELEVATOR_SERVO_CLAMPED_POS = 1;
         public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 1;
         public static final boolean ELEVATOR_INVERT = true;
-        public static final double ELEVATOR_P = 0.097;
+        public static final double ELEVATOR_P = 0.001;
         public static final double ELEVATOR_I = 0.0;
         public static final double ELEVATOR_D = 0.0;
         public static final double ELEVATOR_LOWER_LIMIT = 0;
