@@ -15,26 +15,31 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.AlphaBotConstants;
+import frc.robot.Configuration;
+import frc.robot.RobotConstants;
+import frc.robot.RobotIdentity;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveModule[] swerveMods;
     public final Pigeon2 gyro;
+    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
+    private final Configuration configuration = robot.getConfiguration();
     final Field2d field = new Field2d();
 
     // TODO: Once robot is finished, swerve gyro angles will need to be fixed
 
     public Swerve() {
-        gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
+        gyro = new Pigeon2(configuration.pigeon_id);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
 
         swerveMods = new SwerveModule[] {
-            new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
-            new SwerveModule(1, Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS),
-            new SwerveModule(2, Constants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS),
-            new SwerveModule(3, Constants.Swerve.Mod3.SWERVE_MODULE_CONSTANTS)
+            new SwerveModule(0, configuration.swerve_module_constants_0),
+            new SwerveModule(1, configuration.swerve_module_constants_1),
+            new SwerveModule(2, configuration.swerve_module_constants_2),
+            new SwerveModule(3, configuration.swerve_module_constants_3)
         };
 
         /*
@@ -46,7 +51,7 @@ public class Swerve extends SubsystemBase {
         resetModulesToAbsolute();
 
         swerveOdometry = new SwerveDriveOdometry(
-                Constants.Swerve.SWERVE_KINEMATICS,
+                configuration.swerve_kinematics,
                 getHeading(),
                 getModulePositions()
         );
@@ -54,28 +59,28 @@ public class Swerve extends SubsystemBase {
         AutoBuilder.configureHolonomic(
                 this::getPose, // Robot pose supplier
                 this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
+                () -> configuration.swerve_kinematics.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
                 speeds -> {
                     // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                     SwerveModuleState[] swerveModuleStates =
-                            Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
+                            configuration.swerve_kinematics.toSwerveModuleStates(speeds);
                     setModuleStates(swerveModuleStates);
                 },
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your
                                                  // Constants class
                         new PIDConstants( // Translation PID constants
-                                Constants.Auto.AUTO_DRIVE_P,
-                                Constants.Auto.AUTO_DRIVE_I,
-                                Constants.Auto.AUTO_DRIVE_D
+                                configuration.auto_drive_p,
+                                configuration.auto_drive_i,
+                                configuration.auto_drive_d
                         ),
                         new PIDConstants( // Rotation PID constants
-                                Constants.Auto.AUTO_ANGLE_P,
-                                Constants.Auto.AUTO_ANGLE_I,
-                                Constants.Auto.AUTO_ANGLE_D
+                                configuration.auto_angle_p,
+                                configuration.auto_angle_i,
+                                configuration.auto_angle_d
                         ),
-                        Constants.Swerve.MAX_SPEED - 2, // Max module speed, in m/s
-                        Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to
+                        configuration.max_speed - 2, // Max module speed, in m/s
+                        configuration.center_to_wheel, // Drive base radius in meters. Distance from robot center to
                                                           // furthest module.
                         new ReplanningConfig(true, true) // Default path replanning config. See the API for the options here
                 ),
@@ -108,7 +113,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-        SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(
+        SwerveModuleState[] swerveModuleStates = configuration.swerve_kinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(),
                         translation.getY(),
@@ -124,8 +129,8 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getYaw() {
-        return (Constants.Swerve.INVERT_GYRO) ?
-                Constants.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
+        return (configuration.invert_gyro) ?
+                AlphaBotConstants.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
                 gyro.getYaw().getValueAsDouble();
     }
 
@@ -166,7 +171,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.MAX_SPEED);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, configuration.max_speed);
 
         for (SwerveModule mod : swerveMods) {
             mod.setDesiredState(desiredStates[mod.moduleNumber], isOpenLoop);

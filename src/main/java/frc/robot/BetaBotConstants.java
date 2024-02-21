@@ -10,7 +10,7 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
-public final class Constants {
+public final class BetaBotConstants implements RobotConstants{
     public static final double STICK_DEADBAND = 0.1;
     public static final double TRIGGER_DEADBAND = 0.5;
     public static final double MINIMUM_ANGLE = -180.0;
@@ -32,6 +32,8 @@ public final class Constants {
         public static final double ANGLER_D = 0.0001;
         public static final int ANGLER_CURRENT_LIMIT = 35;
         public static final boolean ANGLER_INVERT = false;
+        public static final int ANGLER_LOWER_LIMIT_SWITCH_PORT = 1;
+        public static final int ANGLER_UPPER_LIMIT_SWTICH_PORT = 0;
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
         public static final double UPPER_BOUND_LIMIT = 2.26;
@@ -44,6 +46,10 @@ public final class Constants {
     public static final class Elevator {
         public static final int ELEVATOR_ID = 31;
         public static final int ELEVATOR_CURRENT_LIMIT = 70;
+        public static final int ELEVATOR_LIMIT_SWITCH = 2;
+        public static final int ELEVATOR_SERVO_PORT = 1;
+        public static final double ELEVATOR_SERVO_CLAMPED_POS = 1;
+        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 1;
         public static final boolean ELEVATOR_INVERT = true;
         public static final double ELEVATOR_P = 0.097;
         public static final double ELEVATOR_I = 0.0;
@@ -58,6 +64,9 @@ public final class Constants {
         public static final int INTAKE_ID = 41;
         public static final int CARRIAGE_ID = 42;
         public static final double IDLE_INTAKE_SPEED = -0.15;
+        public static final int CARRIAGE_BEAM = 4;
+        public static final int SHOOTER_BEAM = 3;
+        public static final int AMP_BEAM = 5;
     }
 
     public static final class Limelight {
@@ -224,5 +233,143 @@ public final class Constants {
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
+    }
+    private Configuration configuration = new Configuration();
+
+    public BetaBotConstants() {
+        configuration.auto_drive_p = Auto.AUTO_DRIVE_P;
+        configuration.auto_drive_i = Auto.AUTO_DRIVE_I;
+        configuration.auto_drive_d = Auto.AUTO_DRIVE_D;
+        configuration.auto_angle_p = Auto.AUTO_ANGLE_P;
+        configuration.auto_angle_i = Auto.AUTO_ANGLE_I;
+        configuration.auto_angle_d = Auto.AUTO_ANGLE_D;
+        
+        configuration.angler_id = Angler.ANGLER_ID;
+        configuration.angler_p = Angler.ANGLER_P;
+        configuration.angler_i = Angler.ANGLER_I;
+        configuration.angler_d = Angler.ANGLER_D;
+        configuration.angler_current_limit = Angler.ANGLER_CURRENT_LIMIT;
+        configuration.angler_invert = Angler.ANGLER_INVERT;
+        configuration.angler_lower_limit_switch_port = Angler.ANGLER_LOWER_LIMIT_SWITCH_PORT;
+        configuration.angler_upper_limit_switch_port = Angler.ANGLER_UPPER_LIMIT_SWTICH_PORT;
+        configuration.angler_lower_limit = Angler.ANGLER_LOWER_LIMIT;
+        configuration.angler_upper_limit = Angler.ANGLER_UPPER_LIMIT;
+        configuration.upper_bound_limit = Angler.UPPER_BOUND_LIMIT;
+        configuration.upper_bound_coefficient = Angler.UPPER_BOUND_COEFFICIENT;
+        configuration.upper_bound_series = Angler.UPPER_BOUND_SERIES;
+        configuration.tight_bound_coefficient = Angler.TIGHT_BOUND_COEFFICIENT;
+        configuration.tight_bound_series = Angler.TIGHT_BOUND_SERIES;
+
+        configuration.elevator_id = Elevator.ELEVATOR_ID;
+        configuration.elevator_current_limit = Elevator.ELEVATOR_CURRENT_LIMIT;
+        configuration.elevator_limit_switch = Elevator.ELEVATOR_LIMIT_SWITCH;
+        configuration.elevator_servo_port = Elevator.ELEVATOR_SERVO_PORT;
+        configuration.elevator_servo_clamped_pos = Elevator.ELEVATOR_SERVO_CLAMPED_POS;
+        configuration.elevator_servo_unclamped_pos = Elevator.ELEVATOR_SERVO_UNCLAMPED_POS;
+        configuration.elevator_invert = Elevator.ELEVATOR_INVERT;
+        configuration.elevator_p = Elevator.ELEVATOR_P;
+        configuration.elevator_i = Elevator.ELEVATOR_I;
+        configuration.elevator_d = Elevator.ELEVATOR_D;
+        configuration.elevator_lower_limit = Elevator.ELEVATOR_LOWER_LIMIT;
+        configuration.elevator_upper_limit = Elevator.ELEVATOR_UPPER_LIMIT;
+        configuration.elevator_amp = Elevator.ELEVATOR_AMP;
+        configuration.elevator_stow = Elevator.ELEVATOR_STOW;
+
+        configuration.intake_id = IntakeCarriage.INTAKE_ID;
+        configuration.carriage_id = IntakeCarriage.CARRIAGE_ID;
+        configuration.idle_intake_speed = IntakeCarriage.IDLE_INTAKE_SPEED;
+        configuration.carriage_beam = IntakeCarriage.CARRIAGE_BEAM;
+        configuration.shooter_beam = IntakeCarriage.SHOOTER_BEAM;
+        configuration.amp_beam = IntakeCarriage.AMP_BEAM;
+
+        configuration.limelight_p = Limelight.LIMELIGHT_P;
+        configuration.limelight_i = Limelight.LIMELIGHT_I;
+        configuration.limelight_d = Limelight.LIMELIGHT_D;
+        configuration.yaw_offset = Limelight.YAW_OFFSET;
+
+        configuration.bottom_shooter_id = Shooter.BOTTOM_SHOOTER_ID;
+        configuration.top_shooter_id = Shooter.TOP_SHOOTER_ID;
+        configuration.shooter_current_limit = Shooter.SHOOTER_CURRENT_LIMIT;
+        configuration.shooter_invert = Shooter.SHOOTER_INVERT;
+        configuration.base_shooter_speed = Shooter.BASE_SHOOTER_SPEED;
+        configuration.idle_shooter_speed = Shooter.IDLE_SHOOTER_SPEED;
+        configuration.shooter_error_tolerance = Shooter.SHOOTER_ERROR_TOLERANCE;
+        configuration.distance_multiplier = Shooter.DISTANCE_MULTIPLIER;
+        configuration.shooter_p = Shooter.SHOOTER_P;
+        configuration.shooter_i = Shooter.SHOOTER_I;
+        configuration.shooter_d = Shooter.SHOOTER_D;
+        configuration.shooter_ff = Shooter.SHOOTER_FF;
+        configuration.feeder_id = Shooter.FEEDER_ID;
+        configuration.feeder_current_limit = Shooter.FEEDER_CURRENT_LIMIT;
+        configuration.feeder_invert = Shooter.FEEDER_INVERT;
+
+        configuration.gyro_offset = Swerve.GYRO_OFFSET;
+        configuration.pigeon_id = Swerve.PIGEON_ID;
+        configuration.invert_gyro = Swerve.INVERT_GYRO;
+        configuration.chosen_module = Swerve.CHOSEN_MODULE;
+        configuration.track_width = Swerve.TRACK_WIDTH;
+        configuration.wheel_base = Swerve.WHEEL_BASE;
+        configuration.center_to_wheel = Swerve.CENTER_TO_WHEEL;
+        configuration.wheel_circumference = Swerve.WHEEL_CIRCUMFERENCE;
+        configuration.swerve_kinematics = Swerve.SWERVE_KINEMATICS;
+        configuration.voltage_comp = Swerve.VOLTAGE_COMP;
+        configuration.drive_gear_ratio = Swerve.DRIVE_GEAR_RATIO;
+        configuration.angle_gear_ratio = Swerve.ANGLE_GEAR_RATIO;
+        configuration.angle_motor_invert = Swerve.ANGLE_MOTOR_INVERT;
+        configuration.drive_motor_invert = Swerve.DRIVE_MOTOR_INVERT;
+        configuration.cancoder_sensor_direction = Swerve.CANCODER_SENSOR_DIRECTION;
+        configuration.angle_continuous_supply_current_limit = Swerve.ANGLE_CONTINUOUS_SUPPLY_CURRENT_LIMIT;
+        configuration.angle_peak_supply_current_limit = Swerve.ANGLE_PEAK_SUPPLY_CURRENT_LIMIT;
+        configuration.angle_peak_supply_current_duration = Swerve.ANGLE_PEAK_SUPPLY_CURRENT_DURATION;
+        configuration.angle_enable_supply_current_limit = Swerve.ANGLE_ENABLE_SUPPLY_CURRENT_LIMIT;
+        configuration.drive_continuous_supply_current_limit = Swerve.DRIVE_CONTINUOUS_SUPPLY_CURRENT_LIMIT;
+        configuration.drive_peak_supply_current_limit = Swerve.DRIVE_PEAK_SUPPLY_CURRENT_LIMIT;
+        configuration.drive_peak_supply_current_duration = Swerve.DRIVE_PEAK_SUPPLY_CURRENT_DURATION;
+        configuration.drive_enable_supply_current_limit = Swerve.DRIVE_ENABLE_SUPPLY_CURRENT_LIMIT;
+        configuration.open_loop_ramp = Swerve.OPEN_LOOP_RAMP;
+        configuration.closed_loop_ramp = Swerve.CLOSED_LOOP_RAMP;
+        configuration.angle_p = Swerve.ANGLE_P;
+        configuration.angle_i = Swerve.ANGLE_I;
+        configuration.angle_d = Swerve.ANGLE_D;
+        configuration.angle_f = Swerve.ANGLE_F;
+        configuration.drive_s = Swerve.DRIVE_S;
+        configuration.drive_v = Swerve.DRIVE_V;
+        configuration.drive_a = Swerve.DRIVE_A;
+        configuration.drive_conversion_position_factor = Swerve.DRIVE_CONVERSION_POSITION_FACTOR;
+        configuration.drive_conversion_velocity_factor = Swerve.DRIVE_CONVERSION_VELOCITY_FACTOR;
+        configuration.angle_conversion_factor = Swerve.ANGLE_CONVERSION_FACTOR;
+        configuration.max_speed = Swerve.MAX_SPEED;
+        configuration.max_accel = Swerve.MAX_ACCEL;
+        configuration.max_angular_velocity = Swerve.MAX_ANGULAR_VELOCITY;
+        configuration.angle_neutral_mode = Swerve.ANGLE_NEUTRAL_MODE;
+        configuration.drive_neutral_mode = Swerve.DRIVE_NEUTRAL_MODE;
+
+        configuration.drive_motor_id_3 = Swerve.Mod3.DRIVE_MOTOR_ID;
+        configuration.angle_motor_id_3 = Swerve.Mod3.ANGLE_MOTOR_ID;
+        configuration.cancoder_id_3 = Swerve.Mod3.CANCODER_ID;
+        configuration.angle_offset_3 = Swerve.Mod3.ANGLE_OFFSET;
+        configuration.swerve_module_constants_3 = Swerve.Mod3.SWERVE_MODULE_CONSTANTS;
+
+        configuration.drive_motor_id_2 = Swerve.Mod2.DRIVE_MOTOR_ID;
+        configuration.angle_motor_id_2 = Swerve.Mod2.ANGLE_MOTOR_ID;
+        configuration.cancoder_id_2 = Swerve.Mod2.CANCODER_ID;
+        configuration.angle_offset_2 = Swerve.Mod2.ANGLE_OFFSET;
+        configuration.swerve_module_constants_2 = Swerve.Mod2.SWERVE_MODULE_CONSTANTS;
+
+        configuration.drive_motor_id_0 = Swerve.Mod0.DRIVE_MOTOR_ID;
+        configuration.angle_motor_id_0 = Swerve.Mod0.ANGLE_MOTOR_ID;
+        configuration.cancoder_id_0 = Swerve.Mod0.CANCODER_ID;
+        configuration.angle_offset_0 = Swerve.Mod0.ANGLE_OFFSET;
+        configuration.swerve_module_constants_0 = Swerve.Mod0.SWERVE_MODULE_CONSTANTS;
+
+        configuration.drive_motor_id_1 = Swerve.Mod1.DRIVE_MOTOR_ID;
+        configuration.angle_motor_id_1 = Swerve.Mod1.ANGLE_MOTOR_ID;
+        configuration.cancoder_id_1 = Swerve.Mod1.CANCODER_ID;
+        configuration.angle_offset_1 = Swerve.Mod1.ANGLE_OFFSET;
+        configuration.swerve_module_constants_1 = Swerve.Mod1.SWERVE_MODULE_CONSTANTS;
+    }
+    @Override
+    public Configuration getConfiguration() {
+        return configuration;
     }
 }

@@ -6,26 +6,29 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-
+import frc.robot.Configuration;
+import frc.robot.RobotConstants;
+import frc.robot.RobotIdentity;
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
     private final PIDController pidController;
     private final RelativeEncoder encoder;
     private double target;
     private double error;
+    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
+    private final Configuration configuration = robot.getConfiguration();
 
     public Angler() {
-        angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
+        angler = new CANSparkMax(configuration.angler_id, MotorType.kBrushless);
         angler.restoreFactoryDefaults();
-        angler.setSmartCurrentLimit(Constants.Angler.ANGLER_CURRENT_LIMIT);
-        angler.setInverted(Constants.Angler.ANGLER_INVERT);
+        angler.setSmartCurrentLimit(configuration.angler_current_limit);
+        angler.setInverted(configuration.angler_invert);
         encoder = angler.getEncoder();
         
         pidController = new PIDController(
-                Constants.Angler.ANGLER_P,
-                Constants.Angler.ANGLER_I,
-                Constants.Angler.ANGLER_D
+                configuration.angler_p,
+                configuration.angler_i,
+                configuration.angler_d
         );
 
         target = 0.0;
@@ -63,10 +66,10 @@ public class Angler extends SubsystemBase {
 
     public void checkLimitSwitches() {
         if (upperSwitchTriggered()) {
-            encoder.setPosition(Constants.Angler.ANGLER_UPPER_LIMIT);
+            encoder.setPosition(configuration.angler_upper_limit);
         }
         if (lowerSwitchTriggered()) {
-            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
+            encoder.setPosition(configuration.angler_lower_limit);
         }
     }
 
@@ -79,10 +82,10 @@ public class Angler extends SubsystemBase {
         target = encoder.getPosition();
         checkLimitSwitches();
         if (axisValue < 0 && lowerSwitchTriggered()) {
-            target = Constants.Angler.ANGLER_LOWER_LIMIT;
+            target = configuration.angler_lower_limit;
             holdTarget();
         } else if (axisValue > 0 && upperSwitchTriggered()) {
-            target = Constants.Angler.ANGLER_UPPER_LIMIT;
+            target = configuration.angler_upper_limit;
             holdTarget();
         } else {
             angler.set(axisValue);
@@ -92,9 +95,9 @@ public class Angler extends SubsystemBase {
     public void setAngle(double encoderVal) {
         checkLimitSwitches();
         encoderVal = (encoderVal < encoder.getPosition() && lowerSwitchTriggered()) ?
-                Constants.Angler.ANGLER_LOWER_LIMIT :
+                configuration.angler_lower_limit :
                 (encoderVal > encoder.getPosition() && upperSwitchTriggered()) ?
-                Constants.Angler.ANGLER_UPPER_LIMIT : encoderVal;
+                configuration.angler_upper_limit : encoderVal;
         target = encoderVal;
         holdTarget();
     }
@@ -102,15 +105,15 @@ public class Angler extends SubsystemBase {
     public void setAlignedAngle(double x, double z, boolean tag) {
         double dist = Math.hypot(x, z);
         if (tag) {
-            if (dist < Constants.Angler.UPPER_BOUND_LIMIT) {
+            if (dist < configuration.upper_bound_limit) {
                 setAngle(Math.min(
-                        Constants.Angler.TIGHT_BOUND_COEFFICIENT *
-                                Math.pow(dist, Constants.Angler.TIGHT_BOUND_SERIES) - 0.3, Constants.Angler.ANGLER_UPPER_LIMIT
+                        configuration.tight_bound_coefficient *
+                                Math.pow(dist, configuration.tight_bound_series) - 0.3, configuration.angler_upper_limit
                 ));
             } else {
                 setAngle(Math.min(
-                        Constants.Angler.UPPER_BOUND_COEFFICIENT *
-                                Math.pow(dist, Constants.Angler.UPPER_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
+                        configuration.upper_bound_coefficient *
+                                Math.pow(dist, configuration.upper_bound_series), configuration.angler_upper_limit
                 ));
             }
         } else {

@@ -5,7 +5,10 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+import frc.robot.AlphaBotConstants;
+import frc.robot.Configuration;
+import frc.robot.RobotConstants;
+import frc.robot.RobotIdentity;
 import frc.robot.subsystems.Swerve;
 
 public class TeleopSwerveCommand extends Command {
@@ -14,6 +17,8 @@ public class TeleopSwerveCommand extends Command {
     private final DoubleSupplier strafeSup;
     private final DoubleSupplier rotationSup;
     private final BooleanSupplier robotCentricSup;
+    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
+    private final Configuration configuration = robot.getConfiguration();
 
     public TeleopSwerveCommand(
             Swerve swerve,
@@ -33,14 +38,14 @@ public class TeleopSwerveCommand extends Command {
     @Override
     public void execute() {
         /* Get Values, Deadband */
-        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.STICK_DEADBAND);
-        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.STICK_DEADBAND);
-        double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.STICK_DEADBAND);
+        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), AlphaBotConstants.STICK_DEADBAND);
+        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), AlphaBotConstants.STICK_DEADBAND);
+        double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), AlphaBotConstants.STICK_DEADBAND);
 
         /* Drive */
         swerve.drive(
-                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
-                rotationVal * Constants.Swerve.MAX_ANGULAR_VELOCITY,
+                new Translation2d(translationVal, strafeVal).times(configuration.max_speed),
+                rotationVal * configuration.max_angular_velocity,
                 !robotCentricSup.getAsBoolean(),
                 true
         );

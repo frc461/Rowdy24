@@ -6,7 +6,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Swerve;
-import frc.robot.Constants;
+import frc.robot.AlphaBotConstants;
+import frc.robot.Configuration;
+import frc.robot.RobotConstants;
+import frc.robot.RobotIdentity;
 import frc.robot.subsystems.Limelight;
 
 public class LimelightTurretCommand extends Command {
@@ -15,6 +18,8 @@ public class LimelightTurretCommand extends Command {
     private final DoubleSupplier translationSup;
     private final DoubleSupplier strafeSup;
     private final BooleanSupplier robotCentricSup;
+    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
+    private final Configuration configuration = robot.getConfiguration();
 
     public LimelightTurretCommand(
             Limelight limelight,
@@ -34,19 +39,19 @@ public class LimelightTurretCommand extends Command {
     @Override
     public void execute() {
         /* Apply Deadband */
-        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.STICK_DEADBAND);
-        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.STICK_DEADBAND);
+        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), AlphaBotConstants.STICK_DEADBAND);
+        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), AlphaBotConstants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
         if(limelight.tagExists()) {
             try (
                     PIDController rotController = new PIDController(
-                            Constants.Limelight.LIMELIGHT_P,
-                            Constants.Limelight.LIMELIGHT_I,
-                            Constants.Limelight.LIMELIGHT_D
+                            configuration.limelight_p,
+                            configuration.limelight_i,
+                            configuration.limelight_d
                     )
             ) {
-                rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
+                rotController.enableContinuousInput(AlphaBotConstants.MINIMUM_ANGLE, AlphaBotConstants.MAXIMUM_ANGLE);
 
                 double rotate = rotController.calculate(
                         swerve.getYaw(),
@@ -55,7 +60,7 @@ public class LimelightTurretCommand extends Command {
 
                 /* Drive */
                 swerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
+                    new Translation2d(translationVal, strafeVal).times(configuration.max_speed),
                     -rotate,
                     !robotCentricSup.getAsBoolean(),
                     true

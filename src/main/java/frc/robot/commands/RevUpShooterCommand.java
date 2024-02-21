@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+import frc.robot.Configuration;
+import frc.robot.RobotConstants;
+import frc.robot.RobotIdentity;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 
@@ -9,6 +11,9 @@ public class RevUpShooterCommand extends Command {
     private final Shooter shooter;
     private final Limelight limelight;
     private final boolean idleMode;
+    private final RobotConstants robot = RobotConstants.getRobotConstants(RobotIdentity.getIdentity());
+    private final Configuration configuration = robot.getConfiguration();
+
     public RevUpShooterCommand(Shooter shooter, Limelight limelight, boolean idleMode) {
         this.shooter = shooter;
         this.limelight = limelight;
@@ -18,12 +23,12 @@ public class RevUpShooterCommand extends Command {
 
     @Override
     public void initialize() {
-        shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER);
+        shooter.shoot(configuration.base_shooter_speed + limelight.getRZ() * configuration.distance_multiplier);
     }
 
     @Override
     public void execute() {
-        shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER);
+        shooter.shoot(configuration.base_shooter_speed + limelight.getRZ() * configuration.distance_multiplier);
     }
 
     @Override
