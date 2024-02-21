@@ -46,7 +46,7 @@ public final class Constants {
 
     public static final class Elevator {
         public static final int ELEVATOR_ID = 31;
-        public static final int ELEVATOR_CURRENT_LIMIT = 70;
+        public static final int ELEVATOR_CURRENT_LIMIT = 25;
         public static final int ELEVATOR_LIMIT_SWITCH = 2;
         public static final int ELEVATOR_SERVO_PORT = 1;
         public static final double ELEVATOR_SERVO_CLAMPED_POS = 1;
@@ -56,7 +56,7 @@ public final class Constants {
         public static final double ELEVATOR_I = 0.0;
         public static final double ELEVATOR_D = 0.0;
         public static final double ELEVATOR_LOWER_LIMIT = 0;
-        public static final double ELEVATOR_UPPER_LIMIT = 61;
+        public static final double ELEVATOR_UPPER_LIMIT = 38;
         public static final double ELEVATOR_AMP = 61.0;
         public static final double ELEVATOR_STOW = 0.0;
     }

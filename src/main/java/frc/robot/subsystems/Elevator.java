@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import java.beans.Encoder;
+
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -8,6 +11,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -27,8 +31,9 @@ public class Elevator extends SubsystemBase {
         talonFXConfigurator.apply(new VoltageConfigs().withPeakForwardVoltage(60));
         talonFXConfigurator.apply(new MotorOutputConfigs().withInverted(InvertedValue.CounterClockwise_Positive));
         talonFXConfigurator.apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake));
+        talonFXConfigurator.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT));
 
-        //encoder = elevator.getEncoder(); //TODO fix this lul
+        //elevator.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
 
         pidController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
@@ -57,8 +62,7 @@ public class Elevator extends SubsystemBase {
 
     public void checkLimitSwitch() {
         if (elevatorSwitchTriggered()) {
-            //encoder.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
-            elevator.setPosition(0);
+            elevator.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
         }
     }
 

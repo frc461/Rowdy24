@@ -23,9 +23,10 @@ public class TeleopElevatorCommand extends Command {
 
         /* Move Elevator */
         if (axisValue != 0) {
-            elevator.moveElevator(axisValue);
+            elevator.moveElevator(motionSup.getAsDouble());
         } else {
             elevator.holdTarget();
         }
+        elevator.checkLimitSwitch();
     }
 }

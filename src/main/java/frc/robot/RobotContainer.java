@@ -117,12 +117,12 @@ public class RobotContainer {
                 )
         );
 
-//         elevator.setDefaultCommand(
-//                 new TeleopElevator(
-//                         elevator,
-//                         () -> -operator.getRawAxis(elevatorAxis)
-//                 )
-//         );
+        elevator.setDefaultCommand(
+                new TeleopElevatorCommand(
+                        elevator,
+                        () -> -operator.getRawAxis(elevatorAxis)
+                )
+        );
 
         // Configure controller button bindings
         configureButtonBindings();
@@ -263,7 +263,7 @@ public class RobotContainer {
         );
 
         
-        //operatorOneEighty.onTrue(new InstantCommand(()-> elevator.setClamp(true))); //toggle clamp
+        operatorOneEighty.onTrue(new InstantCommand(()-> elevator.setClamp(true))); //toggle clamp
 
 
 //        driverStowButton.onTrue(
@@ -296,7 +296,7 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
         SmartDashboard.putBoolean("note in system", intakeCarriage.noteInSystem());
 
-//        elevator debug
+        // elevator debug
        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
        SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
@@ -320,6 +320,9 @@ public class RobotContainer {
         // angler debug
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
         SmartDashboard.putNumber("Angler error", angler.getError());
+        SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
+        SmartDashboard.putBoolean("Angler top triggered", angler.upperSwitchTriggered());
+
     }
 
     /**

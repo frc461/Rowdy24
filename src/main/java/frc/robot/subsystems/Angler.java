@@ -56,19 +56,21 @@ public class Angler extends SubsystemBase {
     }
 
     public boolean lowerSwitchTriggered() { 
-        return lowerLimitSwitch.get();
+        return !lowerLimitSwitch.get();
     }
 
     public boolean upperSwitchTriggered() {
-        return upperLimitSwitch.get();
+        return !upperLimitSwitch.get();
     }
 
     public void checkLimitSwitches() {
         if (upperSwitchTriggered()) {
             encoder.setPosition(Constants.Angler.ANGLER_UPPER_LIMIT);
+            target = Constants.Angler.ANGLER_UPPER_LIMIT;
         }
         if (lowerSwitchTriggered()) {
             encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
+            target = Constants.Angler.ANGLER_LOWER_LIMIT;
         }
     }
 
