@@ -2,7 +2,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -76,10 +75,6 @@ public class RobotContainer {
     private final POVButton driverNinety = new POVButton(driver, 90);
     private final POVButton driverOneEighty = new POVButton(driver, 180);
     private final POVButton driverTwoSeventy = new POVButton(driver, 270);
-
-    /* LED Initialization */
-    private final DigitalOutput lightEight = new DigitalOutput(8);
-    private final DigitalOutput lightNine = new DigitalOutput(9);
 
     /* Variables */
     private boolean idleMode = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
@@ -259,22 +254,20 @@ public class RobotContainer {
                 shooter, limelight, idleMode
                 )
         );
-
         
         toggleClamp.onTrue(new InstantCommand(()-> elevator.setClamp())); //toggle clamp
 
-
-       driverStow.onTrue(
+        driverStow.onTrue(
             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-       );
+        );
 
-       operatorStow.onTrue(
+        operatorStow.onTrue(
             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-       );
+        );
 
-       elevatorAmp.onTrue(new InstantCommand(() ->
+        elevatorAmp.onTrue(new InstantCommand(() ->
             elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
-       ));
+        ));
 
         alignAngler.onTrue(new InstantCommand(() -> angler.setAlignedAngle(
                 limelight.getRX(),
@@ -320,7 +313,6 @@ public class RobotContainer {
         SmartDashboard.putNumber("Angler error", angler.getError());
         SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
         SmartDashboard.putBoolean("Angler top triggered", angler.upperSwitchTriggered());
-
     }
 
     /**
