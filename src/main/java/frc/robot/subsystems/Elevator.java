@@ -19,7 +19,7 @@ public class Elevator extends SubsystemBase {
     private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
     private final Servo elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
     private double target;
-    boolean clamped = false;
+    boolean clamped, limitHitOnce = false;
 
     public Elevator() {
         elevator =  new TalonFX(Constants.Elevator.ELEVATOR_ID);
@@ -58,13 +58,16 @@ public class Elevator extends SubsystemBase {
 
     public void checkLimitSwitch() {
         if (elevatorSwitchTriggered()) {
+            limitHitOnce = true;
             elevator.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
         }
     }
 
     public void holdTarget() {
         checkLimitSwitch();
-        elevator.set(pidController.calculate(elevator.getRotorPosition().getValueAsDouble(), target));
+        if (limitHitOnce) {
+            elevator.set(pidController.calculate(elevator.getRotorPosition().getValueAsDouble(), target));
+        }
     }
 
     public void setClamp(){
