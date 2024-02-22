@@ -1,5 +1,9 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj2.command.*;
+
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -105,7 +109,7 @@ public class RobotContainer {
                         swerve,
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
+                        () -> driver.getRawAxis(rotationAxis),
                         robotCentric
                 )
         );
@@ -266,17 +270,17 @@ public class RobotContainer {
         operatorOneEighty.onTrue(new InstantCommand(()-> elevator.setClamp(true))); //toggle clamp
 
 
-//        driverStowButton.onTrue(
-//             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-//        );
-//
-//        operatorStowButton.onTrue(
-//             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-//        );
-//
-//        elevatorAmp.onTrue(new InstantCommand(() ->
-//             elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
-//        ));
+       driverStowButton.onTrue(
+            new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+       );
+
+       operatorStowButton.onTrue(
+            new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+       );
+
+       elevatorAmp.onTrue(new InstantCommand(() ->
+            elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
+       ));
 
         alignAngler.onTrue(new InstantCommand(() -> angler.setAlignedAngle(
                 limelight.getRX(),

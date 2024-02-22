@@ -24,14 +24,15 @@ public class Elevator extends SubsystemBase {
     public Elevator() {
         elevator =  new TalonFX(Constants.Elevator.ELEVATOR_ID);
         elevator.setNeutralMode(NeutralModeValue.Brake);
-        elevator.getConfigurator().apply(new TalonFXConfiguration());
-        var talonFXConfigurator = elevator.getConfigurator();
-        talonFXConfigurator.apply(new VoltageConfigs().withPeakForwardVoltage(60));
-        talonFXConfigurator.apply(new MotorOutputConfigs().withInverted(InvertedValue.CounterClockwise_Positive));
-        talonFXConfigurator.apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake));
-        talonFXConfigurator.apply(new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT));
+        var config = new TalonFXConfiguration();
+        config.Voltage = new VoltageConfigs().withPeakForwardVoltage(6);
+        config.MotorOutput = new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake);
+        config.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
 
-        //elevator.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
+        elevator.getConfigurator().apply(config);
+        System.out.println(elevator.getInverted());
+        
+        //elevator.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT)
 
         pidController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
