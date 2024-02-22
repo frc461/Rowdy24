@@ -1,5 +1,9 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj2.command.*;
+
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -30,7 +34,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-    //private final Elevator elevator = new Elevator();
+    private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
@@ -107,7 +111,7 @@ public class RobotContainer {
                         swerve,
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
+                        () -> driver.getRawAxis(rotationAxis),
                         robotCentric
                 )
         );
@@ -119,12 +123,12 @@ public class RobotContainer {
                 )
         );
 
-//         elevator.setDefaultCommand(
-//                 new TeleopElevator(
-//                         elevator,
-//                         () -> -operator.getRawAxis(elevatorAxis)
-//                 )
-//         );
+        elevator.setDefaultCommand(
+                new TeleopElevatorCommand(
+                        elevator,
+                        () -> -operator.getRawAxis(elevatorAxis)
+                )
+        );
 
         // Configure controller button bindings
         configureButtonBindings();
@@ -219,7 +223,8 @@ public class RobotContainer {
                 )
         ));
 
-        driverLimelight.whileTrue(new LimelightTurretCommand(
+        driverLimelight.whileTrue(
+        new LimelightTurretCommand(
                 limelight,
                 swerve,
                 () -> -driver.getRawAxis(translationAxis),
@@ -263,18 +268,21 @@ public class RobotContainer {
                 )
         );
 
+        
+        operatorOneEighty.onTrue(new InstantCommand(()-> elevator.setClamp(true))); //toggle clamp
 
-//        driverStowButton.onTrue(
-//             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-//        );
-//
-//        operatorStowButton.onTrue(
-//             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-//        );
-//
-//        elevatorAmp.onTrue(new InstantCommand(() ->
-//             elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
-//        ));
+
+       driverStowButton.onTrue(
+            new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+       );
+
+       operatorStowButton.onTrue(
+            new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+       );
+
+       elevatorAmp.onTrue(new InstantCommand(() ->
+            elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
+       ));
 
         alignAngler.onTrue(new InstantCommand(() -> angler.setAlignedAngle(
                 limelight.getRX(),
@@ -294,12 +302,11 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
         SmartDashboard.putBoolean("note in system", intakeCarriage.noteInSystem());
 
-//        elevator debug
-//        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
-//        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
-//        SmartDashboard.putNumber("Elevator Power", elevator.elevatorPower());
-//        SmartDashboard.putBoolean("Elevator Limit Triggered?",
-//        elevator.elevatorSwitchTriggered());
+        // elevator debug
+       SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
+       SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
+       SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
+       SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
 
         // limelight debug
         SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());
@@ -319,6 +326,9 @@ public class RobotContainer {
         // angler debug
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
         SmartDashboard.putNumber("Angler error", angler.getError());
+        SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
+        SmartDashboard.putBoolean("Angler top triggered", angler.upperSwitchTriggered());
+
     }
 
     /**

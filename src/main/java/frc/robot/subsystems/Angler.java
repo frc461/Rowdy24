@@ -4,25 +4,33 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
+
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotIdentity;
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
+    private final SparkLimitSwitch lowerLimitSwitch; //= new DigitalInput(Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH_PORT);
+    private final SparkLimitSwitch upperLimitSwitch; //= new DigitalInput(Constants.Angler.ANGLER_UPPER_LIMIT_SWITCH_PORT);
     private final PIDController pidController;
     private final RelativeEncoder encoder;
     private double target;
     private double error;
 
     public Angler() {
+
         angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
         angler.restoreFactoryDefaults();
         angler.setSmartCurrentLimit(Constants.Angler.ANGLER_CURRENT_LIMIT);
         angler.setInverted(Constants.Angler.ANGLER_INVERT);
         encoder = angler.getEncoder();
-        
+
+        lowerLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        upperLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+
         pidController = new PIDController(
                 Constants.Angler.ANGLER_P,
                 Constants.Angler.ANGLER_I,
@@ -55,19 +63,21 @@ public class Angler extends SubsystemBase {
     }
 
     public boolean lowerSwitchTriggered() { 
-        return angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
+        return lowerLimitSwitch.isPressed();
     }
 
     public boolean upperSwitchTriggered() {
-        return angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
+        return upperLimitSwitch.isPressed();
     }
 
     public void checkLimitSwitches() {
         if (upperSwitchTriggered()) {
             encoder.setPosition(Constants.Angler.ANGLER_UPPER_LIMIT);
+            target = Constants.Angler.ANGLER_UPPER_LIMIT;
         }
         if (lowerSwitchTriggered()) {
             encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
+            target = Constants.Angler.ANGLER_LOWER_LIMIT;
         }
     }
 

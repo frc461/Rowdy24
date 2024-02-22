@@ -47,18 +47,19 @@ public final class RowdyConstants implements RobotConstants {
 
     public static final class Elevator {
         public static final int ELEVATOR_ID = 31;
-        public static final int ELEVATOR_CURRENT_LIMIT = 70;
+        public static final int ELEVATOR_CURRENT_LIMIT = 80;
         public static final int ELEVATOR_LIMIT_SWITCH = 2;
         public static final int ELEVATOR_SERVO_PORT = 1;
         public static final double ELEVATOR_SERVO_CLAMPED_POS = 1;
         public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 1;
         public static final boolean ELEVATOR_INVERT = true;
-        public static final double ELEVATOR_P = 0.097;
-        public static final double ELEVATOR_I = 0.0;
-        public static final double ELEVATOR_D = 0.0;
+        public static final double ELEVATOR_P = 0.025;
+        public static final double ELEVATOR_I = 0.0000001;
+        public static final double ELEVATOR_D = 0.012;
+        //switch = 12.6
         public static final double ELEVATOR_LOWER_LIMIT = 0;
-        public static final double ELEVATOR_UPPER_LIMIT = 61;
-        public static final double ELEVATOR_AMP = 61.0;
+        public static final double ELEVATOR_UPPER_LIMIT = 35; //36
+        public static final double ELEVATOR_AMP = 34.16;
         public static final double ELEVATOR_STOW = 0.0;
     }
 
@@ -69,6 +70,7 @@ public final class RowdyConstants implements RobotConstants {
         public static final int CARRIAGE_BEAM = 4;
         public static final int SHOOTER_BEAM = 3;
         public static final int AMP_BEAM = 5;
+
     }
 
     public static final class Limelight {
@@ -79,15 +81,15 @@ public final class RowdyConstants implements RobotConstants {
     }
 
     public static final class Shooter {
-        public static final int BOTTOM_SHOOTER_ID = 60; //BOTTOM WHEEL
-        public static final int TOP_SHOOTER_ID = 61; //TOP WHEEL
+        public static final int BOTTOM_SHOOTER_ID = 60; // BOTTOM WHEEL
+        public static final int TOP_SHOOTER_ID = 61; // TOP WHEEL
         public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final boolean SHOOTER_INVERT = false;
         public static final double BASE_SHOOTER_SPEED = 6000; //baseline shooter speed in RPM
         public static final double IDLE_SHOOTER_SPEED = 0.3;
         public static final double SHOOTER_ERROR_TOLERANCE = 300; // +/-tolerance for considering if the shooter is up to speed
         public static final double DISTANCE_MULTIPLIER = 10;
-        public static final double SHOOTER_P = 0.00062; //was 0.003
+        public static final double SHOOTER_P = 0.00062; // was 0.003
         public static final double SHOOTER_I = 0.000000001;
         public static final double SHOOTER_D = 0.0005;
         public static final double SHOOTER_FF = 0.1;
@@ -247,7 +249,7 @@ public final class RowdyConstants implements RobotConstants {
         Constants.Auto.AUTO_ANGLE_P = Auto.AUTO_ANGLE_P;
         Constants.Auto.AUTO_ANGLE_I = Auto.AUTO_ANGLE_I;
         Constants.Auto.AUTO_ANGLE_D = Auto.AUTO_ANGLE_D;
-        
+
         Constants.Angler.ANGLER_ID = Angler.ANGLER_ID;
         Constants.Angler.ANGLER_P = Angler.ANGLER_P;
         Constants.Angler.ANGLER_I = Angler.ANGLER_I;
