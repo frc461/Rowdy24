@@ -23,8 +23,6 @@ public class Swerve extends SubsystemBase {
     public final Pigeon2 gyro;
     final Field2d field = new Field2d();
 
-    // TODO: Once robot is finished, swerve gyro angles will need to be fixed
-
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());

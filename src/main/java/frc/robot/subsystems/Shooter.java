@@ -9,15 +9,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
-    private final CANSparkFlex bottomShooter;
-    private final CANSparkFlex topShooter;
-
+    private final CANSparkFlex bottomShooter, topShooter;
+    
     private final SparkPIDController bottomController, topController;
-
-    private final RelativeEncoder bottomEncoder;
-    private final RelativeEncoder topEncoder;
-    private double target;
-    private double error;
+    
+    private final RelativeEncoder bottomEncoder, topEncoder;
+    
+    private double target, error;
 
     public Shooter() {
         bottomShooter = new CANSparkFlex(Constants.Shooter.BOTTOM_SHOOTER_ID, MotorType.kBrushless);

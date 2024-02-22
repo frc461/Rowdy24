@@ -4,23 +4,18 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
-    private final SparkLimitSwitch lowerLimitSwitch; //= new DigitalInput(Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH_PORT);
-    private final SparkLimitSwitch upperLimitSwitch; //= new DigitalInput(Constants.Angler.ANGLER_UPPER_LIMIT_SWITCH_PORT);
+    private final SparkLimitSwitch lowerLimitSwitch, upperLimitSwitch;
     private final PIDController pidController;
     private final RelativeEncoder encoder;
-    private double target;
-    private double error;
+    private double target, error;
 
     public Angler() {
-
         angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
         angler.restoreFactoryDefaults();
         angler.setSmartCurrentLimit(Constants.Angler.ANGLER_CURRENT_LIMIT);

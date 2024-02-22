@@ -13,7 +13,6 @@ public class IntakeCarriage extends SubsystemBase {
     private final CANSparkFlex intake;
     private final CANSparkMax carriage;
 
-    // TODO: Implement beam break logic Please!
     DigitalInput carriageBeam = new DigitalInput(Constants.IntakeCarriage.CARRIAGE_BEAM); // end of carriage (on shooter side)
     DigitalInput ampBeam = new DigitalInput(Constants.IntakeCarriage.AMP_BEAM); // entrance of carriage (which is the amp shooter)
     DigitalInput shooterBeam = new DigitalInput(Constants.IntakeCarriage.SHOOTER_BEAM); // completely exit through shooter

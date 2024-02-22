@@ -16,10 +16,10 @@ import frc.robot.Constants;
 public class Elevator extends SubsystemBase {
     private final TalonFX elevator;
     private final PIDController pidController;
-    //private final RelativeEncoder encoder;
     private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
     private final Servo elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
     private double target;
+    boolean clamped = false;
 
     public Elevator() {
         elevator =  new TalonFX(Constants.Elevator.ELEVATOR_ID);
@@ -30,10 +30,7 @@ public class Elevator extends SubsystemBase {
         config.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
 
         elevator.getConfigurator().apply(config);
-        System.out.println(elevator.getInverted());
         
-        //elevator.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT)
-
         pidController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
                 Constants.Elevator.ELEVATOR_I,
@@ -67,12 +64,17 @@ public class Elevator extends SubsystemBase {
 
     public void holdTarget() {
         checkLimitSwitch();
-        //elevator.set(pidController.calculate(encoder.getPosition(), target));
         elevator.set(pidController.calculate(elevator.getRotorPosition().getValueAsDouble(), target));
     }
 
-    public void setClamp(boolean isClamped){
-        if (isClamped) elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS); else elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
+    public void setClamp(){
+        if (!clamped) {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
+            clamped = true;
+        }  else {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
+            clamped = false;
+        } 
     }
 
     public void moveElevator(double axisValue) {
@@ -81,22 +83,18 @@ public class Elevator extends SubsystemBase {
             target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
             holdTarget();
         } else if (axisValue > 0 && elevator.getRotorPosition().getValueAsDouble() >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
-        // } else if (axisValue > 0 && encoder.getPosition() >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
             target = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
             holdTarget();
         } else {
             elevator.set(axisValue);
-            //target = encoder.getPosition();
             target = elevator.getRotorPosition().getValueAsDouble();
         }
     }
 
     public void setHeight(double height) {
         checkLimitSwitch();
-        //if (height < encoder.getPosition() && elevatorSwitchTriggered()) {
         if (height < elevator.getRotorPosition().getValueAsDouble() && elevatorSwitchTriggered()) {
             height = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
-        // } else if (height > encoder.getPosition() && encoder.getPosition() > Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
         } else if (height > elevator.getRotorPosition().getValueAsDouble() && elevator.getRotorPosition().getValueAsDouble() > Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
             height = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
         }

@@ -1,9 +1,5 @@
 package frc.robot;
-
-import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj2.command.*;
-
-import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -12,7 +8,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -41,7 +36,6 @@ public class RobotContainer {
 
     /* Controllers */
     public final static Joystick driver = new Joystick(0);
-
     public final static Joystick operator = new Joystick(1);
 
     /* Operate Controls */
@@ -56,17 +50,17 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Operator Buttons */
-    private final JoystickButton operatorStowButton = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton operatorStow = new JoystickButton(operator, XboxController.Button.kA.value);
     private final JoystickButton overrideIntake = new JoystickButton(operator, XboxController.Button.kB.value);
     private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
     private final JoystickButton alignAngler = new JoystickButton(operator, XboxController.Button.kX.value);
 
-    private final JoystickButton outtakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+    private final JoystickButton outtake = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton intake = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
 
     private final POVButton toggleIdleMode = new POVButton(operator, 0);
     private final POVButton operatorNinety = new POVButton(operator, 90);
-    private final POVButton operatorOneEighty = new POVButton(operator, 180);
+    private final POVButton toggleClamp = new POVButton(operator, 180);
     private final POVButton operatorTwoSeventy = new POVButton(operator, 270);
 
     /* Driver Buttons */
@@ -76,7 +70,7 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
     private final JoystickButton driverLimelight = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton driverStowButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton driverStow = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
     private final POVButton driverZero = new POVButton(driver, 0);
     private final POVButton driverNinety = new POVButton(driver, 90);
@@ -230,14 +224,14 @@ public class RobotContainer {
                 robotCentric)
         );
 
-        intakeButton.whileTrue(new IntakeCarriageCommand(
+        intake.whileTrue(new IntakeCarriageCommand(
                 intakeCarriage,
                 0.9,
                 1,
                 idleMode
         ).until(intakeCarriage::noteInSystem));
 
-        outtakeButton.whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
+        outtake.whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
 
         overrideIntake.whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
 
@@ -267,14 +261,14 @@ public class RobotContainer {
         );
 
         
-        operatorOneEighty.onTrue(new InstantCommand(()-> elevator.setClamp(true))); //toggle clamp
+        toggleClamp.onTrue(new InstantCommand(()-> elevator.setClamp())); //toggle clamp
 
 
-       driverStowButton.onTrue(
+       driverStow.onTrue(
             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
        );
 
-       operatorStowButton.onTrue(
+       operatorStow.onTrue(
             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
        );
 

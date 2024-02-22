@@ -26,7 +26,6 @@ public class SwerveModule {
     private final CANSparkMax angleMotor;
     private final CANSparkMax driveMotor;
 
-
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder integratedAngleEncoder;
     private final CANcoder angleEncoder;
