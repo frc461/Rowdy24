@@ -8,18 +8,33 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+
+import java.awt.*;
+
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.*;
 
 public class Elevator extends SubsystemBase {
     private final TalonFX elevator;
     private final PIDController elevatorPIDController, upperPIDController, lowerPIDController;
     private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
     private final Servo elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
+    private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
+
+    /* Specified units are estimates because encoder "rotation" default unit position values are very inaccurate */
+    private final MutableMeasure<Distance> distance = mutable(Inches.of(0));
+    private final MutableMeasure<Velocity<Distance>> velocity = mutable(InchesPerSecond.of(0));
+    private final SysIdRoutine sysIdRoutine;
     private double target;
-    boolean clamped, limitHitOnce = false;
+    private boolean clamped, limitHitOnce = false;
 
     public Elevator() {
         elevator =  new TalonFX(Constants.Elevator.ELEVATOR_ID);
@@ -47,6 +62,27 @@ public class Elevator extends SubsystemBase {
                 Constants.Elevator.ELEVATOR_P,
                 Constants.Elevator.ELEVATOR_I,
                 Constants.Elevator.ELEVATOR_D
+        );
+
+        sysIdRoutine = new SysIdRoutine(
+                new SysIdRoutine.Config(),
+                new SysIdRoutine.Mechanism(
+                        (Measure<Voltage> volts) -> elevator.setVoltage(volts.in(Volts)),
+                        log -> log.motor("elevator")
+                                .voltage(
+                                        appliedVoltage.mut_replace(
+                                                elevator.get() * RobotController.getBatteryVoltage(), Volts
+                                        ))
+                                .linearPosition(
+                                        distance.mut_replace(
+                                                elevator.getPosition().getValue(), Inches
+                                        ))
+                                .linearVelocity(
+                                        velocity.mut_replace(
+                                                elevator.getVelocity().getValue(), InchesPerSecond
+                                        )),
+                        this
+                )
         );
 
         elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
@@ -125,5 +161,13 @@ public class Elevator extends SubsystemBase {
         }
         target = height;
         holdTarget();
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysIdRoutine.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysIdRoutine.dynamic(direction);
     }
 }
