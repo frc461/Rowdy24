@@ -15,7 +15,7 @@ import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
     private final TalonFX elevator;
-    private final PIDController pidController;
+    private final PIDController pidController, upperPidController, lowerPidController;
     private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
     private final Servo elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
     private double target;
@@ -36,6 +36,20 @@ public class Elevator extends SubsystemBase {
                 Constants.Elevator.ELEVATOR_I,
                 Constants.Elevator.ELEVATOR_D
         );
+        
+        lowerPidController = new PIDController(
+                Constants.Elevator.ELEVATOR_P,
+                Constants.Elevator.ELEVATOR_I,
+                Constants.Elevator.ELEVATOR_D
+        );
+
+        upperPidController = new PIDController(
+                Constants.Elevator.ELEVATOR_P,
+                Constants.Elevator.ELEVATOR_I,
+                Constants.Elevator.ELEVATOR_D
+        );
+
+        elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
 
         target = 0.0;
     }
@@ -65,19 +79,27 @@ public class Elevator extends SubsystemBase {
 
     public void holdTarget() {
         checkLimitSwitch();
-        if (limitHitOnce) {
-            elevator.set(pidController.calculate(elevator.getRotorPosition().getValueAsDouble(), target));
+        if(elevator.getRotorPosition().getValueAsDouble() > Constants.Elevator.UPPER_STAGE_THRESHOLD){ //if on upper stage use higher PID
+            if (limitHitOnce) {
+            elevator.set(upperPidController.calculate(elevator.getRotorPosition().getValueAsDouble(), target));
+            }
+        }else{ //otherwise use lower PID
+            if (limitHitOnce) {
+            elevator.set(lowerPidController.calculate(elevator.getRotorPosition().getValueAsDouble(), target));
+            }   
         }
     }
 
-    public void setClamp(){
-        if (!clamped) {
-            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
-            clamped = true;
-        }  else {
+    public void climb(){
+        if(!elevatorSwitchTriggered()){
+            target = Constants.Elevator.ELEVATOR_LOWER_LIMIT-2;
+            holdTarget();
             elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
-            clamped = false;
-        } 
+        }else{
+            target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
+            holdTarget();
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
+        }
     }
 
     public void moveElevator(double axisValue) {

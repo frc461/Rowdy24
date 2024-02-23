@@ -51,14 +51,15 @@ public final class Constants {
         public static final double ELEVATOR_SERVO_CLAMPED_POS = 1;
         public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 0;
         public static final boolean ELEVATOR_INVERT = true;
-        public static final double ELEVATOR_P = 0.025;
-        public static final double ELEVATOR_I = 0.0000001;
-        public static final double ELEVATOR_D = 0.012;
+        public static final double ELEVATOR_P = 0.045;
+        public static final double ELEVATOR_I = 0.00;
+        public static final double ELEVATOR_D = 0.001;
         //switch = 12.6
         public static final double ELEVATOR_LOWER_LIMIT = 0;
         public static final double ELEVATOR_UPPER_LIMIT = 35; //36
         public static final double ELEVATOR_AMP = 34.16;
         public static final double ELEVATOR_STOW = 0.0;
+        public static final double UPPER_STAGE_THRESHOLD = 0.0;
     }
 
     public static final class IntakeCarriage {

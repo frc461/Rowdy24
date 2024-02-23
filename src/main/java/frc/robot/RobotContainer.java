@@ -59,7 +59,7 @@ public class RobotContainer {
 
     private final POVButton toggleIdleMode = new POVButton(operator, 0);
     private final POVButton operatorNinety = new POVButton(operator, 90);
-    private final POVButton toggleClamp = new POVButton(operator, 180);
+    private final POVButton climb = new POVButton(operator, 180);
     private final POVButton operatorTwoSeventy = new POVButton(operator, 270);
 
     /* Driver Buttons */
@@ -98,7 +98,7 @@ public class RobotContainer {
                         swerve,
                         () -> -driver.getRawAxis(translationAxis),
                         () -> -driver.getRawAxis(strafeAxis),
-                        () -> driver.getRawAxis(rotationAxis),
+                        () -> -driver.getRawAxis(rotationAxis),
                         robotCentric
                 )
         );
@@ -255,7 +255,7 @@ public class RobotContainer {
                 )
         );
         
-        toggleClamp.onTrue(new InstantCommand(()-> elevator.setClamp())); //toggle clamp
+        climb.whileTrue(new InstantCommand(()-> elevator.climb())); //climb
 
         driverStow.onTrue(
             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
