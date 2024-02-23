@@ -159,4 +159,20 @@ public class SwerveModule {
                 getAngle()
         );
     }
+
+    public CANSparkMax getDriveMotor() {
+        return driveMotor;
+    }
+
+    public CANSparkMax getAngleMotor() {
+        return angleMotor;
+    }
+
+    public RelativeEncoder getDriveEncoder() {
+        return driveEncoder;
+    }
+
+    public RelativeEncoder getAngleEncoder() {
+        return integratedAngleEncoder;
+    }
 }
