@@ -36,7 +36,7 @@ public final class Constants {
         public static final int ANGLER_UPPER_LIMIT_SWITCH_PORT = 0;
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
-        public static final double UPPER_BOUND_LIMIT = 2.26;
+        public static final double UPPER_BOUND_LIMIT = 4;
         public static final double UPPER_BOUND_COEFFICIENT = 51.8;
         public static final double UPPER_BOUND_SERIES = -1.31;
         public static final double TIGHT_BOUND_COEFFICIENT = 40.9; // 43.9
