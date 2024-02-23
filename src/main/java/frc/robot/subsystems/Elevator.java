@@ -7,6 +7,8 @@ import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
@@ -18,6 +20,11 @@ public class Elevator extends SubsystemBase {
     private final PIDController pidController, upperPidController, lowerPidController;
     private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
     private final Servo elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
+    private final ElevatorFeedforward elevatorFeedforward = new ElevatorFeedforward(
+        Constants.Elevator.ELEVATOR_FF_KS, 
+        Constants.Elevator.ELEVATOR_FF_KG,
+        Constants.Elevator.ELEVATOR_FF_KV,
+        Constants.Elevator.ELEVATOR_FF_KA);
     private double target;
     boolean clamped, limitHitOnce = false;
 
@@ -28,7 +35,7 @@ public class Elevator extends SubsystemBase {
         config.Voltage = new VoltageConfigs().withPeakForwardVoltage(6);
         config.MotorOutput = new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake);
         config.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
-
+        
         elevator.getConfigurator().apply(config);
         
         pidController = new PIDController(

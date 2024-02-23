@@ -60,6 +60,11 @@ public final class Constants {
         public static final double ELEVATOR_AMP = 34.16;
         public static final double ELEVATOR_STOW = 0.0;
         public static final double UPPER_STAGE_THRESHOLD = 0.0;
+
+        public static final double ELEVATOR_FF_KS = 0.30049;
+        public static final double ELEVATOR_FF_KV = 4.9046;
+        public static final double ELEVATOR_FF_KA = 0.13987;
+        public static final double ELEVATOR_FF_KG = 0.46936;
     }
 
     public static final class IntakeCarriage {
