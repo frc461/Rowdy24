@@ -20,7 +20,7 @@ public class Elevator extends SubsystemBase {
     private final TalonFX elevator;
     private final ProfiledPIDController upperPidController, lowerPidController;
     private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
-    private final Servo elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
+    public final Servo elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
     private final ElevatorFeedforward elevatorFeedforward = new ElevatorFeedforward(
         Constants.Elevator.ELEVATOR_FF_KS, 
         Constants.Elevator.ELEVATOR_FF_KG,
@@ -100,17 +100,19 @@ public class Elevator extends SubsystemBase {
     }
 
     public void climb(){
-        if(!elevatorSwitchTriggered()){
-            target = Constants.Elevator.ELEVATOR_LOWER_LIMIT-2;
-            holdTarget();
-            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
-        }else{
-            target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
-            holdTarget();
-            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
-        }
+        target = Constants.Elevator.ELEVATOR_LOWER_LIMIT-3.5;
+        holdTarget();
     }
 
+    public void setClamp() {
+        if (!clamped) {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
+            clamped = true;
+        } else {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
+            clamped = false;
+        }
+    }
     public void moveElevator(double axisValue) {
         checkLimitSwitch();
         if (axisValue < 0 && elevatorSwitchTriggered()) {

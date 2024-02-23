@@ -238,6 +238,8 @@ public class RobotContainer {
                 ))
         );
 
+        operatorTwoSeventy.onTrue(new InstantCommand(() -> elevator.setClamp()));
+
         new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > Constants.TRIGGER_DEADBAND).whileTrue(
                 new ParallelCommandGroup(
                         new RevUpShooterCommand(shooter, limelight, idleMode),
@@ -255,7 +257,7 @@ public class RobotContainer {
                 )
         );
         
-        climb.whileTrue(new InstantCommand(()-> elevator.climb())); //climb
+        climb.whileTrue(new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)); //climb
 
         driverStow.onTrue(
             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
@@ -313,6 +315,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Angler error", angler.getError());
         SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
         SmartDashboard.putBoolean("Angler top triggered", angler.upperSwitchTriggered());
+        SmartDashboard.putNumber("servo", elevator.elevatorClamp.getPosition());
     }
 
     /**
