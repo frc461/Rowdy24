@@ -5,14 +5,27 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.*;
 
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
     private final SparkLimitSwitch lowerLimitSwitch, upperLimitSwitch;
     private final PIDController anglerPIDController;
     private final RelativeEncoder encoder;
+    private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
+
+    /* Specified units are estimates because encoder "rotation" default unit position values are very inaccurate */
+    private final MutableMeasure<Angle> angle = mutable(Degrees.of(0));
+    private final MutableMeasure<Velocity<Angle>> velocity = mutable(DegreesPerSecond.of(0));
+    private final SysIdRoutine sysIdRoutine;
     private double target, error;
 
     public Angler() {
@@ -29,6 +42,27 @@ public class Angler extends SubsystemBase {
                 Constants.Angler.ANGLER_P,
                 Constants.Angler.ANGLER_I,
                 Constants.Angler.ANGLER_D
+        );
+
+        sysIdRoutine = new SysIdRoutine(
+                new SysIdRoutine.Config(),
+                new SysIdRoutine.Mechanism(
+                        (Measure<Voltage> volts) -> angler.setVoltage(volts.in(Volts)),
+                        log -> log.motor("angler")
+                                .voltage(
+                                        appliedVoltage.mut_replace(
+                                                angler.get() * RobotController.getBatteryVoltage(), Volts
+                                        ))
+                                .angularPosition(
+                                        angle.mut_replace(
+                                                encoder.getPosition(), Degrees
+                                        ))
+                                .angularVelocity(
+                                        velocity.mut_replace(
+                                                encoder.getVelocity() / 60, DegreesPerSecond
+                                        )),
+                        this
+                )
         );
 
         target = 0.0;
@@ -119,5 +153,13 @@ public class Angler extends SubsystemBase {
         } else {
             target = getPosition();
         }
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysIdRoutine.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysIdRoutine.dynamic(direction);
     }
 }
