@@ -126,7 +126,7 @@ public class Elevator extends SubsystemBase {
         checkLimitSwitch();
         if (axisValue < 0 && elevatorSwitchTriggered()) {
             target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
-            elevator.set(0);
+            holdTarget();
         } else if (axisValue > 0 && elevator.getPosition().getValueAsDouble() >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
             target = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
             holdTarget();

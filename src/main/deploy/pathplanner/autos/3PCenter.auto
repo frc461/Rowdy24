@@ -26,6 +26,12 @@
         {
           "type": "named",
           "data": {
+            "name": "intakeNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "autoShoot"
           }
         },
@@ -33,6 +39,12 @@
           "type": "path",
           "data": {
             "pathName": "3PFinish"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeNote"
           }
         },
         {
