@@ -10,18 +10,33 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.*;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveModule[] swerveMods;
     public final Pigeon2 gyro;
-    final Field2d field = new Field2d();
+    private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
+
+    /* Because of prior-defined rotation conversion units (refer to Swerve constants), specified units are theoretically accurate */
+    private final MutableMeasure<Distance> distance = mutable(Meters.of(0));
+    private final MutableMeasure<Velocity<Distance>> velocity = mutable(MetersPerSecond.of(0));
+    private final MutableMeasure<Angle> angle = mutable(Degrees.of(0));
+    private final MutableMeasure<Velocity<Angle>> angularVelocity = mutable(DegreesPerSecond.of(0));
+    private final SysIdRoutine sysIdRoutine;
+    private final Field2d field = new Field2d();
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
@@ -85,6 +100,49 @@ public class Swerve extends SubsystemBase {
                     return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
                 },
                 this // Reference to this subsystem to set requirements
+        );
+
+        sysIdRoutine = new SysIdRoutine(
+                new SysIdRoutine.Config(),
+                new SysIdRoutine.Mechanism(
+                        (Measure<Voltage> volts) -> {
+                            for (SwerveModule mod : swerveMods) {
+                                mod.getDriveMotor().setVoltage(volts.in(Volts));
+                                mod.getAngleMotor().setVoltage(volts.in(Volts));
+                            }
+                        },
+                        log -> {
+                            for (SwerveModule mod : swerveMods) {
+                                log.motor("driveMotor" + mod.moduleNumber)
+                                        .voltage(
+                                                appliedVoltage.mut_replace(
+                                                        mod.getDriveMotor().get() * RobotController.getBatteryVoltage(), Volts
+                                                ))
+                                        .linearPosition(
+                                                distance.mut_replace(
+                                                        mod.getDriveEncoder().getPosition(), Meters
+                                                ))
+                                        .linearVelocity(
+                                                velocity.mut_replace(
+                                                        mod.getDriveEncoder().getVelocity(), MetersPerSecond
+                                                ));
+                                log.motor("angleMotor" + mod.moduleNumber)
+                                        .voltage(
+                                                appliedVoltage.mut_replace(
+                                                        mod.getAngleMotor().get() * RobotController.getBatteryVoltage(), Volts
+                                                ))
+                                        .angularPosition(
+                                                angle.mut_replace(
+                                                        mod.getAngleEncoder().getPosition(), Degrees
+                                                ))
+                                        .angularVelocity(
+                                                angularVelocity.mut_replace(
+                                                        mod.getAngleEncoder().getVelocity() / 60, DegreesPerSecond
+                                                ));
+                            }
+                        },
+                        this
+                )
         );
     }
 
@@ -183,5 +241,13 @@ public class Swerve extends SubsystemBase {
         for (SwerveModule mod : swerveMods) {
             mod.resetToAbsolute();
         }
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysIdRoutine.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysIdRoutine.dynamic(direction);
     }
 }
