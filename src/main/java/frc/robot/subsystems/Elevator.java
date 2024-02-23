@@ -18,7 +18,7 @@ import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
     private final TalonFX elevator;
-    private final ProfiledPIDController pidController, upperPidController, lowerPidController;
+    private final ProfiledPIDController upperPidController, lowerPidController;
     private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
     private final Servo elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
     private final ElevatorFeedforward elevatorFeedforward = new ElevatorFeedforward(
@@ -36,22 +36,14 @@ public class Elevator extends SubsystemBase {
         config.Voltage = new VoltageConfigs().withPeakForwardVoltage(6);
         config.MotorOutput = new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive).withNeutralMode(NeutralModeValue.Brake);
         config.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
-        TrapezoidProfile.Constraints trapConstraints = new TrapezoidProfile.Constraints(0.5,0.2);
 
         elevator.getConfigurator().apply(config);
-        
-        pidController = new ProfiledPIDController(
-                Constants.Elevator.ELEVATOR_P,
-                Constants.Elevator.ELEVATOR_I,
-                Constants.Elevator.ELEVATOR_D,
-                trapConstraints
-        );
         
         lowerPidController = new ProfiledPIDController(
                 Constants.Elevator.ELEVATOR_P,
                 Constants.Elevator.ELEVATOR_I,
                 Constants.Elevator.ELEVATOR_D,
-                trapConstraints
+                new TrapezoidProfile.Constraints(Constants.Elevator.ELEVATOR_MAX_VELOCITY,Constants.Elevator.ELEVATOR_MAX_ACCEL)
         );
 
         
@@ -59,7 +51,7 @@ public class Elevator extends SubsystemBase {
                 Constants.Elevator.ELEVATOR_P,
                 Constants.Elevator.ELEVATOR_I,
                 Constants.Elevator.ELEVATOR_D,
-                trapConstraints
+                new TrapezoidProfile.Constraints(Constants.Elevator.ELEVATOR_MAX_VELOCITY,Constants.Elevator.ELEVATOR_MAX_ACCEL)
         );
 
         elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
@@ -92,18 +84,17 @@ public class Elevator extends SubsystemBase {
 
     public void holdTarget() {
         checkLimitSwitch();
-        if(elevator.getRotorPosition().getValueAsDouble() > Constants.Elevator.UPPER_STAGE_THRESHOLD){ //if on upper stage use higher PID
+        if (elevator.getRotorPosition().getValueAsDouble() > Constants.Elevator.UPPER_STAGE_THRESHOLD) { //if on upper stage use higher PID
             if (limitHitOnce) {
                 double pid = upperPidController.calculate(elevator.getRotorPosition().getValueAsDouble(), target);
                 double ff = elevatorFeedforward.calculate(upperPidController.getSetpoint().velocity);
-            elevator.set(ff + pid);
-            
+                elevator.set(ff + pid);
             }
-        }else{ //otherwise use lower PID
+        } else { //otherwise use lower PID
             if (limitHitOnce) {
                 double pid = lowerPidController.calculate(elevator.getRotorPosition().getValueAsDouble(), target);
                 double ff = elevatorFeedforward.calculate(lowerPidController.getSetpoint().velocity);
-            elevator.set(ff + pid);
+                elevator.set(ff + pid);
             }   
         }
     }
