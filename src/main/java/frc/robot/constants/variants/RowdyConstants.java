@@ -10,9 +10,8 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 import frc.robot.constants.Constants;
-import frc.robot.constants.RobotConstants;
 
-public final class RowdyConstants implements RobotConstants {
+public final class RowdyConstants {
     public static final double STICK_DEADBAND = 0.1;
     public static final double TRIGGER_DEADBAND = 0.5;
     public static final double MINIMUM_ANGLE = -180.0;

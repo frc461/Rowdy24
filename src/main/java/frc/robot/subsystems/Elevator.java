@@ -11,10 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.variants.PracticeConstants;
 import frc.robot.constants.Constants;
-import frc.robot.constants.RobotConstants;
-import frc.robot.constants.RobotIdentity;
 
 public class Elevator extends SubsystemBase {
     private final TalonFX elevator;

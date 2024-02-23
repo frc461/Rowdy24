@@ -5,10 +5,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.variants.PracticeConstants;
 import frc.robot.constants.Constants;
-import frc.robot.constants.RobotConstants;
-import frc.robot.constants.RobotIdentity;
 import frc.robot.subsystems.Swerve;
 
 public class TeleopSwerveCommand extends Command {

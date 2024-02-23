@@ -6,11 +6,9 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
-import frc.robot.constants.RobotConstants;
-import frc.robot.constants.RobotIdentity;
+
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
     private final SparkLimitSwitch lowerLimitSwitch; //= new DigitalInput(Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH_PORT);
