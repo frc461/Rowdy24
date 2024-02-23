@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
@@ -12,7 +11,7 @@ import frc.robot.Constants;
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
     private final SparkLimitSwitch lowerLimitSwitch, upperLimitSwitch;
-    private final PIDController pidController;
+    private final PIDController anglerPIDController;
     private final RelativeEncoder encoder;
     private double target, error;
 
@@ -26,7 +25,7 @@ public class Angler extends SubsystemBase {
         lowerLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
         upperLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
-        pidController = new PIDController(
+        anglerPIDController = new PIDController(
                 Constants.Angler.ANGLER_P,
                 Constants.Angler.ANGLER_I,
                 Constants.Angler.ANGLER_D
@@ -78,7 +77,7 @@ public class Angler extends SubsystemBase {
 
     public void holdTarget() {
         checkLimitSwitches();
-        angler.set(pidController.calculate(encoder.getPosition(), target));
+        angler.set(anglerPIDController.calculate(encoder.getPosition(), target));
     }
 
     public void moveAngle(double axisValue) {

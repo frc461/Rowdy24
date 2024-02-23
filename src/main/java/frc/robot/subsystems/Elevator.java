@@ -15,7 +15,7 @@ import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
     private final TalonFX elevator;
-    private final PIDController pidController, upperPidController, lowerPidController;
+    private final PIDController elevatorPIDController, upperPIDController, lowerPIDController;
     private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
     private final Servo elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
     private double target;
@@ -31,19 +31,19 @@ public class Elevator extends SubsystemBase {
 
         elevator.getConfigurator().apply(config);
         
-        pidController = new PIDController(
+        elevatorPIDController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
                 Constants.Elevator.ELEVATOR_I,
                 Constants.Elevator.ELEVATOR_D
         );
         
-        lowerPidController = new PIDController(
+        lowerPIDController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
                 Constants.Elevator.ELEVATOR_I,
                 Constants.Elevator.ELEVATOR_D
         );
 
-        upperPidController = new PIDController(
+        upperPIDController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
                 Constants.Elevator.ELEVATOR_I,
                 Constants.Elevator.ELEVATOR_D
@@ -81,21 +81,21 @@ public class Elevator extends SubsystemBase {
         checkLimitSwitch();
         if(elevator.getRotorPosition().getValueAsDouble() > Constants.Elevator.UPPER_STAGE_THRESHOLD){ //if on upper stage use higher PID
             if (limitHitOnce) {
-            elevator.set(upperPidController.calculate(elevator.getRotorPosition().getValueAsDouble(), target));
+            elevator.set(upperPIDController.calculate(elevator.getRotorPosition().getValueAsDouble(), target));
             }
         }else{ //otherwise use lower PID
             if (limitHitOnce) {
-            elevator.set(lowerPidController.calculate(elevator.getRotorPosition().getValueAsDouble(), target));
+            elevator.set(lowerPIDController.calculate(elevator.getRotorPosition().getValueAsDouble(), target));
             }   
         }
     }
 
     public void climb(){
         if(!elevatorSwitchTriggered()){
-            target = Constants.Elevator.ELEVATOR_LOWER_LIMIT-2;
+            target = Constants.Elevator.ELEVATOR_LOWER_LIMIT - 2;
             holdTarget();
             elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
-        }else{
+        } else {
             target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
             holdTarget();
             elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);

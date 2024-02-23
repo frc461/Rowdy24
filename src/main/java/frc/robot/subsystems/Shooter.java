@@ -11,7 +11,7 @@ import frc.robot.Constants;
 public class Shooter extends SubsystemBase {
     private final CANSparkFlex bottomShooter, topShooter;
     
-    private final SparkPIDController bottomController, topController;
+    private final SparkPIDController bottomPIDController, topPIDController;
     
     private final RelativeEncoder bottomEncoder, topEncoder;
     
@@ -30,18 +30,18 @@ public class Shooter extends SubsystemBase {
         topShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
         topEncoder = topShooter.getEncoder();
 
-        topController = topShooter.getPIDController();
-        bottomController = bottomShooter.getPIDController();
+        topPIDController = topShooter.getPIDController();
+        bottomPIDController = bottomShooter.getPIDController();
 
-        topController.setP(Constants.Shooter.SHOOTER_P);
-        topController.setI(Constants.Shooter.SHOOTER_I);
-        topController.setD(Constants.Shooter.SHOOTER_D);
-        topController.setFF(Constants.Shooter.SHOOTER_FF);
+        topPIDController.setP(Constants.Shooter.SHOOTER_P);
+        topPIDController.setI(Constants.Shooter.SHOOTER_I);
+        topPIDController.setD(Constants.Shooter.SHOOTER_D);
+        topPIDController.setFF(Constants.Shooter.SHOOTER_FF);
 
-        bottomController.setP(Constants.Shooter.SHOOTER_P);
-        bottomController.setI(Constants.Shooter.SHOOTER_I);
-        bottomController.setD(Constants.Shooter.SHOOTER_D);
-        bottomController.setFF(Constants.Shooter.SHOOTER_FF);
+        bottomPIDController.setP(Constants.Shooter.SHOOTER_P);
+        bottomPIDController.setI(Constants.Shooter.SHOOTER_I);
+        bottomPIDController.setD(Constants.Shooter.SHOOTER_D);
+        bottomPIDController.setFF(Constants.Shooter.SHOOTER_FF);
         
         bottomShooter.burnFlash();
         topShooter.burnFlash();
@@ -69,8 +69,8 @@ public class Shooter extends SubsystemBase {
 
     public void shoot(double speed) {
         target = speed;
-        topController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
-        bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+        topPIDController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
+        bottomPIDController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
     }
 
     public boolean minimalError() {
