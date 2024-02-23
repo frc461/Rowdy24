@@ -5,16 +5,24 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.*;
 
 public class Shooter extends SubsystemBase {
     private final CANSparkFlex bottomShooter, topShooter;
-    
     private final SparkPIDController bottomPIDController, topPIDController;
-    
     private final RelativeEncoder bottomEncoder, topEncoder;
-    
+    private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
+    private final MutableMeasure<Angle> angle = mutable(Rotations.of(0));
+    private final MutableMeasure<Velocity<Angle>> velocity = mutable(RPM.of(0));
+    private final SysIdRoutine sysIdRoutine;
     private double target, error;
 
     public Shooter() {
@@ -45,6 +53,46 @@ public class Shooter extends SubsystemBase {
         
         bottomShooter.burnFlash();
         topShooter.burnFlash();
+
+        sysIdRoutine = new SysIdRoutine(
+                new SysIdRoutine.Config(),
+                new SysIdRoutine.Mechanism(
+                        (Measure<Voltage> volts) -> {
+                            topShooter.setVoltage(volts.in(Volts));
+                            bottomShooter.setVoltage(volts.in(Volts));
+                        },
+                        log -> {
+                            log.motor("topShooter")
+                                    .voltage(
+                                            appliedVoltage.mut_replace(
+                                                    topShooter.get() * RobotController.getBatteryVoltage(), Volts
+                                            ))
+                                    .angularPosition(
+                                            angle.mut_replace(
+                                                    topEncoder.getPosition(), Rotations
+                                            ))
+                                    .angularVelocity(
+                                            velocity.mut_replace(
+                                                    topEncoder.getVelocity(), RPM
+                                            ));
+                            log.motor("bottomShooter")
+                                    .voltage(
+                                            appliedVoltage.mut_replace(
+                                                    bottomShooter.get() * RobotController.getBatteryVoltage(), Volts
+                                            ))
+                                    .angularPosition(
+                                            angle.mut_replace(
+                                                    bottomEncoder.getPosition(), Rotations
+                                            ))
+                                    .angularVelocity(
+                                            velocity.mut_replace(
+                                                    bottomEncoder.getVelocity(), RPM
+                                            ));
+
+                        },
+                        this
+                )
+        );
 
         target = 0.0;
         error = Math.abs(target - (getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
@@ -85,5 +133,13 @@ public class Shooter extends SubsystemBase {
     public void overrideShooterSpeed(double speed) {
         topShooter.set(speed);
         bottomShooter.set(speed);
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysIdRoutine.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysIdRoutine.dynamic(direction);
     }
 }
