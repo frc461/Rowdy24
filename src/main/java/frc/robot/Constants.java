@@ -66,8 +66,8 @@ public final class Constants {
         public static final double ELEVATOR_FF_KA = 0.13987;
         public static final double ELEVATOR_FF_KG = 0.46936;
 
-        public static final double ELEVATOR_MAX_VELOCITY = 0.5;
-        public static final double ELEVATOR_MAX_ACCEL = 0.2;
+        public static final double ELEVATOR_MAX_VELOCITY = 0.2;
+        public static final double ELEVATOR_MAX_ACCEL = 0.05;
     }
 
     public static final class IntakeCarriage {
