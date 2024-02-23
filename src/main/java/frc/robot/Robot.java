@@ -37,11 +37,7 @@ public class Robot extends TimedRobot {
          * and put our autonomous chooser on the dashboard.
          */
         robotContainer = new RobotContainer();
-        switch (RobotIdentity.getIdentity()) {
-            case PRACTICE -> new PracticeConstants();
-            case ROWDY -> new RowdyConstants();
-            default -> new RowdyConstants();
-        }
+        RobotIdentity.initializeConstants();
     }
 
     /**
