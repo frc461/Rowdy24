@@ -181,6 +181,15 @@ public class RobotContainer {
                 driverXbox.b()) // Robot-centric trigger
         );
 
+        /* Cheeky driver angler align */
+        driverXbox.leftBumper().whileTrue(
+                new InstantCommand(() -> angler.setAlignedAngle(
+                        limelight.getRX(),
+                        limelight.getRZ(),
+                        limelight.tagExists()
+                ))
+        );
+
         /* Intake Note */
         opXbox.rightBumper().whileTrue(new IntakeCarriageCommand(
                 intakeCarriage,

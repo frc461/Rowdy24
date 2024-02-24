@@ -55,7 +55,7 @@ public final class Constants {
         public static final double ELEVATOR_I = 0.01;
         public static final double ELEVATOR_D = 0.001;
         //switch = 12.6
-        public static final double ELEVATOR_LOWER_LIMIT = 0;
+        public static final double ELEVATOR_LOWER_LIMIT = -1;
         public static final double ELEVATOR_UPPER_LIMIT = 36;
         public static final double ELEVATOR_AMP = 35;
         public static final double ELEVATOR_STOW = 0.0;
