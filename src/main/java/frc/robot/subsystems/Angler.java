@@ -105,13 +105,13 @@ public class Angler extends SubsystemBase {
     public void setAlignedAngle(double x, double z, boolean tag) {
         double dist = Math.hypot(x, z);
         if (tag) {
-            if (dist > Constants.Angler.UPPER_BOUND_LIMIT) {
+            if (dist > Constants.Angler.AVG_BOUND_LIMIT) {
                 setAngle(Math.min(
-                        34.8 - 11.5 * dist + 1.04 * Math.pow(dist, 2), Constants.Angler.ANGLER_UPPER_LIMIT
+                        Constants.Angler.AVG_BOUND_CONSTANT - Constants.Angler.AVG_BOUND_LINEAR_COEFFICIENT * dist + Constants.Angler.AVG_BOUND_SQUARED_COEFFICIENT * Math.pow(dist, 2), Constants.Angler.ANGLER_UPPER_LIMIT
                 ));
             } else {
                 setAngle(Math.min(
-                        31.4 - 10.6 * dist + 0.984 * Math.pow(dist, 2), Constants.Angler.ANGLER_UPPER_LIMIT
+                        Constants.Angler.LOWER_BOUND_CONSTANT - Constants.Angler.LOWER_BOUND_LINEAR_COEFFICIENT* dist + Constants.Angler.LOWER_BOUND_SQUARED_COEFFICIENT * Math.pow(dist, 2), Constants.Angler.ANGLER_UPPER_LIMIT
                 ));
             }
         } else {

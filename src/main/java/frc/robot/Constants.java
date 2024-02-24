@@ -43,11 +43,15 @@ public final class Constants {
         public static final double ANGLER_UPPER_LIMIT = 20;
 
         // equation constants for shooting with distance from april tag
-        public static final double UPPER_BOUND_LIMIT = 4;
-        public static final double UPPER_BOUND_COEFFICIENT = 51.8;
-        public static final double UPPER_BOUND_SERIES = -1.31;
-        public static final double TIGHT_BOUND_COEFFICIENT = 40.9;
-        public static final double TIGHT_BOUND_SERIES = -1.3;
+        public static final double AVG_BOUND_LIMIT = 4;
+        
+        public static final double LOWER_BOUND_CONSTANT = 31.4;
+        public static final double LOWER_BOUND_LINEAR_COEFFICIENT = 10.6;
+        public static final double LOWER_BOUND_SQUARED_COEFFICIENT = 0.984;
+
+        public static final double AVG_BOUND_CONSTANT = 34.8;
+         public static final double AVG_BOUND_LINEAR_COEFFICIENT = 11.5;
+        public static final double AVG_BOUND_SQUARED_COEFFICIENT = 1.04;
     }
 
     public static final class Elevator {
