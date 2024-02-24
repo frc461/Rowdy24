@@ -103,7 +103,7 @@ public class Elevator extends SubsystemBase {
 
     public void climb(){
         if(!elevatorSwitchTriggered()){
-            elevator.set(-0.2);
+            elevator.set(-0.2); //TODO this is sketch
             elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
         }else{
             target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
