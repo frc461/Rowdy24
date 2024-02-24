@@ -46,7 +46,7 @@ public class LimelightTurretCommand extends Command {
                             Constants.Limelight.LIMELIGHT_D
                     )
             ) {
-                rotController.enableContinuousInput(Constants.MINIMUM_ANGLE, Constants.MAXIMUM_ANGLE);
+                rotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
 
                 double rotate = rotController.calculate(
                         swerve.getYaw(),

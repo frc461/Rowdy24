@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
@@ -68,11 +67,9 @@ public class Angler extends SubsystemBase {
     public void checkLimitSwitches() {
         if (upperSwitchTriggered()) {
             encoder.setPosition(Constants.Angler.ANGLER_UPPER_LIMIT);
-            //target = Constants.Angler.ANGLER_UPPER_LIMIT;
         }
         if (lowerSwitchTriggered()) {
             encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
-            //target = Constants.Angler.ANGLER_LOWER_LIMIT;
         }
     }
 
@@ -110,11 +107,11 @@ public class Angler extends SubsystemBase {
         if (tag) {
             if (dist > Constants.Angler.UPPER_BOUND_LIMIT) {
                 setAngle(Math.min(
-                        34.8 - 11.5*dist + 1.04*Math.pow(dist, 2), Constants.Angler.ANGLER_UPPER_LIMIT
+                        34.8 - 11.5 * dist + 1.04 * Math.pow(dist, 2), Constants.Angler.ANGLER_UPPER_LIMIT
                 ));
             } else {
                 setAngle(Math.min(
-                        31.4 - 10.6*dist + 0.984*Math.pow(dist, 2), Constants.Angler.ANGLER_UPPER_LIMIT
+                        31.4 - 10.6 * dist + 0.984 * Math.pow(dist, 2), Constants.Angler.ANGLER_UPPER_LIMIT
                 ));
             }
         } else {

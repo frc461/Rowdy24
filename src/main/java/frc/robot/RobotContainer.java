@@ -1,4 +1,5 @@
 package frc.robot;
+
 import edu.wpi.first.wpilibj2.command.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -28,7 +29,6 @@ public class RobotContainer {
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
     private final Angler angler = new Angler();
-
 
     /* Controllers */
     public final static CommandXboxController driverXbox = new CommandXboxController(0);
@@ -147,8 +147,6 @@ public class RobotContainer {
      */
 
     private void configureButtonBindings() {
-        /* Driver Buttons */
-
         /* Zero Gyro */
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
@@ -204,7 +202,7 @@ public class RobotContainer {
         /* Outtake Note */
         opXbox.leftBumper().whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
 
-        /* Auto-align-and-shoot (deadband defaults to 0.5) */
+        /* Auto-align (deadband defaults to 0.5) */
         opXbox.rightTrigger().onTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
                         limelight.getRX(),
@@ -213,6 +211,7 @@ public class RobotContainer {
                 ))
         );
 
+        /* Rev up shooter and run carriage when its up to speed */
         opXbox.rightTrigger().whileTrue(
                 new ParallelCommandGroup(
                         new RevUpShooterCommand(shooter, limelight, idleMode),

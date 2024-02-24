@@ -10,13 +10,11 @@ import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-    // TODO: TUNE NEW COMPETITION ROBOT
     public static final double STICK_DEADBAND = 0.1;
     public static final double TRIGGER_DEADBAND = 0.5;
-    public static final double MINIMUM_ANGLE = -180.0;
-    public static final double MAXIMUM_ANGLE = 180.0;
 
     public static final class Auto {
+        // pid values for pathplanner
         public static final double AUTO_DRIVE_P = 0.1;
         public static final double AUTO_DRIVE_I = 0.0;
         public static final double AUTO_DRIVE_D = 0.00001;
@@ -26,92 +24,124 @@ public final class Constants {
     }
 
     public static final class Angler {
+        // basic configs
         public static final int ANGLER_ID = 62;
+        public static final int ANGLER_CURRENT_LIMIT = 35;
+        public static final boolean ANGLER_INVERT = false;
+
+        // pid for angler
         public static final double ANGLER_P = 0.035;
         public static final double ANGLER_I = 0.00009;
         public static final double ANGLER_D = 0.0001;
-        public static final int ANGLER_CURRENT_LIMIT = 35;
-        public static final boolean ANGLER_INVERT = false;
+       
+        // limit switches
         public static final int ANGLER_LOWER_LIMIT_SWITCH_PORT = 1;
         public static final int ANGLER_UPPER_LIMIT_SWITCH_PORT = 0;
+
+        // code limits on encoder values
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
+
+        // equation constants for shooting with distance from april tag
         public static final double UPPER_BOUND_LIMIT = 4;
         public static final double UPPER_BOUND_COEFFICIENT = 51.8;
         public static final double UPPER_BOUND_SERIES = -1.31;
-        public static final double TIGHT_BOUND_COEFFICIENT = 40.9; // 43.9
+        public static final double TIGHT_BOUND_COEFFICIENT = 40.9;
         public static final double TIGHT_BOUND_SERIES = -1.3;
     }
 
     public static final class Elevator {
+        // basic configs
         public static final int ELEVATOR_ID = 31;
         public static final int ELEVATOR_CURRENT_LIMIT = 80;
         public static final int ELEVATOR_LIMIT_SWITCH = 2;
+        public static final boolean ELEVATOR_INVERT = true;
+        public static final double ELEVATOR_MAX_VELOCITY = 0.2;
+        public static final double ELEVATOR_MAX_ACCEL = 0.05;
+
+        // servo to hold elevator in endgame
         public static final int ELEVATOR_SERVO_PORT = 1;
         public static final double ELEVATOR_SERVO_CLAMPED_POS = 1;
         public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 0;
-        public static final boolean ELEVATOR_INVERT = true;
+        
+        // pid
         public static final double ELEVATOR_P = 0.08;
         public static final double ELEVATOR_I = 0.01;
         public static final double ELEVATOR_D = 0.001;
-        //switch = 12.6
+
+        // presets
         public static final double ELEVATOR_LOWER_LIMIT = -1;
         public static final double ELEVATOR_UPPER_LIMIT = 36;
-        public static final double ELEVATOR_AMP = 35;
-        public static final double ELEVATOR_STOW = 0.0;
+        public static final double ELEVATOR_AMP = 35.5;
+        public static final double ELEVATOR_STOW = -0.9;
         public static final double UPPER_STAGE_THRESHOLD = 0.0;
 
+        // feedforward
         public static final double ELEVATOR_FF_KS = 0.30049;
         public static final double ELEVATOR_FF_KV = 4.9046;
         public static final double ELEVATOR_FF_KA = 0.13987;
         public static final double ELEVATOR_FF_KG = 0.46936;
-
-        public static final double ELEVATOR_MAX_VELOCITY = 0.2;
-        public static final double ELEVATOR_MAX_ACCEL = 0.05;
     }
 
     public static final class IntakeCarriage {
+        // basic configs
         public static final int INTAKE_ID = 41;
         public static final int CARRIAGE_ID = 42;
+
+        // idle when intake is not actively being used
         public static final double IDLE_INTAKE_SPEED = -0.15;
+
+        // beam breaks
         public static final int CARRIAGE_BEAM = 4;
         public static final int SHOOTER_BEAM = 3;
         public static final int AMP_BEAM = 5;
-
     }
 
     public static final class Limelight {
+        // pid for limelight alignment
         public static final double LIMELIGHT_P = 0.07;
         public static final double LIMELIGHT_I = 0.03;
         public static final double LIMELIGHT_D = 0;
+        
+        // turn slightly to the right 
         public static final double YAW_OFFSET = -10.5;
     }
 
     public static final class Shooter {
+        // basic configs
         public static final int BOTTOM_SHOOTER_ID = 60; // BOTTOM WHEEL
         public static final int TOP_SHOOTER_ID = 61; // TOP WHEEL
         public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final boolean SHOOTER_INVERT = false;
+
         // baseline shooter speed in RPM
         public static final double BASE_SHOOTER_SPEED = 6000;
+
+        // percentage to idle at when shooter is not in use
         public static final double IDLE_SHOOTER_SPEED = 0.3;
+
         // +/-tolerance for considering if the shooter is up to speed
         public static final double SHOOTER_ERROR_TOLERANCE = 300;
+
+        // increases shooter speed as distance from speaker increases
         public static final double DISTANCE_MULTIPLIER = 10;
+
+        // shooter pidf
         public static final double SHOOTER_P = 0.00062; // was 0.003
         public static final double SHOOTER_I = 0.000000001;
         public static final double SHOOTER_D = 0.0005;
         public static final double SHOOTER_FF = 0.1;
-        public static final int FEEDER_ID = 59;
-        public static final int FEEDER_CURRENT_LIMIT = 50;
-        public static final boolean FEEDER_INVERT = false;
     }
 
     public static final class Swerve {
+        // gyro config
         public static final double GYRO_OFFSET = 0;
         public static final int PIGEON_ID = 51;
-        public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW- (DO NOT USE, ENABLES
-                                                         // ROBOT-CENTRIC)
+        public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW- (DO NOT USE, ENABLES ROBOT-CENTRIC)
+        
+        // min and max angle of swerve
+        public static final double MINIMUM_ANGLE = -180.0;
+        public static final double MAXIMUM_ANGLE = 180.0;
 
         public static final COTSFalconSwerveConstants CHOSEN_MODULE = COTSFalconSwerveConstants
                 .SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L3);

@@ -27,6 +27,8 @@ public class Swerve extends SubsystemBase {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
+        
+        SmartDashboard.putData("Field", field);
 
         swerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
@@ -123,7 +125,7 @@ public class Swerve extends SubsystemBase {
 
     public double getYaw() {
         return (Constants.Swerve.INVERT_GYRO) ?
-                Constants.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
+                Constants.Swerve.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
                 gyro.getYaw().getValueAsDouble();
     }
 
