@@ -10,9 +10,9 @@ import frc.robot.Constants;
 
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
-    private final SparkLimitSwitch lowerLimitSwitch, upperLimitSwitch;
-    private final PIDController pidController;
     private final RelativeEncoder encoder;
+    private final PIDController anglerPIDController;
+    private final SparkLimitSwitch lowerLimitSwitch, upperLimitSwitch;
     private double target, error;
 
     public Angler() {
@@ -22,17 +22,17 @@ public class Angler extends SubsystemBase {
         angler.setInverted(Constants.Angler.ANGLER_INVERT);
         encoder = angler.getEncoder();
 
-        lowerLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-        upperLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-
-        pidController = new PIDController(
+        anglerPIDController = new PIDController(
                 Constants.Angler.ANGLER_P,
                 Constants.Angler.ANGLER_I,
                 Constants.Angler.ANGLER_D
         );
 
+        lowerLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        upperLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+
         target = 0.0;
-        error = 1000;
+        error = Math.abs(target - getPosition());
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Angler extends SubsystemBase {
 
     public void holdTarget() {
         checkLimitSwitches();
-        angler.set(pidController.calculate(encoder.getPosition(), target));
+        angler.set(anglerPIDController.calculate(encoder.getPosition(), target));
     }
 
     public void moveAngle(double axisValue) {

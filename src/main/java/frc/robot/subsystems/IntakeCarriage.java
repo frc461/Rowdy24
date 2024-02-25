@@ -11,10 +11,9 @@ import frc.robot.Constants;
 public class IntakeCarriage extends SubsystemBase {
     private final CANSparkFlex intake;
     private final CANSparkMax carriage;
-
-    DigitalInput carriageBeam = new DigitalInput(Constants.IntakeCarriage.CARRIAGE_BEAM); // end of carriage (on shooter side)
-    DigitalInput ampBeam = new DigitalInput(Constants.IntakeCarriage.AMP_BEAM); // entrance of carriage (which is the amp shooter)
-    DigitalInput shooterBeam = new DigitalInput(Constants.IntakeCarriage.SHOOTER_BEAM); // completely exit through shooter
+    private final DigitalInput carriageBeam; // end of carriage (on shooter side)
+    private final DigitalInput ampBeam; // entrance of carriage (which is the amp shooter)
+    private final DigitalInput shooterBeam; // completely exit through shooter
 
     public IntakeCarriage() {
         intake = new CANSparkFlex(Constants.IntakeCarriage.INTAKE_ID, MotorType.kBrushless);
@@ -26,6 +25,10 @@ public class IntakeCarriage extends SubsystemBase {
         carriage = new CANSparkMax(Constants.IntakeCarriage.CARRIAGE_ID, MotorType.kBrushless);
         carriage.restoreFactoryDefaults();
         carriage.setInverted(true);
+
+        carriageBeam = new DigitalInput(Constants.IntakeCarriage.CARRIAGE_BEAM);
+        ampBeam = new DigitalInput(Constants.IntakeCarriage.AMP_BEAM);
+        shooterBeam = new DigitalInput(Constants.IntakeCarriage.SHOOTER_BEAM);
     }
 
     public double getIntakeSpeed() {
