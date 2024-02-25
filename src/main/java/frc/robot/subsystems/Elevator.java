@@ -114,7 +114,6 @@ public class Elevator extends SubsystemBase {
     }
 
     public void holdTarget() {
-        if(true)return;
         checkLimitSwitch();
         if(elevator.getRotorPosition().getValueAsDouble() > Constants.Elevator.UPPER_STAGE_THRESHOLD){ //if on upper stage use higher PID
             if (limitHitOnce) {
@@ -140,7 +139,6 @@ public class Elevator extends SubsystemBase {
     }
 
     public void moveElevator(double axisValue) {
-        if(true)return;
         checkLimitSwitch();
         if (axisValue < 0 && elevatorSwitchTriggered()) {
             target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
@@ -155,7 +153,6 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setHeight(double height) {
-        if(true)return;
         checkLimitSwitch();
         if (height < elevator.getRotorPosition().getValueAsDouble() && elevatorSwitchTriggered()) {
             height = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
