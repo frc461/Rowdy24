@@ -28,7 +28,7 @@ public class LimelightTurretCommand extends Command {
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
         this.robotCentricSup = robotCentricSup;
-        addRequirements(this.limelight, this.swerve);
+        addRequirements(this.swerve);
     }
     
     @Override

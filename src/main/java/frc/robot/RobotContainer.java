@@ -97,7 +97,7 @@ public class RobotContainer {
                                 limelight.getRX(),
                                 limelight.getRZ(),
                                 limelight.tagExists()
-                        )),
+                        ), angler),
                         new RevUpShooterCommand(
                                 shooter,
                                 limelight,
@@ -118,12 +118,12 @@ public class RobotContainer {
                         limelight.getRX(),
                         limelight.getRZ(),
                         limelight.tagExists()
-                ))
+                ), angler)
         );
 
         NamedCommands.registerCommand(
-                "shoot",
-                new InstantCommand(() -> shooter.overrideShooterSpeed(1.0))
+                "overrideShoot",
+                new InstantCommand(() -> shooter.overrideShooterSpeed(1.0), shooter)
         );
 
         NamedCommands.registerCommand(
@@ -154,38 +154,35 @@ public class RobotContainer {
         opXbox.povUp().onTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> idleMode = !idleMode),
                 new ParallelCommandGroup(
-                        (new InstantCommand(
+                        new InstantCommand(
                                 () -> intakeCarriage.setIntakeIdle(idleMode),
                                 intakeCarriage
-                        )).withInterruptBehavior(
-                                Command.InterruptionBehavior.kCancelSelf
                         ),
-                        (new InstantCommand(
+                        new InstantCommand(
                                 () -> shooter.setShooterIdle(idleMode),
                                 shooter
-                        )).withInterruptBehavior(
-                                Command.InterruptionBehavior.kCancelSelf
                         )
                 )
         ));
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
-        new LimelightTurretCommand(
-                limelight,
-                swerve,
-                () -> -driverXbox.getLeftY(), // Ordinate Translation
-                () -> -driverXbox.getLeftX(), // Coordinate Translation
-                driverXbox.b()) // Robot-centric trigger
+                new LimelightTurretCommand(
+                        limelight,
+                        swerve,
+                        () -> -driverXbox.getLeftY(), // Ordinate Translation
+                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox.b() // Robot-centric trigger
+                )
         );
 
-        /* Cheeky driver angler align */
+        /* Cheeky Driver Auto-align (deadband defaults to 0.5) */
         driverXbox.leftBumper().whileTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
                         limelight.getRX(),
                         limelight.getRZ(),
                         limelight.tagExists()
-                ))
+                ), angler)
         );
 
         /* Intake Note */
@@ -202,13 +199,13 @@ public class RobotContainer {
         /* Outtake Note */
         opXbox.leftBumper().whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
 
-        /* Auto-align (deadband defaults to 0.5) */
+        /* Auto-align for auto-shoot (deadband defaults to 0.5) */
         opXbox.rightTrigger().onTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
                         limelight.getRX(),
                         limelight.getRZ(),
                         limelight.tagExists()
-                ))
+                ), angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
 
         /* Rev up shooter and run carriage when its up to speed */
@@ -221,7 +218,16 @@ public class RobotContainer {
                                 1,
                                 idleMode
                         ))
-                )
+                ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
+        );
+
+        /* Auto-align (deadband defaults to 0.5) */
+        opXbox.x().onTrue(
+                new InstantCommand(() -> angler.setAlignedAngle(
+                        limelight.getRX(),
+                        limelight.getRZ(),
+                        limelight.tagExists()
+                ), angler)
         );
 
         /* Override Shooter (deadband defaults to 0.5) */
@@ -237,25 +243,18 @@ public class RobotContainer {
 
         /* Stow Elevator Preset */
         driverXbox.rightBumper().onTrue(
-            new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
         );
 
         /* Stow Elevator Preset */
         opXbox.a().onTrue(
-            new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
         );
 
         /* Amp Elevator Preset */
-        opXbox.y().onTrue(new InstantCommand(() ->
-            elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
-        ));
-
-        /* Auto Angle Align */
-        opXbox.x().onTrue(new InstantCommand(() -> angler.setAlignedAngle(
-                limelight.getRX(),
-                limelight.getRZ(),
-                limelight.tagExists()
-        )));
+        opXbox.y().onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator)
+        );
     }
 
     public void printValues() {
