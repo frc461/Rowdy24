@@ -162,7 +162,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void zeroGyro() {
-        gyro.setYaw(0);
+        gyro.setYaw(Constants.Swerve.GYRO_OFFSET);
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {

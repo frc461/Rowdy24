@@ -96,7 +96,7 @@ public final class PracticeConstants {
     }
 
     public static final class Swerve {
-        public static final double GYRO_OFFSET = 0;
+        public static final double GYRO_OFFSET = -90;
         public static final int PIGEON_ID = 51;
         public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW- (DO NOT USE, ENABLES ROBOT-CENTRIC)
 
