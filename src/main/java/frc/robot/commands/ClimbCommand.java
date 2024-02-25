@@ -19,7 +19,7 @@ public class ClimbCommand extends Command {
     @Override
     public void end(boolean isFinished) {
         if (isFinished) {
-            elevator.setClamp();
+            elevator.setClamp(true);
         }
     }
 

@@ -78,17 +78,16 @@ public class Elevator extends SubsystemBase {
     public void climb() {
         if (!elevatorSwitchTriggered()) {
             elevator.set(-0.2); //TODO this is sketch
-            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
+            setClamp(false);
         } else {
             target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
             holdTarget();
-            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
+            setClamp(true);
         }
     }
-
-    public void setClamp() {
-        clamped = !clamped;
-        elevatorClamp.set(clamped ?
+    //stop changing this to flip, it makes it harder to see what is going on
+    public void setClamp(boolean isClamped) {
+        elevatorClamp.set(isClamped ?
                 Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS :
                 Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS
         );
