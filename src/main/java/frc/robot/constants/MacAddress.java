@@ -4,8 +4,8 @@ import java.net.NetworkInterface;
 import java.util.Enumeration;
 
 public class MacAddress {
-    public static final String PRACTICE = "00-80-2F-33-9F-37";
-    public static final String ROWDY = "00-80-2F-17-81-C0";
+    public static final String PRACTICE = "00-80-2F-17-81-C0";
+    public static final String ROWDY = "00-80-2F-33-9F-37";
 
     public static String getMACAddress() {
         try {
