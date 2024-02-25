@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
 
     private RobotContainer robotContainer;
-    private final SysIdRoutineBot robotSysIdRoutine = new SysIdRoutineBot();
+    private final SysIdRoutineBot robotSysIdRoutine = new SysIdRoutineBot(); // can replace robot container for testing purposes
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -35,7 +35,6 @@ public class Robot extends TimedRobot {
          * and put our autonomous chooser on the dashboard.
          */
         robotContainer = new RobotContainer();
-        robotSysIdRoutine.configureBindings();
     }
 
     /**
@@ -79,7 +78,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        autonomousCommand = robotSysIdRoutine.getAutonomousCommand();
+        autonomousCommand = robotContainer.getAutonomousCommand();
         // schedule the autonomous command (example)
         if (autonomousCommand != null) {
           autonomousCommand.schedule();
