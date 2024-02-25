@@ -19,7 +19,7 @@ public class ClimbCommand extends Command {
     @Override
     public void end(boolean isFinished) {
         if (isFinished) {
-            elevator.setClamp(true);
+            elevator.climb(); // climb function will finally detect the limit switch and set the clamp to true
         }
     }
 

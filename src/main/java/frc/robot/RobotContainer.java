@@ -35,8 +35,7 @@ public class RobotContainer {
     public final static CommandXboxController opXbox = new CommandXboxController(1);
 
     /* Variables */
-    private boolean idleMode = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
-    private boolean clamped = false; //Disables/enables clamp.
+    private boolean idleMode = false; // Disables/enables automatic subsystem functions (e.g. auto-outtake)
     private final SendableChooser<Command> chooser;
 
     /**
@@ -238,12 +237,10 @@ public class RobotContainer {
         );
 
         /* Climb */
-        opXbox.povDown().whileTrue(new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)); //climb
+        opXbox.povDown().whileTrue(new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered));
+
         /* Toggle clamp */
-        opXbox.povLeft().onTrue( new SequentialCommandGroup(
-                new InstantCommand(() -> clamped = !clamped),
-                new InstantCommand(() -> elevator.setClamp(clamped)))
-        );
+        opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
 
         /* Stow Elevator Preset */
         driverXbox.rightBumper().onTrue(
