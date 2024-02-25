@@ -103,10 +103,6 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    public Field2d getField2d() {
-        return field;
-    }
-
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -162,7 +158,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void zeroGyro() {
-        gyro.setYaw(0);
+        gyro.setYaw(Constants.Swerve.GYRO_OFFSET);
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {

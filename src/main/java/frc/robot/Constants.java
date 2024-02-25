@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -11,7 +12,6 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final double STICK_DEADBAND = 0.1;
-    public static final double TRIGGER_DEADBAND = 0.5;
 
     public static final class Auto {
         // pid values for pathplanner
@@ -33,10 +33,6 @@ public final class Constants {
         public static final double ANGLER_P = 0.035;
         public static final double ANGLER_I = 0.00009;
         public static final double ANGLER_D = 0.0001;
-       
-        // limit switches
-        public static final int ANGLER_LOWER_LIMIT_SWITCH_PORT = 1;
-        public static final int ANGLER_UPPER_LIMIT_SWITCH_PORT = 0;
 
         // code limits on encoder values
         public static final double ANGLER_LOWER_LIMIT = 0;
@@ -59,9 +55,7 @@ public final class Constants {
         public static final int ELEVATOR_ID = 31;
         public static final int ELEVATOR_CURRENT_LIMIT = 80;
         public static final int ELEVATOR_LIMIT_SWITCH = 2;
-        public static final boolean ELEVATOR_INVERT = true;
-        public static final double ELEVATOR_MAX_VELOCITY = 0.2;
-        public static final double ELEVATOR_MAX_ACCEL = 0.05;
+        public static final InvertedValue ELEVATOR_INVERT = InvertedValue.Clockwise_Positive;
 
         // servo to hold elevator in endgame
         public static final int ELEVATOR_SERVO_PORT = 1;
@@ -78,13 +72,6 @@ public final class Constants {
         public static final double ELEVATOR_UPPER_LIMIT = 36;
         public static final double ELEVATOR_AMP = 35.5;
         public static final double ELEVATOR_STOW = -0.9;
-        public static final double UPPER_STAGE_THRESHOLD = 0.0;
-
-        // feedforward
-        public static final double ELEVATOR_FF_KS = 0.30049;
-        public static final double ELEVATOR_FF_KV = 4.9046;
-        public static final double ELEVATOR_FF_KA = 0.13987;
-        public static final double ELEVATOR_FF_KG = 0.46936;
     }
 
     public static final class IntakeCarriage {
