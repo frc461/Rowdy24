@@ -66,10 +66,6 @@ public class IntakeCarriage extends SubsystemBase {
         carriage.set(carriageSpeed);
     }
 
-    public void setIntakeCarriageSpeed(double speed){
-        setIntakeCarriageSpeed(speed, speed);
-    }
-
     public void setIntakeIdle(boolean idleMode) {
         intake.set(idleMode ? Constants.IntakeCarriage.IDLE_INTAKE_SPEED : 0);
     }

@@ -16,10 +16,9 @@ import frc.lib.util.CTREConfigs;
 */
 public class Robot extends TimedRobot {
     public static CTREConfigs ctreConfigs;
-
     private Command autonomousCommand;
-
     private RobotContainer robotContainer;
+    @SuppressWarnings("unused")
     private final SysIdRoutineBot robotSysIdRoutine = new SysIdRoutineBot(); // can replace robot container for testing purposes
 
     /**

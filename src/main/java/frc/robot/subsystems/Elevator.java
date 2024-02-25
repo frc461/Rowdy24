@@ -17,14 +17,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 
-import java.awt.*;
-
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.*;
 
 public class Elevator extends SubsystemBase {
     private final TalonFX elevator;
-    private final PIDController elevatorPIDController, upperPIDController, lowerPIDController;
+    private final PIDController upperPIDController, lowerPIDController;
     private final DigitalInput elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
     private final Servo elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
     private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
@@ -45,12 +43,6 @@ public class Elevator extends SubsystemBase {
         config.CurrentLimits = new CurrentLimitsConfigs().withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
 
         elevator.getConfigurator().apply(config);
-        
-        elevatorPIDController = new PIDController(
-                Constants.Elevator.ELEVATOR_P,
-                Constants.Elevator.ELEVATOR_I,
-                Constants.Elevator.ELEVATOR_D
-        );
         
         lowerPIDController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
