@@ -9,7 +9,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
-import frc.robot.constants.Constants;
 
 public final class PracticeConstants {
     public static final double STICK_DEADBAND = 0.1;
@@ -39,12 +38,12 @@ public final class PracticeConstants {
         public static final double ANGLER_UPPER_LIMIT = 20;
         public static final double UPPER_AIM_LIMIT = 2.26;
 
-        public static double UPPER_AIM_EQUATION(double dist) {
-            return 51.8 * Math.pow(dist, -1.31);
-        }
-
         public static double TIGHT_AIM_EQUATION(double dist) {
             return 40.9 * Math.pow(dist, -1.3) - 0.3;
+        }
+
+        public static double UPPER_AIM_EQUATION(double dist) {
+            return 51.8 * Math.pow(dist, -1.31);
         }
     }
 

@@ -36,9 +36,9 @@ public final class Constants {
         public static int ANGLER_UPPER_LIMIT_SWITCH_PORT;
         public static double ANGLER_LOWER_LIMIT;
         public static double ANGLER_UPPER_LIMIT;
-        public static double UPPER_AIM_LIMIT;
-        public static Function<Double, Double> UPPER_AIM_EQUATION;
-        public static Function<Double, Double> TIGHT_AIM_EQUATION;
+        public static double CLOSE_AIM_LIMIT;
+        public static Function<Double, Double> CLOSE_AIM_EQUATION;
+        public static Function<Double, Double> FAR_AIM_EQUATION;
     }
 
     public static final class Elevator {

@@ -36,14 +36,14 @@ public final class RowdyConstants {
         public static final int ANGLER_UPPER_LIMIT_SWTICH_PORT = 0;
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
-        public static final double UPPER_AIM_LIMIT = 2.26;
+        public static final double LOWER_AIM_LIMIT = 4;
 
-        public static double UPPER_AIM_EQUATION(double dist) {
-            return 34.8 - 11.5 * dist + 1.04 * Math.pow(dist, 2);
+        public static double LOWER_AIM_EQUATION(double dist) {
+            return 31.4 - 10.6 * dist + 0.984 * dist * dist;
         }
 
         public static double TIGHT_AIM_EQUATION(double dist) {
-            return 38.2 - 12.3 * dist + 1.1 * Math.pow(dist, 2);
+            return 34.8 - 11.5 * dist + 1.04 * dist * dist;
         }
     }
 
