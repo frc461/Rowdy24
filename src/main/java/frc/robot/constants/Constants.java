@@ -8,6 +8,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
+import java.util.function.Function;
+
 public final class Constants {
     public static double STICK_DEADBAND;
     public static double TRIGGER_DEADBAND;
@@ -34,11 +36,9 @@ public final class Constants {
         public static int ANGLER_UPPER_LIMIT_SWITCH_PORT;
         public static double ANGLER_LOWER_LIMIT;
         public static double ANGLER_UPPER_LIMIT;
-        public static double UPPER_BOUND_LIMIT;
-        public static double UPPER_BOUND_COEFFICIENT;
-        public static double UPPER_BOUND_SERIES;
-        public static double TIGHT_BOUND_COEFFICIENT;
-        public static double TIGHT_BOUND_SERIES;
+        public static double UPPER_AIM_LIMIT;
+        public static Function<Double, Double> UPPER_AIM_EQUATION;
+        public static Function<Double, Double> TIGHT_AIM_EQUATION;
     }
 
     public static final class Elevator {

@@ -37,11 +37,15 @@ public final class PracticeConstants {
         public static final int ANGLER_UPPER_LIMIT_SWTICH_PORT = 0;
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
-        public static final double UPPER_BOUND_LIMIT = 2.26;
-        public static final double UPPER_BOUND_COEFFICIENT = 51.8;
-        public static final double UPPER_BOUND_SERIES = -1.31;
-        public static final double TIGHT_BOUND_COEFFICIENT = 40.9; // 43.9
-        public static final double TIGHT_BOUND_SERIES = -1.3;
+        public static final double UPPER_AIM_LIMIT = 2.26;
+
+        public static double UPPER_AIM_EQUATION(double dist) {
+            return 51.8 * Math.pow(dist, -1.31);
+        }
+
+        public static double TIGHT_AIM_EQUATION(double dist) {
+            return 40.9 * Math.pow(dist, -1.3) - 0.3;
+        }
     }
 
     public static final class Elevator {

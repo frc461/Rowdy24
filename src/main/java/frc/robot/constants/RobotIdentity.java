@@ -45,11 +45,9 @@ public enum RobotIdentity {
                 Constants.Angler.ANGLER_UPPER_LIMIT_SWITCH_PORT = PracticeConstants.Angler.ANGLER_UPPER_LIMIT_SWTICH_PORT;
                 Constants.Angler.ANGLER_LOWER_LIMIT = PracticeConstants.Angler.ANGLER_LOWER_LIMIT;
                 Constants.Angler.ANGLER_UPPER_LIMIT = PracticeConstants.Angler.ANGLER_UPPER_LIMIT;
-                Constants.Angler.UPPER_BOUND_LIMIT = PracticeConstants.Angler.UPPER_BOUND_LIMIT;
-                Constants.Angler.UPPER_BOUND_COEFFICIENT = PracticeConstants.Angler.UPPER_BOUND_COEFFICIENT;
-                Constants.Angler.UPPER_BOUND_SERIES = PracticeConstants.Angler.UPPER_BOUND_SERIES;
-                Constants.Angler.TIGHT_BOUND_COEFFICIENT = PracticeConstants.Angler.TIGHT_BOUND_COEFFICIENT;
-                Constants.Angler.TIGHT_BOUND_SERIES = PracticeConstants.Angler.TIGHT_BOUND_SERIES;
+                Constants.Angler.UPPER_AIM_LIMIT = PracticeConstants.Angler.UPPER_AIM_LIMIT;
+                Constants.Angler.UPPER_AIM_EQUATION = PracticeConstants.Angler::UPPER_AIM_EQUATION;
+                Constants.Angler.TIGHT_AIM_EQUATION = PracticeConstants.Angler::TIGHT_AIM_EQUATION;
 
                 Constants.Elevator.ELEVATOR_ID = PracticeConstants.Elevator.ELEVATOR_ID;
                 Constants.Elevator.ELEVATOR_CURRENT_LIMIT = PracticeConstants.Elevator.ELEVATOR_CURRENT_LIMIT;
@@ -182,11 +180,9 @@ public enum RobotIdentity {
                 Constants.Angler.ANGLER_UPPER_LIMIT_SWITCH_PORT = RowdyConstants.Angler.ANGLER_UPPER_LIMIT_SWTICH_PORT;
                 Constants.Angler.ANGLER_LOWER_LIMIT = RowdyConstants.Angler.ANGLER_LOWER_LIMIT;
                 Constants.Angler.ANGLER_UPPER_LIMIT = RowdyConstants.Angler.ANGLER_UPPER_LIMIT;
-                Constants.Angler.UPPER_BOUND_LIMIT = RowdyConstants.Angler.UPPER_BOUND_LIMIT;
-                Constants.Angler.UPPER_BOUND_COEFFICIENT = RowdyConstants.Angler.UPPER_BOUND_COEFFICIENT;
-                Constants.Angler.UPPER_BOUND_SERIES = RowdyConstants.Angler.UPPER_BOUND_SERIES;
-                Constants.Angler.TIGHT_BOUND_COEFFICIENT = RowdyConstants.Angler.TIGHT_BOUND_COEFFICIENT;
-                Constants.Angler.TIGHT_BOUND_SERIES = RowdyConstants.Angler.TIGHT_BOUND_SERIES;
+                Constants.Angler.UPPER_AIM_LIMIT = RowdyConstants.Angler.UPPER_AIM_LIMIT;
+                Constants.Angler.UPPER_AIM_EQUATION = RowdyConstants.Angler::UPPER_AIM_EQUATION;
+                Constants.Angler.TIGHT_AIM_EQUATION = RowdyConstants.Angler::TIGHT_AIM_EQUATION;
 
                 Constants.Elevator.ELEVATOR_ID = RowdyConstants.Elevator.ELEVATOR_ID;
                 Constants.Elevator.ELEVATOR_CURRENT_LIMIT = RowdyConstants.Elevator.ELEVATOR_CURRENT_LIMIT;
