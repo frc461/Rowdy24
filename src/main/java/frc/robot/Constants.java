@@ -38,10 +38,13 @@ public final class Constants {
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
 
+        //setpoint(s)
+        public static final double ANGLER_LAYUP_POSITION = 18;
+
         // equation constants for shooting with distance from april tag
         public static final double AVG_BOUND_LIMIT = 4;
         
-        public static final double LOWER_BOUND_CONSTANT = 31.4;
+        public static final double LOWER_BOUND_CONSTANT = 31.4; //33.4
         public static final double LOWER_BOUND_LINEAR_COEFFICIENT = 10.6;
         public static final double LOWER_BOUND_SQUARED_COEFFICIENT = 0.984;
 

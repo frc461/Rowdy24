@@ -256,6 +256,9 @@ public class RobotContainer {
         opXbox.y().onTrue(
                 new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator)
         );
+
+        /* Angler layup setpoint (Limelight failsafe) */
+        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setAngle(Constants.Angler.ANGLER_LAYUP_POSITION)));
     }
 
     public void printValues() {
