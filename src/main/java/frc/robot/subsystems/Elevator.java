@@ -5,7 +5,6 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -17,13 +16,12 @@ public class Elevator extends SubsystemBase {
     private final TalonFX elevator;
     private final PIDController elevatorPIDController;
     private final DigitalInput elevatorSwitch;
-    public final Servo elevatorClamp;
+    private final Servo elevatorClamp;
     private double target;
     private boolean clamped;
 
     public Elevator() {
         elevator = new TalonFX(Constants.Elevator.ELEVATOR_ID);
-        elevator.setNeutralMode(NeutralModeValue.Brake);
         elevator.getConfigurator().apply(new TalonFXConfiguration()
                 .withVoltage(new VoltageConfigs().withPeakForwardVoltage(6))
                 .withMotorOutput(new MotorOutputConfigs()
@@ -96,6 +94,10 @@ public class Elevator extends SubsystemBase {
                 Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS :
                 Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS
         );
+    }
+
+    public double getClampPosition() {
+        return elevatorClamp.getPosition();
     }
 
     public void moveElevator(double axisValue) {
