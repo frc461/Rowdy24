@@ -30,9 +30,60 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter();
     private final Angler angler = new Angler();
 
-    /* Controllers */
     public final static CommandXboxController driverXbox = new CommandXboxController(0);
+    /* Currently Allocated For Driver:
+     * POV buttons / Dpad:
+     * Up
+     * Down
+     * Left
+     * Right
+     * 
+     * Triggers:
+     * Left:
+     * Right:
+     * 
+     * Joysticks:
+     * Left: Translation
+     * Right: Rotation
+     * 
+     * Bumpers:
+     * Left: auto-align angler and drivetrain to april tag
+     * Right: stow elevator
+     * 
+     * Buttons: 
+     * A: 
+     * B: 
+     * X: 
+     * Y: rezero gyro
+     */  
+
     public final static CommandXboxController opXbox = new CommandXboxController(1);
+    /* Currently Allocated For Operator:
+     * POV buttons / Dpad:
+     * Up - toggle auto subsystems
+     * Down - auto climb
+     * Left - toggle clamp
+     * Right - angler layup setpoint
+     * 
+     * Triggers:
+     * Left: Manual shooter rev
+     * Right: Auto shoot
+     * 
+     * Joysticks:
+     * Left: Manual angler
+     * Right: Manual elevator
+     * 
+     * Bumpers:
+     * Left: Outtake note 
+     * Right: Intake note (with beam breaks)
+     * 
+     * Buttons: 
+     * A: Stow elevator
+     * B: Force intake
+     * X: Auto angler align
+     * Y: Elevator amp preset
+     */
+
 
     /* Variables */
     private boolean idleMode = false; // Disables/enables automatic subsystem functions (e.g. auto-outtake)
@@ -54,7 +105,7 @@ public class RobotContainer {
         swerve.setDefaultCommand(
                 new TeleopSwerveCommand(
                         swerve,
-                        () -> -driverXbox.getLeftY(), // Ordinate Translation
+                        () -> -driverXbox.getLeftY(), // Cordinate Translation
                         () -> -driverXbox.getLeftX(), // Coordinate Translation
                         () -> -driverXbox.getRightX(), // Rotation
                         driverXbox.b() // Robot-centric trigger
