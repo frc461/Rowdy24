@@ -22,14 +22,12 @@ public class Shooter extends SubsystemBase {
         bottomShooter.restoreFactoryDefaults();
         bottomShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
         bottomShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
-        bottomShooter.burnFlash();
         bottomEncoder = bottomShooter.getEncoder();
 
         topShooter = new CANSparkFlex(Constants.Shooter.TOP_SHOOTER_ID, MotorType.kBrushless);
         topShooter.restoreFactoryDefaults();
         topShooter.setSmartCurrentLimit(Constants.Shooter.SHOOTER_CURRENT_LIMIT);
         topShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
-        topShooter.burnFlash();
         topEncoder = topShooter.getEncoder();
 
         bottomController = bottomShooter.getPIDController();
@@ -39,11 +37,13 @@ public class Shooter extends SubsystemBase {
         bottomController.setI(Constants.Shooter.SHOOTER_I);
         bottomController.setD(Constants.Shooter.SHOOTER_D);
         bottomController.setFF(Constants.Shooter.SHOOTER_FF);
+        bottomShooter.burnFlash();
 
         topController.setP(Constants.Shooter.SHOOTER_P);
         topController.setI(Constants.Shooter.SHOOTER_I);
         topController.setD(Constants.Shooter.SHOOTER_D);
         topController.setFF(Constants.Shooter.SHOOTER_FF);
+        topShooter.burnFlash();
 
         target = 0.0;
         error = Math.abs(target - (getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
