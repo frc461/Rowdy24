@@ -71,10 +71,10 @@ public final class Constants {
         public static final double ELEVATOR_D = 0.001;
 
         // presets
-        public static final double ELEVATOR_LOWER_LIMIT = -1;
+        public static final double ELEVATOR_LOWER_LIMIT = -2;
         public static final double ELEVATOR_UPPER_LIMIT = 36;
         public static final double ELEVATOR_AMP = 35.5;
-        public static final double ELEVATOR_STOW = -0.9;
+        public static final double ELEVATOR_STOW = -1.5;
     }
 
     public static final class IntakeCarriage {
