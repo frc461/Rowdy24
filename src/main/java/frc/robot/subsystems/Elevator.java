@@ -45,12 +45,14 @@ public class Elevator extends SubsystemBase {
         clamped = false; // disables/enables clamp
     }
 
-//    @Override
-//    public void periodic() {
-//        if (!clamped) {
-//            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
-//        }
-//    }
+   @Override
+   public void periodic() {
+       if (!clamped) {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
+       } else {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
+       }
+   }
 
     public double getPosition() {
         return elevator.getPosition().getValueAsDouble();
@@ -101,6 +103,16 @@ public class Elevator extends SubsystemBase {
                 Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS :
                 Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS
         );
+    }
+
+    public void setClamp() {
+        if (!clamped) {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
+            clamped = true;
+        } else {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
+            clamped = false;
+        }
     }
 
     public double getClampPosition() {

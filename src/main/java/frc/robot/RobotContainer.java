@@ -291,7 +291,7 @@ public class RobotContainer {
         opXbox.povDown().whileTrue(new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered));
 
         /* Toggle clamp */
-        opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
+        opXbox.povLeft().onTrue(new InstantCommand(elevator::setClamp));
 
         /* Stow Elevator Preset */
         driverXbox.rightBumper().onTrue(
