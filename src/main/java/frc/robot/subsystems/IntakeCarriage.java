@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -14,6 +15,7 @@ public class IntakeCarriage extends SubsystemBase {
     private final DigitalInput carriageBeam; // end of carriage (on shooter side)
     private final DigitalInput ampBeam; // entrance of carriage (which is the amp shooter)
     private final DigitalInput shooterBeam; // completely exit through shooter
+    private final Spark lights;
 
     public IntakeCarriage() {
         intake = new CANSparkFlex(Constants.IntakeCarriage.INTAKE_ID, MotorType.kBrushless);
@@ -29,6 +31,17 @@ public class IntakeCarriage extends SubsystemBase {
         carriageBeam = new DigitalInput(Constants.IntakeCarriage.CARRIAGE_BEAM);
         ampBeam = new DigitalInput(Constants.IntakeCarriage.AMP_BEAM);
         shooterBeam = new DigitalInput(Constants.IntakeCarriage.SHOOTER_BEAM);
+
+        lights = new Spark(Constants.IntakeCarriage.LIGHT_ID);
+    }
+
+    @Override
+    public void periodic() {
+        if (noteInSystem()) {
+            lights.set(0.71);
+        } else {
+            lights.set(-0.99);
+        }
     }
 
     public double getIntakeSpeed() {

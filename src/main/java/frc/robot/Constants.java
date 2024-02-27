@@ -89,6 +89,8 @@ public final class Constants {
         public static final int CARRIAGE_BEAM = 4;
         public static final int SHOOTER_BEAM = 3;
         public static final int AMP_BEAM = 5;
+
+        public static final int LIGHT_ID = 0;
     }
 
     public static final class Limelight {
