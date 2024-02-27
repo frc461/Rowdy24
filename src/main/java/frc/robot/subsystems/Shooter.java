@@ -37,12 +37,13 @@ public class Shooter extends SubsystemBase {
         bottomController.setI(Constants.Shooter.SHOOTER_I);
         bottomController.setD(Constants.Shooter.SHOOTER_D);
         bottomController.setFF(Constants.Shooter.SHOOTER_FF);
-        bottomShooter.burnFlash();
 
         topController.setP(Constants.Shooter.SHOOTER_P);
         topController.setI(Constants.Shooter.SHOOTER_I);
         topController.setD(Constants.Shooter.SHOOTER_D);
         topController.setFF(Constants.Shooter.SHOOTER_FF);
+
+        bottomShooter.burnFlash();
         topShooter.burnFlash();
 
         target = 0.0;

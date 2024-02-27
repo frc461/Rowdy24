@@ -30,8 +30,8 @@ public final class Constants {
         public static final boolean ANGLER_INVERT = false;
 
         // pid for angler
-        public static final double ANGLER_P = 0.035;
-        public static final double ANGLER_I = 0.00009;
+        public static final double ANGLER_P = 0.05;
+        public static final double ANGLER_I = 0.0001;
         public static final double ANGLER_D = 0.0001;
 
         // code limits on encoder values
@@ -62,8 +62,8 @@ public final class Constants {
 
         // servo to hold elevator in endgame
         public static final int ELEVATOR_SERVO_PORT = 1;
-        public static final double ELEVATOR_SERVO_CLAMPED_POS = 1;
-        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 0;
+        public static final double ELEVATOR_SERVO_CLAMPED_POS = 0.64;
+        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 0.36;
         
         // pid
         public static final double ELEVATOR_P = 0.08;

@@ -45,6 +45,13 @@ public class Elevator extends SubsystemBase {
         clamped = false; // disables/enables clamp
     }
 
+//    @Override
+//    public void periodic() {
+//        if (!clamped) {
+//            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
+//        }
+//    }
+
     public double getPosition() {
         return elevator.getPosition().getValueAsDouble();
     }
