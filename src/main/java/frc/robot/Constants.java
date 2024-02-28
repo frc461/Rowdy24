@@ -10,6 +10,8 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
+import java.util.function.Function;
+
 public final class Constants {
     public static final double STICK_DEADBAND = 0.1;
 
@@ -65,6 +67,13 @@ public final class Constants {
         public static final double AVG_BOUND_CONSTANT = 33.3; // 35.6
          public static final double AVG_BOUND_LINEAR_COEFFICIENT = -11.8; // -12.2
         public static final double AVG_BOUND_SQUARED_COEFFICIENT = 1.17; // 1.18
+
+        public static final double SPEAKER_HEIGHT = 1.98;
+        public static final double SHOOTER_HEIGHT = 0.2989; // CAD
+        public static final double Y_COMPONENT_AIM = SPEAKER_HEIGHT - SHOOTER_HEIGHT;
+        public static final Function<Double, Double> ANGLE_TO_ENCODER_VALUE = (angle) -> 4 / 9 * (angle - 10);
+        public static final Function<Double, Double> AUTO_ANGLER_AIM_EQUATION =
+                (distance) -> ANGLE_TO_ENCODER_VALUE.apply(Math.toDegrees(Math.atan(Y_COMPONENT_AIM / distance)));
     }
 
     public static final class Elevator {
