@@ -1,17 +1,13 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -28,63 +24,69 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-    //private final Elevator elevator = new Elevator();
+    private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
     private final Angler angler = new Angler();
 
+    public final static CommandXboxController driverXbox = new CommandXboxController(0);
+    /* Currently Allocated For Driver:
+     * POV buttons / Dpad:
+     * Up
+     * Down
+     * Left
+     * Right
+     * 
+     * Triggers:
+     * Left:
+     * Right:
+     * 
+     * Joysticks:
+     * Left: Translation
+     * Right: Rotation
+     * 
+     * Bumpers:
+     * Left: auto-align angler and drivetrain to april tag
+     * Right: stow elevator
+     * 
+     * Buttons: 
+     * A: 
+     * B: 
+     * X: 
+     * Y: rezero gyro
+     */  
 
-    /* Controllers */
-    public final static Joystick driver = new Joystick(0);
+    public final static CommandXboxController opXbox = new CommandXboxController(1);
+    /* Currently Allocated For Operator:
+     * POV buttons / Dpad:
+     * Up - toggle auto subsystems
+     * Down - auto climb
+     * Left - toggle clamp
+     * Right - angler layup setpoint
+     * 
+     * Triggers:
+     * Left: Manual shooter rev
+     * Right: Auto shoot
+     * 
+     * Joysticks:
+     * Left: Manual angler
+     * Right: Manual elevator
+     * 
+     * Bumpers:
+     * Left: Outtake note 
+     * Right: Intake note (with beam breaks)
+     * 
+     * Buttons: 
+     * A: Stow elevator
+     * B: Force intake
+     * X: Auto angler align
+     * Y: Elevator amp preset
+     */
 
-    public final static Joystick operator = new Joystick(1);
-
-    /* Operate Controls */
-    private final int anglerAxis = XboxController.Axis.kLeftY.value;
-    private final int elevatorAxis = XboxController.Axis.kRightY.value;
-    private final int revShoot = XboxController.Axis.kLeftTrigger.value;
-    private final int autoAlignRevShoot = XboxController.Axis.kRightTrigger.value;
-
-    /* Drive Controls */
-    private final int translationAxis = XboxController.Axis.kLeftY.value;
-    private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    private final int rotationAxis = XboxController.Axis.kRightX.value;
-
-    /* Operator Buttons */
-    private final JoystickButton operatorStowButton = new JoystickButton(operator, XboxController.Button.kA.value);
-    private final JoystickButton overrideIntake = new JoystickButton(operator, XboxController.Button.kB.value);
-    private final JoystickButton elevatorAmp = new JoystickButton(operator, XboxController.Button.kY.value);
-    private final JoystickButton alignAngler = new JoystickButton(operator, XboxController.Button.kX.value);
-
-    private final JoystickButton outtakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-
-    private final POVButton toggleIdleMode = new POVButton(operator, 0);
-    private final POVButton operatorNinety = new POVButton(operator, 90);
-    private final POVButton operatorOneEighty = new POVButton(operator, 180);
-    private final POVButton operatorTwoSeventy = new POVButton(operator, 270);
-
-    /* Driver Buttons */
-    private final JoystickButton driverA = new JoystickButton(driver, XboxController.Button.kA.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kB.value);
-    private final JoystickButton outtakeButtonDriver = new JoystickButton(driver, XboxController.Button.kX.value);
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-
-    private final JoystickButton driverLimelight = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton driverStowButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-
-    private final POVButton driverZero = new POVButton(driver, 0);
-    private final POVButton driverNinety = new POVButton(driver, 90);
-    private final POVButton driverOneEighty = new POVButton(driver, 180);
-    private final POVButton driverTwoSeventy = new POVButton(driver, 270);
-
-    /* LED Initialization */
-    private final DigitalOutput lightEight = new DigitalOutput(8);
-    private final DigitalOutput lightNine = new DigitalOutput(9);
 
     /* Variables */
-    private boolean idleMode = false; // Disables/enables automatic subsystem functions (e.g. auto-intake)
+    private boolean idleMode = false; // Disables/enables automatic subsystem functions (e.g. auto-outtake)
     private final SendableChooser<Command> chooser;
 
     /**
@@ -103,26 +105,26 @@ public class RobotContainer {
         swerve.setDefaultCommand(
                 new TeleopSwerveCommand(
                         swerve,
-                        () -> -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
-                        robotCentric
+                        () -> -driverXbox.getLeftY(), // Cordinate Translation
+                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        () -> -driverXbox.getRightX(), // Rotation
+                        driverXbox.b() // Robot-centric trigger
                 )
         );
 
         angler.setDefaultCommand(
                 new TeleopAnglerCommand(
                         angler,
-                        () -> -operator.getRawAxis(anglerAxis)
+                        () -> -opXbox.getLeftY()
                 )
         );
 
-//         elevator.setDefaultCommand(
-//                 new TeleopElevator(
-//                         elevator,
-//                         () -> -operator.getRawAxis(elevatorAxis)
-//                 )
-//         );
+        elevator.setDefaultCommand(
+                new TeleopElevatorCommand(
+                        elevator,
+                        () -> -opXbox.getRightY()
+                )
+        );
 
         // Configure controller button bindings
         configureButtonBindings();
@@ -146,7 +148,7 @@ public class RobotContainer {
                                 limelight.getRX(),
                                 limelight.getRZ(),
                                 limelight.tagExists()
-                        )),
+                        ), angler),
                         new RevUpShooterCommand(
                                 shooter,
                                 limelight,
@@ -167,12 +169,12 @@ public class RobotContainer {
                         limelight.getRX(),
                         limelight.getRZ(),
                         limelight.tagExists()
-                ))
+                ), angler)
         );
 
         NamedCommands.registerCommand(
-                "shoot",
-                new InstantCommand(() -> shooter.overrideShooterSpeed(1.0))
+                "overrideShoot",
+                new InstantCommand(() -> shooter.overrideShooterSpeed(1.0), shooter)
         );
 
         NamedCommands.registerCommand(
@@ -196,55 +198,69 @@ public class RobotContainer {
      */
 
     private void configureButtonBindings() {
-        /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(swerve::zeroGyro));
+        /* Zero Gyro */
+        driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
-        toggleIdleMode.onTrue(new SequentialCommandGroup(
+        /* Toggle idle subsystems */
+        opXbox.povUp().onTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> idleMode = !idleMode),
                 new ParallelCommandGroup(
-                        (new InstantCommand(
+                        new InstantCommand(
                                 () -> intakeCarriage.setIntakeIdle(idleMode),
                                 intakeCarriage
-                        )).withInterruptBehavior(
-                                Command.InterruptionBehavior.kCancelSelf
                         ),
-                        (new InstantCommand(
+                        new InstantCommand(
                                 () -> shooter.setShooterIdle(idleMode),
                                 shooter
-                        )).withInterruptBehavior(
-                                Command.InterruptionBehavior.kCancelSelf
                         )
                 )
         ));
 
-        driverLimelight.whileTrue(new LimelightTurretCommand(
-                limelight,
-                swerve,
-                () -> -driver.getRawAxis(translationAxis),
-                () -> -driver.getRawAxis(strafeAxis),
-                robotCentric)
+        /* Limelight Turret */
+        driverXbox.leftBumper().whileTrue(
+                new LimelightTurretCommand(
+                        limelight,
+                        swerve,
+                        () -> -driverXbox.getLeftY(), // Ordinate Translation
+                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox.b() // Robot-centric trigger
+                )
         );
 
-        intakeButton.whileTrue(new IntakeCarriageCommand(
+        /* Cheeky Driver Auto-align (deadband defaults to 0.5) */
+        driverXbox.leftBumper().whileTrue(
+                new InstantCommand(() -> angler.setAlignedAngle(
+                        limelight.getRX(),
+                        limelight.getRZ(),
+                        limelight.tagExists()
+                ), angler)
+        );
+
+        /* Intake Note */
+        opXbox.rightBumper().whileTrue(new IntakeCarriageCommand(
                 intakeCarriage,
                 0.9,
                 1,
                 idleMode
         ).until(intakeCarriage::noteInSystem));
 
-        outtakeButton.whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
+        /* Intake Override */
+        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
 
-        overrideIntake.whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
+        /* Outtake Note */
+        opXbox.leftBumper().whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
 
-        new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > Constants.TRIGGER_DEADBAND).onTrue(
+        /* Auto-align for auto-shoot (deadband defaults to 0.5) */
+        opXbox.rightTrigger().onTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
                         limelight.getRX(),
                         limelight.getRZ(),
                         limelight.tagExists()
-                ))
+                ), angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
 
-        new Trigger(() -> operator.getRawAxis(autoAlignRevShoot) > Constants.TRIGGER_DEADBAND).whileTrue(
+        /* Rev up shooter and run carriage when its up to speed */
+        opXbox.rightTrigger().whileTrue(
                 new ParallelCommandGroup(
                         new RevUpShooterCommand(shooter, limelight, idleMode),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
@@ -253,32 +269,47 @@ public class RobotContainer {
                                 1,
                                 idleMode
                         ))
-                )
+                ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
 
-        new Trigger(() -> operator.getRawAxis(revShoot) > Constants.TRIGGER_DEADBAND).whileTrue(new RevUpShooterCommand(
+        /* Auto-align (deadband defaults to 0.5) */
+        opXbox.x().onTrue(
+                new InstantCommand(() -> angler.setAlignedAngle(
+                        limelight.getRX(),
+                        limelight.getRZ(),
+                        limelight.tagExists()
+                ), angler)
+        );
+
+        /* Override Shooter (deadband defaults to 0.5) */
+        opXbox.leftTrigger().whileTrue(new RevUpShooterCommand(
                 shooter, limelight, idleMode
                 )
         );
 
+        /* Climb */
+        opXbox.povDown().whileTrue(new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered));
 
-//        driverStowButton.onTrue(
-//             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-//        );
-//
-//        operatorStowButton.onTrue(
-//             new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW))
-//        );
-//
-//        elevatorAmp.onTrue(new InstantCommand(() ->
-//             elevator.setHeight(Constants.Elevator.ELEVATOR_AMP)
-//        ));
+        /* Toggle clamp */
+        opXbox.povLeft().onTrue(new InstantCommand(elevator::setClamp));
 
-        alignAngler.onTrue(new InstantCommand(() -> angler.setAlignedAngle(
-                limelight.getRX(),
-                limelight.getRZ(),
-                limelight.tagExists()
-        )));
+        /* Stow Elevator Preset */
+        driverXbox.rightBumper().onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
+        );
+
+        /* Stow Elevator Preset */
+        opXbox.a().onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
+        );
+
+        /* Amp Elevator Preset */
+        opXbox.y().onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator)
+        );
+
+        /* Angler layup setpoint (Limelight failsafe) */
+        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setAngle(Constants.Angler.ANGLER_LAYUP_POSITION)));
     }
 
     public void printValues() {
@@ -292,12 +323,12 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
         SmartDashboard.putBoolean("note in system", intakeCarriage.noteInSystem());
 
-//        elevator debug
-//        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
-//        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
-//        SmartDashboard.putNumber("Elevator Power", elevator.elevatorPower());
-//        SmartDashboard.putBoolean("Elevator Limit Triggered?",
-//        elevator.elevatorSwitchTriggered());
+        // elevator debug
+       SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
+       SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
+       SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
+       SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
+       SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
 
         // limelight debug
         SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());
@@ -307,6 +338,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight X", limelight.getRX());
         SmartDashboard.putNumber("Limelight Y", limelight.getRY());
         SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
+        SmartDashboard.putNumber("Limelight dist", Math.hypot(limelight.getRZ(), limelight.getRX()));
 
         // shooter debug
         SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
@@ -317,6 +349,8 @@ public class RobotContainer {
         // angler debug
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
         SmartDashboard.putNumber("Angler error", angler.getError());
+        SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
+        SmartDashboard.putBoolean("Angler top triggered", angler.upperSwitchTriggered());
     }
 
     /**

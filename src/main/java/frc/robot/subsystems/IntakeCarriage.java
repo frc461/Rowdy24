@@ -1,10 +1,10 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -12,21 +12,36 @@ import frc.robot.Constants;
 public class IntakeCarriage extends SubsystemBase {
     private final CANSparkFlex intake;
     private final CANSparkMax carriage;
-
-    DigitalInput carriageBeam = new DigitalInput(6); // end of carriage (on shooter side)
-
-    DigitalInput ampBeam = new DigitalInput(2); // entrance of carriage (which is the amp shooter)
-    DigitalInput shooterBeam = new DigitalInput(7); // completely exit through shooter
+    private final DigitalInput carriageBeam; // end of carriage (on shooter side)
+    private final DigitalInput ampBeam; // entrance of carriage (which is the amp shooter)
+    private final DigitalInput shooterBeam; // completely exit through shooter
+    private final Spark lights;
 
     public IntakeCarriage() {
         intake = new CANSparkFlex(Constants.IntakeCarriage.INTAKE_ID, MotorType.kBrushless);
         intake.restoreFactoryDefaults();
         intake.setSmartCurrentLimit(80);
         intake.setInverted(false);
+        intake.setIdleMode(IdleMode.kCoast);
 
         carriage = new CANSparkMax(Constants.IntakeCarriage.CARRIAGE_ID, MotorType.kBrushless);
         carriage.restoreFactoryDefaults();
         carriage.setInverted(true);
+
+        carriageBeam = new DigitalInput(Constants.IntakeCarriage.CARRIAGE_BEAM);
+        ampBeam = new DigitalInput(Constants.IntakeCarriage.AMP_BEAM);
+        shooterBeam = new DigitalInput(Constants.IntakeCarriage.SHOOTER_BEAM);
+
+        lights = new Spark(Constants.IntakeCarriage.LIGHT_ID);
+    }
+
+    @Override
+    public void periodic() {
+        if (noteInSystem()) {
+            lights.set(0.71);
+        } else {
+            lights.set(-0.99);
+        }
     }
 
     public double getIntakeSpeed() {
@@ -38,7 +53,7 @@ public class IntakeCarriage extends SubsystemBase {
     }
 
     public boolean getAmpBeamBroken() {
-        return ampBeam.get();
+        return !ampBeam.get();
     }
 
     public boolean getShooterBeamBroken() {

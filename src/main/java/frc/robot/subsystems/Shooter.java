@@ -9,15 +9,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
-    private final CANSparkFlex bottomShooter;
-    private final CANSparkFlex topShooter;
-
+    private final CANSparkFlex bottomShooter, topShooter;
+    
     private final SparkPIDController bottomController, topController;
-
-    private final RelativeEncoder bottomEncoder;
-    private final RelativeEncoder topEncoder;
-    private double target;
-    private double error;
+    
+    private final RelativeEncoder bottomEncoder, topEncoder;
+    
+    private double target, error;
 
     public Shooter() {
         bottomShooter = new CANSparkFlex(Constants.Shooter.BOTTOM_SHOOTER_ID, MotorType.kBrushless);
@@ -32,19 +30,19 @@ public class Shooter extends SubsystemBase {
         topShooter.setInverted(!Constants.Shooter.SHOOTER_INVERT);
         topEncoder = topShooter.getEncoder();
 
-        topController = topShooter.getPIDController();
         bottomController = bottomShooter.getPIDController();
+        topController = topShooter.getPIDController();
+
+        bottomController.setP(Constants.Shooter.SHOOTER_P);
+        bottomController.setI(Constants.Shooter.SHOOTER_I);
+        bottomController.setD(Constants.Shooter.SHOOTER_D);
+        bottomController.setFF(Constants.Shooter.SHOOTER_FF);
 
         topController.setP(Constants.Shooter.SHOOTER_P);
         topController.setI(Constants.Shooter.SHOOTER_I);
         topController.setD(Constants.Shooter.SHOOTER_D);
         topController.setFF(Constants.Shooter.SHOOTER_FF);
 
-        bottomController.setP(Constants.Shooter.SHOOTER_P);
-        bottomController.setI(Constants.Shooter.SHOOTER_I);
-        bottomController.setD(Constants.Shooter.SHOOTER_D);
-        bottomController.setFF(Constants.Shooter.SHOOTER_FF);
-        
         bottomShooter.burnFlash();
         topShooter.burnFlash();
 

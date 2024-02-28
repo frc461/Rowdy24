@@ -1,48 +1,68 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
-    private final CANSparkMax elevator;
-    private final PIDController pidController;
-    private final RelativeEncoder encoder;
+    private final TalonFX elevator;
+    private final PIDController elevatorPIDController;
     private final DigitalInput elevatorSwitch;
+    private final Servo elevatorClamp;
     private double target;
+    private boolean clamped;
 
     public Elevator() {
-        elevator = new CANSparkMax(Constants.Elevator.ELEVATOR_ID, MotorType.kBrushless);
-        elevator.restoreFactoryDefaults();
-        elevator.setSmartCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT);
-        elevator.setInverted(Constants.Elevator.ELEVATOR_INVERT);
-        encoder = elevator.getEncoder();
+        elevator = new TalonFX(Constants.Elevator.ELEVATOR_ID);
+        elevator.getConfigurator().apply(new TalonFXConfiguration()
+                .withVoltage(new VoltageConfigs().withPeakForwardVoltage(6))
+                .withMotorOutput(new MotorOutputConfigs()
+                        .withInverted(Constants.Elevator.ELEVATOR_INVERT)
+                        .withNeutralMode(NeutralModeValue.Brake))
+                .withCurrentLimits(new CurrentLimitsConfigs()
+                        .withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT))
+                .withAudio(new AudioConfigs().withBeepOnConfig(false)
+                        .withAllowMusicDurDisable(true)));
 
-        elevatorSwitch = new DigitalInput(4); // limit switch that re-zeros the elevator encoder
-
-        pidController = new PIDController(
+        elevatorPIDController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
                 Constants.Elevator.ELEVATOR_I,
                 Constants.Elevator.ELEVATOR_D
         );
 
+        elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
+
+        elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
+        elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
+
         target = 0.0;
+        clamped = false; // disables/enables clamp
     }
 
+   @Override
+   public void periodic() {
+       if (!clamped) {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
+       } else {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
+       }
+   }
+
     public double getPosition() {
-        return encoder.getPosition();
+        return elevator.getPosition().getValueAsDouble();
     }
 
     public double getTarget() {
         return target;
     }
 
-    public double elevatorPower() {
-        return elevator.getAppliedOutput();
+    public double elevatorVelocity() {
+        return elevator.getVelocity().getValueAsDouble();
     }
 
     public boolean elevatorSwitchTriggered() {
@@ -51,13 +71,51 @@ public class Elevator extends SubsystemBase {
 
     public void checkLimitSwitch() {
         if (elevatorSwitchTriggered()) {
-            encoder.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
+            elevator.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
         }
     }
 
     public void holdTarget() {
         checkLimitSwitch();
-        elevator.set(pidController.calculate(encoder.getPosition(), target));
+        elevator.set(elevatorPIDController.calculate(getPosition(), target));
+    }
+
+    public void climb() {
+        checkLimitSwitch();
+        if (elevatorSwitchTriggered()) {
+            target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
+            holdTarget();
+            setClamp(true);
+        } else {
+            elevator.set(-0.2); //TODO this is sketch
+        }
+    }
+
+    // boolean toggles for specific subsystems are meant to be in the subsystem class, not robot container
+    public void toggleClamp() {
+        setClamp(!clamped);
+    }
+
+    public void setClamp(boolean toggle) {
+        clamped = toggle;
+        elevatorClamp.set(clamped ?
+                Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS :
+                Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS
+        );
+    }
+
+    public void setClamp() {
+        if (!clamped) {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
+            clamped = true;
+        } else {
+            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
+            clamped = false;
+        }
+    }
+
+    public double getClampPosition() {
+        return elevatorClamp.getPosition();
     }
 
     public void moveElevator(double axisValue) {
@@ -65,22 +123,19 @@ public class Elevator extends SubsystemBase {
         if (axisValue < 0 && elevatorSwitchTriggered()) {
             target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
             holdTarget();
-        } else if (axisValue > 0 && encoder.getPosition() >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
+        } else if (axisValue > 0 && getPosition() >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
             target = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
             holdTarget();
         } else {
             elevator.set(axisValue);
-            target = encoder.getPosition();
+            target = getPosition();
         }
     }
 
     public void setHeight(double height) {
         checkLimitSwitch();
-        if (height < encoder.getPosition() && elevatorSwitchTriggered()) {
-            height = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
-        } else if (height > encoder.getPosition() && encoder.getPosition() > Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
-            height = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
-        }
+        height = Math.max(Constants.Elevator.ELEVATOR_LOWER_LIMIT, height);
+        height = Math.min(Constants.Elevator.ELEVATOR_UPPER_LIMIT, height);
         target = height;
         holdTarget();
     }

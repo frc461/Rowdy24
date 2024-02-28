@@ -9,6 +9,7 @@ public class RevUpShooterCommand extends Command {
     private final Shooter shooter;
     private final Limelight limelight;
     private final boolean idleMode;
+    
     public RevUpShooterCommand(Shooter shooter, Limelight limelight, boolean idleMode) {
         this.shooter = shooter;
         this.limelight = limelight;

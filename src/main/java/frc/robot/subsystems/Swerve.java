@@ -23,12 +23,12 @@ public class Swerve extends SubsystemBase {
     public final Pigeon2 gyro;
     final Field2d field = new Field2d();
 
-    // TODO: Once robot is finished, swerve gyro angles will need to be fixed
-
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
+        
+        SmartDashboard.putData("Field", field);
 
         swerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
@@ -103,10 +103,6 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    public Field2d getField2d() {
-        return field;
-    }
-
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -125,7 +121,7 @@ public class Swerve extends SubsystemBase {
 
     public double getYaw() {
         return (Constants.Swerve.INVERT_GYRO) ?
-                Constants.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
+                Constants.Swerve.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
                 gyro.getYaw().getValueAsDouble();
     }
 
@@ -162,7 +158,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void zeroGyro() {
-        gyro.setYaw(-90);
+        gyro.setYaw(Constants.Swerve.GYRO_OFFSET);
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {

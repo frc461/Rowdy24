@@ -1,19 +1,16 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkLimitSwitch;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
-    private final PIDController pidController;
     private final RelativeEncoder encoder;
-    private double target;
-    private double error;
+    private final SparkPIDController anglerPIDController;
+    private final SparkLimitSwitch lowerLimitSwitch, upperLimitSwitch;
+    private double target, error;
 
     public Angler() {
         angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
@@ -21,15 +18,17 @@ public class Angler extends SubsystemBase {
         angler.setSmartCurrentLimit(Constants.Angler.ANGLER_CURRENT_LIMIT);
         angler.setInverted(Constants.Angler.ANGLER_INVERT);
         encoder = angler.getEncoder();
-        
-        pidController = new PIDController(
-                Constants.Angler.ANGLER_P,
-                Constants.Angler.ANGLER_I,
-                Constants.Angler.ANGLER_D
-        );
+
+        anglerPIDController = angler.getPIDController();
+        anglerPIDController.setP(Constants.Angler.ANGLER_P);
+        anglerPIDController.setI(Constants.Angler.ANGLER_I);
+        anglerPIDController.setD(Constants.Angler.ANGLER_D);
+
+        lowerLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        upperLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
         target = 0.0;
-        error = 1000;
+        error = Math.abs(target - getPosition());
     }
 
     @Override
@@ -54,11 +53,11 @@ public class Angler extends SubsystemBase {
     }
 
     public boolean lowerSwitchTriggered() { 
-        return angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
+        return lowerLimitSwitch.isPressed();
     }
 
     public boolean upperSwitchTriggered() {
-        return angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed();
+        return upperLimitSwitch.isPressed();
     }
 
     public void checkLimitSwitches() {
@@ -72,7 +71,7 @@ public class Angler extends SubsystemBase {
 
     public void holdTarget() {
         checkLimitSwitches();
-        angler.set(pidController.calculate(encoder.getPosition(), target));
+        anglerPIDController.setReference(target, CANSparkBase.ControlType.kPosition);
     }
 
     public void moveAngle(double axisValue) {
@@ -102,19 +101,12 @@ public class Angler extends SubsystemBase {
     public void setAlignedAngle(double x, double z, boolean tag) {
         double dist = Math.hypot(x, z);
         if (tag) {
-            if (dist < Constants.Angler.UPPER_BOUND_LIMIT) {
-                setAngle(Math.min(
-                        Constants.Angler.TIGHT_BOUND_COEFFICIENT *
-                                Math.pow(dist, Constants.Angler.TIGHT_BOUND_SERIES) - 0.3, Constants.Angler.ANGLER_UPPER_LIMIT
-                ));
-            } else {
-                setAngle(Math.min(
-                        Constants.Angler.UPPER_BOUND_COEFFICIENT *
-                                Math.pow(dist, Constants.Angler.UPPER_BOUND_SERIES), Constants.Angler.ANGLER_UPPER_LIMIT
-                ));
-            }
-        } else {
-            target = getPosition();
+            setAngle(Math.min(
+                    (dist < Constants.Angler.AVG_BOUND_LIMIT) ?
+                            Constants.Angler.AVG_BOUND_CONSTANT + Constants.Angler.AVG_BOUND_LINEAR_COEFFICIENT * dist + Constants.Angler.AVG_BOUND_SQUARED_COEFFICIENT * Math.pow(dist, 2) :
+                            Constants.Angler.UPPER_BOUND_CONSTANT + Constants.Angler.UPPER_BOUND_LINEAR_COEFFICIENT * dist + Constants.Angler.UPPER_BOUND_SQUARED_COEFFICIENT * Math.pow(dist, 2) - 1,
+                    Constants.Angler.ANGLER_UPPER_LIMIT
+            ));
         }
     }
 }
