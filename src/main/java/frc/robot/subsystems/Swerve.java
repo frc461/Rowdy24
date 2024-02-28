@@ -31,10 +31,10 @@ public class Swerve extends SubsystemBase {
         zeroGyro();
 
         swerveMods = new SwerveModule[] {
-            new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS_0),
-            new SwerveModule(1, Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS_1),
-            new SwerveModule(2, Constants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS_2),
-            new SwerveModule(3, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS_3)
+            new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
+            new SwerveModule(1, Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS),
+            new SwerveModule(2, Constants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS),
+            new SwerveModule(3, Constants.Swerve.Mod3.SWERVE_MODULE_CONSTANTS)
         };
 
         /*
@@ -125,7 +125,7 @@ public class Swerve extends SubsystemBase {
 
     public double getYaw() {
         return (Constants.Swerve.INVERT_GYRO) ?
-                Constants.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
+                Constants.Swerve.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
                 gyro.getYaw().getValueAsDouble();
     }
 

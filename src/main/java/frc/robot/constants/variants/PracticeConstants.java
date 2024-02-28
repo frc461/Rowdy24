@@ -1,5 +1,6 @@
 package frc.robot.constants.variants;
 
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkBase.IdleMode;
 
@@ -12,9 +13,6 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class PracticeConstants {
     public static final double STICK_DEADBAND = 0.1;
-    public static final double TRIGGER_DEADBAND = 0.5;
-    public static final double MINIMUM_ANGLE = -180.0;
-    public static final double MAXIMUM_ANGLE = 180.0;
 
     public static final class Auto {
         public static final double AUTO_DRIVE_P = 0.1;
@@ -27,23 +25,30 @@ public final class PracticeConstants {
 
     public static final class Angler {
         public static final int ANGLER_ID = 62;
+
+
+        public static final int ANGLER_CURRENT_LIMIT = 35;
+        public static final boolean ANGLER_INVERT = false;
+
         public static final double ANGLER_P = 0.035;
         public static final double ANGLER_I = 0.00009;
         public static final double ANGLER_D = 0.0001;
-        public static final int ANGLER_CURRENT_LIMIT = 35;
-        public static final boolean ANGLER_INVERT = false;
-        public static final int ANGLER_LOWER_LIMIT_SWITCH_PORT = 1;
-        public static final int ANGLER_UPPER_LIMIT_SWTICH_PORT = 0;
+
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
+
         public static final double UPPER_AIM_LIMIT = 2.26;
 
-        public static double TIGHT_AIM_EQUATION(double dist) {
-            return 40.9 * Math.pow(dist, -1.3) - 0.3;
+        public static double TIGHT_AIM_EQUATION(double x, double z) {
+            return 40.9 * Math.pow(Math.hypot(x, z), -1.3) - 0.3;
         }
 
-        public static double UPPER_AIM_EQUATION(double dist) {
-            return 51.8 * Math.pow(dist, -1.31);
+        public static double UPPER_AIM_EQUATION(double x, double z) {
+            return 51.8 * Math.pow(Math.hypot(x, z), -1.31);
+        }
+
+        public static double AUTO_ANGLER_AIM_EQUATION(double x, double z) {
+            return Math.hypot(x, z) < UPPER_AIM_LIMIT ? TIGHT_AIM_EQUATION(x, z) : UPPER_AIM_EQUATION(x, z);
         }
     }
 
@@ -51,13 +56,16 @@ public final class PracticeConstants {
         public static final int ELEVATOR_ID = 31;
         public static final int ELEVATOR_CURRENT_LIMIT = 70;
         public static final int ELEVATOR_LIMIT_SWITCH = 2;
+        public static final InvertedValue ELEVATOR_INVERT = InvertedValue.Clockwise_Positive;
+
         public static final int ELEVATOR_SERVO_PORT = 1;
         public static final double ELEVATOR_SERVO_CLAMPED_POS = 1;
         public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 1;
-        public static final boolean ELEVATOR_INVERT = true;
+
         public static final double ELEVATOR_P = 0.097;
         public static final double ELEVATOR_I = 0.0;
         public static final double ELEVATOR_D = 0.0;
+
         public static final double ELEVATOR_LOWER_LIMIT = 0;
         public static final double ELEVATOR_UPPER_LIMIT = 61;
         public static final double ELEVATOR_AMP = 61.0;
@@ -67,7 +75,9 @@ public final class PracticeConstants {
     public static final class IntakeCarriage {
         public static final int INTAKE_ID = 41;
         public static final int CARRIAGE_ID = 42;
+
         public static final double IDLE_INTAKE_SPEED = -0.15;
+
         public static final int CARRIAGE_BEAM = 4;
         public static final int SHOOTER_BEAM = 3;
         public static final int AMP_BEAM = 5;
@@ -85,23 +95,25 @@ public final class PracticeConstants {
         public static final int TOP_SHOOTER_ID = 61; //TOP WHEEL
         public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final boolean SHOOTER_INVERT = false;
+
         public static final double BASE_SHOOTER_SPEED = 6000; //baseline shooter speed in RPM
         public static final double IDLE_SHOOTER_SPEED = 0.3;
         public static final double SHOOTER_ERROR_TOLERANCE = 300; // +/-tolerance for considering if the shooter is up to speed
         public static final double DISTANCE_MULTIPLIER = 10;
+
         public static final double SHOOTER_P = 0.00062; //was 0.003
         public static final double SHOOTER_I = 0.000000001;
         public static final double SHOOTER_D = 0.0005;
         public static final double SHOOTER_FF = 0.1;
-        public static final int FEEDER_ID = 59;
-        public static final int FEEDER_CURRENT_LIMIT = 50;
-        public static final boolean FEEDER_INVERT = false;
     }
 
     public static final class Swerve {
         public static final double GYRO_OFFSET = -90;
         public static final int PIGEON_ID = 51;
         public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW- (DO NOT USE, ENABLES ROBOT-CENTRIC)
+
+        public static final double MINIMUM_ANGLE = -180.0;
+        public static final double MAXIMUM_ANGLE = 180.0;
 
         public static final COTSFalconSwerveConstants CHOSEN_MODULE =
                 COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L3);
@@ -197,26 +209,6 @@ public final class PracticeConstants {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
-        public static final class Mod3 {
-            public static final int DRIVE_MOTOR_ID = 4;
-            public static final int ANGLE_MOTOR_ID = 14;
-            public static final int CANCODER_ID = 24;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(225.14); // 127.3 original value
-            public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
-                    new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
-        }
-
-        /* Front Right Module - Module 1 */
-        public static final class Mod2 {
-            public static final int DRIVE_MOTOR_ID = 3;
-            public static final int ANGLE_MOTOR_ID = 13;
-            public static final int CANCODER_ID = 23;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(139.65);
-            public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
-                    new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
-        }
-
-        /* Back Left Module - Module 2 */
         public static final class Mod0 {
             public static final int DRIVE_MOTOR_ID = 1;
             public static final int ANGLE_MOTOR_ID = 11;
@@ -226,12 +218,32 @@ public final class PracticeConstants {
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
 
-        /* Back Right Module - Module 3 */
+        /* Front Right Module - Module 1 */
         public static final class Mod1 {
             public static final int DRIVE_MOTOR_ID = 2;
             public static final int ANGLE_MOTOR_ID = 12;
             public static final int CANCODER_ID = 22;
             public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(167.78);
+            public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
+                    new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
+        }
+
+        /* Back Left Module - Module 2 */
+        public static final class Mod2 {
+            public static final int DRIVE_MOTOR_ID = 3;
+            public static final int ANGLE_MOTOR_ID = 13;
+            public static final int CANCODER_ID = 23;
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(139.65);
+            public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
+                    new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
+        }
+
+        /* Back Right Module - Module 3 */
+        public static final class Mod3 {
+            public static final int DRIVE_MOTOR_ID = 4;
+            public static final int ANGLE_MOTOR_ID = 14;
+            public static final int CANCODER_ID = 24;
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(225.14); // 127.3 original value
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS =
                     new SwerveModuleConstants(DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }

@@ -24,9 +24,6 @@ public enum RobotIdentity {
         switch (RobotIdentity.getIdentity()) {
             case PRACTICE -> {
                 Constants.STICK_DEADBAND = PracticeConstants.STICK_DEADBAND;
-                Constants.TRIGGER_DEADBAND = PracticeConstants.TRIGGER_DEADBAND;
-                Constants.MINIMUM_ANGLE = PracticeConstants.MINIMUM_ANGLE;
-                Constants.MAXIMUM_ANGLE = PracticeConstants.MAXIMUM_ANGLE;
 
                 Constants.Auto.AUTO_DRIVE_P = PracticeConstants.Auto.AUTO_DRIVE_P;
                 Constants.Auto.AUTO_DRIVE_I = PracticeConstants.Auto.AUTO_DRIVE_I;
@@ -36,26 +33,23 @@ public enum RobotIdentity {
                 Constants.Auto.AUTO_ANGLE_D = PracticeConstants.Auto.AUTO_ANGLE_D;
 
                 Constants.Angler.ANGLER_ID = PracticeConstants.Angler.ANGLER_ID;
+                Constants.Angler.ANGLER_CURRENT_LIMIT = PracticeConstants.Angler.ANGLER_CURRENT_LIMIT;
+                Constants.Angler.ANGLER_INVERT = PracticeConstants.Angler.ANGLER_INVERT;
                 Constants.Angler.ANGLER_P = PracticeConstants.Angler.ANGLER_P;
                 Constants.Angler.ANGLER_I = PracticeConstants.Angler.ANGLER_I;
                 Constants.Angler.ANGLER_D = PracticeConstants.Angler.ANGLER_D;
-                Constants.Angler.ANGLER_CURRENT_LIMIT = PracticeConstants.Angler.ANGLER_CURRENT_LIMIT;
-                Constants.Angler.ANGLER_INVERT = PracticeConstants.Angler.ANGLER_INVERT;
-                Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH_PORT = PracticeConstants.Angler.ANGLER_LOWER_LIMIT_SWITCH_PORT;
-                Constants.Angler.ANGLER_UPPER_LIMIT_SWITCH_PORT = PracticeConstants.Angler.ANGLER_UPPER_LIMIT_SWTICH_PORT;
                 Constants.Angler.ANGLER_LOWER_LIMIT = PracticeConstants.Angler.ANGLER_LOWER_LIMIT;
                 Constants.Angler.ANGLER_UPPER_LIMIT = PracticeConstants.Angler.ANGLER_UPPER_LIMIT;
                 Constants.Angler.CLOSE_AIM_LIMIT = PracticeConstants.Angler.UPPER_AIM_LIMIT;
-                Constants.Angler.CLOSE_AIM_EQUATION = PracticeConstants.Angler::TIGHT_AIM_EQUATION;
-                Constants.Angler.FAR_AIM_EQUATION = PracticeConstants.Angler::UPPER_AIM_EQUATION;
+                Constants.Angler.AUTO_ANGLER_AIM_EQUATION = PracticeConstants.Angler::AUTO_ANGLER_AIM_EQUATION;
 
                 Constants.Elevator.ELEVATOR_ID = PracticeConstants.Elevator.ELEVATOR_ID;
                 Constants.Elevator.ELEVATOR_CURRENT_LIMIT = PracticeConstants.Elevator.ELEVATOR_CURRENT_LIMIT;
                 Constants.Elevator.ELEVATOR_LIMIT_SWITCH = PracticeConstants.Elevator.ELEVATOR_LIMIT_SWITCH;
+                Constants.Elevator.ELEVATOR_INVERT = PracticeConstants.Elevator.ELEVATOR_INVERT;
                 Constants.Elevator.ELEVATOR_SERVO_PORT = PracticeConstants.Elevator.ELEVATOR_SERVO_PORT;
                 Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS = PracticeConstants.Elevator.ELEVATOR_SERVO_CLAMPED_POS;
                 Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS = PracticeConstants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS;
-                Constants.Elevator.ELEVATOR_INVERT = PracticeConstants.Elevator.ELEVATOR_INVERT;
                 Constants.Elevator.ELEVATOR_P = PracticeConstants.Elevator.ELEVATOR_P;
                 Constants.Elevator.ELEVATOR_I = PracticeConstants.Elevator.ELEVATOR_I;
                 Constants.Elevator.ELEVATOR_D = PracticeConstants.Elevator.ELEVATOR_D;
@@ -88,13 +82,12 @@ public enum RobotIdentity {
                 Constants.Shooter.SHOOTER_I = PracticeConstants.Shooter.SHOOTER_I;
                 Constants.Shooter.SHOOTER_D = PracticeConstants.Shooter.SHOOTER_D;
                 Constants.Shooter.SHOOTER_FF = PracticeConstants.Shooter.SHOOTER_FF;
-                Constants.Shooter.FEEDER_ID = PracticeConstants.Shooter.FEEDER_ID;
-                Constants.Shooter.FEEDER_CURRENT_LIMIT = PracticeConstants.Shooter.FEEDER_CURRENT_LIMIT;
-                Constants.Shooter.FEEDER_INVERT = PracticeConstants.Shooter.FEEDER_INVERT;
 
                 Constants.Swerve.GYRO_OFFSET = PracticeConstants.Swerve.GYRO_OFFSET;
                 Constants.Swerve.PIGEON_ID = PracticeConstants.Swerve.PIGEON_ID;
                 Constants.Swerve.INVERT_GYRO = PracticeConstants.Swerve.INVERT_GYRO;
+                Constants.Swerve.MINIMUM_ANGLE = PracticeConstants.Swerve.MINIMUM_ANGLE;
+                Constants.Swerve.MAXIMUM_ANGLE = PracticeConstants.Swerve.MAXIMUM_ANGLE;
                 Constants.Swerve.CHOSEN_MODULE = PracticeConstants.Swerve.CHOSEN_MODULE;
                 Constants.Swerve.TRACK_WIDTH = PracticeConstants.Swerve.TRACK_WIDTH;
                 Constants.Swerve.WHEEL_BASE = PracticeConstants.Swerve.WHEEL_BASE;
@@ -121,6 +114,10 @@ public enum RobotIdentity {
                 Constants.Swerve.ANGLE_I = PracticeConstants.Swerve.ANGLE_I;
                 Constants.Swerve.ANGLE_D = PracticeConstants.Swerve.ANGLE_D;
                 Constants.Swerve.ANGLE_F = PracticeConstants.Swerve.ANGLE_F;
+                Constants.Swerve.DRIVE_P = PracticeConstants.Swerve.DRIVE_P;
+                Constants.Swerve.DRIVE_I = PracticeConstants.Swerve.DRIVE_I;
+                Constants.Swerve.DRIVE_D = PracticeConstants.Swerve.DRIVE_D;
+                Constants.Swerve.DRIVE_F = PracticeConstants.Swerve.DRIVE_F;
                 Constants.Swerve.DRIVE_S = PracticeConstants.Swerve.DRIVE_S;
                 Constants.Swerve.DRIVE_V = PracticeConstants.Swerve.DRIVE_V;
                 Constants.Swerve.DRIVE_A = PracticeConstants.Swerve.DRIVE_A;
@@ -133,35 +130,32 @@ public enum RobotIdentity {
                 Constants.Swerve.ANGLE_NEUTRAL_MODE = PracticeConstants.Swerve.ANGLE_NEUTRAL_MODE;
                 Constants.Swerve.DRIVE_NEUTRAL_MODE = PracticeConstants.Swerve.DRIVE_NEUTRAL_MODE;
 
-                Constants.Swerve.Mod3.DRIVE_MOTOR_ID_3 = PracticeConstants.Swerve.Mod3.DRIVE_MOTOR_ID;
-                Constants.Swerve.Mod3.ANGLE_MOTOR_ID_3 = PracticeConstants.Swerve.Mod3.ANGLE_MOTOR_ID;
-                Constants.Swerve.Mod3.CANCODER_ID_3 = PracticeConstants.Swerve.Mod3.CANCODER_ID;
-                Constants.Swerve.Mod3.ANGLE_OFFSET_3 = PracticeConstants.Swerve.Mod3.ANGLE_OFFSET;
-                Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS_3 = PracticeConstants.Swerve.Mod3.SWERVE_MODULE_CONSTANTS;
+                Constants.Swerve.Mod0.DRIVE_MOTOR_ID = PracticeConstants.Swerve.Mod0.DRIVE_MOTOR_ID;
+                Constants.Swerve.Mod0.ANGLE_MOTOR_ID = PracticeConstants.Swerve.Mod0.ANGLE_MOTOR_ID;
+                Constants.Swerve.Mod0.CANCODER_ID = PracticeConstants.Swerve.Mod0.CANCODER_ID;
+                Constants.Swerve.Mod0.ANGLE_OFFSET = PracticeConstants.Swerve.Mod0.ANGLE_OFFSET;
+                Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS = PracticeConstants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS;
 
-                Constants.Swerve.Mod2.DRIVE_MOTOR_ID_2 = PracticeConstants.Swerve.Mod2.DRIVE_MOTOR_ID;
-                Constants.Swerve.Mod2.ANGLE_MOTOR_ID_2 = PracticeConstants.Swerve.Mod2.ANGLE_MOTOR_ID;
-                Constants.Swerve.Mod2.CANCODER_ID_2 = PracticeConstants.Swerve.Mod2.CANCODER_ID;
-                Constants.Swerve.Mod2.ANGLE_OFFSET_2 = PracticeConstants.Swerve.Mod2.ANGLE_OFFSET;
-                Constants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS_2 = PracticeConstants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS;
+                Constants.Swerve.Mod1.DRIVE_MOTOR_ID = PracticeConstants.Swerve.Mod1.DRIVE_MOTOR_ID;
+                Constants.Swerve.Mod1.ANGLE_MOTOR_ID = PracticeConstants.Swerve.Mod1.ANGLE_MOTOR_ID;
+                Constants.Swerve.Mod1.CANCODER_ID = PracticeConstants.Swerve.Mod1.CANCODER_ID;
+                Constants.Swerve.Mod1.ANGLE_OFFSET = PracticeConstants.Swerve.Mod1.ANGLE_OFFSET;
+                Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS = PracticeConstants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS;
 
-                Constants.Swerve.Mod0.DRIVE_MOTOR_ID_0 = PracticeConstants.Swerve.Mod0.DRIVE_MOTOR_ID;
-                Constants.Swerve.Mod0.ANGLE_MOTOR_ID_0 = PracticeConstants.Swerve.Mod0.ANGLE_MOTOR_ID;
-                Constants.Swerve.Mod0.CANCODER_ID_0 = PracticeConstants.Swerve.Mod0.CANCODER_ID;
-                Constants.Swerve.Mod0.ANGLE_OFFSET_0 = PracticeConstants.Swerve.Mod0.ANGLE_OFFSET;
-                Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS_0 = PracticeConstants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS;
+                Constants.Swerve.Mod2.DRIVE_MOTOR_ID = PracticeConstants.Swerve.Mod2.DRIVE_MOTOR_ID;
+                Constants.Swerve.Mod2.ANGLE_MOTOR_ID = PracticeConstants.Swerve.Mod2.ANGLE_MOTOR_ID;
+                Constants.Swerve.Mod2.CANCODER_ID = PracticeConstants.Swerve.Mod2.CANCODER_ID;
+                Constants.Swerve.Mod2.ANGLE_OFFSET = PracticeConstants.Swerve.Mod2.ANGLE_OFFSET;
+                Constants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS = PracticeConstants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS;
 
-                Constants.Swerve.Mod1.DRIVE_MOTOR_ID_1 = PracticeConstants.Swerve.Mod1.DRIVE_MOTOR_ID;
-                Constants.Swerve.Mod1.ANGLE_MOTOR_ID_1 = PracticeConstants.Swerve.Mod1.ANGLE_MOTOR_ID;
-                Constants.Swerve.Mod1.CANCODER_ID_1 = PracticeConstants.Swerve.Mod1.CANCODER_ID;
-                Constants.Swerve.Mod1.ANGLE_OFFSET_1 = PracticeConstants.Swerve.Mod1.ANGLE_OFFSET;
-                Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS_1 = PracticeConstants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS;
+                Constants.Swerve.Mod3.DRIVE_MOTOR_ID = PracticeConstants.Swerve.Mod3.DRIVE_MOTOR_ID;
+                Constants.Swerve.Mod3.ANGLE_MOTOR_ID = PracticeConstants.Swerve.Mod3.ANGLE_MOTOR_ID;
+                Constants.Swerve.Mod3.CANCODER_ID = PracticeConstants.Swerve.Mod3.CANCODER_ID;
+                Constants.Swerve.Mod3.ANGLE_OFFSET = PracticeConstants.Swerve.Mod3.ANGLE_OFFSET;
+                Constants.Swerve.Mod3.SWERVE_MODULE_CONSTANTS = PracticeConstants.Swerve.Mod3.SWERVE_MODULE_CONSTANTS;
             }
             case ROWDY -> {
                 Constants.STICK_DEADBAND = RowdyConstants.STICK_DEADBAND;
-                Constants.TRIGGER_DEADBAND = RowdyConstants.TRIGGER_DEADBAND;
-                Constants.MINIMUM_ANGLE = RowdyConstants.MINIMUM_ANGLE;
-                Constants.MAXIMUM_ANGLE = RowdyConstants.MAXIMUM_ANGLE;
 
                 Constants.Auto.AUTO_DRIVE_P = RowdyConstants.Auto.AUTO_DRIVE_P;
                 Constants.Auto.AUTO_DRIVE_I = RowdyConstants.Auto.AUTO_DRIVE_I;
@@ -176,13 +170,10 @@ public enum RobotIdentity {
                 Constants.Angler.ANGLER_D = RowdyConstants.Angler.ANGLER_D;
                 Constants.Angler.ANGLER_CURRENT_LIMIT = RowdyConstants.Angler.ANGLER_CURRENT_LIMIT;
                 Constants.Angler.ANGLER_INVERT = RowdyConstants.Angler.ANGLER_INVERT;
-                Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH_PORT = RowdyConstants.Angler.ANGLER_LOWER_LIMIT_SWITCH_PORT;
-                Constants.Angler.ANGLER_UPPER_LIMIT_SWITCH_PORT = RowdyConstants.Angler.ANGLER_UPPER_LIMIT_SWTICH_PORT;
                 Constants.Angler.ANGLER_LOWER_LIMIT = RowdyConstants.Angler.ANGLER_LOWER_LIMIT;
                 Constants.Angler.ANGLER_UPPER_LIMIT = RowdyConstants.Angler.ANGLER_UPPER_LIMIT;
-                Constants.Angler.CLOSE_AIM_LIMIT = RowdyConstants.Angler.LOWER_AIM_LIMIT;
-                Constants.Angler.CLOSE_AIM_EQUATION = RowdyConstants.Angler::LOWER_AIM_EQUATION;
-                Constants.Angler.FAR_AIM_EQUATION = RowdyConstants.Angler::TIGHT_AIM_EQUATION;
+                Constants.Angler.CLOSE_AIM_LIMIT = RowdyConstants.Angler.AVG_BOUND_LIMIT;
+                Constants.Angler.AUTO_ANGLER_AIM_EQUATION = RowdyConstants.Angler.AUTO_ANGLER_AIM_EQUATION;
 
                 Constants.Elevator.ELEVATOR_ID = RowdyConstants.Elevator.ELEVATOR_ID;
                 Constants.Elevator.ELEVATOR_CURRENT_LIMIT = RowdyConstants.Elevator.ELEVATOR_CURRENT_LIMIT;
@@ -223,9 +214,6 @@ public enum RobotIdentity {
                 Constants.Shooter.SHOOTER_I = RowdyConstants.Shooter.SHOOTER_I;
                 Constants.Shooter.SHOOTER_D = RowdyConstants.Shooter.SHOOTER_D;
                 Constants.Shooter.SHOOTER_FF = RowdyConstants.Shooter.SHOOTER_FF;
-                Constants.Shooter.FEEDER_ID = RowdyConstants.Shooter.FEEDER_ID;
-                Constants.Shooter.FEEDER_CURRENT_LIMIT = RowdyConstants.Shooter.FEEDER_CURRENT_LIMIT;
-                Constants.Shooter.FEEDER_INVERT = RowdyConstants.Shooter.FEEDER_INVERT;
 
                 Constants.Swerve.GYRO_OFFSET = RowdyConstants.Swerve.GYRO_OFFSET;
                 Constants.Swerve.PIGEON_ID = RowdyConstants.Swerve.PIGEON_ID;
@@ -268,29 +256,29 @@ public enum RobotIdentity {
                 Constants.Swerve.ANGLE_NEUTRAL_MODE = RowdyConstants.Swerve.ANGLE_NEUTRAL_MODE;
                 Constants.Swerve.DRIVE_NEUTRAL_MODE = RowdyConstants.Swerve.DRIVE_NEUTRAL_MODE;
 
-                Constants.Swerve.Mod3.DRIVE_MOTOR_ID_3 = RowdyConstants.Swerve.Mod3.DRIVE_MOTOR_ID;
-                Constants.Swerve.Mod3.ANGLE_MOTOR_ID_3 = RowdyConstants.Swerve.Mod3.ANGLE_MOTOR_ID;
-                Constants.Swerve.Mod3.CANCODER_ID_3 = RowdyConstants.Swerve.Mod3.CANCODER_ID;
-                Constants.Swerve.Mod3.ANGLE_OFFSET_3 = RowdyConstants.Swerve.Mod3.ANGLE_OFFSET;
-                Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS_3 = RowdyConstants.Swerve.Mod3.SWERVE_MODULE_CONSTANTS;
+                Constants.Swerve.Mod0.DRIVE_MOTOR_ID = RowdyConstants.Swerve.Mod0.DRIVE_MOTOR_ID;
+                Constants.Swerve.Mod0.ANGLE_MOTOR_ID = RowdyConstants.Swerve.Mod0.ANGLE_MOTOR_ID;
+                Constants.Swerve.Mod0.CANCODER_ID = RowdyConstants.Swerve.Mod0.CANCODER_ID;
+                Constants.Swerve.Mod0.ANGLE_OFFSET = RowdyConstants.Swerve.Mod0.ANGLE_OFFSET;
+                Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS = RowdyConstants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS;
 
-                Constants.Swerve.Mod2.DRIVE_MOTOR_ID_2 = RowdyConstants.Swerve.Mod2.DRIVE_MOTOR_ID;
-                Constants.Swerve.Mod2.ANGLE_MOTOR_ID_2 = RowdyConstants.Swerve.Mod2.ANGLE_MOTOR_ID;
-                Constants.Swerve.Mod2.CANCODER_ID_2 = RowdyConstants.Swerve.Mod2.CANCODER_ID;
-                Constants.Swerve.Mod2.ANGLE_OFFSET_2 = RowdyConstants.Swerve.Mod2.ANGLE_OFFSET;
-                Constants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS_2 = RowdyConstants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS;
+                Constants.Swerve.Mod1.DRIVE_MOTOR_ID = RowdyConstants.Swerve.Mod1.DRIVE_MOTOR_ID;
+                Constants.Swerve.Mod1.ANGLE_MOTOR_ID = RowdyConstants.Swerve.Mod1.ANGLE_MOTOR_ID;
+                Constants.Swerve.Mod1.CANCODER_ID = RowdyConstants.Swerve.Mod1.CANCODER_ID;
+                Constants.Swerve.Mod1.ANGLE_OFFSET = RowdyConstants.Swerve.Mod1.ANGLE_OFFSET;
+                Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS = RowdyConstants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS;
 
-                Constants.Swerve.Mod0.DRIVE_MOTOR_ID_0 = RowdyConstants.Swerve.Mod0.DRIVE_MOTOR_ID;
-                Constants.Swerve.Mod0.ANGLE_MOTOR_ID_0 = RowdyConstants.Swerve.Mod0.ANGLE_MOTOR_ID;
-                Constants.Swerve.Mod0.CANCODER_ID_0 = RowdyConstants.Swerve.Mod0.CANCODER_ID;
-                Constants.Swerve.Mod0.ANGLE_OFFSET_0 = RowdyConstants.Swerve.Mod0.ANGLE_OFFSET;
-                Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS_0 = RowdyConstants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS;
+                Constants.Swerve.Mod2.DRIVE_MOTOR_ID = RowdyConstants.Swerve.Mod2.DRIVE_MOTOR_ID;
+                Constants.Swerve.Mod2.ANGLE_MOTOR_ID = RowdyConstants.Swerve.Mod2.ANGLE_MOTOR_ID;
+                Constants.Swerve.Mod2.CANCODER_ID = RowdyConstants.Swerve.Mod2.CANCODER_ID;
+                Constants.Swerve.Mod2.ANGLE_OFFSET = RowdyConstants.Swerve.Mod2.ANGLE_OFFSET;
+                Constants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS = RowdyConstants.Swerve.Mod2.SWERVE_MODULE_CONSTANTS;
 
-                Constants.Swerve.Mod1.DRIVE_MOTOR_ID_1 = RowdyConstants.Swerve.Mod1.DRIVE_MOTOR_ID;
-                Constants.Swerve.Mod1.ANGLE_MOTOR_ID_1 = RowdyConstants.Swerve.Mod1.ANGLE_MOTOR_ID;
-                Constants.Swerve.Mod1.CANCODER_ID_1 = RowdyConstants.Swerve.Mod1.CANCODER_ID;
-                Constants.Swerve.Mod1.ANGLE_OFFSET_1 = RowdyConstants.Swerve.Mod1.ANGLE_OFFSET;
-                Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS_1 = RowdyConstants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS;
+                Constants.Swerve.Mod3.DRIVE_MOTOR_ID = RowdyConstants.Swerve.Mod3.DRIVE_MOTOR_ID;
+                Constants.Swerve.Mod3.ANGLE_MOTOR_ID = RowdyConstants.Swerve.Mod3.ANGLE_MOTOR_ID;
+                Constants.Swerve.Mod3.CANCODER_ID = RowdyConstants.Swerve.Mod3.CANCODER_ID;
+                Constants.Swerve.Mod3.ANGLE_OFFSET = RowdyConstants.Swerve.Mod3.ANGLE_OFFSET;
+                Constants.Swerve.Mod3.SWERVE_MODULE_CONSTANTS = RowdyConstants.Swerve.Mod3.SWERVE_MODULE_CONSTANTS;
             }
         }
     }
