@@ -1,9 +1,6 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.VoltageConfigs;
+import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
@@ -28,7 +25,9 @@ public class Elevator extends SubsystemBase {
                         .withInverted(Constants.Elevator.ELEVATOR_INVERT)
                         .withNeutralMode(NeutralModeValue.Brake))
                 .withCurrentLimits(new CurrentLimitsConfigs()
-                        .withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT)));
+                        .withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT))
+                .withAudio(new AudioConfigs().withBeepOnConfig(false)
+                        .withAllowMusicDurDisable(true)));
 
         elevatorPIDController = new PIDController(
                 Constants.Elevator.ELEVATOR_P,
