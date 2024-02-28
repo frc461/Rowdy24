@@ -1,17 +1,14 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkLimitSwitch;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
     private final RelativeEncoder encoder;
-    private final PIDController anglerPIDController;
+    private final SparkPIDController anglerPIDController;
     private final SparkLimitSwitch lowerLimitSwitch, upperLimitSwitch;
     private double target, error;
 
@@ -22,11 +19,10 @@ public class Angler extends SubsystemBase {
         angler.setInverted(Constants.Angler.ANGLER_INVERT);
         encoder = angler.getEncoder();
 
-        anglerPIDController = new PIDController(
-                Constants.Angler.ANGLER_P,
-                Constants.Angler.ANGLER_I,
-                Constants.Angler.ANGLER_D
-        );
+        anglerPIDController = angler.getPIDController();
+        anglerPIDController.setP(Constants.Angler.ANGLER_P);
+        anglerPIDController.setI(Constants.Angler.ANGLER_I);
+        anglerPIDController.setD(Constants.Angler.ANGLER_D);
 
         lowerLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
         upperLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
@@ -75,7 +71,7 @@ public class Angler extends SubsystemBase {
 
     public void holdTarget() {
         checkLimitSwitches();
-        angler.set(anglerPIDController.calculate(encoder.getPosition(), target));
+        anglerPIDController.setReference(target, CANSparkBase.ControlType.kPosition);
     }
 
     public void moveAngle(double axisValue) {
@@ -106,9 +102,9 @@ public class Angler extends SubsystemBase {
         double dist = Math.hypot(x, z);
         if (tag) {
             setAngle(Math.min(
-                    (dist > Constants.Angler.AVG_BOUND_LIMIT) ?
-                            Constants.Angler.AVG_BOUND_CONSTANT - Constants.Angler.AVG_BOUND_LINEAR_COEFFICIENT * dist + Constants.Angler.AVG_BOUND_SQUARED_COEFFICIENT * Math.pow(dist, 2) :
-                            Constants.Angler.LOWER_BOUND_CONSTANT - Constants.Angler.LOWER_BOUND_LINEAR_COEFFICIENT * dist + Constants.Angler.LOWER_BOUND_SQUARED_COEFFICIENT * Math.pow(dist, 2),
+                    (dist < Constants.Angler.AVG_BOUND_LIMIT) ?
+                            Constants.Angler.AVG_BOUND_CONSTANT + Constants.Angler.AVG_BOUND_LINEAR_COEFFICIENT * dist + Constants.Angler.AVG_BOUND_SQUARED_COEFFICIENT * Math.pow(dist, 2) :
+                            Constants.Angler.UPPER_BOUND_CONSTANT + Constants.Angler.UPPER_BOUND_LINEAR_COEFFICIENT * dist + Constants.Angler.UPPER_BOUND_SQUARED_COEFFICIENT * Math.pow(dist, 2) - 1,
                     Constants.Angler.ANGLER_UPPER_LIMIT
             ));
         }

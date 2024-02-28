@@ -338,6 +338,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight X", limelight.getRX());
         SmartDashboard.putNumber("Limelight Y", limelight.getRY());
         SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
+        SmartDashboard.putNumber("Limelight dist", Math.hypot(limelight.getRZ(), limelight.getRX()));
 
         // shooter debug
         SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());

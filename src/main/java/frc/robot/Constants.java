@@ -30,9 +30,9 @@ public final class Constants {
         public static final boolean ANGLER_INVERT = false;
 
         // pid for angler
-        public static final double ANGLER_P = 0.05;
-        public static final double ANGLER_I = 0.0001;
-        public static final double ANGLER_D = 0.0001;
+        public static final double ANGLER_P = 0.2;
+        public static final double ANGLER_I = 0.0008;
+        public static final double ANGLER_D = 0.000075;
 
         // code limits on encoder values
         public static final double ANGLER_LOWER_LIMIT = 0;
@@ -42,15 +42,29 @@ public final class Constants {
         public static final double ANGLER_LAYUP_POSITION = 18;
 
         // equation constants for shooting with distance from april tag
-        public static final double AVG_BOUND_LIMIT = 4;
-        
-        public static final double LOWER_BOUND_CONSTANT = 31.4; //33.4
-        public static final double LOWER_BOUND_LINEAR_COEFFICIENT = 10.6;
-        public static final double LOWER_BOUND_SQUARED_COEFFICIENT = 0.984;
+        public static final double AVG_BOUND_LIMIT = 3; // 4
 
-        public static final double AVG_BOUND_CONSTANT = 34.8;
-         public static final double AVG_BOUND_LINEAR_COEFFICIENT = 11.5;
-        public static final double AVG_BOUND_SQUARED_COEFFICIENT = 1.04;
+        // 40.8 + -13.9x + 1.35x^2 <-- upper
+        // 39.9 + -13.6x + 1.32x^2 <-- .9 * upper + .1 * lower
+        // 38.6 + -13.2x + 1.28x^2 <-- .75 * upper + .25 * lower
+        // 36.4 + -12.5x + 1.21x^2 <-- average
+        // 35.6 + -12.2x + 1.18x^2 <-- .4 * upper + .6 * lower
+        // 33.3 + -11.8x + 1.17x^2 <-- lower
+        // 27.2 + -8.51x + 0.738x^2 <-- new (doesn't work)
+        public static final double UPPER_BOUND_CONSTANT = 35.6; // 36.4
+        public static final double UPPER_BOUND_LINEAR_COEFFICIENT = -12.2; // -12.5
+        public static final double UPPER_BOUND_SQUARED_COEFFICIENT = 1.18; // 1.21
+
+        // 40.8 + -13.9x + 1.35x^2 <-- upper
+        // 39.9 + -13.6x + 1.32x^2 <-- .9 * upper + .1 * lower
+        // 38.6 + -13.2x + 1.28x^2 <-- .75 * upper + .25 * lower
+        // 36.4 + -12.5x + 1.21x^2 <-- average
+        // 35.6 + -12.2x + 1.18x^2 <-- .4 * upper + .6 * lower
+        // 33.3 + -11.8x + 1.17x^2 <-- lower
+        // 27.2 + -8.51x + 0.738x^2 <-- new (doesn't work)
+        public static final double AVG_BOUND_CONSTANT = 33.3; // 35.6
+         public static final double AVG_BOUND_LINEAR_COEFFICIENT = -11.8; // -12.2
+        public static final double AVG_BOUND_SQUARED_COEFFICIENT = 1.17; // 1.18
     }
 
     public static final class Elevator {
