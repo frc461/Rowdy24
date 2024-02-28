@@ -88,6 +88,8 @@ public class Elevator extends SubsystemBase {
             setClamp(true);
         } else {
             elevator.set(-0.2); //TODO this is sketch
+//            target = getPosition() - 0.05;
+//            holdTarget();
         }
     }
 
@@ -102,16 +104,6 @@ public class Elevator extends SubsystemBase {
                 Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS :
                 Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS
         );
-    }
-
-    public void setClamp() {
-        if (!clamped) {
-            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
-            clamped = true;
-        } else {
-            elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
-            clamped = false;
-        }
     }
 
     public double getClampPosition() {
