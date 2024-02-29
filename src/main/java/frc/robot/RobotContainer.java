@@ -24,7 +24,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-//    private final Elevator elevator = new Elevator();
+    private final Elevator elevator = new Elevator();
     private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
@@ -119,12 +119,12 @@ public class RobotContainer {
                 )
         );
 
-//        elevator.setDefaultCommand(
-//                new TeleopElevatorCommand(
-//                        elevator,
-//                        () -> -opXbox.getRightY()
-//                )
-//        );
+        elevator.setDefaultCommand(
+                new TeleopElevatorCommand(
+                        elevator,
+                        () -> -opXbox.getRightY()
+                )
+        );
 
         // Configure controller button bindings
         configureButtonBindings();
@@ -288,25 +288,25 @@ public class RobotContainer {
         );
 
         /* Climb */
-//        opXbox.povDown().whileTrue(new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered));
+        opXbox.povDown().whileTrue(new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered));
 
         /* Toggle clamp */
-//        opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
+        opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
 
         /* Stow Elevator Preset */
-//        driverXbox.rightBumper().onTrue(
-//                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
-//        );
+        driverXbox.rightBumper().onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
+        );
 
         /* Stow Elevator Preset */
-//        opXbox.a().onTrue(
-//                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
-//        );
+        opXbox.a().onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
+        );
 
         /* Amp Elevator Preset */
-//        opXbox.y().onTrue(
-//                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator)
-//        );
+        opXbox.y().onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator)
+        );
 
         /* Angler layup setpoint (Limelight failsafe) */
         opXbox.povRight().onTrue(new InstantCommand(() -> angler.setAngle(Constants.Angler.ANGLER_LAYUP_POSITION)));
@@ -324,11 +324,11 @@ public class RobotContainer {
         SmartDashboard.putBoolean("note in system", intakeCarriage.noteInSystem());
 
         // elevator debug
-//       SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
-//       SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
-//       SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
-//       SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
-//       SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
+       SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
+       SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
+       SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
+       SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
+       SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
 
         // limelight debug
         SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());

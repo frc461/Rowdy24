@@ -15,7 +15,7 @@ public class Elevator extends SubsystemBase {
     private final DigitalInput elevatorSwitch;
     private final Servo elevatorClamp;
     private double target;
-    private boolean clamped;
+    private boolean clamped, movingAboveLimitSwitch;
 
     public Elevator() {
         elevator = new TalonFX(Constants.Elevator.ELEVATOR_ID);
@@ -43,6 +43,7 @@ public class Elevator extends SubsystemBase {
 
         target = 0.0;
         clamped = false; // disables/enables clamp
+        movingAboveLimitSwitch = false; // whether the elevator is trying to move above the limit switch
     }
 
    @Override
@@ -73,12 +74,15 @@ public class Elevator extends SubsystemBase {
     public void checkLimitSwitch() {
         if (elevatorSwitchTriggered()) {
             elevator.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
+            if ((target > getPosition() ? getPosition() / target : target / getPosition()) > 0.95) {
+                movingAboveLimitSwitch = false;
+            }
         }
     }
 
     public void holdTarget() {
         checkLimitSwitch();
-        elevator.set(elevatorPIDController.calculate(getPosition(), target));
+        elevator.set(elevatorSwitchTriggered() && !movingAboveLimitSwitch ? 0 : elevatorPIDController.calculate(getPosition(), target));
     }
 
     public void climb() {
@@ -130,6 +134,7 @@ public class Elevator extends SubsystemBase {
         height = Math.max(Constants.Elevator.ELEVATOR_LOWER_LIMIT, height);
         height = Math.min(Constants.Elevator.ELEVATOR_UPPER_LIMIT, height);
         target = height;
+        movingAboveLimitSwitch = true;
         holdTarget();
     }
 }
