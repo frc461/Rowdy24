@@ -119,8 +119,8 @@ public final class Constants {
         // percentage to idle at when shooter is not in use
         public static final double IDLE_SHOOTER_SPEED = 0.3;
 
-        // +/-tolerance for considering if the shooter is up to speed
-        public static final double SHOOTER_ERROR_TOLERANCE = 300;
+        // required accuracy to consider shooter up to speed
+        public static final double SHOOTER_ACCURACY_REQUIREMENT = 0.8;
 
         // increases shooter speed as distance from speaker increases
         public static final double DISTANCE_MULTIPLIER = 10;

@@ -15,7 +15,7 @@ public class Shooter extends SubsystemBase {
     
     private final RelativeEncoder bottomEncoder, topEncoder;
     
-    private double target, error;
+    private double target, error, accuracy;
 
     public Shooter() {
         bottomShooter = new CANSparkFlex(Constants.Shooter.BOTTOM_SHOOTER_ID, MotorType.kBrushless);
@@ -48,11 +48,17 @@ public class Shooter extends SubsystemBase {
 
         target = 0.0;
         error = Math.abs(target - (getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
+        accuracy = (target > (getBottomShooterSpeed() + getTopShooterSpeed()) / 2) ?
+                ((getBottomShooterSpeed() + getTopShooterSpeed()) / 2) / target :
+                target / ((getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
     }
 
     @Override
     public void periodic() {
         error = Math.abs(target - (getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
+        accuracy = (target > (getBottomShooterSpeed() + getTopShooterSpeed()) / 2) ?
+                ((getBottomShooterSpeed() + getTopShooterSpeed()) / 2) / target :
+                target / ((getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
     }
 
     public double getBottomShooterSpeed() {
@@ -74,7 +80,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean minimalError() {
-        return error < Constants.Shooter.SHOOTER_ERROR_TOLERANCE && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 5000;
+        return accuracy > Constants.Shooter.SHOOTER_ACCURACY_REQUIREMENT && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 4500;
     }
 
     public void setShooterIdle(boolean idleMode) {
