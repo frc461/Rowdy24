@@ -38,8 +38,7 @@ public final class Constants {
         public static final double ANGLER_D = 0.0001;
 
         // limit switches
-        public static final int ANGLER_LOWER_LIMIT_SWITCH = 0;
-        public static final int ANGLER_UPPER_LIMIT_SWITCH = 1;
+        public static final int ANGLER_LOWER_LIMIT_SWITCH = 1;
 
         // code limits on encoder values
         public static final double ANGLER_LOWER_LIMIT = 0;

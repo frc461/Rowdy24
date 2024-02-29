@@ -350,7 +350,6 @@ public class RobotContainer {
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
         SmartDashboard.putNumber("Angler error", angler.getError());
         SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
-        SmartDashboard.putBoolean("Angler top triggered", angler.upperSwitchTriggered());
     }
 
     /**
