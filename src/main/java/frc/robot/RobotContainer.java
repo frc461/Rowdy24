@@ -86,7 +86,7 @@ public class RobotContainer {
 
 
     /* Variables */
-    private boolean idleMode = false; // Disables/enables automatic subsystem functions (e.g. auto-outtake)
+    private boolean idleMode = true; // Disables/enables automatic subsystem functions (e.g. auto-outtake)
     private final SendableChooser<Command> chooser;
 
     /**
