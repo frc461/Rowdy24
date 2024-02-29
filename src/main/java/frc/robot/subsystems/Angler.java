@@ -23,12 +23,15 @@ public class Angler extends SubsystemBase {
         anglerPIDController.setP(Constants.Angler.ANGLER_P);
         anglerPIDController.setI(Constants.Angler.ANGLER_I);
         anglerPIDController.setD(Constants.Angler.ANGLER_D);
+        angler.burnFlash();
 
         lowerLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
         upperLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
         target = 0.0;
         error = Math.abs(target - getPosition());
+
+        encoder.setPosition(0.0);
     }
 
     @Override
@@ -62,10 +65,10 @@ public class Angler extends SubsystemBase {
 
     public void checkLimitSwitches() {
         if (upperSwitchTriggered()) {
-            encoder.setPosition(Constants.Angler.ANGLER_UPPER_LIMIT);
+//            encoder.setPosition(Constants.Angler.ANGLER_UPPER_LIMIT);
         }
         if (lowerSwitchTriggered()) {
-            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
+//            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
         }
     }
 

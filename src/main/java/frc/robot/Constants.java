@@ -33,9 +33,9 @@ public final class Constants {
         public static final boolean ANGLER_INVERT = false;
 
         // pid for angler
-        public static final double ANGLER_P = 0.2;
-        public static final double ANGLER_I = 0.0008;
-        public static final double ANGLER_D = 0.000075;
+        public static final double ANGLER_P = 0.2; // 0.2
+        public static final double ANGLER_I = 0.00001;
+        public static final double ANGLER_D = 0.0001;
 
         // code limits on encoder values
         public static final double ANGLER_LOWER_LIMIT = 0;
@@ -72,7 +72,7 @@ public final class Constants {
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
         public static final double Y_COMPONENT_AIM = SPEAKER_HEIGHT - SHOOTER_HEIGHT;
-        public static final double Z_DEPTH_OFFSET = 0.08; // or 0.04 // Half of the depth of the speaker into the field
+        public static final double Z_DEPTH_OFFSET = -0.23; // or 0.04 // Half of the depth of the speaker into the field
         public static final Function<Double, Double> ANGLE_TO_ENCODER_VALUE = (angle) -> 4.0 / 9.0 * (angle - 10.0);
         public static final BiFunction<Double, Double, Double> AUTO_ANGLER_AIM_EQUATION =
                 (x, z) -> ANGLE_TO_ENCODER_VALUE.apply(Math.toDegrees(Math.atan(Y_COMPONENT_AIM / Math.hypot(x, z + Z_DEPTH_OFFSET))));
