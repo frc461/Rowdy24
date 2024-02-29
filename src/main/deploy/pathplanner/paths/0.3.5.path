@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4681388112776226,
-        "y": 7.770505249343833
+        "x": 3.468149241073637,
+        "y": 7.770533698680426
       },
       "isLocked": false,
       "linkedName": "shoot 0.3"
@@ -20,8 +20,8 @@
         "y": 7.43
       },
       "prevControl": {
-        "x": 8.38335604819709,
-        "y": 7.427426709649235
+        "x": 8.752088115481165,
+        "y": 7.395568015339112
       },
       "nextControl": {
         "x": 6.951507657644945,
@@ -44,12 +44,23 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
