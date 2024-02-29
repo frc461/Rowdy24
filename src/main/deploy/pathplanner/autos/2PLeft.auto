@@ -12,22 +12,21 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "align"
-                }
-              }
-            ]
+            "name": "autoShoot"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "3.3.0"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoShoot"
           }
         }
       ]
