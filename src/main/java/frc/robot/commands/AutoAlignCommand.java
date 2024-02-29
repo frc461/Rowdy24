@@ -11,6 +11,7 @@ public class AutoAlignCommand extends Command {
     double z;
     boolean tagExists;
 
+    @SuppressWarnings("unused")
     public AutoAlignCommand(Angler angler, Limelight limelight) {
         this.angler = angler;
         this.limelight = limelight;
