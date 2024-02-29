@@ -11,7 +11,7 @@ public class Angler extends SubsystemBase {
     private final RelativeEncoder encoder;
     private final SparkPIDController anglerPIDController;
     private final SparkLimitSwitch lowerMagnetLimitSwitch, upperMagnetLimitSwitch;
-    private final DigitalInput lowerLimitSwitch, upperLimitSwitch;
+    private final DigitalInput lowerLimitSwitch;
     private double target, error;
 
     public Angler() {
@@ -30,12 +30,9 @@ public class Angler extends SubsystemBase {
         lowerMagnetLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
         lowerLimitSwitch = new DigitalInput(Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH);
         upperMagnetLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-        upperLimitSwitch = new DigitalInput(Constants.Angler.ANGLER_UPPER_LIMIT_SWITCH);
 
         target = 0.0;
         error = Math.abs(target - getPosition());
-
-        encoder.setPosition(0.0); // temp solution
     }
 
     @Override
@@ -63,16 +60,9 @@ public class Angler extends SubsystemBase {
         return !lowerLimitSwitch.get();
     }
 
-    public boolean upperSwitchTriggered() {
-        return !upperLimitSwitch.get();
-    }
-
     public void checkLimitSwitches() {
-        if (upperSwitchTriggered()) {
-//            encoder.setPosition(Constants.Angler.ANGLER_UPPER_LIMIT);
-        }
         if (lowerSwitchTriggered()) {
-//            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
+            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
         }
     }
 
@@ -82,16 +72,16 @@ public class Angler extends SubsystemBase {
     }
 
     public void moveAngle(double axisValue) {
-        target = encoder.getPosition();
         checkLimitSwitches();
         if (axisValue < 0 && lowerSwitchTriggered()) {
             target = Constants.Angler.ANGLER_LOWER_LIMIT;
             holdTarget();
-        } else if (axisValue > 0 && upperSwitchTriggered()) {
+        } else if (axisValue > 0 && getPosition() > Constants.Angler.ANGLER_UPPER_LIMIT) {
             target = Constants.Angler.ANGLER_UPPER_LIMIT;
             holdTarget();
         } else {
             angler.set(axisValue);
+            target = encoder.getPosition();
         }
     }
 
@@ -99,7 +89,7 @@ public class Angler extends SubsystemBase {
         checkLimitSwitches();
         encoderVal = (encoderVal < encoder.getPosition() && lowerSwitchTriggered()) ?
                 Constants.Angler.ANGLER_LOWER_LIMIT :
-                (encoderVal > encoder.getPosition() && upperSwitchTriggered()) ?
+                (encoderVal > encoder.getPosition() && getPosition() > Constants.Angler.ANGLER_UPPER_LIMIT) ?
                 Constants.Angler.ANGLER_UPPER_LIMIT : encoderVal;
         target = encoderVal;
         holdTarget();
