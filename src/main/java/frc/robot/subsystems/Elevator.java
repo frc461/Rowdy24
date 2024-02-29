@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.PIDController;
@@ -10,7 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
-    private final TalonFX elevator;
+    private final TalonFX elevator, elevator2;
+    private final Follower elevatorFollower;
     private final PIDController elevatorPIDController;
     private final DigitalInput elevatorSwitch;
     private final Servo elevatorClamp;
@@ -23,7 +25,7 @@ public class Elevator extends SubsystemBase {
                 .withVoltage(new VoltageConfigs().withPeakForwardVoltage(6))
                 .withMotorOutput(new MotorOutputConfigs()
                         .withInverted(Constants.Elevator.ELEVATOR_INVERT)
-                        .withNeutralMode(NeutralModeValue.Brake))
+                        .withNeutralMode(NeutralModeValue.Coast))
                 .withCurrentLimits(new CurrentLimitsConfigs()
                         .withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT))
                 .withAudio(new AudioConfigs().withBeepOnConfig(false)
@@ -35,6 +37,11 @@ public class Elevator extends SubsystemBase {
                 Constants.Elevator.ELEVATOR_I,
                 Constants.Elevator.ELEVATOR_D
         );
+
+        elevatorFollower = new Follower(Constants.Elevator.ELEVATOR_ID, true);
+
+        elevator2 = new TalonFX(Constants.Elevator.ELEVATOR_FOLLOWER_ID);
+        elevator2.setControl(elevatorFollower);
 
         elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
 

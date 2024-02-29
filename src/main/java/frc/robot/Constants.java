@@ -59,25 +59,26 @@ public final class Constants {
     public static final class Elevator {
         // basic configs
         public static final int ELEVATOR_ID = 31;
+        public static final int ELEVATOR_FOLLOWER_ID = 32;
         public static final int ELEVATOR_CURRENT_LIMIT = 80;
         public static final int ELEVATOR_LIMIT_SWITCH = 2;
         public static final InvertedValue ELEVATOR_INVERT = InvertedValue.Clockwise_Positive;
 
         // servo to hold elevator in endgame
         public static final int ELEVATOR_SERVO_PORT = 1;
-        public static final double ELEVATOR_SERVO_CLAMPED_POS = 0.678;
-        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 0.3928;
+        public static final double ELEVATOR_SERVO_CLAMPED_POS = 0.92857;
+        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 0.4;
         
         // pid
-        public static final double ELEVATOR_P = 0.08;
-        public static final double ELEVATOR_I = 0.01;
-        public static final double ELEVATOR_D = 0.001;
+        public static final double ELEVATOR_P = 0.05;
+        public static final double ELEVATOR_I = 0.0;
+        public static final double ELEVATOR_D = 0.0;
 
         // presets
-        public static final double ELEVATOR_LOWER_LIMIT = -2;
-        public static final double ELEVATOR_UPPER_LIMIT = 36;
-        public static final double ELEVATOR_AMP = 35.5;
-        public static final double ELEVATOR_STOW = -1.5;
+        public static final double ELEVATOR_LOWER_LIMIT = 0;
+        public static final double ELEVATOR_UPPER_LIMIT = 37;
+        public static final double ELEVATOR_AMP = 36;
+        public static final double ELEVATOR_STOW = ELEVATOR_LOWER_LIMIT;
     }
 
     public static final class IntakeCarriage {
