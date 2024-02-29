@@ -27,6 +27,7 @@ public class Elevator extends SubsystemBase {
                 .withCurrentLimits(new CurrentLimitsConfigs()
                         .withSupplyCurrentLimit(Constants.Elevator.ELEVATOR_CURRENT_LIMIT))
                 .withAudio(new AudioConfigs().withBeepOnConfig(false)
+                        .withBeepOnBoot(false)
                         .withAllowMusicDurDisable(true)));
 
         elevatorPIDController = new PIDController(
