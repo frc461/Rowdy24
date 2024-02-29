@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.1892520467505387,
-      "y": 5.339933333895103
+      "x": 0.6445593933841892,
+      "y": 6.55
     },
-    "rotation": 180.0
+    "rotation": -120.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2.2.0"
+            "pathName": "3.3.0Backup"
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "0.2to3.0"
+            "pathName": "0.3.5Backup"
           }
         },
         {
