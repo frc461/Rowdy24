@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -9,7 +10,8 @@ public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
     private final RelativeEncoder encoder;
     private final SparkPIDController anglerPIDController;
-    private final SparkLimitSwitch lowerLimitSwitch, upperLimitSwitch;
+    private final SparkLimitSwitch lowerMagnetLimitSwitch, upperMagnetLimitSwitch;
+    private final DigitalInput lowerLimitSwitch, upperLimitSwitch;
     private double target, error;
 
     public Angler() {
@@ -25,13 +27,15 @@ public class Angler extends SubsystemBase {
         anglerPIDController.setD(Constants.Angler.ANGLER_D);
         angler.burnFlash();
 
-        lowerLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-        upperLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        lowerMagnetLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        lowerLimitSwitch = new DigitalInput(Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH);
+        upperMagnetLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        upperLimitSwitch = new DigitalInput(Constants.Angler.ANGLER_UPPER_LIMIT_SWITCH);
 
         target = 0.0;
         error = Math.abs(target - getPosition());
 
-        encoder.setPosition(0.0);
+        encoder.setPosition(0.0); // temp solution
     }
 
     @Override
@@ -56,11 +60,11 @@ public class Angler extends SubsystemBase {
     }
 
     public boolean lowerSwitchTriggered() { 
-        return lowerLimitSwitch.isPressed();
+        return !lowerLimitSwitch.get();
     }
 
     public boolean upperSwitchTriggered() {
-        return upperLimitSwitch.isPressed();
+        return !upperLimitSwitch.get();
     }
 
     public void checkLimitSwitches() {
