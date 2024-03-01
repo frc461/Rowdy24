@@ -26,6 +26,12 @@
         {
           "type": "named",
           "data": {
+            "name": "waitUntilIntakeNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "autoShoot"
           }
         },
@@ -38,6 +44,12 @@
         {
           "type": "named",
           "data": {
+            "name": "waitUntilIntakeNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "autoShoot"
           }
         },
@@ -45,6 +57,12 @@
           "type": "path",
           "data": {
             "pathName": "0.2to3.0Backup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "waitUntilIntakeNote"
           }
         },
         {

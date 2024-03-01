@@ -142,6 +142,11 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
+                "waitUntilIntakeNote",
+                new WaitUntilCommand(intakeCarriage::noteInSystem)
+        );
+
+        NamedCommands.registerCommand(
                 "autoShoot",
                 new ParallelCommandGroup(
                         new InstantCommand(() -> angler.setAlignedAngle(

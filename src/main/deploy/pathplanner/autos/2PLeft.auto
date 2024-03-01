@@ -26,6 +26,12 @@
         {
           "type": "named",
           "data": {
+            "name": "waitUntilIntakeNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "autoShoot"
           }
         }
