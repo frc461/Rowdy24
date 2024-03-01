@@ -28,13 +28,7 @@
       "linkedName": "0.3.0"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.95,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {

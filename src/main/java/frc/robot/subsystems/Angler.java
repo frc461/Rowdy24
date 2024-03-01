@@ -58,14 +58,14 @@ public class Angler extends SubsystemBase {
         return error;
     }
 
-    public boolean lowerSwitchTriggered() { 
+    public boolean lowerSwitchTriggered() {
         return lowerMagnetLimitSwitch.isPressed();
     }
 
     public void checkLimitSwitches() {
-        if (lowerSwitchTriggered()) {
-            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
-        }
+//        if (lowerSwitchTriggered()) {
+//            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
+//        }
     }
 
     public void holdTarget() {
