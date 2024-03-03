@@ -16,7 +16,7 @@ public class Elevator extends SubsystemBase {
     private final PIDController elevatorPIDController;
     private final DigitalInput elevatorSwitch, servoSwitch;
     private final Servo elevatorClamp;
-    private double target, error;
+    private double target, accuracy;
     private boolean clamped, movingAboveLimitSwitch;
 
     public Elevator() {
@@ -50,7 +50,7 @@ public class Elevator extends SubsystemBase {
         elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
 
         target = 0.0;
-        error = target > getPosition() ? getPosition() / target : target / getPosition();
+        accuracy = target > getPosition() ? getPosition() / target : target / getPosition();
         clamped = false; // disables/enables clamp
         movingAboveLimitSwitch = false; // whether the elevator is trying to move above the limit switch
     }
@@ -62,7 +62,7 @@ public class Elevator extends SubsystemBase {
         } else {
             elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
         }
-        error = target > getPosition() ? getPosition() / target : target / getPosition();
+        accuracy = target > getPosition() ? getPosition() / target : target / getPosition();
    }
 
     public double getPosition() {
@@ -90,7 +90,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public boolean elevatorNearTarget() {
-        return error > 0.95;
+        return accuracy > 0.95;
     }
 
     public void checkLimitSwitch() {
