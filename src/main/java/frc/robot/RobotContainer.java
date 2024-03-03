@@ -293,7 +293,13 @@ public class RobotContainer {
         );
 
         /* Climb */
-        opXbox.povDown().whileTrue(new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered));
+        opXbox.povDown().whileTrue(
+                new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
+                .andThen(new WaitCommand(0.2))
+                .andThen(new InstantCommand(() -> elevator.climb(true)))
+                .andThen(new WaitCommand(0.35))
+                .andThen(new InstantCommand(() -> elevator.stopElevator()))
+        );
 
         /* Toggle clamp */
         opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
@@ -310,7 +316,10 @@ public class RobotContainer {
 
         /* Amp Elevator Preset */
         opXbox.y().onTrue(
-                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator)
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator),
+                        new IntakeCarriageCommand(intakeCarriage, 0.1, 0.1, idleMode).until(elevator::elevatorNearTarget)
+                )
         );
 
         /* Angler layup setpoint (Limelight failsafe) */
@@ -333,6 +342,7 @@ public class RobotContainer {
        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
        SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
        SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
+       SmartDashboard.putBoolean("Servo Limit Triggered?", elevator.servoSwitchTriggered());
        SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
 
         // limelight debug
