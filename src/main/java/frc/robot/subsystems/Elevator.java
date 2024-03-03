@@ -110,6 +110,7 @@ public class Elevator extends SubsystemBase {
     public void climb(boolean stop) {
         if (stop) {
             setClamp(true);
+            target = 0;
         } else {
             elevator.set(-0.5);
         }
