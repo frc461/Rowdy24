@@ -21,14 +21,12 @@ import frc.robot.Constants;
 import java.util.Optional;
 
 public class Swerve extends SubsystemBase {
-    private final Limelight limelight;
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveModule[] swerveMods;
     public final Pigeon2 gyro;
     final Field2d field = new Field2d();
 
     public Swerve() {
-        limelight = new Limelight();
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
@@ -166,7 +164,7 @@ public class Swerve extends SubsystemBase {
 
     public Optional<Rotation2d> getRotationTargetOverride() {
         if (Limelight.overrideTargetNow) {
-            return Optional.of(Rotation2d.fromDegrees(getYaw() + limelight.getLateralOffset()));
+            return Optional.of(Rotation2d.fromDegrees(getYaw() + Limelight.getLateralOffset()));
         }
         return Optional.empty();
     }
