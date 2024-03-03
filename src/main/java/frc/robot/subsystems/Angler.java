@@ -11,7 +11,7 @@ public class Angler extends SubsystemBase {
     private final RelativeEncoder encoder;
     private final SparkPIDController anglerPIDController;
     private final SparkLimitSwitch lowerMagnetLimitSwitch, upperMagnetLimitSwitch;
-//    private final DigitalInput lowerLimitSwitch;
+    private final DigitalInput lowerLimitSwitch;
     private double target, error;
 
     public Angler() {
@@ -28,7 +28,7 @@ public class Angler extends SubsystemBase {
         angler.burnFlash();
 
         lowerMagnetLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-//        lowerLimitSwitch = new DigitalInput(Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH);
+        lowerLimitSwitch = new DigitalInput(Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH);
         upperMagnetLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
         target = 0.0;
@@ -59,13 +59,13 @@ public class Angler extends SubsystemBase {
     }
 
     public boolean lowerSwitchTriggered() {
-        return lowerMagnetLimitSwitch.isPressed();
+        return !lowerLimitSwitch.get();
     }
 
     public void checkLimitSwitches() {
-//        if (lowerSwitchTriggered()) {
-//            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
-//        }
+       if (lowerSwitchTriggered()) {
+           encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
+       }
     }
 
     public void holdTarget() {
