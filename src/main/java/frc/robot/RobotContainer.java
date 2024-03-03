@@ -138,18 +138,19 @@ public class RobotContainer {
                         1,
                         idleMode
                 ).until(intakeCarriage::noteInSystem)
-                .andThen(new IntakeCarriageCommand(
-                        intakeCarriage,
-                        0.9,
-                        1,
-                        idleMode
-                ).until(() -> !intakeCarriage.getAmpBeamBroken()))
-                .andThen(new IntakeCarriageCommand(
-                        intakeCarriage,
-                        -0.9,
-                        -1,
-                        idleMode
-                ).until(intakeCarriage::getAmpBeamBroken))
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0.9,
+                                1,
+                                idleMode
+                        ).until(() -> !intakeCarriage.getAmpBeamBroken()))
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                -0.9,
+                                -1,
+                                idleMode
+                        ).until(intakeCarriage::getAmpBeamBroken))
+                        .andThen(new InstantCommand(() -> Limelight.overrideTargetNow = true))
         );
 
         NamedCommands.registerCommand(
@@ -175,6 +176,7 @@ public class RobotContainer {
                                 1,
                                 idleMode
                         ).until(() -> !intakeCarriage.noteInSystem()))
+                                .andThen(new InstantCommand(() -> Limelight.overrideTargetNow = false))
                 )
         );
 
@@ -217,19 +219,19 @@ public class RobotContainer {
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
         /* Toggle idle subsystems */
-        opXbox.povUp().onTrue(new SequentialCommandGroup(
-                new InstantCommand(() -> idleMode = !idleMode),
-                new ParallelCommandGroup(
-                        new InstantCommand(
-                                () -> intakeCarriage.setIntakeIdle(idleMode),
-                                intakeCarriage
-                        ),
-                        new InstantCommand(
-                                () -> shooter.setShooterIdle(idleMode),
-                                shooter
-                        )
-                )
-        ));
+        opXbox.povUp().onTrue(
+                new InstantCommand(() -> idleMode = !idleMode)
+                        .andThen(new ParallelCommandGroup(
+                                new InstantCommand(
+                                        () -> intakeCarriage.setIntakeIdle(idleMode),
+                                        intakeCarriage
+                                ),
+                                new InstantCommand(
+                                        () -> shooter.setShooterIdle(idleMode),
+                                        shooter
+                                )
+                        ))
+        );
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
@@ -260,18 +262,18 @@ public class RobotContainer {
                 1,
                 idleMode
         ).until(intakeCarriage::noteInSystem)
-        .andThen(new IntakeCarriageCommand(
-                intakeCarriage,
-                0.9,
-                1,
-                idleMode
-        ).until(() -> !intakeCarriage.getAmpBeamBroken()))
-        .andThen(new IntakeCarriageCommand(
-                intakeCarriage,
-                -0.9,
-                -1,
-                idleMode
-        ).until(intakeCarriage::getAmpBeamBroken)));
+                .andThen(new IntakeCarriageCommand(
+                        intakeCarriage,
+                        0.9,
+                        1,
+                        idleMode
+                ).until(() -> !intakeCarriage.getAmpBeamBroken()))
+                .andThen(new IntakeCarriageCommand(
+                        intakeCarriage,
+                        -0.9,
+                        -1,
+                        idleMode
+                ).until(intakeCarriage::getAmpBeamBroken)));
 
         /* Intake Override */
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode, true));
@@ -321,10 +323,10 @@ public class RobotContainer {
         /* Climb */
         opXbox.povDown().whileTrue(
                 new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
-                .andThen(new WaitCommand(0.2))
-                .andThen(new InstantCommand(() -> elevator.climb(true)))
-                .andThen(new WaitCommand(0.35))
-                .andThen(new InstantCommand(elevator::stopElevator))
+                        .andThen(new WaitCommand(0.2))
+                        .andThen(new InstantCommand(() -> elevator.climb(true)))
+                        .andThen(new WaitCommand(0.35))
+                        .andThen(new InstantCommand(elevator::stopElevator))
         );
 
         /* Toggle clamp */

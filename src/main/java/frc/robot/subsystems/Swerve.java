@@ -162,7 +162,7 @@ public class Swerve extends SubsystemBase {
         return positions;
     }
 
-    public Optional<Rotation2d> getRotationTargetOverride() {
+    public Optional<Rotation2d> getRotationTargetOverride() { // only for auto
         if (Limelight.overrideTargetNow) {
             return Optional.of(Rotation2d.fromDegrees(getYaw() + Limelight.getLateralOffset()));
         }

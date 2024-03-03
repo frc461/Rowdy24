@@ -12,7 +12,7 @@ public class Limelight extends SubsystemBase {
     private final static DoubleArraySubscriber tagPoseTopic = table.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]);
     private static double[] tagPose = new double[6];
     private static int updates;
-    public static boolean overrideTargetNow = false;
+    public static boolean overrideTargetNow = false; // only for auto
 
     @Override
     public void periodic() {
