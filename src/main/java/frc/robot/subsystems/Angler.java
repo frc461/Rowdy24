@@ -105,7 +105,7 @@ public class Angler extends SubsystemBase {
 //                            Constants.Angler.UPPER_BOUND_CONSTANT + Constants.Angler.UPPER_BOUND_LINEAR_COEFFICIENT * dist + Constants.Angler.UPPER_BOUND_SQUARED_COEFFICIENT * Math.pow(dist, 2) - 1,
 //                    Constants.Angler.ANGLER_UPPER_LIMIT
 //            ));
-            setAngle(Math.min(Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(x, z), Constants.Angler.ANGLER_UPPER_LIMIT));
+            setAngle(Math.min(Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(x, z), Constants.Angler.ANGLER_UPPER_LIMIT + Constants.Angler.ANGLER_TRIM));
         }
     }
 }

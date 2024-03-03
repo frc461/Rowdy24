@@ -27,6 +27,8 @@ public final class Constants {
     }
 
     public static final class Angler {
+        public static double ANGLER_TRIM = 0;
+
         // basic configs
         public static final int ANGLER_ID = 62;
         public static final int ANGLER_CURRENT_LIMIT = 35;
