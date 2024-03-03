@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -17,13 +18,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import java.util.Optional;
+
 public class Swerve extends SubsystemBase {
+    private final Limelight limelight;
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveModule[] swerveMods;
     public final Pigeon2 gyro;
     final Field2d field = new Field2d();
 
     public Swerve() {
+        limelight = new Limelight();
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
@@ -88,6 +93,8 @@ public class Swerve extends SubsystemBase {
                 },
                 this // Reference to this subsystem to set requirements
         );
+
+        PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
     }
 
     @Override
@@ -155,6 +162,13 @@ public class Swerve extends SubsystemBase {
             positions[mod.moduleNumber] = mod.getPosition();
         }
         return positions;
+    }
+
+    public Optional<Rotation2d> getRotationTargetOverride() {
+        if (Limelight.overrideTargetNow) {
+            return Optional.of(Rotation2d.fromDegrees(getYaw() + limelight.getLateralOffset()));
+        }
+        return Optional.empty();
     }
 
     public void zeroGyro() {

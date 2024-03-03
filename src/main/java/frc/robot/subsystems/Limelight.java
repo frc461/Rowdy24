@@ -12,11 +12,13 @@ public class Limelight extends SubsystemBase {
     private NetworkTable table;
     private double[] tagPose;
     private int updates;
+    public static boolean overrideTargetNow;
 
     public Limelight() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tagPoseTopic = table.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]);
         tagPose = new double[6];
+        overrideTargetNow = false;
     }
 
     @Override
