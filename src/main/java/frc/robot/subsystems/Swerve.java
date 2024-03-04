@@ -102,7 +102,9 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateFusedVision(Pose2d limeLightPose){
-        FusedPose.addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp(), null);
+        if(limeLightPose != new Pose2d(0, 0, new Rotation2d(0))){
+            FusedPose.addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp(), null);
+        }
     }
 
     @Override
