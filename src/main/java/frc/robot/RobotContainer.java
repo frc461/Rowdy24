@@ -100,10 +100,6 @@ public class RobotContainer {
         chooser = AutoBuilder.buildAutoChooser("default");
         SmartDashboard.putData("Auto Choices", chooser);
 
-        limelight.setDefaultCommand(
-                new FusedOdometryCommand(limelight, swerve)
-        );
-
         // Register default commands/controller axis commands
         swerve.setDefaultCommand(
                 new TeleopSwerveCommand(

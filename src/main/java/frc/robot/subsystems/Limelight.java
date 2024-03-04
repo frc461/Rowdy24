@@ -15,7 +15,7 @@ public class Limelight extends SubsystemBase {
     private static int updates;
 
     //TODO make sure the coordinates here are correct
-    public Pose2d getLimeLightPose(){
+    public static Pose2d getLimeLightPose(){
         return new Pose2d(getRZ(), getRX(), new Rotation2d(getYaw()));
     }
 

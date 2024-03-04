@@ -19,9 +19,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import java.util.Objects;
+
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
-    SwerveDrivePoseEstimator FusedPose;
+    private final SwerveDrivePoseEstimator fusedPose;
     private final SwerveModule[] swerveMods;
     public final Pigeon2 gyro;
     final Field2d field = new Field2d();
@@ -93,24 +95,14 @@ public class Swerve extends SubsystemBase {
         );
 
         //TODO update deviations
-        FusedPose = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getHeading(), getModulePositions(), getPose(), null, null);
-    }
-
-    public Pose2d getFusedPose(){
-        FusedPose.update(getHeading(), getModulePositions());
-        return FusedPose.getEstimatedPosition();
-    }
-
-    public void updateFusedVision(Pose2d limeLightPose){
-        if(limeLightPose != new Pose2d(0, 0, new Rotation2d(0))){
-            FusedPose.addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp(), null);
-        }
+        fusedPose = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getHeading(), getModulePositions(), getPose(), null, null);
     }
 
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
         field.setRobotPose(swerveOdometry.getPoseMeters());
+        updateFusedVision(Limelight.getLimeLightPose());
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -136,6 +128,12 @@ public class Swerve extends SubsystemBase {
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
+    public void updateFusedVision(Pose2d limeLightPose){
+        if(!Objects.equals(limeLightPose, new Pose2d(0, 0, new Rotation2d(0)))){
+            fusedPose.addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp(), null);
+        }
+    }
+
     public double getYaw() {
         return (Constants.Swerve.INVERT_GYRO) ?
                 Constants.Swerve.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
@@ -156,6 +154,11 @@ public class Swerve extends SubsystemBase {
 
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
+    }
+
+    public Pose2d getFusedPose(){
+        fusedPose.update(getHeading(), getModulePositions());
+        return fusedPose.getEstimatedPosition();
     }
 
     public SwerveModuleState[] getModuleStates() {
