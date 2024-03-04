@@ -16,7 +16,7 @@ public class AutoAlignCommand extends Command {
         this.angler = angler;
         this.limelight = limelight;
         this.x = limelight.getRX();
-        this.z = limelight.getRX();
+        this.z = limelight.getRZ();
         this.tagExists = limelight.tagExists();
         addRequirements(angler, limelight);
     }

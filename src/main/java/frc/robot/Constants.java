@@ -27,6 +27,8 @@ public final class Constants {
     }
 
     public static final class Angler {
+        public static double ANGLER_TRIM = 0;
+
         // basic configs
         public static final int ANGLER_ID = 62;
         public static final int ANGLER_CURRENT_LIMIT = 35;
@@ -38,7 +40,7 @@ public final class Constants {
         public static final double ANGLER_D = 0.0001;
 
         // limit switches
-        public static final int ANGLER_LOWER_LIMIT_SWITCH = 1;
+        public static final int ANGLER_LOWER_LIMIT_SWITCH = 6;
 
         // code limits on encoder values
         public static final double ANGLER_LOWER_LIMIT = 0;
@@ -61,13 +63,14 @@ public final class Constants {
         public static final int ELEVATOR_ID = 31;
         public static final int ELEVATOR_FOLLOWER_ID = 32;
         public static final int ELEVATOR_CURRENT_LIMIT = 80;
+        public static final int SERVO_LIMIT_SWITCH = 1;
         public static final int ELEVATOR_LIMIT_SWITCH = 2;
         public static final InvertedValue ELEVATOR_INVERT = InvertedValue.Clockwise_Positive;
 
         // servo to hold elevator in endgame
         public static final int ELEVATOR_SERVO_PORT = 1;
-        public static final double ELEVATOR_SERVO_CLAMPED_POS = 0.92857;
-        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 0.4;
+        public static final double ELEVATOR_SERVO_CLAMPED_POS = 0.4185; // 1540 .5285
+        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 0.7357; // 1630 .5957
         
         // pid
         public static final double ELEVATOR_P = 0.05;

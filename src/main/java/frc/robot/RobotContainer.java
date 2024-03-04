@@ -139,11 +139,23 @@ public class RobotContainer {
                         1,
                         idleMode
                 ).until(intakeCarriage::noteInSystem)
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0.9,
+                                1,
+                                idleMode
+                        ).until(() -> !intakeCarriage.getAmpBeamBroken()))
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                -0.9,
+                                -1,
+                                idleMode
+                        ).until(intakeCarriage::getAmpBeamBroken))
         );
 
         NamedCommands.registerCommand(
                 "waitUntilIntakeNote",
-                new WaitUntilCommand(intakeCarriage::noteInSystem)
+                new WaitUntilCommand(intakeCarriage::noteInSystem).andThen(new WaitCommand(0.2))
         );
 
         NamedCommands.registerCommand(
@@ -207,9 +219,9 @@ public class RobotContainer {
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
         /* Toggle idle subsystems */
-        opXbox.povUp().onTrue(new SequentialCommandGroup(
-                new InstantCommand(() -> idleMode = !idleMode),
-                new ParallelCommandGroup(
+        opXbox.povUp().onTrue(
+                new InstantCommand(() -> idleMode = !idleMode)
+                        .andThen(new ParallelCommandGroup(
                         new InstantCommand(
                                 () -> intakeCarriage.setIntakeIdle(idleMode),
                                 intakeCarriage
@@ -218,8 +230,8 @@ public class RobotContainer {
                                 () -> shooter.setShooterIdle(idleMode),
                                 shooter
                         )
-                )
-        ));
+                ))
+        );
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
@@ -240,6 +252,9 @@ public class RobotContainer {
                         limelight.tagExists()
                 ), angler)
         );
+        
+        //driverXbox.povUp().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_TRIM)));
+
 
         /* Intake Note */
         opXbox.rightBumper().whileTrue(new IntakeCarriageCommand(
@@ -247,13 +262,27 @@ public class RobotContainer {
                 0.9,
                 1,
                 idleMode
-        ).until(intakeCarriage::noteInSystem));
+        ).until(intakeCarriage::noteInSystem)
+                .andThen(new IntakeCarriageCommand(
+                        intakeCarriage,
+                        0.9,
+                        1,
+                        idleMode
+                ).until(() -> !intakeCarriage.getAmpBeamBroken()))
+                .andThen(new IntakeCarriageCommand(
+                        intakeCarriage,
+                        -0.9,
+                        -1,
+                        idleMode
+                ).until(intakeCarriage::getAmpBeamBroken)));
 
         /* Intake Override */
-        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
+        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode, true));
 
         /* Outtake Note */
-        opXbox.leftBumper().whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode));
+        opXbox.leftBumper().whileTrue(
+                new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode)
+        );
 
         /* Auto-align for auto-shoot (deadband defaults to 0.5) */
         opXbox.rightTrigger().onTrue(
@@ -293,7 +322,12 @@ public class RobotContainer {
         );
 
         /* Climb */
-        opXbox.povDown().whileTrue(new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered));
+        opXbox.povDown().whileTrue(
+                new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
+                        .andThen(new InstantCommand(() -> elevator.climb(true)))
+                        .andThen(new WaitCommand(0.75))
+                        .andThen(new InstantCommand(() -> elevator.stopElevator()))
+        );
 
         /* Toggle clamp */
         opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
@@ -310,7 +344,10 @@ public class RobotContainer {
 
         /* Amp Elevator Preset */
         opXbox.y().onTrue(
-                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator)
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator),
+                        new IntakeCarriageCommand(intakeCarriage, 0.1, 0.1, idleMode).until(elevator::elevatorNearTarget)
+                )
         );
 
         /* Angler layup setpoint (Limelight failsafe) */
@@ -333,6 +370,7 @@ public class RobotContainer {
        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
        SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
        SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
+       SmartDashboard.putBoolean("Servo Limit Triggered?", elevator.servoSwitchTriggered());
        SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
 
         // limelight debug
