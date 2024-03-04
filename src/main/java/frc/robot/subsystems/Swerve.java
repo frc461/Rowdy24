@@ -6,6 +6,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -19,6 +21,7 @@ import frc.robot.Constants;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
+    SwerveDrivePoseEstimator FusedPose;
     private final SwerveModule[] swerveMods;
     public final Pigeon2 gyro;
     final Field2d field = new Field2d();
@@ -88,7 +91,19 @@ public class Swerve extends SubsystemBase {
                 },
                 this // Reference to this subsystem to set requirements
         );
+
+        //TODO update deviations
+        FusedPose = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getHeading(), getModulePositions(), getPose(), null, null);
     }
+
+    Pose2d getFusedPose(){
+        FusedPose.update(getHeading(), getModulePositions());
+        return FusedPose.getEstimatedPosition();
+    }
+
+    // void updateFusedVision(){
+    //     FusedPose.addVisionMeasurement(getFusedPose(), , null);
+    // }
 
     @Override
     public void periodic() {
