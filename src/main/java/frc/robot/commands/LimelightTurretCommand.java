@@ -10,17 +10,20 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Limelight;
 
 public class LimelightTurretCommand extends Command {
+    private final Limelight limelight;
     private final Swerve swerve;
     private final DoubleSupplier translationSup;
     private final DoubleSupplier strafeSup;
     private final BooleanSupplier robotCentricSup;
 
     public LimelightTurretCommand(
+            Limelight limelight,
             Swerve swerve,
             DoubleSupplier translationSup,
             DoubleSupplier strafeSup,
             BooleanSupplier robotCentricSup
     ) {
+        this.limelight = limelight;
         this.swerve = swerve;
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
@@ -35,7 +38,7 @@ public class LimelightTurretCommand extends Command {
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.STICK_DEADBAND);
 
         /* Calculate Rotation Magnitude */
-        if(Limelight.tagExists()) {
+        if(limelight.tagExists()) {
             try (
                     PIDController rotController = new PIDController(
                             Constants.Limelight.LIMELIGHT_P,
@@ -47,7 +50,7 @@ public class LimelightTurretCommand extends Command {
 
                 double rotate = rotController.calculate(
                         swerve.getYaw(),
-                        swerve.getYaw() + Limelight.getLateralOffset()
+                        swerve.getYaw() + limelight.getLateralOffset()
                 );
 
                 /* Drive */

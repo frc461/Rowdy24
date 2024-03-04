@@ -25,6 +25,7 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
     private final Elevator elevator = new Elevator();
+    private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
     private final Angler angler = new Angler();
@@ -161,12 +162,13 @@ public class RobotContainer {
                 "autoShoot",
                 new ParallelCommandGroup(
                         new InstantCommand(() -> angler.setAlignedAngle(
-                                Limelight.getRX(),
-                                Limelight.getRZ(),
-                                Limelight.tagExists()
+                                limelight.getRX(),
+                                limelight.getRZ(),
+                                limelight.tagExists()
                         ), angler),
                         new RevUpShooterCommand(
                                 shooter,
+                                limelight,
                                 idleMode
                         ).until(() -> !intakeCarriage.noteInSystem()),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
@@ -181,9 +183,9 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "alignAngler",
                 new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
-                        Limelight.tagExists()
+                        limelight.getRX(),
+                        limelight.getRZ(),
+                        limelight.tagExists()
                 ), angler)
         );
 
@@ -234,6 +236,7 @@ public class RobotContainer {
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
                 new LimelightTurretCommand(
+                        limelight,
                         swerve,
                         () -> -driverXbox.getLeftY(), // Ordinate Translation
                         () -> -driverXbox.getLeftX(), // Coordinate Translation
@@ -244,9 +247,9 @@ public class RobotContainer {
         /* Cheeky Driver Auto-align (deadband defaults to 0.5) */
         driverXbox.leftBumper().whileTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
-                        Limelight.tagExists()
+                        limelight.getRX(),
+                        limelight.getRZ(),
+                        limelight.tagExists()
                 ), angler)
         );
         
@@ -284,16 +287,16 @@ public class RobotContainer {
         /* Auto-align for auto-shoot (deadband defaults to 0.5) */
         opXbox.rightTrigger().onTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
-                        Limelight.tagExists()
+                        limelight.getRX(),
+                        limelight.getRZ(),
+                        limelight.tagExists()
                 ), angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
 
         /* Rev up shooter and run carriage when its up to speed */
         opXbox.rightTrigger().whileTrue(
                 new ParallelCommandGroup(
-                        new RevUpShooterCommand(shooter, idleMode),
+                        new RevUpShooterCommand(shooter, limelight, idleMode),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
@@ -306,15 +309,15 @@ public class RobotContainer {
         /* Auto-align (deadband defaults to 0.5) */
         opXbox.x().onTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
-                        Limelight.tagExists()
+                        limelight.getRX(),
+                        limelight.getRZ(),
+                        limelight.tagExists()
                 ), angler)
         );
 
         /* Override Shooter (deadband defaults to 0.5) */
         opXbox.leftTrigger().whileTrue(new RevUpShooterCommand(
-                shooter, idleMode
+                shooter, limelight, idleMode
                 )
         );
 
@@ -323,7 +326,7 @@ public class RobotContainer {
                 new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
                         .andThen(new InstantCommand(() -> elevator.climb(true)))
                         .andThen(new WaitCommand(0.75))
-                        .andThen(new InstantCommand(elevator::stopElevator))
+                        .andThen(new InstantCommand(() -> elevator.stopElevator()))
         );
 
         /* Toggle clamp */
@@ -371,14 +374,14 @@ public class RobotContainer {
        SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
 
         // limelight debug
-        SmartDashboard.putNumber("Limelight Updates", Limelight.getUpdates());
-        SmartDashboard.putNumber("Limelight Yaw", Limelight.getYaw());
-        SmartDashboard.putNumber("Limelight Pitch", Limelight.getPitch());
-        SmartDashboard.putNumber("Limelight Roll", Limelight.getRoll());
-        SmartDashboard.putNumber("Limelight X", Limelight.getRX());
-        SmartDashboard.putNumber("Limelight Y", Limelight.getRY());
-        SmartDashboard.putNumber("Limelight Z", Limelight.getRZ());
-        SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getRZ(), Limelight.getRX()));
+        SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());
+        SmartDashboard.putNumber("Limelight Yaw", limelight.getYaw());
+        SmartDashboard.putNumber("Limelight Pitch", limelight.getPitch());
+        SmartDashboard.putNumber("Limelight Roll", limelight.getRoll());
+        SmartDashboard.putNumber("Limelight X", limelight.getRX());
+        SmartDashboard.putNumber("Limelight Y", limelight.getRY());
+        SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
+        SmartDashboard.putNumber("Limelight dist", Math.hypot(limelight.getRZ(), limelight.getRX()));
 
         // shooter debug
         SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());

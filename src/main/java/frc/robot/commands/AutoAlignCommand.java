@@ -6,24 +6,26 @@ import frc.robot.subsystems.Limelight;
 
 public class AutoAlignCommand extends Command {
     Angler angler;
+    Limelight limelight;
     double x;
     double z;
     boolean tagExists;
 
     @SuppressWarnings("unused")
-    public AutoAlignCommand(Angler angler) {
+    public AutoAlignCommand(Angler angler, Limelight limelight) {
         this.angler = angler;
-        this.x = Limelight.getRX();
-        this.z = Limelight.getRZ();
-        this.tagExists = Limelight.tagExists();
-        addRequirements(angler);
+        this.limelight = limelight;
+        this.x = limelight.getRX();
+        this.z = limelight.getRZ();
+        this.tagExists = limelight.tagExists();
+        addRequirements(angler, limelight);
     }
 
     @Override
     public void execute() {
-        x = Limelight.getRX();
-        z = Limelight.getRZ();
-        tagExists = Limelight.tagExists();
+        x = limelight.getRX();
+        z = limelight.getRZ();
+        tagExists = limelight.tagExists();
         angler.setAlignedAngle(x, z, tagExists);
     }
 }
