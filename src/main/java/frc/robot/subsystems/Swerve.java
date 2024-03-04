@@ -55,7 +55,7 @@ public class Swerve extends SubsystemBase {
         );
 
         AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
+                this::getFusedPose, // Robot pose supplier (fused)
                 this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
