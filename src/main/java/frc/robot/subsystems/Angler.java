@@ -33,8 +33,6 @@ public class Angler extends SubsystemBase {
 
         target = 0.0;
         error = Math.abs(target - getPosition());
-
-        encoder.setPosition(0.0); // temp solution
     }
 
     @Override
