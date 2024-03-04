@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -17,6 +18,11 @@ public class Limelight extends SubsystemBase {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tagPoseTopic = table.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]);
         tagPose = new double[6];
+    }
+
+    //TODO make sure the coordinates here are correct
+    public Pose2d getLimeLightPose(){
+        return new Pose2d(getRZ(), getRX(), new Rotation2d(getYaw()));
     }
 
     @Override

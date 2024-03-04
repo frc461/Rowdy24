@@ -96,12 +96,12 @@ public class Swerve extends SubsystemBase {
         FusedPose = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getHeading(), getModulePositions(), getPose(), null, null);
     }
 
-    Pose2d getFusedPose(){
+    public Pose2d getFusedPose(){
         FusedPose.update(getHeading(), getModulePositions());
         return FusedPose.getEstimatedPosition();
     }
 
-    void updateFusedVision(Pose2d limeLightPose){
+    public void updateFusedVision(Pose2d limeLightPose){
         FusedPose.addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp(), null);
     }
 
