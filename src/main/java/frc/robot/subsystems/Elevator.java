@@ -14,9 +14,9 @@ public class Elevator extends SubsystemBase {
     private final TalonFX elevator, elevator2;
     private final Follower elevatorFollower;
     private final PIDController elevatorPIDController;
-    private final DigitalInput elevatorSwitch;
+    private final DigitalInput elevatorSwitch, servoSwitch;
     private final Servo elevatorClamp;
-    private double target;
+    private double target, error;
     private boolean clamped, movingAboveLimitSwitch;
 
     public Elevator() {
@@ -44,22 +44,25 @@ public class Elevator extends SubsystemBase {
         elevator2.setControl(elevatorFollower);
 
         elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
+        servoSwitch = new DigitalInput(Constants.Elevator.SERVO_LIMIT_SWITCH);
 
         elevatorClamp = new Servo(Constants.Elevator.ELEVATOR_SERVO_PORT);
         elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
 
         target = 0.0;
+        error = target > getPosition() ? getPosition() / target : target / getPosition();
         clamped = false; // disables/enables clamp
         movingAboveLimitSwitch = false; // whether the elevator is trying to move above the limit switch
     }
 
    @Override
    public void periodic() {
-       if (!clamped) {
+        if (!clamped) {
             elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_UNCLAMPED_POS);
-       } else {
+        } else {
             elevatorClamp.set(Constants.Elevator.ELEVATOR_SERVO_CLAMPED_POS);
-       }
+        }
+        error = target > getPosition() ? getPosition() / target : target / getPosition();
    }
 
     public double getPosition() {
@@ -78,6 +81,18 @@ public class Elevator extends SubsystemBase {
         return !elevatorSwitch.get();
     }
 
+    public boolean servoSwitchTriggered() {
+        return !servoSwitch.get();
+    }
+
+    public double getClampPosition() {
+        return elevatorClamp.getPosition();
+    }
+
+    public boolean elevatorNearTarget() {
+        return error > 0.95;
+    }
+
     public void checkLimitSwitch() {
         if (elevatorSwitchTriggered()) {
             elevator.setPosition(Constants.Elevator.ELEVATOR_LOWER_LIMIT);
@@ -92,16 +107,12 @@ public class Elevator extends SubsystemBase {
         elevator.set(elevatorSwitchTriggered() && !movingAboveLimitSwitch ? 0 : elevatorPIDController.calculate(getPosition(), target));
     }
 
-    public void climb() {
-        checkLimitSwitch();
-        if (elevatorSwitchTriggered()) {
-            target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
-            holdTarget();
+    public void climb(boolean stop) {
+        if (stop) {
             setClamp(true);
+            target = 0;
         } else {
-            elevator.set(-0.2); //TODO this is sketch
-//            target = getPosition() - 0.05;
-//            holdTarget();
+            elevator.set(-0.5);
         }
     }
 
@@ -118,15 +129,11 @@ public class Elevator extends SubsystemBase {
         );
     }
 
-    public double getClampPosition() {
-        return elevatorClamp.getPosition();
-    }
-
     public void moveElevator(double axisValue) {
         checkLimitSwitch();
         if (axisValue < 0 && elevatorSwitchTriggered()) {
             target = Constants.Elevator.ELEVATOR_LOWER_LIMIT;
-            holdTarget();
+            elevator.set(0);
         } else if (axisValue > 0 && getPosition() >= Constants.Elevator.ELEVATOR_UPPER_LIMIT) {
             target = Constants.Elevator.ELEVATOR_UPPER_LIMIT;
             holdTarget();
@@ -143,5 +150,9 @@ public class Elevator extends SubsystemBase {
         target = height;
         movingAboveLimitSwitch = true;
         holdTarget();
+    }
+
+    public void stopElevator() {
+        elevator.set(0);
     }
 }
