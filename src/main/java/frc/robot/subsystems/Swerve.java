@@ -95,7 +95,7 @@ public class Swerve extends SubsystemBase {
         );
 
         //TODO update deviations
-        fusedPose = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getHeading(), getModulePositions(), getPose(), null, null);
+        fusedPose = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getHeading(), getModulePositions(), getPose());
     }
 
     @Override
@@ -130,7 +130,7 @@ public class Swerve extends SubsystemBase {
 
     public void updateFusedVision(Pose2d limeLightPose){
         if(!Objects.equals(limeLightPose, new Pose2d(0, 0, new Rotation2d(0)))){
-            fusedPose.addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp(), null);
+            fusedPose.addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp());
         }
     }
 
