@@ -372,7 +372,6 @@ public class RobotContainer {
        SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
 
         // limelight debug
-        SmartDashboard.putNumber("Limelight Updates", Limelight.getUpdates());
         SmartDashboard.putNumber("Limelight Yaw", Limelight.getYaw());
         SmartDashboard.putNumber("Limelight Pitch", Limelight.getPitch());
         SmartDashboard.putNumber("Limelight Roll", Limelight.getRoll());

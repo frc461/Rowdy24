@@ -11,18 +11,15 @@ import frc.robot.Constants;
 public class Limelight extends SubsystemBase {
     private static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     private final static DoubleArraySubscriber tagPoseTopic = table.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]);
-    private final static DoubleArraySubscriber robotPoseTopic = table.getDoubleArrayTopic("robotpose_targetspace").subscribe(new double[6]);
-    private final static DoubleArraySubscriber tagIDTopic = table.getDoubleArrayTopic("tid").subscribe(new double[1]);
+    private final static DoubleArraySubscriber fusedPoseTopic = table.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[11]);
 
     private static double[] tagPose = new double[6];
-    private static double[] robotPose = new double[6];
-    private static double[] tagID = new double[1];
-    private static int updates;
+    private static double[] fusedPose = new double[11];
 
     // FIXME currently is in camera frame, not target frame -> change to target space either by new network table or fancy math
     public static Pose2d getLimelightPoseTargetSpace() {
         refreshValues();
-        return new Pose2d(robotPose[0], robotPose[2], new Rotation2d(robotPose[4]));
+        return new Pose2d(getFusedRX(), getFusedRY(), new Rotation2d(getFusedYaw()));
     }
 
     @Override
@@ -35,8 +32,39 @@ public class Limelight extends SubsystemBase {
         return !(getTable().getEntry("tv").getDouble(0) == 0);
     }
 
-    public static int getUpdates() {
-        return updates;
+    public static double getFusedRX() {
+        refreshValues();
+        return fusedPose[0];
+    }
+   
+    public static double getFusedRY() {
+        refreshValues();
+        return fusedPose[1];
+    }
+    
+    public static double getFusedRZ() {
+        refreshValues();
+        return fusedPose[2];
+    }
+
+    public static double getFusedPitch() {
+        refreshValues();
+        return fusedPose[3];
+    }
+    
+    public static double getFusedRoll() {
+        refreshValues();
+        return fusedPose[4];
+    }
+
+    public static double getFusedYaw() {
+        refreshValues();
+        return fusedPose[5];
+    }
+
+    public static double getFusedLatency() {
+        refreshValues();
+        return fusedPose[6];
     }
 
     // X+ is to the right when looking at the tag
@@ -87,8 +115,6 @@ public class Limelight extends SubsystemBase {
     public static void refreshValues() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tagPose = tagPoseTopic.get(new double[6]);
-        robotPose = robotPoseTopic.get(new double[6]);
-        tagID = tagIDTopic.get(new double[1]);
-        updates++;
+        fusedPose = fusedPoseTopic.get(new double[6]);
     }
 }

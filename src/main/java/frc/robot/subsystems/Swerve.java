@@ -6,15 +6,15 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -24,15 +24,12 @@ public class Swerve extends SubsystemBase {
     private final SwerveDrivePoseEstimator fusedPose;
     private final SwerveModule[] swerveMods;
     public final Pigeon2 gyro;
-    final Field2d field = new Field2d();
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
         
-        SmartDashboard.putData("Field", field);
-
         swerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
             new SwerveModule(1, Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS),
@@ -92,15 +89,19 @@ public class Swerve extends SubsystemBase {
                 this // Reference to this subsystem to set requirements
         );
 
-        //TODO update deviations
-        fusedPose = new SwerveDrivePoseEstimator(Constants.Swerve.SWERVE_KINEMATICS, getHeading(), getModulePositions(), getPose());
+        fusedPose = new SwerveDrivePoseEstimator(
+            Constants.Swerve.SWERVE_KINEMATICS, 
+            getHeading(), getModulePositions(), 
+            getPose(), 
+            VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+            VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
+        );
     }
 
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        field.setRobotPose(swerveOdometry.getPoseMeters());
-        updateFusedVision(Limelight.getLimelightPoseTargetSpace());
+        updateFusedVision(Limelight.getLimelightPoseTargetSpace(), Limelight.getFusedLatency());
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -126,12 +127,6 @@ public class Swerve extends SubsystemBase {
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
-    public void updateFusedVision(Pose2d limelightPose){
-        if(!limelightPose.equals(new Pose2d())) {
-            fusedPose.addVisionMeasurement(limelightPose, Timer.getFPGATimestamp());
-        }
-    }
-
     public double getYaw() {
         return (Constants.Swerve.INVERT_GYRO) ?
                 Constants.Swerve.MAXIMUM_ANGLE - (gyro.getYaw().getValueAsDouble()) :
@@ -155,7 +150,6 @@ public class Swerve extends SubsystemBase {
     }
 
     public Pose2d getFusedPose(){
-        fusedPose.update(getHeading(), getModulePositions());
         return fusedPose.getEstimatedPosition();
     }
 
@@ -165,6 +159,15 @@ public class Swerve extends SubsystemBase {
 
     public void resetFusedPose(){
         setFusedPose(new Pose2d());
+    }
+
+    public void updateFusedVision(Pose2d limelightPose, double latency){
+        fusedPose.update(getHeading(), getModulePositions());
+
+        if (!limelightPose.equals(new Pose2d())) {
+            fusedPose.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
+            fusedPose.addVisionMeasurement(limelightPose, latency);
+        }
     }
 
     public SwerveModuleState[] getModuleStates() {
