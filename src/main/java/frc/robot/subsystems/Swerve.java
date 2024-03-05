@@ -159,6 +159,14 @@ public class Swerve extends SubsystemBase {
         return fusedPose.getEstimatedPosition();
     }
 
+    public void setFusedPose(Pose2d newPose){
+        fusedPose.resetPosition(getHeading(), getModulePositions(), newPose);
+    }
+
+    public void resetFusedPose(){
+        setFusedPose(new Pose2d());
+    }
+
     public SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (SwerveModule mod : swerveMods) {
