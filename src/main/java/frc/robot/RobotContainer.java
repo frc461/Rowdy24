@@ -354,7 +354,7 @@ public class RobotContainer {
 
     public void printValues() {
         // robot position
-        SmartDashboard.putString("Robot Pose2d", swerve.getPose().getTranslation().toString());
+        SmartDashboard.putString("Robot Fused Pose2d", swerve.getFusedPose().getTranslation().toString());
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
