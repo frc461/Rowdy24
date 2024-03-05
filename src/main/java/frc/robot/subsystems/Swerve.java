@@ -77,7 +77,7 @@ public class Swerve extends SubsystemBase {
                                 Constants.Auto.AUTO_ANGLE_I,
                                 Constants.Auto.AUTO_ANGLE_D
                         ),
-                        Constants.Swerve.MAX_SPEED - 2, // Max module speed, in m/s
+                        Constants.Swerve.MAX_SPEED, // Max module speed, in m/s
                         Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to
                                                           // furthest module.
                         new ReplanningConfig(true, true) // Default path replanning config. See the API for the options here

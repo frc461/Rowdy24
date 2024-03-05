@@ -11,12 +11,18 @@ import frc.robot.Constants;
 public class Limelight extends SubsystemBase {
     private static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     private final static DoubleArraySubscriber tagPoseTopic = table.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]);
+    private final static DoubleArraySubscriber robotPoseTopic = table.getDoubleArrayTopic("robotpose_targetspace").subscribe(new double[6]);
+    private final static DoubleArraySubscriber tagIDTopic = table.getDoubleArrayTopic("tid").subscribe(new double[1]);
+
     private static double[] tagPose = new double[6];
+    private static double[] robotPose = new double[6];
+    private static double[] tagID = new double[1];
     private static int updates;
 
     // FIXME currently is in camera frame, not target frame -> change to target space either by new network table or fancy math
     public static Pose2d getLimelightPoseTargetSpace() {
-        return new Pose2d(getRZ(), getRX(), new Rotation2d(getYaw()));
+        refreshValues();
+        return new Pose2d(robotPose[0], robotPose[2], new Rotation2d(robotPose[4]));
     }
 
     @Override
@@ -81,6 +87,8 @@ public class Limelight extends SubsystemBase {
     public static void refreshValues() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tagPose = tagPoseTopic.get(new double[6]);
+        robotPose = robotPoseTopic.get(new double[6]);
+        tagID = tagIDTopic.get(new double[1]);
         updates++;
     }
 }
