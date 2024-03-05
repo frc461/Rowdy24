@@ -100,7 +100,7 @@ public class Swerve extends SubsystemBase {
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
         field.setRobotPose(swerveOdometry.getPoseMeters());
-        updateFusedVision(Limelight.getRobotPoseTargetSpace());
+        updateFusedVision(Limelight.getLimelightPoseTargetSpace());
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());

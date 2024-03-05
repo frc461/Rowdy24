@@ -15,7 +15,7 @@ public class Limelight extends SubsystemBase {
     private static int updates;
 
     // FIXME currently is in camera frame, not target frame -> change to target space either by new network table or fancy math
-    public static Pose2d getRobotPoseTargetSpace() {
+    public static Pose2d getLimelightPoseTargetSpace() {
         return new Pose2d(getRZ(), getRX(), new Rotation2d(getYaw()));
     }
 
