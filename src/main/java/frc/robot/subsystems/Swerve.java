@@ -19,8 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-import java.util.Objects;
-
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveDrivePoseEstimator fusedPose;
@@ -102,7 +100,7 @@ public class Swerve extends SubsystemBase {
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
         field.setRobotPose(swerveOdometry.getPoseMeters());
-        updateFusedVision(Limelight.getLimeLightPose());
+        updateFusedVision(Limelight.getRobotPoseTargetSpace());
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -128,9 +126,9 @@ public class Swerve extends SubsystemBase {
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
-    public void updateFusedVision(Pose2d limeLightPose){
-        if(!Objects.equals(limeLightPose, new Pose2d(0, 0, new Rotation2d(0)))){
-            fusedPose.addVisionMeasurement(limeLightPose, Timer.getFPGATimestamp());
+    public void updateFusedVision(Pose2d limelightPose){
+        if(!limelightPose.equals(new Pose2d())) {
+            fusedPose.addVisionMeasurement(limelightPose, Timer.getFPGATimestamp());
         }
     }
 

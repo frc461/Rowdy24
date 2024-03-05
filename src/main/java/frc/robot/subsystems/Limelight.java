@@ -14,8 +14,8 @@ public class Limelight extends SubsystemBase {
     private static double[] tagPose = new double[6];
     private static int updates;
 
-    //TODO make sure the coordinates here are correct
-    public static Pose2d getLimeLightPose(){
+    // FIXME currently is in camera frame, not target frame -> change to target space either by new network table or fancy math
+    public static Pose2d getRobotPoseTargetSpace() {
         return new Pose2d(getRZ(), getRX(), new Rotation2d(getYaw()));
     }
 
