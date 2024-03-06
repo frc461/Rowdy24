@@ -52,7 +52,7 @@ public class Swerve extends SubsystemBase {
         );
 
         AutoBuilder.configureHolonomic(
-                this::getFusedPose, // Robot pose supplier (fused)
+                this::getPose, // Robot pose supplier (fused)
                 this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
@@ -94,7 +94,7 @@ public class Swerve extends SubsystemBase {
             getHeading(), getModulePositions(), 
             getPose(), 
             VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-            VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
+            VecBuilder.fill(1, 1, Units.degreesToRadians(5))
         );
     }
 

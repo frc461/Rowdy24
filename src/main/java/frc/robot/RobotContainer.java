@@ -352,8 +352,9 @@ public class RobotContainer {
         opXbox.povRight().onTrue(new InstantCommand(() -> angler.setAngle(Constants.Angler.ANGLER_LAYUP_POSITION)));
     }
 
-    public void printValues() {
+    public void printValues() { 
         // robot position
+        SmartDashboard.putString("Robot Unfused Pose2d", swerve.getPose().getTranslation().toString());
         SmartDashboard.putString("Robot Fused Pose2d", swerve.getFusedPose().getTranslation().toString());
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
@@ -381,6 +382,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getRZ(), Limelight.getRX()));
 
         // shooter debug
+        SmartDashboard.getNumber("Shooter Trip", Constants.Angler.ANGLER_TRIM);
         SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
         SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
