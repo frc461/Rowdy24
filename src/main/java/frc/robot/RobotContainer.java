@@ -252,9 +252,16 @@ public class RobotContainer {
                         limelight.tagExists()
                 ), angler)
         );
-        
-        //driverXbox.povUp().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_TRIM)));
 
+
+        /* Intake Override */
+        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode, true));
+
+        // TODO: automate layup-position shooting
+        /* Outtake Note */
+        opXbox.leftBumper().whileTrue(
+                new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode)
+        );
 
         /* Intake Note */
         opXbox.rightBumper().whileTrue(new IntakeCarriageCommand(
@@ -276,12 +283,10 @@ public class RobotContainer {
                         idleMode
                 ).until(intakeCarriage::getAmpBeamBroken)));
 
-        /* Intake Override */
-        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode, true));
-
-        /* Outtake Note */
-        opXbox.leftBumper().whileTrue(
-                new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode)
+        /* Override Shooter (deadband defaults to 0.5) */
+        opXbox.leftTrigger().whileTrue(new RevUpShooterCommand(
+                        shooter, limelight, idleMode
+                )
         );
 
         /* Auto-align for auto-shoot (deadband defaults to 0.5) */
@@ -313,12 +318,6 @@ public class RobotContainer {
                         limelight.getRZ(),
                         limelight.tagExists()
                 ), angler)
-        );
-
-        /* Override Shooter (deadband defaults to 0.5) */
-        opXbox.leftTrigger().whileTrue(new RevUpShooterCommand(
-                shooter, limelight, idleMode
-                )
         );
 
         /* Climb */
