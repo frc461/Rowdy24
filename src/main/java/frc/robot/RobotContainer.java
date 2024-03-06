@@ -255,7 +255,7 @@ public class RobotContainer {
 
 
         /* Intake Override */
-        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode, true));
+        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
 
         // TODO: automate layup-position shooting
         /* Outtake Note */
