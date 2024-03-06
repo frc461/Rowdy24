@@ -346,8 +346,16 @@ public class RobotContainer {
         opXbox.y().onTrue(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator),
-                        new IntakeCarriageCommand(intakeCarriage, 0.1, 0.1, idleMode).until(elevator::elevatorNearTarget)
+                        new IntakeCarriageCommand(intakeCarriage, 0.9, 0, idleMode).until(() -> !intakeCarriage.getAmpBeamBroken())
                 )
+        );
+        
+        /* Amp Score Preset */
+        opXbox.y().onFalse(
+                new IntakeCarriageCommand(intakeCarriage, -0.9, 0, idleMode)
+                        .until(() -> (!intakeCarriage.getAmpBeamBroken() && !intakeCarriage.getCarriageBeamBroken()))
+                        .andThen(Commands.waitSeconds(0.75))
+                        .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)) 
         );
 
         /* Angler layup setpoint (Limelight failsafe) */
