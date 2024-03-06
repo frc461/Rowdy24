@@ -162,8 +162,8 @@ public class RobotContainer {
                 "autoShoot",
                 new ParallelCommandGroup(
                         new InstantCommand(() -> angler.setAlignedAngle(
-                                Limelight.getRX(),
-                                Limelight.getRZ(),
+                                Limelight.getTagRX(),
+                                Limelight.getTagRZ(),
                                 Limelight.tagExists()
                         ), angler),
                         new RevUpShooterCommand(
@@ -182,8 +182,8 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "alignAngler",
                 new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
+                        Limelight.getTagRX(),
+                        Limelight.getTagRZ(),
                         Limelight.tagExists()
                 ), angler)
         );
@@ -245,8 +245,8 @@ public class RobotContainer {
         /* Cheeky Driver Auto-align (deadband defaults to 0.5) */
         driverXbox.leftBumper().whileTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
+                        Limelight.getTagRX(),
+                        Limelight.getTagRZ(),
                         Limelight.tagExists()
                 ), angler)
         );
@@ -285,8 +285,8 @@ public class RobotContainer {
         /* Auto-align for auto-shoot (deadband defaults to 0.5) */
         opXbox.rightTrigger().onTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
+                        Limelight.getTagRX(),
+                        Limelight.getTagRZ(),
                         Limelight.tagExists()
                 ), angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
@@ -307,8 +307,8 @@ public class RobotContainer {
         /* Auto-align (deadband defaults to 0.5) */
         opXbox.x().onTrue(
                 new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
+                        Limelight.getTagRX(),
+                        Limelight.getTagRZ(),
                         Limelight.tagExists()
                 ), angler)
         );
@@ -373,13 +373,13 @@ public class RobotContainer {
        SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
 
         // limelight debug
-        SmartDashboard.putNumber("Limelight Yaw", Limelight.getYaw());
-        SmartDashboard.putNumber("Limelight Pitch", Limelight.getPitch());
-        SmartDashboard.putNumber("Limelight Roll", Limelight.getRoll());
-        SmartDashboard.putNumber("Limelight X", Limelight.getRX());
-        SmartDashboard.putNumber("Limelight Y", Limelight.getRY());
-        SmartDashboard.putNumber("Limelight Z", Limelight.getRZ());
-        SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getRZ(), Limelight.getRX()));
+        SmartDashboard.putNumber("Limelight Yaw", Limelight.getTagYaw());
+        SmartDashboard.putNumber("Limelight Pitch", Limelight.getTagPitch());
+        SmartDashboard.putNumber("Limelight Roll", Limelight.getTagRoll());
+        SmartDashboard.putNumber("Limelight X", Limelight.getTagRX());
+        SmartDashboard.putNumber("Limelight Y", Limelight.getTagRY());
+        SmartDashboard.putNumber("Limelight Z", Limelight.getTagRZ());
+        SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getTagRZ(), Limelight.getTagRX()));
 
         // shooter debug
         SmartDashboard.getNumber("Shooter Trip", Constants.Angler.ANGLER_TRIM);

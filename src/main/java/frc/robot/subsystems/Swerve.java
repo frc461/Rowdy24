@@ -6,13 +6,11 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -92,16 +90,14 @@ public class Swerve extends SubsystemBase {
         fusedPose = new SwerveDrivePoseEstimator(
             Constants.Swerve.SWERVE_KINEMATICS, 
             getHeading(), getModulePositions(), 
-            getPose(), 
-            VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-            VecBuilder.fill(1, 1, Units.degreesToRadians(5))
+            getPose()
         );
     }
 
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        updateFusedVision(Limelight.getLimelightPoseTargetSpace(), Limelight.getFusedLatency());
+        updateFusedPose(Limelight.getBluePoseRobotSpace());
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -161,12 +157,11 @@ public class Swerve extends SubsystemBase {
         setFusedPose(new Pose2d());
     }
 
-    public void updateFusedVision(Pose2d limelightPose, double latency){
+    public void updateFusedPose(Pose2d limelightPose){
         fusedPose.update(getHeading(), getModulePositions());
 
         if (!limelightPose.equals(new Pose2d())) {
-            fusedPose.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,9999999));
-            fusedPose.addVisionMeasurement(limelightPose, latency);
+            fusedPose.addVisionMeasurement(limelightPose, Timer.getFPGATimestamp());
         }
     }
 

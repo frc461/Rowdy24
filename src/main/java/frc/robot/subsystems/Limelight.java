@@ -15,11 +15,9 @@ public class Limelight extends SubsystemBase {
     private final static DoubleArraySubscriber fusedPoseTopic = table.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[11]);
 
     private static double[] tagPose = new double[6];
-    private static double[] fusedPose = new double[11];
+    private static double[] fusedPose = new double[11]; // TODO: figure out what this network table consists of
 
-    // FIXME currently is in camera frame, not target frame -> change to target space either by new network table or fancy math
-    public static Pose2d getLimelightPoseTargetSpace() {
-        refreshValues();
+    public static Pose2d getBluePoseRobotSpace() {
         return new Pose2d(getFusedRX(), getFusedRY(), new Rotation2d(getFusedYaw()));
     }
 
@@ -29,88 +27,64 @@ public class Limelight extends SubsystemBase {
     }
 
     public static boolean tagExists() {
-        refreshValues();
-        return !(getTable().getEntry("tv").getDouble(0) == 0);
+        return !(table.getEntry("tv").getDouble(0) == 0);
     }
 
     public static double getFusedRX() {
-        refreshValues();
         return fusedPose[0];
     }
    
     public static double getFusedRY() {
-        refreshValues();
         return fusedPose[1];
     }
     
     public static double getFusedRZ() {
-        refreshValues();
         return fusedPose[2];
     }
 
     public static double getFusedPitch() {
-        refreshValues();
         return fusedPose[3];
     }
     
     public static double getFusedRoll() {
-        refreshValues();
         return fusedPose[4];
     }
 
     public static double getFusedYaw() {
-        refreshValues();
         return fusedPose[5];
     }
 
-    public static double getFusedLatency() {
-        refreshValues();
-        return Timer.getFPGATimestamp();//fusedPose[6];
-    }
-
     // X+ is to the right when looking at the tag
-    public static double getRX() {
-        refreshValues();
+    public static double getTagRX() {
         return tagPose[0];
     }
 
     // Y+ is upwards
-    public static double getRY() {
-        refreshValues();
+    public static double getTagRY() {
         return tagPose[1];
     }
 
     // Z+ is perpendicular to the plane of the limelight (Z+ is towards tag on data
     // side, Z- is on other side of robot)
-    public static double getRZ() {
-        refreshValues();
+    public static double getTagRZ() {
         return tagPose[2];
     }
 
-    public static double getPitch() {
-        refreshValues();
+    public static double getTagPitch() {
         return tagPose[3];
     }
 
-    public static double getYaw() {
-        refreshValues();
+    public static double getTagYaw() {
         return tagPose[4];
     }
 
-    public static double getRoll() {
-        refreshValues();
+    public static double getTagRoll() {
         return tagPose[5];
     }
 
     // returns lateral angle of tag from center of limelight in degrees
-    public static double getLateralOffset() {
-        refreshValues();
+    public static double getTagLateralAngle() {
         return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees() + Constants.Limelight.YAW_OFFSET / tagPose[2]);
-    }
-
-    public static NetworkTable getTable() {
-        refreshValues();
-        return table;
     }
 
     public static void refreshValues() {

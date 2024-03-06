@@ -47,7 +47,7 @@ public class LimelightTurretCommand extends Command {
 
                 double rotate = rotController.calculate(
                         swerve.getYaw(),
-                        swerve.getYaw() + Limelight.getLateralOffset()
+                        swerve.getYaw() + Limelight.getTagLateralAngle()
                 );
 
                 /* Drive */

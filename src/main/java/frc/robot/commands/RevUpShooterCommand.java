@@ -17,12 +17,12 @@ public class RevUpShooterCommand extends Command {
 
     @Override
     public void initialize() {
-        shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + Limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER);
+        shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + Limelight.getTagRZ() * Constants.Shooter.DISTANCE_MULTIPLIER);
     }
 
     @Override
     public void execute() {
-        shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + Limelight.getRZ() * Constants.Shooter.DISTANCE_MULTIPLIER);
+        shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED + Limelight.getTagRZ() * Constants.Shooter.DISTANCE_MULTIPLIER);
     }
 
     @Override

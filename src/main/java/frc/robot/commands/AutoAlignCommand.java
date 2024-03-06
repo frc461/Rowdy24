@@ -13,16 +13,16 @@ public class AutoAlignCommand extends Command {
     @SuppressWarnings("unused")
     public AutoAlignCommand(Angler angler) {
         this.angler = angler;
-        this.x = Limelight.getRX();
-        this.z = Limelight.getRZ();
+        this.x = Limelight.getTagRX();
+        this.z = Limelight.getTagRZ();
         this.tagExists = Limelight.tagExists();
         addRequirements(angler);
     }
 
     @Override
     public void execute() {
-        x = Limelight.getRX();
-        z = Limelight.getRZ();
+        x = Limelight.getTagRX();
+        z = Limelight.getTagRZ();
         tagExists = Limelight.tagExists();
         angler.setAlignedAngle(x, z, tagExists);
     }
