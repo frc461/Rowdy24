@@ -225,20 +225,17 @@ public class RobotContainer {
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
-                new ParallelCommandGroup(
-                        new LimelightTurretCommand(
-                                swerve,
-                                () -> -driverXbox.getLeftY(), // Ordinate Translation
-                                () -> -driverXbox.getLeftX(), // Coordinate Translation
-                                driverXbox.b() // Robot-centric trigger
-                        ),
-                        new AutoAlignCommand(angler)
+                new LimelightTurretCommand(
+                        swerve,
+                        () -> -driverXbox.getLeftY(), // Ordinate Translation
+                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox.b() // Robot-centric trigger
                 )
         );
 
         /* Cheeky Driver Auto-align (deadband defaults to 0.5) */
         driverXbox.leftBumper().whileTrue(
-                new InstantCommand(angler::setAlignedAngle, angler)
+                new AutoAlignCommand(angler)
         );
 
         /* Intake Override */
