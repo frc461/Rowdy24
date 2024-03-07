@@ -160,11 +160,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "autoShoot",
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> angler.setAlignedAngle(
-                                Limelight.getRX(),
-                                Limelight.getRZ(),
-                                Limelight.tagExists()
-                        ), angler),
+                        new InstantCommand(angler::setAlignedAngle, angler),
                         new RevUpShooterCommand(
                                 shooter,
                                 idleMode
@@ -180,11 +176,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "alignAngler",
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
-                        Limelight.tagExists()
-                ), angler)
+                new InstantCommand(angler::setAlignedAngle, angler)
         );
 
         NamedCommands.registerCommand(
@@ -243,15 +235,17 @@ public class RobotContainer {
 
         /* Cheeky Driver Auto-align (deadband defaults to 0.5) */
         driverXbox.leftBumper().whileTrue(
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
-                        Limelight.tagExists()
-                ), angler)
+                new InstantCommand(angler::setAlignedAngle, angler)
         );
-        
-        //driverXbox.povUp().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_TRIM)));
 
+        /* Intake Override */
+        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
+
+        // TODO: automate layup-position shooting
+        /* Outtake Note */
+        opXbox.leftBumper().whileTrue(
+                new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode)
+        );
 
         /* Intake Note */
         opXbox.rightBumper().whileTrue(new IntakeCarriageCommand(
@@ -282,11 +276,7 @@ public class RobotContainer {
 
         /* Auto-align for auto-shoot (deadband defaults to 0.5) */
         opXbox.rightTrigger().onTrue(
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
-                        Limelight.tagExists()
-                ), angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
+                new InstantCommand(angler::setAlignedAngle, angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
 
         /* Rev up shooter and run carriage when its up to speed */
@@ -307,11 +297,7 @@ public class RobotContainer {
 
         /* Auto-align (deadband defaults to 0.5) */
         opXbox.x().onTrue(
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        Limelight.getRX(),
-                        Limelight.getRZ(),
-                        Limelight.tagExists()
-                ), angler)
+                new InstantCommand(angler::setAlignedAngle, angler)
         );
 
         /* Override Shooter (deadband defaults to 0.5) */

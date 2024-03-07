@@ -12,7 +12,7 @@ public class Angler extends SubsystemBase {
     private final SparkPIDController anglerPIDController;
     private final SparkLimitSwitch lowerMagnetLimitSwitch, upperMagnetLimitSwitch;
     private final DigitalInput lowerLimitSwitch;
-    private double target, error;
+    private double target, limelightTarget, error, accuracy;
 
     public Angler() {
         angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
@@ -32,12 +32,30 @@ public class Angler extends SubsystemBase {
         upperMagnetLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
         target = 0.0;
+        limelightTarget = Limelight.tagExists() ?
+                Math.min(
+                        Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
+                                Limelight.getRX(),
+                                Limelight.getRZ()) + Constants.Angler.ANGLER_TRIM,
+                        Constants.Angler.ANGLER_UPPER_LIMIT
+                ) : getPosition();
         error = Math.abs(target - getPosition());
+        accuracy = Limelight.tagExists() ? (target > limelightTarget) ?
+                limelightTarget / target : target / limelightTarget : -1.0;
     }
 
     @Override
     public void periodic() {
+        limelightTarget = Limelight.tagExists() ?
+                Math.min(
+                        Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
+                                Limelight.getRX(),
+                                Limelight.getRZ()) + Constants.Angler.ANGLER_TRIM,
+                        Constants.Angler.ANGLER_UPPER_LIMIT
+                ) : getPosition();
         error = Math.abs(target - getPosition());
+        accuracy = Limelight.tagExists() ? (target > limelightTarget) ?
+                limelightTarget / target : target / limelightTarget : -1.0;
     }
 
     public double getPosition() { 
@@ -95,9 +113,7 @@ public class Angler extends SubsystemBase {
         holdTarget();
     }
 
-    public void setAlignedAngle(double x, double z, boolean tag) {
-        if (tag) {
-            setEncoderVal(Math.min(Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(x, z) + Constants.Angler.ANGLER_TRIM, Constants.Angler.ANGLER_UPPER_LIMIT));
-        }
+    public void setAlignedAngle() {
+        setEncoderVal(limelightTarget);
     }
 }
