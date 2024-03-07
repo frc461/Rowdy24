@@ -343,15 +343,22 @@ public class RobotContainer {
     }
 
     public void printValues() {
+        // Scheduled commands
+        SmartDashboard.putData("Scheduled Commands", CommandScheduler.getInstance());
+
         // robot position
         SmartDashboard.putString("Robot Pose2d", swerve.getPose().getTranslation().toString());
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
+        SmartDashboard.putData("Swerve Command", swerve);
+
+        // intake-carriage debug
         SmartDashboard.putBoolean("Beam Brake carriage", intakeCarriage.getCarriageBeamBroken());
         SmartDashboard.putBoolean("Beam Brake amp", intakeCarriage.getAmpBeamBroken());
         SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
         SmartDashboard.putBoolean("note in system", intakeCarriage.noteInSystem());
+        SmartDashboard.putData("Intake-Carriage Cmd", intakeCarriage);
 
         // elevator debug
        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
@@ -360,6 +367,7 @@ public class RobotContainer {
        SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
        SmartDashboard.putBoolean("Servo Limit Triggered?", elevator.servoSwitchTriggered());
        SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
+       SmartDashboard.putData("Elevator Cmd", elevator);
 
         // limelight debug
         SmartDashboard.putNumber("Limelight Updates", Limelight.getUpdates());
@@ -376,11 +384,14 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
         SmartDashboard.putNumber("Shooter error", shooter.getError());
+        SmartDashboard.putData("Shooter Cmd", shooter);
 
         // angler debug
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
         SmartDashboard.putNumber("Angler error", angler.getError());
         SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
+        SmartDashboard.putData("Angler Cmd", angler);
+        SmartDashboard.getNumber("Angler trim", 0.0);
     }
 
     /**
