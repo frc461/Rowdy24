@@ -225,11 +225,14 @@ public class RobotContainer {
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
-                new LimelightTurretCommand(
-                        swerve,
-                        () -> -driverXbox.getLeftY(), // Ordinate Translation
-                        () -> -driverXbox.getLeftX(), // Coordinate Translation
-                        driverXbox.b() // Robot-centric trigger
+                new ParallelCommandGroup(
+                        new LimelightTurretCommand(
+                                swerve,
+                                () -> -driverXbox.getLeftY(), // Ordinate Translation
+                                () -> -driverXbox.getLeftX(), // Coordinate Translation
+                                driverXbox.b() // Robot-centric trigger
+                        ),
+                        new AutoAlignCommand(angler)
                 )
         );
 
@@ -274,14 +277,10 @@ public class RobotContainer {
                 )
         );
 
-        /* Auto-align for auto-shoot (deadband defaults to 0.5) */
-        opXbox.rightTrigger().onTrue(
-                new InstantCommand(angler::setAlignedAngle, angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
-        );
-
         /* Rev up shooter and run carriage when its up to speed */
         opXbox.rightTrigger().whileTrue(
                 new ParallelCommandGroup(
+                        new AutoAlignCommand(angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
                         new RevUpShooterCommand(shooter, idleMode),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
@@ -291,9 +290,6 @@ public class RobotContainer {
                         ))
                 ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
-
-        /* Auto zero */
-        opXbox.rightTrigger().onFalse(new InstantCommand(() -> angler.setEncoderVal(0)));
 
         /* Auto-align (deadband defaults to 0.5) */
         opXbox.x().onTrue(
