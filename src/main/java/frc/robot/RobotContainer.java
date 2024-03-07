@@ -339,7 +339,7 @@ public class RobotContainer {
         );
 
         /* Angler layup setpoint (Limelight failsafe) */
-        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_POSITION)));
+        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET)));
     }
 
     public void printValues() {
@@ -391,7 +391,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Angler error", angler.getError());
         SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
         SmartDashboard.putData("Angler Cmd", angler);
-        SmartDashboard.getNumber("Angler trim", 0.0);
+        Constants.Angler.ANGLER_ENCODER_OFFSET = SmartDashboard.getNumber("Angler trim", 0.0);
     }
 
     /**

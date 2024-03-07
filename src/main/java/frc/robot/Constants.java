@@ -11,7 +11,6 @@ import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public final class Constants {
     public static final double STICK_DEADBAND = 0.1;
@@ -27,7 +26,6 @@ public final class Constants {
     }
 
     public static final class Angler {
-        public static double ANGLER_TRIM = 0;
 
         // basic configs
         public static final int ANGLER_ID = 62;
@@ -46,9 +44,10 @@ public final class Constants {
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
 
-        //setpoint(s)
-        public static final double ANGLER_LAYUP_POSITION = 18;
+        // preset
+        public static final double ANGLER_LAYUP_PRESET = 18;
 
+        public static double ANGLER_ENCODER_OFFSET = 0;
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
         public static final double Y_COMPONENT_AIM = SPEAKER_HEIGHT - SHOOTER_HEIGHT;
