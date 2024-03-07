@@ -25,7 +25,7 @@ public class LimelightTurretCommand extends Command {
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
         this.robotCentricSup = robotCentricSup;
-        addRequirements(this.swerve);
+        addRequirements(swerve);
     }
     
     @Override
@@ -34,30 +34,9 @@ public class LimelightTurretCommand extends Command {
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.STICK_DEADBAND);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.STICK_DEADBAND);
 
-        /* Calculate Rotation Magnitude */
-        if(Limelight.tagExists()) {
-            try (
-                    PIDController rotController = new PIDController(
-                            Constants.Limelight.LIMELIGHT_P,
-                            Constants.Limelight.LIMELIGHT_I,
-                            Constants.Limelight.LIMELIGHT_D
-                    )
-            ) {
-                rotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
-
-                double rotate = rotController.calculate(
-                        swerve.getYaw(),
-                        swerve.getYaw() + Limelight.getLateralOffset()
-                );
-
-                /* Drive */
-                swerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
-                    -rotate,
-                    !robotCentricSup.getAsBoolean(),
-                    true
-                );
-            }
-        }
+        swerve.driveTurret(
+                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
+                !robotCentricSup.getAsBoolean()
+        );
     }
 }
