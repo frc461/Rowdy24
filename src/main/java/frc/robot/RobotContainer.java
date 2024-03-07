@@ -393,6 +393,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Angler error", angler.getError());
         SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
         SmartDashboard.putData("Angler Cmd", angler);
+        SmartDashboard.putNumber("Angler trim", Constants.Angler.ANGLER_ENCODER_OFFSET);
         Constants.Angler.ANGLER_ENCODER_OFFSET = SmartDashboard.getNumber("Angler trim", 0.0);
     }
 
