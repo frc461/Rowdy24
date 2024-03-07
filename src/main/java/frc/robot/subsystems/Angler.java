@@ -32,27 +32,14 @@ public class Angler extends SubsystemBase {
         upperMagnetLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
         target = 0.0;
-        limelightTarget = Limelight.tagExists() ?
-                Math.min(
-                        Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
-                                Limelight.getRX(),
-                                Limelight.getRZ()) + Constants.Angler.ANGLER_TRIM,
-                        Constants.Angler.ANGLER_UPPER_LIMIT
-                ) : getPosition();
-        error = Math.abs(target - getPosition());
-        accuracy = Limelight.tagExists() ? (target > limelightTarget) ?
-                limelightTarget / target : target / limelightTarget : -1.0;
+        limelightTarget = getPosition();
+        error = 0.0;
+        accuracy = 1.0;
     }
 
     @Override
     public void periodic() {
-        limelightTarget = Limelight.tagExists() ?
-                Math.min(
-                        Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
-                                Limelight.getRX(),
-                                Limelight.getRZ()) + Constants.Angler.ANGLER_TRIM,
-                        Constants.Angler.ANGLER_UPPER_LIMIT
-                ) : getPosition();
+        updateLimelightTarget();
         error = Math.abs(target - getPosition());
         accuracy = Limelight.tagExists() ? (target > limelightTarget) ?
                 limelightTarget / target : target / limelightTarget : -1.0;
@@ -76,6 +63,16 @@ public class Angler extends SubsystemBase {
 
     public boolean lowerSwitchTriggered() {
         return !lowerLimitSwitch.get();
+    }
+
+    public void updateLimelightTarget() {
+        limelightTarget = Limelight.tagExists() ?
+                Math.min(
+                        Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
+                                Limelight.getRX(),
+                                Limelight.getRZ()) + Constants.Angler.ANGLER_ENCODER_OFFSET,
+                        Constants.Angler.ANGLER_UPPER_LIMIT
+                ) : getPosition();
     }
 
     public void checkLimitSwitches() {
@@ -114,6 +111,7 @@ public class Angler extends SubsystemBase {
     }
 
     public void setAlignedAngle() {
+        updateLimelightTarget();
         setEncoderVal(limelightTarget);
     }
 }

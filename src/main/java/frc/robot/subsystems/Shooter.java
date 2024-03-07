@@ -47,10 +47,8 @@ public class Shooter extends SubsystemBase {
         topShooter.burnFlash();
 
         target = 0.0;
-        error = Math.abs(target - (getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
-        accuracy = (target > (getBottomShooterSpeed() + getTopShooterSpeed()) / 2) ?
-                ((getBottomShooterSpeed() + getTopShooterSpeed()) / 2) / target :
-                target / ((getBottomShooterSpeed() + getTopShooterSpeed()) / 2);
+        error = 0.0;
+        accuracy = 1.0;
     }
 
     @Override
