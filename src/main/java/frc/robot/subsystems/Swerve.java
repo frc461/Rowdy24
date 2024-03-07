@@ -6,6 +6,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -161,7 +163,14 @@ public class Swerve extends SubsystemBase {
         fusedPose.update(getHeading(), getModulePositions());
 
         if (!limelightPose.equals(new Pose2d())) { // TODO: comment out add vision measurement to test swerve odometry itself in pose estimator
-            fusedPose.addVisionMeasurement(limelightPose, Timer.getFPGATimestamp());
+            fusedPose.addVisionMeasurement(
+                    limelightPose,
+                    Timer.getFPGATimestamp(),
+                    VecBuilder.fill(
+                            Math.hypot(Limelight.getTagRX(), Limelight.getTagRZ()) * 0.5,
+                            Math.hypot(Limelight.getTagRX(), Limelight.getTagRZ()) * 0.5,
+                            5
+                    ));
         }
     }
 
