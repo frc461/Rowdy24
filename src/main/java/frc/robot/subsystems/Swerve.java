@@ -160,7 +160,7 @@ public class Swerve extends SubsystemBase {
     public void updateFusedPose(Pose2d limelightPose){
         fusedPose.update(getHeading(), getModulePositions());
 
-        if (!limelightPose.equals(new Pose2d())) {
+        if (!limelightPose.equals(new Pose2d())) { // TODO: comment out add vision measurement to test swerve odometry itself in pose estimator
             fusedPose.addVisionMeasurement(limelightPose, Timer.getFPGATimestamp());
         }
     }
