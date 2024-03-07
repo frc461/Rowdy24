@@ -345,15 +345,13 @@ public class RobotContainer {
         opXbox.y().onTrue(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator),
-                        new IntakeCarriageCommand(intakeCarriage, 0.9, 0, idleMode).until(() -> !intakeCarriage.getAmpBeamBroken())
-                        // FIXME: right now carriage does not move, so note won't be able to get out of the way. Consider line 280. However, intake doesn't necessarily have to move, and it shouldn't, in case any notes are nearby (we don't want to intake them incidentally).
+                        new IntakeCarriageCommand(intakeCarriage, 0, 1, idleMode).until(() -> !intakeCarriage.getAmpBeamBroken())
                 )
         );
         
         /* Amp Shoot Preset */
         opXbox.y().onFalse(
-                new IntakeCarriageCommand(intakeCarriage, -0.9, 0, idleMode)
-                        // FIXME: right now carriage does not move, so note won't be able to be taken out.
+                new IntakeCarriageCommand(intakeCarriage, 0, -1, idleMode)
                         .until(() -> !intakeCarriage.noteInSystem())
                         .andThen(new WaitCommand(0.75))
                         .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)) 
