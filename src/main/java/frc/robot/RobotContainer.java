@@ -380,6 +380,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight Y", Limelight.getTagRY());
         SmartDashboard.putNumber("Limelight Z", Limelight.getTagRZ());
         SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getTagRZ(), Limelight.getTagRX()));
+        SmartDashboard.putNumberArray("LL botpose_wpilib data", Limelight.getFusedPoseTable());
 
         // shooter debug
         SmartDashboard.getNumber("Shooter Trip", Constants.Angler.ANGLER_TRIM);

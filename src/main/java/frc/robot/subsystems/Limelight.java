@@ -29,6 +29,9 @@ public class Limelight extends SubsystemBase {
     public static boolean tagExists() {
         return !(table.getEntry("tv").getDouble(0) == 0);
     }
+    public static double[] getFusedPoseTable() {
+        return fusedPose;
+    }
 
     public static double getFusedRX() {
         return fusedPose[0];
