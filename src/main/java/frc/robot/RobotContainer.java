@@ -25,7 +25,6 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
     private final Elevator elevator = new Elevator();
-    private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
     private final Angler angler = new Angler();
@@ -161,14 +160,9 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "autoShoot",
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> angler.setAlignedAngle(
-                                limelight.getRX(),
-                                limelight.getRZ(),
-                                limelight.tagExists()
-                        ), angler),
+                        new InstantCommand(angler::setAlignedAngle, angler),
                         new RevUpShooterCommand(
                                 shooter,
-                                limelight,
                                 idleMode
                         ).until(() -> !intakeCarriage.noteInSystem()),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
@@ -182,11 +176,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "alignAngler",
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        limelight.getRX(),
-                        limelight.getRZ(),
-                        limelight.tagExists()
-                ), angler)
+                new InstantCommand(angler::setAlignedAngle, angler)
         );
 
         NamedCommands.registerCommand(
@@ -236,7 +226,6 @@ public class RobotContainer {
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
                 new LimelightTurretCommand(
-                        limelight,
                         swerve,
                         () -> -driverXbox.getLeftY(), // Ordinate Translation
                         () -> -driverXbox.getLeftX(), // Coordinate Translation
@@ -246,16 +235,11 @@ public class RobotContainer {
 
         /* Cheeky Driver Auto-align (deadband defaults to 0.5) */
         driverXbox.leftBumper().whileTrue(
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        limelight.getRX(),
-                        limelight.getRZ(),
-                        limelight.tagExists()
-                ), angler)
+                new AutoAlignCommand(angler)
         );
 
-
         /* Intake Override */
-        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode, true));
+        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
 
         // TODO: automate layup-position shooting
         /* Outtake Note */
@@ -281,27 +265,20 @@ public class RobotContainer {
                         -0.9,
                         -1,
                         idleMode
-                ).until(intakeCarriage::getAmpBeamBroken)));
+                ).until(intakeCarriage::getAmpBeamBroken))
+        );
 
         /* Override Shooter (deadband defaults to 0.5) */
         opXbox.leftTrigger().whileTrue(new RevUpShooterCommand(
-                        shooter, limelight, idleMode
+                        shooter, idleMode
                 )
-        );
-
-        /* Auto-align for auto-shoot (deadband defaults to 0.5) */
-        opXbox.rightTrigger().onTrue(
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        limelight.getRX(),
-                        limelight.getRZ(),
-                        limelight.tagExists()
-                ), angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
 
         /* Rev up shooter and run carriage when its up to speed */
         opXbox.rightTrigger().whileTrue(
                 new ParallelCommandGroup(
-                        new RevUpShooterCommand(shooter, limelight, idleMode),
+                        new AutoAlignCommand(angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
+                        new RevUpShooterCommand(shooter, idleMode),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
@@ -313,11 +290,13 @@ public class RobotContainer {
 
         /* Auto-align (deadband defaults to 0.5) */
         opXbox.x().onTrue(
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        limelight.getRX(),
-                        limelight.getRZ(),
-                        limelight.tagExists()
-                ), angler)
+                new InstantCommand(angler::setAlignedAngle, angler)
+        );
+
+        /* Override Shooter (deadband defaults to 0.5) */
+        opXbox.leftTrigger().whileTrue(new RevUpShooterCommand(
+                shooter, idleMode
+                )
         );
 
         /* Climb */
@@ -325,7 +304,7 @@ public class RobotContainer {
                 new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
                         .andThen(new InstantCommand(() -> elevator.climb(true)))
                         .andThen(new WaitCommand(0.75))
-                        .andThen(new InstantCommand(() -> elevator.stopElevator()))
+                        .andThen(new InstantCommand(elevator::stopElevator))
         );
 
         /* Toggle clamp */
@@ -348,29 +327,36 @@ public class RobotContainer {
                         new IntakeCarriageCommand(intakeCarriage, 0, 1, idleMode).until(() -> !intakeCarriage.getAmpBeamBroken())
                 )
         );
-        
+
         /* Amp Shoot Preset */
         opXbox.y().onFalse(
                 new IntakeCarriageCommand(intakeCarriage, 0, -1, idleMode)
                         .until(() -> !intakeCarriage.noteInSystem())
                         .andThen(new WaitCommand(0.75))
-                        .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)) 
+                        .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
         );
 
         /* Angler layup setpoint (Limelight failsafe) */
-        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setAngle(Constants.Angler.ANGLER_LAYUP_POSITION)));
+        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET)));
     }
 
     public void printValues() {
+        // Scheduled commands
+        SmartDashboard.putData("Scheduled Commands", CommandScheduler.getInstance());
+
         // robot position
         SmartDashboard.putString("Robot Pose2d", swerve.getPose().getTranslation().toString());
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
+        SmartDashboard.putData("Swerve Command", swerve);
+
+        // intake-carriage debug
         SmartDashboard.putBoolean("Beam Brake carriage", intakeCarriage.getCarriageBeamBroken());
         SmartDashboard.putBoolean("Beam Brake amp", intakeCarriage.getAmpBeamBroken());
         SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
         SmartDashboard.putBoolean("note in system", intakeCarriage.noteInSystem());
+        SmartDashboard.putData("Intake-Carriage Cmd", intakeCarriage);
 
         // elevator debug
        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
@@ -379,27 +365,31 @@ public class RobotContainer {
        SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
        SmartDashboard.putBoolean("Servo Limit Triggered?", elevator.servoSwitchTriggered());
        SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
+       SmartDashboard.putData("Elevator Cmd", elevator);
 
         // limelight debug
-        SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());
-        SmartDashboard.putNumber("Limelight Yaw", limelight.getYaw());
-        SmartDashboard.putNumber("Limelight Pitch", limelight.getPitch());
-        SmartDashboard.putNumber("Limelight Roll", limelight.getRoll());
-        SmartDashboard.putNumber("Limelight X", limelight.getRX());
-        SmartDashboard.putNumber("Limelight Y", limelight.getRY());
-        SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
-        SmartDashboard.putNumber("Limelight dist", Math.hypot(limelight.getRZ(), limelight.getRX()));
+        SmartDashboard.putNumber("Limelight Updates", Limelight.getUpdates());
+        SmartDashboard.putNumber("Limelight Yaw", Limelight.getYaw());
+        SmartDashboard.putNumber("Limelight Pitch", Limelight.getPitch());
+        SmartDashboard.putNumber("Limelight Roll", Limelight.getRoll());
+        SmartDashboard.putNumber("Limelight X", Limelight.getRX());
+        SmartDashboard.putNumber("Limelight Y", Limelight.getRY());
+        SmartDashboard.putNumber("Limelight Z", Limelight.getRZ());
+        SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getRZ(), Limelight.getRX()));
 
         // shooter debug
         SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
         SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
         SmartDashboard.putNumber("Shooter error", shooter.getError());
+        SmartDashboard.putData("Shooter Cmd", shooter);
 
         // angler debug
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
         SmartDashboard.putNumber("Angler error", angler.getError());
         SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
+        SmartDashboard.putData("Angler Cmd", angler);
+        Constants.Angler.ANGLER_ENCODER_OFFSET = SmartDashboard.getNumber("Angler trim", 0.0);
     }
 
     /**
