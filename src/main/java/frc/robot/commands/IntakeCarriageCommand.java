@@ -24,7 +24,7 @@ public class IntakeCarriageCommand extends Command {
 
     @Override
     public void execute() {
-        if (intakeCarriage.noteInSystem() && intakeSpeed > 0) {
+        if (intakeCarriage.noteInShootingSystem() && intakeSpeed > 0) {
             intakeCarriage.setIntakeIdle(idleMode);
             intakeCarriage.setCarriageSpeed(carriageSpeed);
         } else {

@@ -137,7 +137,7 @@ public class RobotContainer {
                         0.9,
                         1,
                         idleMode
-                ).until(intakeCarriage::noteInSystem)
+                ).until(intakeCarriage::noteInShootingSystem)
                         .andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0.9,
@@ -154,7 +154,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "waitUntilIntakeNote",
-                new WaitUntilCommand(intakeCarriage::noteInSystem).andThen(new WaitCommand(0.2))
+                new WaitUntilCommand(intakeCarriage::noteInShootingSystem).andThen(new WaitCommand(0.2))
         );
 
         NamedCommands.registerCommand(
@@ -164,13 +164,13 @@ public class RobotContainer {
                         new RevUpShooterCommand(
                                 shooter,
                                 idleMode
-                        ).until(() -> !intakeCarriage.noteInSystem()),
+                        ).until(() -> !intakeCarriage.noteInShootingSystem()),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1,
                                 idleMode
-                        ).until(() -> !intakeCarriage.noteInSystem()))
+                        ).until(() -> !intakeCarriage.noteInShootingSystem()))
                 )
         );
 
@@ -191,7 +191,7 @@ public class RobotContainer {
                         0,
                         1,
                         idleMode
-                ).until(() -> !intakeCarriage.noteInSystem())
+                ).until(() -> !intakeCarriage.noteInShootingSystem())
         );
     }
 
@@ -247,7 +247,7 @@ public class RobotContainer {
         opXbox.y().onTrue(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator),
-                        new IntakeCarriageCommand(intakeCarriage, 0, 1, idleMode)
+                        new IntakeCarriageCommand(intakeCarriage, 0, 0.5, idleMode)
                                 .until(() -> !intakeCarriage.getAmpBeamBroken())
                 )
         );
@@ -255,7 +255,7 @@ public class RobotContainer {
         /* Amp Shoot Preset */
         opXbox.y().onFalse(
                 new IntakeCarriageCommand(intakeCarriage, 0, -1, idleMode)
-                        .until(() -> !intakeCarriage.noteInSystem()) // FIXME: this will only outtake until the carriage beam is not broken anymore, which means that the ring will stay in the carriage
+                        .until(() -> !intakeCarriage.noteInAmpSystem()) // FIXME: this will only outtake until the carriage beam is not broken anymore, which means that the ring will stay in the carriage
                         .andThen(new WaitCommand(0.75))
                         .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
         );
@@ -300,7 +300,7 @@ public class RobotContainer {
                 0.9,
                 1,
                 idleMode
-        ).until(intakeCarriage::noteInSystem)
+        ).until(intakeCarriage::noteInShootingSystem)
                 .andThen(new IntakeCarriageCommand(
                         intakeCarriage,
                         0,
@@ -359,7 +359,7 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Beam Brake carriage", intakeCarriage.getCarriageBeamBroken());
         SmartDashboard.putBoolean("Beam Brake amp", intakeCarriage.getAmpBeamBroken());
         SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
-        SmartDashboard.putBoolean("note in system", intakeCarriage.noteInSystem());
+        SmartDashboard.putBoolean("note in shooting system", intakeCarriage.noteInShootingSystem());
         SmartDashboard.putData("Intake-Carriage Cmd", intakeCarriage);
 
         // elevator debug

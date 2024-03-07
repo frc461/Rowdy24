@@ -37,7 +37,7 @@ public class IntakeCarriage extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (noteInSystem()) {
+        if (noteInShootingSystem()) {
             lights.set(0.71);
         } else {
             lights.set(-0.99);
@@ -64,7 +64,11 @@ public class IntakeCarriage extends SubsystemBase {
         return !carriageBeam.get();
     }
 
-    public boolean noteInSystem() {
+    public boolean noteInAmpSystem() {
+        return getCarriageBeamBroken() || getAmpBeamBroken();
+    }
+
+    public boolean noteInShootingSystem() {
         return getShooterBeamBroken() || getCarriageBeamBroken();
     }
 
