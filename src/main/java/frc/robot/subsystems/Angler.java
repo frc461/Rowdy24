@@ -85,7 +85,7 @@ public class Angler extends SubsystemBase {
         }
     }
 
-    public void setAngle(double encoderVal) {
+    public void setEncoderVal(double encoderVal) {
         checkLimitSwitches();
         encoderVal = (encoderVal < encoder.getPosition() && lowerSwitchTriggered()) ?
                 Constants.Angler.ANGLER_LOWER_LIMIT :
@@ -97,7 +97,7 @@ public class Angler extends SubsystemBase {
 
     public void setAlignedAngle(double x, double z, boolean tag) {
         if (tag) {
-            setAngle(Math.min(Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(x, z) + Constants.Angler.ANGLER_TRIM, Constants.Angler.ANGLER_UPPER_LIMIT));
+            setEncoderVal(Math.min(Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(x, z) + Constants.Angler.ANGLER_TRIM, Constants.Angler.ANGLER_UPPER_LIMIT));
         }
     }
 }

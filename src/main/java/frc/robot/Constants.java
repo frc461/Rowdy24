@@ -53,9 +53,12 @@ public final class Constants {
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
         public static final double Y_COMPONENT_AIM = SPEAKER_HEIGHT - SHOOTER_HEIGHT;
         public static final double Z_DEPTH_OFFSET = -0.23; // or 0.04 // Half of the depth of the speaker into the field
-        public static final Function<Double, Double> ANGLE_TO_ENCODER_VALUE = (angle) -> 4.0 / 9.0 * (angle - 10.0);
+        public static final BiFunction<Double, Double, Double> ANGLE_TO_ENCODER_VALUE = (angle, dist) -> 20.0 / 41.0 * (angle + dist * .9967 - 12.0);
         public static final BiFunction<Double, Double, Double> AUTO_ANGLER_AIM_EQUATION =
-                (x, z) -> ANGLE_TO_ENCODER_VALUE.apply(Math.toDegrees(Math.atan(Y_COMPONENT_AIM / Math.hypot(x, z + Z_DEPTH_OFFSET))));
+                (x, z) -> ANGLE_TO_ENCODER_VALUE.apply(
+                        Math.toDegrees(Math.atan(Y_COMPONENT_AIM / Math.hypot(x, z + Z_DEPTH_OFFSET))),
+                        Math.hypot(x, z)
+                );
     }
 
     public static final class Elevator {

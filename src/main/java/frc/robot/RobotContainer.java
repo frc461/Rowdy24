@@ -281,7 +281,8 @@ public class RobotContainer {
                         -0.9,
                         -1,
                         idleMode
-                ).until(intakeCarriage::getAmpBeamBroken)));
+                ).until(intakeCarriage::getAmpBeamBroken))
+        );
 
         /* Override Shooter (deadband defaults to 0.5) */
         opXbox.leftTrigger().whileTrue(new RevUpShooterCommand(
@@ -310,6 +311,9 @@ public class RobotContainer {
                         ))
                 ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
+
+        /* Auto zero */
+        opXbox.rightTrigger().onFalse(new InstantCommand(() -> angler.setEncoderVal(0)));
 
         /* Auto-align (deadband defaults to 0.5) */
         opXbox.x().onTrue(
@@ -360,7 +364,7 @@ public class RobotContainer {
         );
 
         /* Angler layup setpoint (Limelight failsafe) */
-        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setAngle(Constants.Angler.ANGLER_LAYUP_POSITION)));
+        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_POSITION)));
     }
 
     public void printValues() {
