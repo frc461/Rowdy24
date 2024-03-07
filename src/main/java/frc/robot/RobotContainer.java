@@ -383,8 +383,7 @@ public class RobotContainer {
         SmartDashboard.putNumberArray("LL botpose_wpilib data", Limelight.getFusedPoseTable());
 
         // shooter debug
-        SmartDashboard.putNumber("Shooter Trim", Constants.Angler.ANGLER_TRIM);
-        Constants.Angler.ANGLER_TRIM = SmartDashboard.getNumber("Shooter Trim", 0);
+        SmartDashboard.getNumber("Shooter Trip", Constants.Angler.ANGLER_TRIM);
         SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
         SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
