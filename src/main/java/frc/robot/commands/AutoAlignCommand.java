@@ -8,7 +8,6 @@ import frc.robot.subsystems.Limelight;
 public class AutoAlignCommand extends Command {
     Angler angler;
 
-    @SuppressWarnings("unused")
     public AutoAlignCommand(Angler angler) {
         this.angler = angler;
         addRequirements(angler);

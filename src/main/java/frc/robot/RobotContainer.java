@@ -269,9 +269,17 @@ public class RobotContainer {
         );
 
         /* Override Shooter (deadband defaults to 0.5) */
-        opXbox.leftTrigger().whileTrue(new RevUpShooterCommand(
-                        shooter, idleMode
-                )
+        opXbox.leftTrigger().whileTrue(
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET), angler),
+                        new RevUpShooterCommand(shooter, idleMode),
+                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1,
+                                idleMode
+                        ))
+                ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
 
         /* Rev up shooter and run carriage when its up to speed */
