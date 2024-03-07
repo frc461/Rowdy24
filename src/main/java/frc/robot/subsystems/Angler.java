@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-@SuppressWarnings("unused")
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
     private final RelativeEncoder encoder;
