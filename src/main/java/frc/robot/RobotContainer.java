@@ -255,7 +255,7 @@ public class RobotContainer {
         /* Amp Shoot Preset */
         opXbox.y().onFalse(
                 new IntakeCarriageCommand(intakeCarriage, 0, -1, idleMode)
-                        .until(() -> !intakeCarriage.noteInSystem())
+                        .until(() -> !intakeCarriage.noteInSystem()) // FIXME: this will only outtake until the carriage beam is not broken anymore, which means that the ring will stay in the carriage
                         .andThen(new WaitCommand(0.75))
                         .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
         );
