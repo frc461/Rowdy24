@@ -205,43 +205,90 @@ public class RobotContainer {
      */
 
     private void configureButtonBindings() {
+        /* Driver Controls */
+
         /* Zero Gyro */
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
-        /* Toggle idle subsystems */
-        opXbox.povUp().onTrue(
-                new InstantCommand(() -> idleMode = !idleMode)
-                        .andThen(new ParallelCommandGroup(
-                        new InstantCommand(
-                                () -> intakeCarriage.setIntakeIdle(idleMode),
-                                intakeCarriage
-                        ),
-                        new InstantCommand(
-                                () -> shooter.setShooterIdle(idleMode),
-                                shooter
-                        )
-                ))
-        );
-
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
-                new LimelightTurretCommand(
-                        swerve,
-                        () -> -driverXbox.getLeftY(), // Ordinate Translation
-                        () -> -driverXbox.getLeftX(), // Coordinate Translation
-                        driverXbox.b() // Robot-centric trigger
+                new ParallelCommandGroup(
+                        new LimelightTurretCommand(
+                                swerve,
+                                () -> -driverXbox.getLeftY(), // Ordinate Translation
+                                () -> -driverXbox.getLeftX(), // Coordinate Translation
+                                driverXbox.b() // Robot-centric trigger
+                        ),
+                        new AutoAlignCommand(angler)
                 )
         );
 
-        /* Cheeky Driver Auto-align (deadband defaults to 0.5) */
-        driverXbox.leftBumper().whileTrue(
-                new AutoAlignCommand(angler)
+        /* Stow Elevator Preset */
+        driverXbox.rightBumper().onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
+        );
+
+        /* Op Controls */
+
+        /* Stow Elevator Preset */
+        opXbox.a().onTrue(
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
         );
 
         /* Intake Override */
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
 
-        // TODO: automate layup-position shooting
+        /* Auto-align (deadband defaults to 0.5) */
+        opXbox.x().onTrue(
+                new InstantCommand(angler::setAlignedAngle, angler)
+        );
+
+        /* Amp Elevator Preset */
+        opXbox.y().onTrue(
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator),
+                        new IntakeCarriageCommand(intakeCarriage, 0, 1, idleMode)
+                                .until(() -> !intakeCarriage.getAmpBeamBroken())
+                )
+        );
+
+        /* Amp Shoot Preset */
+        opXbox.y().onFalse(
+                new IntakeCarriageCommand(intakeCarriage, 0, -1, idleMode)
+                        .until(() -> !intakeCarriage.noteInSystem())
+                        .andThen(new WaitCommand(0.75))
+                        .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
+        );
+
+        /* Angler layup setpoint (Limelight failsafe) */
+        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET)));
+
+        /* Toggle idle subsystems */
+        opXbox.povUp().onTrue(
+                new InstantCommand(() -> idleMode = !idleMode)
+                        .andThen(new ParallelCommandGroup(
+                                new InstantCommand(
+                                        () -> intakeCarriage.setIntakeIdle(idleMode),
+                                        intakeCarriage
+                                ),
+                                new InstantCommand(
+                                        () -> shooter.setShooterIdle(idleMode),
+                                        shooter
+                                )
+                        ))
+        );
+
+        /* Toggle clamp */
+        opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
+
+        /* Climb */
+        opXbox.povDown().whileTrue(
+                new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
+                        .andThen(new InstantCommand(() -> elevator.climb(true)))
+                        .andThen(new WaitCommand(0.75))
+                        .andThen(new InstantCommand(elevator::stopElevator))
+        );
+
         /* Outtake Note */
         opXbox.leftBumper().whileTrue(
                 new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode)
@@ -256,14 +303,14 @@ public class RobotContainer {
         ).until(intakeCarriage::noteInSystem)
                 .andThen(new IntakeCarriageCommand(
                         intakeCarriage,
-                        0.9,
-                        1,
+                        0,
+                        0.5,
                         idleMode
                 ).until(() -> !intakeCarriage.getAmpBeamBroken()))
                 .andThen(new IntakeCarriageCommand(
                         intakeCarriage,
-                        -0.9,
-                        -1,
+                        0,
+                        -0.5,
                         idleMode
                 ).until(intakeCarriage::getAmpBeamBroken))
         );
@@ -295,57 +342,6 @@ public class RobotContainer {
                         ))
                 ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
-
-        /* Auto-align (deadband defaults to 0.5) */
-        opXbox.x().onTrue(
-                new InstantCommand(angler::setAlignedAngle, angler)
-        );
-
-        /* Override Shooter (deadband defaults to 0.5) */
-        opXbox.leftTrigger().whileTrue(new RevUpShooterCommand(
-                shooter, idleMode
-                )
-        );
-
-        /* Climb */
-        opXbox.povDown().whileTrue(
-                new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
-                        .andThen(new InstantCommand(() -> elevator.climb(true)))
-                        .andThen(new WaitCommand(0.75))
-                        .andThen(new InstantCommand(elevator::stopElevator))
-        );
-
-        /* Toggle clamp */
-        opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
-
-        /* Stow Elevator Preset */
-        driverXbox.rightBumper().onTrue(
-                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
-        );
-
-        /* Stow Elevator Preset */
-        opXbox.a().onTrue(
-                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
-        );
-
-        /* Amp Elevator Preset */
-        opXbox.y().onTrue(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator),
-                        new IntakeCarriageCommand(intakeCarriage, 0, 1, idleMode).until(() -> !intakeCarriage.getAmpBeamBroken())
-                )
-        );
-
-        /* Amp Shoot Preset */
-        opXbox.y().onFalse(
-                new IntakeCarriageCommand(intakeCarriage, 0, -1, idleMode)
-                        .until(() -> !intakeCarriage.noteInSystem())
-                        .andThen(new WaitCommand(0.75))
-                        .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
-        );
-
-        /* Angler layup setpoint (Limelight failsafe) */
-        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET)));
     }
 
     public void printValues() {
