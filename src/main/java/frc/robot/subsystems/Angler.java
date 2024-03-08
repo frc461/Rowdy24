@@ -11,7 +11,7 @@ public class Angler extends SubsystemBase {
     private final RelativeEncoder encoder;
     private final SparkPIDController anglerPIDController;
     private final SparkLimitSwitch lowerMagnetLimitSwitch, upperMagnetLimitSwitch;
-//    private final DigitalInput lowerLimitSwitch;
+    private final DigitalInput lowerLimitSwitch;
     private double target, error;
 
     public Angler() {
@@ -28,13 +28,11 @@ public class Angler extends SubsystemBase {
         angler.burnFlash();
 
         lowerMagnetLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-//        lowerLimitSwitch = new DigitalInput(Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH);
+        lowerLimitSwitch = new DigitalInput(Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH);
         upperMagnetLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
         target = 0.0;
         error = Math.abs(target - getPosition());
-
-        encoder.setPosition(0.0); // temp solution
     }
 
     @Override
@@ -59,13 +57,13 @@ public class Angler extends SubsystemBase {
     }
 
     public boolean lowerSwitchTriggered() {
-        return lowerMagnetLimitSwitch.isPressed();
+        return !lowerLimitSwitch.get();
     }
 
     public void checkLimitSwitches() {
-//        if (lowerSwitchTriggered()) {
-//            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
-//        }
+       if (lowerSwitchTriggered()) {
+           encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
+       }
     }
 
     public void holdTarget() {
@@ -99,13 +97,7 @@ public class Angler extends SubsystemBase {
 
     public void setAlignedAngle(double x, double z, boolean tag) {
         if (tag) {
-//            setAngle(Math.min(
-//                    (dist < Constants.Angler.AVG_BOUND_LIMIT) ?
-//                            Constants.Angler.AVG_BOUND_CONSTANT + Constants.Angler.AVG_BOUND_LINEAR_COEFFICIENT * dist + Constants.Angler.AVG_BOUND_SQUARED_COEFFICIENT * Math.pow(dist, 2) :
-//                            Constants.Angler.UPPER_BOUND_CONSTANT + Constants.Angler.UPPER_BOUND_LINEAR_COEFFICIENT * dist + Constants.Angler.UPPER_BOUND_SQUARED_COEFFICIENT * Math.pow(dist, 2) - 1,
-//                    Constants.Angler.ANGLER_UPPER_LIMIT
-//            ));
-            setAngle(Math.min(Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(x, z), Constants.Angler.ANGLER_UPPER_LIMIT + Constants.Angler.ANGLER_TRIM));
+            setAngle(Math.min(Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(x, z) + Constants.Angler.ANGLER_TRIM, Constants.Angler.ANGLER_UPPER_LIMIT));
         }
     }
 }

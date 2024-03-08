@@ -323,9 +323,8 @@ public class RobotContainer {
         /* Climb */
         opXbox.povDown().whileTrue(
                 new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
-                        .andThen(new WaitCommand(0.2))
                         .andThen(new InstantCommand(() -> elevator.climb(true)))
-                        .andThen(new WaitCommand(0.35))
+                        .andThen(new WaitCommand(0.75))
                         .andThen(new InstantCommand(elevator::stopElevator))
         );
 
