@@ -262,10 +262,23 @@ public class RobotContainer {
                         .andThen(new InstantCommand(elevator::stopElevator))
         );
 
-        /* Outtake Note */
-        opXbox.leftBumper().whileTrue(
-                new IntakeCarriageCommand(intakeCarriage, -0.9, -1)
+        /* Auto-Outtake Note */
+        opXbox.povLeft().whileTrue(
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_OUTTAKE)),
+                        new WaitUntilCommand(() -> !elevator.nearTarget())
+                                .andThen(new WaitUntilCommand(elevator::nearTarget))
+                                .andThen(new IntakeCarriageCommand(
+                                        intakeCarriage,
+                                        -0.9,
+                                        -1
+                                )).until(() -> !intakeCarriage.noteInAmpSystem())
+                                .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)))
+                )
         );
+
+        /* Override Outtake Note */
+        opXbox.leftBumper().whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1));
 
         /* Intake Note */
         opXbox.rightBumper().whileTrue(new IntakeCarriageCommand(
