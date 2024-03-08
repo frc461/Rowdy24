@@ -149,11 +149,6 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
-                "waitUntilIntakeNote",
-                new WaitUntilCommand(intakeCarriage::noteInShootingSystem).andThen(new WaitCommand(0.2))
-        );
-
-        NamedCommands.registerCommand(
                 "autoShoot",
                 new ParallelCommandGroup(
                         new InstantCommand(angler::setAlignedAngle, angler),
@@ -166,25 +161,6 @@ public class RobotContainer {
                                 1
                         ).until(() -> !intakeCarriage.noteInShootingSystem()))
                 )
-        );
-
-        NamedCommands.registerCommand(
-                "alignAngler",
-                new InstantCommand(angler::setAlignedAngle, angler)
-        );
-
-        NamedCommands.registerCommand(
-                "overrideShoot",
-                new InstantCommand(() -> shooter.setShooterSpeed(1.0), shooter)
-        );
-
-        NamedCommands.registerCommand(
-                "carriageShoot",
-                new IntakeCarriageCommand(
-                        intakeCarriage,
-                        0,
-                        1
-                ).until(() -> !intakeCarriage.noteInShootingSystem())
         );
     }
 
@@ -286,16 +262,16 @@ public class RobotContainer {
                 0.9,
                 1
                 ).until(intakeCarriage::noteInShootingSystem)
-                .andThen(new IntakeCarriageCommand(
-                        intakeCarriage,
-                        0,
-                        0.5
-                ).until(() -> !intakeCarriage.getAmpBeamBroken()))
-                .andThen(new IntakeCarriageCommand(
-                        intakeCarriage,
-                        0,
-                        -0.5
-                ).until(intakeCarriage::getAmpBeamBroken))
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                0.5
+                        ).until(() -> !intakeCarriage.getAmpBeamBroken()))
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                -0.5
+                        ).until(intakeCarriage::getAmpBeamBroken))
         );
 
         /* Override Shooter (deadband defaults to 0.5) */

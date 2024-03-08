@@ -26,7 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "waitUntilIntakeNote"
+            "name": "intakeNote"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "named",
           "data": {
-            "name": "waitUntilIntakeNote"
+            "name": "intakeNote"
           }
         },
         {
