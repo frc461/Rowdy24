@@ -7,11 +7,9 @@ import frc.robot.subsystems.Shooter;
 
 public class RevUpShooterCommand extends Command {
     private final Shooter shooter;
-    private final boolean idleMode;
     
-    public RevUpShooterCommand(Shooter shooter, boolean idleMode) {
+    public RevUpShooterCommand(Shooter shooter) {
         this.shooter = shooter;
-        this.idleMode = idleMode;
         addRequirements(this.shooter);
     }
 
@@ -27,6 +25,6 @@ public class RevUpShooterCommand extends Command {
 
     @Override
     public void end(boolean isFinished) {
-        shooter.setShooterIdle(idleMode);
+        shooter.setShooterSpeed(0);
     }
 }

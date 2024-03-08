@@ -85,7 +85,6 @@ public class RobotContainer {
 
 
     /* Variables */
-    private boolean idleMode = false; // Disables/enables automatic subsystem functions (e.g. auto-outtake)
     private final SendableChooser<Command> chooser;
 
     /**
@@ -135,20 +134,17 @@ public class RobotContainer {
                 new IntakeCarriageCommand(
                         intakeCarriage,
                         0.9,
-                        1,
-                        idleMode
+                        1
                 ).until(intakeCarriage::noteInShootingSystem)
                         .andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0.9,
-                                1,
-                                idleMode
+                                1
                         ).until(() -> !intakeCarriage.getAmpBeamBroken()))
                         .andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 -0.9,
-                                -1,
-                                idleMode
+                                -1
                         ).until(intakeCarriage::getAmpBeamBroken))
         );
 
@@ -162,14 +158,12 @@ public class RobotContainer {
                 new ParallelCommandGroup(
                         new InstantCommand(angler::setAlignedAngle, angler),
                         new RevUpShooterCommand(
-                                shooter,
-                                idleMode
+                                shooter
                         ).until(() -> !intakeCarriage.noteInShootingSystem()),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
-                                1,
-                                idleMode
+                                1
                         ).until(() -> !intakeCarriage.noteInShootingSystem()))
                 )
         );
@@ -181,7 +175,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "overrideShoot",
-                new InstantCommand(() -> shooter.overrideShooterSpeed(1.0), shooter)
+                new InstantCommand(() -> shooter.setShooterSpeed(1.0), shooter)
         );
 
         NamedCommands.registerCommand(
@@ -189,8 +183,7 @@ public class RobotContainer {
                 new IntakeCarriageCommand(
                         intakeCarriage,
                         0,
-                        1,
-                        idleMode
+                        1
                 ).until(() -> !intakeCarriage.noteInShootingSystem())
         );
     }
@@ -236,7 +229,7 @@ public class RobotContainer {
         );
 
         /* Intake Override */
-        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
+        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1));
 
         /* Auto-align */
         opXbox.x().whileTrue(new AutoAlignCommand(angler));
@@ -245,14 +238,14 @@ public class RobotContainer {
         opXbox.y().onTrue(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator),
-                        new IntakeCarriageCommand(intakeCarriage, 0, 0.5, idleMode)
+                        new IntakeCarriageCommand(intakeCarriage, 0, 0.5)
                                 .until(() -> !intakeCarriage.getAmpBeamBroken())
                 )
         );
 
         /* Amp Shoot Preset */
         opXbox.y().onFalse(
-                new IntakeCarriageCommand(intakeCarriage, 0, -1, idleMode)
+                new IntakeCarriageCommand(intakeCarriage, 0, -1)
                         .until(() -> !intakeCarriage.noteInAmpSystem())
                         .andThen(new WaitCommand(0.75))
                         .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
@@ -260,21 +253,6 @@ public class RobotContainer {
 
         /* Angler layup setpoint (Limelight failsafe) */
         opXbox.povRight().onTrue(new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET)));
-
-        /* Toggle idle subsystems */
-        opXbox.povUp().onTrue(
-                new InstantCommand(() -> idleMode = !idleMode)
-                        .andThen(new ParallelCommandGroup(
-                                new InstantCommand(
-                                        () -> intakeCarriage.setIntakeIdle(idleMode),
-                                        intakeCarriage
-                                ),
-                                new InstantCommand(
-                                        () -> shooter.setShooterIdle(idleMode),
-                                        shooter
-                                )
-                        ))
-        );
 
         /* Toggle clamp */
         opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
@@ -289,27 +267,24 @@ public class RobotContainer {
 
         /* Outtake Note */
         opXbox.leftBumper().whileTrue(
-                new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode)
+                new IntakeCarriageCommand(intakeCarriage, -0.9, -1)
         );
 
         /* Intake Note */
         opXbox.rightBumper().whileTrue(new IntakeCarriageCommand(
                 intakeCarriage,
                 0.9,
-                1,
-                idleMode
-        ).until(intakeCarriage::noteInShootingSystem)
+                1
+                ).until(intakeCarriage::noteInShootingSystem)
                 .andThen(new IntakeCarriageCommand(
                         intakeCarriage,
                         0,
-                        0.5,
-                        idleMode
+                        0.5
                 ).until(() -> !intakeCarriage.getAmpBeamBroken()))
                 .andThen(new IntakeCarriageCommand(
                         intakeCarriage,
                         0,
-                        -0.5,
-                        idleMode
+                        -0.5
                 ).until(intakeCarriage::getAmpBeamBroken))
         );
 
@@ -317,12 +292,11 @@ public class RobotContainer {
         opXbox.leftTrigger().whileTrue(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET), angler),
-                        new RevUpShooterCommand(shooter, idleMode),
+                        new RevUpShooterCommand(shooter),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
-                                1,
-                                idleMode
+                                1
                         ))
                 ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
@@ -331,12 +305,11 @@ public class RobotContainer {
         opXbox.rightTrigger().whileTrue(
                 new ParallelCommandGroup(
                         new AutoAlignCommand(angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
-                        new RevUpShooterCommand(shooter, idleMode),
+                        new RevUpShooterCommand(shooter),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
-                                1,
-                                idleMode
+                                1
                         ))
                 ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );

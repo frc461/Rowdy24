@@ -81,12 +81,7 @@ public class Shooter extends SubsystemBase {
         return accuracy > Constants.Shooter.SHOOTER_ACCURACY_REQUIREMENT && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 4500;
     }
 
-    public void setShooterIdle(boolean idleMode) {
-        bottomShooter.set(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0);
-        topShooter.set(idleMode ? Constants.Shooter.IDLE_SHOOTER_SPEED : 0);
-    }
-
-    public void overrideShooterSpeed(double speed) {
+    public void setShooterSpeed(double speed) {
         topShooter.set(speed);
         bottomShooter.set(speed);
     }
