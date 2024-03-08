@@ -91,9 +91,6 @@ public final class Constants {
         public static final int INTAKE_ID = 41;
         public static final int CARRIAGE_ID = 42;
 
-        // idle when intake is not actively being used
-        public static final double IDLE_INTAKE_SPEED = -0.15;
-
         // beam breaks
         public static final int CARRIAGE_BEAM = 4;
         public static final int SHOOTER_BEAM = 3;
@@ -121,9 +118,6 @@ public final class Constants {
 
         // baseline shooter speed in RPM
         public static final double BASE_SHOOTER_SPEED = 6000;
-
-        // percentage to idle at when shooter is not in use
-        public static final double IDLE_SHOOTER_SPEED = 0.3;
 
         // required accuracy to consider shooter up to speed
         public static final double SHOOTER_ACCURACY_REQUIREMENT = 0.8;

@@ -251,13 +251,10 @@ public class RobotContainer {
                         .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
         );
 
-        /* Angler layup setpoint (Limelight failsafe) */
-        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET)));
-
         /* Toggle clamp */
-        opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
+        opXbox.povRight().onTrue(new InstantCommand(elevator::toggleClamp));
 
-        /* Climb */
+        /* Auto-Climb */
         opXbox.povDown().whileTrue(
                 new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
                         .andThen(new InstantCommand(() -> elevator.climb(true)))
