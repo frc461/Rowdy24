@@ -263,7 +263,7 @@ public class RobotContainer {
         );
 
         /* Auto-Outtake Note */
-        opXbox.povLeft().whileTrue(
+        opXbox.povRight().whileTrue(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_OUTTAKE)),
                         new WaitUntilCommand(() -> !elevator.nearTarget())
