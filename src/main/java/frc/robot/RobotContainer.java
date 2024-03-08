@@ -238,10 +238,8 @@ public class RobotContainer {
         /* Intake Override */
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode));
 
-        /* Auto-align (deadband defaults to 0.5) */
-        opXbox.x().onTrue(
-                new InstantCommand(angler::setAlignedAngle, angler)
-        );
+        /* Auto-align */
+        opXbox.x().whileTrue(new AutoAlignCommand(angler));
 
         /* Amp Elevator Preset */
         opXbox.y().onTrue(
@@ -255,7 +253,7 @@ public class RobotContainer {
         /* Amp Shoot Preset */
         opXbox.y().onFalse(
                 new IntakeCarriageCommand(intakeCarriage, 0, -1, idleMode)
-                        .until(() -> !intakeCarriage.noteInAmpSystem()) // FIXME: this will only outtake until the carriage beam is not broken anymore, which means that the ring will stay in the carriage
+                        .until(() -> !intakeCarriage.noteInAmpSystem())
                         .andThen(new WaitCommand(0.75))
                         .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
         );
