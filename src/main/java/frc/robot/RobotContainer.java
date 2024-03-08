@@ -59,10 +59,10 @@ public class RobotContainer {
     public final static CommandXboxController opXbox = new CommandXboxController(1);
     /* Currently Allocated For Operator:
      * POV buttons / Dpad:
-     * Up - toggle auto subsystems
+     * Up - 
      * Down - auto climb
      * Left - toggle clamp
-     * Right - angler layup setpoint
+     * Right - 
      * 
      * Triggers:
      * Left: Manual shooter rev
@@ -252,7 +252,7 @@ public class RobotContainer {
         );
 
         /* Toggle clamp */
-        opXbox.povRight().onTrue(new InstantCommand(elevator::toggleClamp));
+        opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
 
         /* Auto-Climb */
         opXbox.povDown().whileTrue(
