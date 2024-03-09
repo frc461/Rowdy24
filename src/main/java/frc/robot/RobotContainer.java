@@ -146,7 +146,6 @@ public class RobotContainer {
                                 -0.9,
                                 -1
                         ).until(intakeCarriage::getAmpBeamBroken))
-                        .andThen(new InstantCommand(() -> Limelight.overrideTargetNow = true))
         );
 
         NamedCommands.registerCommand(
@@ -161,8 +160,17 @@ public class RobotContainer {
                                 0,
                                 1
                         ).until(() -> !intakeCarriage.noteInShootingSystem()))
-                                .andThen(new InstantCommand(() -> Limelight.overrideTargetNow = false))
                 )
+        );
+
+        NamedCommands.registerCommand(
+                "enableTurret",
+                new InstantCommand(() -> Limelight.overrideTargetNow = true)
+        );
+
+        NamedCommands.registerCommand(
+                "disableTurret",
+                new InstantCommand(() -> Limelight.overrideTargetNow = false)
         );
     }
 
