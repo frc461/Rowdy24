@@ -102,12 +102,12 @@ public final class Constants {
 
     public static final class Limelight {
         // pid for limelight alignment
-        public static final double LIMELIGHT_P = 0.07;
-        public static final double LIMELIGHT_I = 0.03;
-        public static final double LIMELIGHT_D = 0;
+        public static final double LIMELIGHT_P = 0.01;
+        public static final double LIMELIGHT_I = 0.0001;
+        public static final double LIMELIGHT_D = 0.001;
         
         // turn slightly to the right 
-        public static final double YAW_OFFSET = -10.5;
+        public static final double YAW_OFFSET = 0;
     }
 
     public static final class Shooter {

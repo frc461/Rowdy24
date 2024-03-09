@@ -164,6 +164,20 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
+                "autoShootWithoutAngler",
+                new ParallelCommandGroup(
+                        new RevUpShooterCommand(
+                                shooter
+                        ).until(() -> !intakeCarriage.noteInShootingSystem()),
+                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1
+                        ).until(() -> !intakeCarriage.noteInShootingSystem()))
+                )
+        );
+
+        NamedCommands.registerCommand(
                 "startShooter",
                 new RevUpShooterCommand(shooter)
         );
@@ -239,25 +253,21 @@ public class RobotContainer {
         );
 
         /* Intake Override */
-        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1));
+        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, true));
 
         /* Auto-align */
         opXbox.x().whileTrue(new AutoAlignCommand(angler));
 
         /* Amp Elevator Preset */
         opXbox.y().onTrue(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator),
-                        new IntakeCarriageCommand(intakeCarriage, 0, 0.5)
-                                .until(() -> !intakeCarriage.getAmpBeamBroken())
-                )
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator)
         );
 
         /* Amp Shoot Preset */
         opXbox.y().onFalse(
                 new IntakeCarriageCommand(intakeCarriage, 0, -1)
                         .until(() -> !intakeCarriage.noteInAmpSystem())
-                        .andThen(new WaitCommand(0.75))
+                        .andThen(new WaitCommand(0.25))
                         .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
         );
 
