@@ -16,66 +16,80 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "parallel",
                 "data": {
-                  "name": "startShooter"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "alignAngler"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "startShooter"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "enableTurret"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "alignAngler"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "enableTurret"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeThenShoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": ".1L"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeThenShoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": ".2L"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeThenShoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": ".3L"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "intakeThenShoot"
+                      }
+                    }
+                  ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeThenShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": ".1L"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeThenShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": ".2L"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeThenShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": ".3L"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeThenShoot"
           }
         }
       ]
