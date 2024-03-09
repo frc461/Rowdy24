@@ -144,7 +144,7 @@ public final class Constants {
         public static final double MAXIMUM_ANGLE = 180.0;
 
         public static final COTSFalconSwerveConstants CHOSEN_MODULE = COTSFalconSwerveConstants
-                .SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L3);
+                .SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L3_PLUS);
 
         /* Drivetrain Constants */
         public static final double TRACK_WIDTH = Units.inchesToMeters(18.375);
@@ -224,8 +224,8 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double MAX_SPEED = 4.1;
-        public static final double MAX_ACCEL = 4.1;
+        public static final double MAX_SPEED = 5.5;
+        public static final double MAX_ACCEL = 5.5;
 
         /** Radians per Second */
         public static final double MAX_ANGULAR_VELOCITY = 10.0;
