@@ -275,9 +275,9 @@ public class RobotContainer {
         );
 
         /* Override Shooter (deadband defaults to 0.5) */
+
         opXbox.leftTrigger().whileTrue(
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET), angler),
                         new RevUpShooterCommand(shooter),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
@@ -285,6 +285,14 @@ public class RobotContainer {
                                 1
                         ))
                 ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
+        );
+       
+        opXbox.leftTrigger().onTrue(
+                new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET), angler)     
+        );
+
+        opXbox.leftTrigger().onFalse(
+                new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LOWER_LIMIT), angler)
         );
 
         /* Rev up shooter and run carriage when its up to speed */
