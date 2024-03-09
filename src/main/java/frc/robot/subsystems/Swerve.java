@@ -9,6 +9,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,13 +24,14 @@ public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveDrivePoseEstimator fusedPose;
     private final SwerveModule[] swerveMods;
+    private final PIDController limelightRotController;
     public final Pigeon2 gyro;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
-        
+
         swerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
             new SwerveModule(1, Constants.Swerve.Mod1.SWERVE_MODULE_CONSTANTS),
@@ -51,8 +53,15 @@ public class Swerve extends SubsystemBase {
                 getModulePositions()
         );
 
+        limelightRotController = new PIDController(
+                Constants.Limelight.LIMELIGHT_P,
+                Constants.Limelight.LIMELIGHT_I,
+                Constants.Limelight.LIMELIGHT_D
+        );
+        limelightRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
+
         AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier (fused)
+                this::getPose, // Robot pose supplier
                 this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
@@ -90,8 +99,8 @@ public class Swerve extends SubsystemBase {
         );
 
         fusedPose = new SwerveDrivePoseEstimator(
-            Constants.Swerve.SWERVE_KINEMATICS, 
-            getHeading(), getModulePositions(), 
+            Constants.Swerve.SWERVE_KINEMATICS,
+            getHeading(), getModulePositions(),
             getPose()
         );
     }
@@ -123,6 +132,21 @@ public class Swerve extends SubsystemBase {
                 )
         );
         setModuleStates(swerveModuleStates, isOpenLoop);
+    }
+
+    public void driveTurret(Translation2d translation, boolean fieldRelative) {
+        if (Limelight.tagExists()) {
+            drive(
+                    translation,
+                    -limelightRotController.calculate(
+                            getYaw(),
+                            getYaw() + Limelight.getTagLateralAngle()
+                    ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
+                    fieldRelative,
+                    true
+            );
+
+        }
     }
 
     public double getYaw() {

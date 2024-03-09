@@ -90,6 +90,11 @@ public class Limelight extends SubsystemBase {
         return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees() + Constants.Limelight.YAW_OFFSET / tagPose[2]);
     }
 
+    public static NetworkTable getTable() {
+        refreshValues();
+        return table;
+    }
+
     public static void refreshValues() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tagPose = tagPoseTopic.get(new double[6]);
