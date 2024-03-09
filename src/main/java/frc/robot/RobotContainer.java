@@ -164,6 +164,30 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
+                "startShooter",
+                new RevUpShooterCommand(shooter)
+        );
+
+        NamedCommands.registerCommand(
+                "alignAngler",
+                new AutoAlignCommand(angler)
+        );
+
+        NamedCommands.registerCommand(
+                "intakeThenShoot",
+                new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0.9,
+                                1
+                        ).until(intakeCarriage::noteInShootingSystem)
+                                .andThen(new IntakeCarriageCommand(
+                                        intakeCarriage,
+                                        0.9,
+                                        1
+                                ).until(() -> !intakeCarriage.noteInShootingSystem())))
+        );
+
+        NamedCommands.registerCommand(
                 "enableTurret",
                 new InstantCommand(() -> Limelight.overrideTargetNow = true)
         );
