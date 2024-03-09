@@ -37,7 +37,7 @@ public class IntakeCarriage extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (noteInSystem()) {
+        if (noteInShootingSystem()) {
             lights.set(0.71);
         } else {
             lights.set(-0.99);
@@ -64,32 +64,28 @@ public class IntakeCarriage extends SubsystemBase {
         return !carriageBeam.get();
     }
 
-    public boolean noteInSystem() {
+    public boolean noteInAmpSystem() {
+        return getCarriageBeamBroken() || getAmpBeamBroken();
+    }
+
+    public boolean noteInShootingSystem() {
         return getShooterBeamBroken() || getCarriageBeamBroken();
     }
 
-    public void overrideIntakeSpeed(double speed) {
+    public void setIntakeSpeed(double speed) {
         intake.set(speed);
     }
 
-    public void overrideCarriageSpeed(double speed) {
+    public void setCarriageSpeed(double speed) {
         carriage.set(speed);
     }
 
     public void setIntakeCarriageSpeed(double intakeSpeed, double carriageSpeed) {
-        intake.set(intakeSpeed);
-        carriage.set(carriageSpeed);
+        setIntakeSpeed(intakeSpeed);
+        setCarriageSpeed(carriageSpeed);
     }
 
     public void setIntakeCarriageSpeed(double speed){
         setIntakeCarriageSpeed(speed, speed);
-    }
-
-    public void setIntakeIdle(boolean idleMode) {
-        intake.set(idleMode ? Constants.IntakeCarriage.IDLE_INTAKE_SPEED : 0);
-    }
-
-    public void setCarriageIdle() {
-        carriage.set(0);
     }
 }

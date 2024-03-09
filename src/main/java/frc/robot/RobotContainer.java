@@ -25,7 +25,6 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve swerve = new Swerve();
     private final Elevator elevator = new Elevator();
-    private final Limelight limelight = new Limelight();
     private final IntakeCarriage intakeCarriage = new IntakeCarriage();
     private final Shooter shooter = new Shooter();
     private final Angler angler = new Angler();
@@ -60,10 +59,10 @@ public class RobotContainer {
     public final static CommandXboxController opXbox = new CommandXboxController(1);
     /* Currently Allocated For Operator:
      * POV buttons / Dpad:
-     * Up - toggle auto subsystems
+     * Up - 
      * Down - auto climb
      * Left - toggle clamp
-     * Right - angler layup setpoint
+     * Right - 
      * 
      * Triggers:
      * Left: Manual shooter rev
@@ -86,7 +85,6 @@ public class RobotContainer {
 
 
     /* Variables */
-    private boolean idleMode = false; // Disables/enables automatic subsystem functions (e.g. auto-outtake)
     private final SendableChooser<Command> chooser;
 
     /**
@@ -136,72 +134,33 @@ public class RobotContainer {
                 new IntakeCarriageCommand(
                         intakeCarriage,
                         0.9,
-                        1,
-                        idleMode
-                ).until(intakeCarriage::noteInSystem)
+                        1
+                ).until(intakeCarriage::noteInShootingSystem)
                         .andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0.9,
-                                1,
-                                idleMode
+                                1
                         ).until(() -> !intakeCarriage.getAmpBeamBroken()))
                         .andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 -0.9,
-                                -1,
-                                idleMode
+                                -1
                         ).until(intakeCarriage::getAmpBeamBroken))
-        );
-
-        NamedCommands.registerCommand(
-                "waitUntilIntakeNote",
-                new WaitUntilCommand(intakeCarriage::noteInSystem).andThen(new WaitCommand(0.2))
         );
 
         NamedCommands.registerCommand(
                 "autoShoot",
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> angler.setAlignedAngle(
-                                limelight.getRX(),
-                                limelight.getRZ(),
-                                limelight.tagExists()
-                        ), angler),
+                        new InstantCommand(angler::setAlignedAngle, angler),
                         new RevUpShooterCommand(
-                                shooter,
-                                limelight,
-                                idleMode
-                        ).until(() -> !intakeCarriage.noteInSystem()),
+                                shooter
+                        ).until(() -> !intakeCarriage.noteInShootingSystem()),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
-                                1,
-                                idleMode
-                        ).until(() -> !intakeCarriage.noteInSystem()))
+                                1
+                        ).until(() -> !intakeCarriage.noteInShootingSystem()))
                 )
-        );
-
-        NamedCommands.registerCommand(
-                "alignAngler",
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        limelight.getRX(),
-                        limelight.getRZ(),
-                        limelight.tagExists()
-                ), angler)
-        );
-
-        NamedCommands.registerCommand(
-                "overrideShoot",
-                new InstantCommand(() -> shooter.overrideShooterSpeed(1.0), shooter)
-        );
-
-        NamedCommands.registerCommand(
-                "carriageShoot",
-                new IntakeCarriageCommand(
-                        intakeCarriage,
-                        0,
-                        1,
-                        idleMode
-                ).until(() -> !intakeCarriage.noteInSystem())
         );
     }
 
@@ -215,155 +174,158 @@ public class RobotContainer {
      */
 
     private void configureButtonBindings() {
+        /* Driver Controls */
+
         /* Zero Gyro */
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
-        /* Toggle idle subsystems */
-        opXbox.povUp().onTrue(
-                new InstantCommand(() -> idleMode = !idleMode)
-                        .andThen(new ParallelCommandGroup(
-                        new InstantCommand(
-                                () -> intakeCarriage.setIntakeIdle(idleMode),
-                                intakeCarriage
-                        ),
-                        new InstantCommand(
-                                () -> shooter.setShooterIdle(idleMode),
-                                shooter
-                        )
-                ))
-        );
-
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
-                new LimelightTurretCommand(
-                        limelight,
-                        swerve,
-                        () -> -driverXbox.getLeftY(), // Ordinate Translation
-                        () -> -driverXbox.getLeftX(), // Coordinate Translation
-                        driverXbox.b() // Robot-centric trigger
-                )
-        );
-
-        /* Cheeky Driver Auto-align (deadband defaults to 0.5) */
-        driverXbox.leftBumper().whileTrue(
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        limelight.getRX(),
-                        limelight.getRZ(),
-                        limelight.tagExists()
-                ), angler)
-        );
-        
-        //driverXbox.povUp().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_TRIM)));
-
-
-        /* Intake Note */
-        opXbox.rightBumper().whileTrue(new IntakeCarriageCommand(
-                intakeCarriage,
-                0.9,
-                1,
-                idleMode
-        ).until(intakeCarriage::noteInSystem)
-                .andThen(new IntakeCarriageCommand(
-                        intakeCarriage,
-                        0.9,
-                        1,
-                        idleMode
-                ).until(() -> !intakeCarriage.getAmpBeamBroken()))
-                .andThen(new IntakeCarriageCommand(
-                        intakeCarriage,
-                        -0.9,
-                        -1,
-                        idleMode
-                ).until(intakeCarriage::getAmpBeamBroken)));
-
-        /* Intake Override */
-        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, idleMode, true));
-
-        /* Outtake Note */
-        opXbox.leftBumper().whileTrue(
-                new IntakeCarriageCommand(intakeCarriage, -0.9, -1, idleMode)
-        );
-
-        /* Auto-align for auto-shoot (deadband defaults to 0.5) */
-        opXbox.rightTrigger().onTrue(
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        limelight.getRX(),
-                        limelight.getRZ(),
-                        limelight.tagExists()
-                ), angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
-        );
-
-        /* Rev up shooter and run carriage when its up to speed */
-        opXbox.rightTrigger().whileTrue(
                 new ParallelCommandGroup(
-                        new RevUpShooterCommand(shooter, limelight, idleMode),
-                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
-                                intakeCarriage,
-                                0,
-                                1,
-                                idleMode
-                        ))
-                ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
-        );
-
-        /* Auto-align (deadband defaults to 0.5) */
-        opXbox.x().onTrue(
-                new InstantCommand(() -> angler.setAlignedAngle(
-                        limelight.getRX(),
-                        limelight.getRZ(),
-                        limelight.tagExists()
-                ), angler)
-        );
-
-        /* Override Shooter (deadband defaults to 0.5) */
-        opXbox.leftTrigger().whileTrue(new RevUpShooterCommand(
-                shooter, limelight, idleMode
+                        new LimelightTurretCommand(
+                                swerve,
+                                () -> -driverXbox.getLeftY(), // Ordinate Translation
+                                () -> -driverXbox.getLeftX(), // Coordinate Translation
+                                driverXbox.b() // Robot-centric trigger
+                        ),
+                        new AutoAlignCommand(angler)
                 )
         );
-
-        /* Climb */
-        opXbox.povDown().whileTrue(
-                new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
-                        .andThen(new InstantCommand(() -> elevator.climb(true)))
-                        .andThen(new WaitCommand(0.75))
-                        .andThen(new InstantCommand(() -> elevator.stopElevator()))
-        );
-
-        /* Toggle clamp */
-        opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
 
         /* Stow Elevator Preset */
         driverXbox.rightBumper().onTrue(
                 new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
         );
 
+        /* Op Controls */
+
         /* Stow Elevator Preset */
         opXbox.a().onTrue(
                 new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
         );
 
+        /* Intake Override */
+        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1));
+
+        /* Auto-align */
+        opXbox.x().whileTrue(new AutoAlignCommand(angler));
+
         /* Amp Elevator Preset */
         opXbox.y().onTrue(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator),
-                        new IntakeCarriageCommand(intakeCarriage, 0.1, 0.1, idleMode).until(elevator::elevatorNearTarget)
+                        new IntakeCarriageCommand(intakeCarriage, 0, 0.5)
+                                .until(() -> !intakeCarriage.getAmpBeamBroken())
                 )
         );
 
-        /* Angler layup setpoint (Limelight failsafe) */
-        opXbox.povRight().onTrue(new InstantCommand(() -> angler.setAngle(Constants.Angler.ANGLER_LAYUP_POSITION)));
+        /* Amp Shoot Preset */
+        opXbox.y().onFalse(
+                new IntakeCarriageCommand(intakeCarriage, 0, -1)
+                        .until(() -> !intakeCarriage.noteInAmpSystem())
+                        .andThen(new WaitCommand(0.75))
+                        .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
+        );
+
+        /* Toggle clamp */
+        opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
+
+        /* Auto-Climb */
+        opXbox.povDown().whileTrue(
+                new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
+                        .andThen(new InstantCommand(() -> elevator.climb(true)))
+                        .andThen(new WaitCommand(0.75))
+                        .andThen(new InstantCommand(elevator::stopElevator))
+        );
+
+        /* Auto-Outtake Note */
+        opXbox.povRight().whileTrue(
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_OUTTAKE)),
+                        new WaitUntilCommand(() -> !elevator.nearTarget())
+                                .andThen(new WaitUntilCommand(elevator::nearTarget))
+                                .andThen(new IntakeCarriageCommand(
+                                        intakeCarriage,
+                                        -0.9,
+                                        -1
+                                )).until(() -> !intakeCarriage.noteInAmpSystem())
+                                .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW)))
+                )
+        );
+
+        /* Override Outtake Note */
+        opXbox.leftBumper().whileTrue(new IntakeCarriageCommand(intakeCarriage, -0.9, -1));
+
+        /* Intake Note */
+        opXbox.rightBumper().whileTrue(new IntakeCarriageCommand(
+                intakeCarriage,
+                0.9,
+                1
+                ).until(intakeCarriage::noteInShootingSystem)
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                0.5
+                        ).until(() -> !intakeCarriage.getAmpBeamBroken()))
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                -0.5
+                        ).until(intakeCarriage::getAmpBeamBroken))
+        );
+
+        /* Override Shooter (deadband defaults to 0.5) */
+
+        opXbox.leftTrigger().whileTrue(
+                new ParallelCommandGroup(
+                        new RevUpShooterCommand(shooter),
+                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1
+                        ))
+                ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
+        );
+       
+        opXbox.leftTrigger().onTrue(
+                new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET), angler)     
+        );
+
+        opXbox.leftTrigger().onFalse(
+                new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LOWER_LIMIT), angler)
+        );
+
+        /* Rev up shooter and run carriage when its up to speed */
+        opXbox.rightTrigger().whileTrue(
+                new ParallelCommandGroup(
+                        new AutoAlignCommand(angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
+                        new RevUpShooterCommand(shooter),
+                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1
+                        ))
+                ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
+        );
     }
 
     public void printValues() {
+        // Scheduled commands
+        SmartDashboard.putData("Scheduled Commands", CommandScheduler.getInstance());
+
         // robot position
         SmartDashboard.putString("Robot Pose2d", swerve.getPose().getTranslation().toString());
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
+        SmartDashboard.putData("Swerve Command", swerve);
+
+        // intake-carriage debug
         SmartDashboard.putBoolean("Beam Brake carriage", intakeCarriage.getCarriageBeamBroken());
         SmartDashboard.putBoolean("Beam Brake amp", intakeCarriage.getAmpBeamBroken());
         SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
-        SmartDashboard.putBoolean("note in system", intakeCarriage.noteInSystem());
+        SmartDashboard.putBoolean("note in shooting system", intakeCarriage.noteInShootingSystem());
+        SmartDashboard.putData("Intake-Carriage Cmd", intakeCarriage);
 
         // elevator debug
        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
@@ -372,27 +334,32 @@ public class RobotContainer {
        SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
        SmartDashboard.putBoolean("Servo Limit Triggered?", elevator.servoSwitchTriggered());
        SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
+       SmartDashboard.putData("Elevator Cmd", elevator);
 
         // limelight debug
-        SmartDashboard.putNumber("Limelight Updates", limelight.getUpdates());
-        SmartDashboard.putNumber("Limelight Yaw", limelight.getYaw());
-        SmartDashboard.putNumber("Limelight Pitch", limelight.getPitch());
-        SmartDashboard.putNumber("Limelight Roll", limelight.getRoll());
-        SmartDashboard.putNumber("Limelight X", limelight.getRX());
-        SmartDashboard.putNumber("Limelight Y", limelight.getRY());
-        SmartDashboard.putNumber("Limelight Z", limelight.getRZ());
-        SmartDashboard.putNumber("Limelight dist", Math.hypot(limelight.getRZ(), limelight.getRX()));
+        SmartDashboard.putNumber("Limelight Updates", Limelight.getUpdates());
+        SmartDashboard.putNumber("Limelight Yaw", Limelight.getYaw());
+        SmartDashboard.putNumber("Limelight Pitch", Limelight.getPitch());
+        SmartDashboard.putNumber("Limelight Roll", Limelight.getRoll());
+        SmartDashboard.putNumber("Limelight X", Limelight.getRX());
+        SmartDashboard.putNumber("Limelight Y", Limelight.getRY());
+        SmartDashboard.putNumber("Limelight Z", Limelight.getRZ());
+        SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getRZ(), Limelight.getRX()));
 
         // shooter debug
         SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
         SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
         SmartDashboard.putNumber("Shooter error", shooter.getError());
+        SmartDashboard.putData("Shooter Cmd", shooter);
 
         // angler debug
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
         SmartDashboard.putNumber("Angler error", angler.getError());
         SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
+        SmartDashboard.putData("Angler Cmd", angler);
+        SmartDashboard.putNumber("Angler trim", Constants.Angler.ANGLER_ENCODER_OFFSET);
+        Constants.Angler.ANGLER_ENCODER_OFFSET = SmartDashboard.getNumber("Angler trim", 0.0);
     }
 
     /**
