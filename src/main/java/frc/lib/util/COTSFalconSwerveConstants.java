@@ -86,7 +86,7 @@ public class COTSFalconSwerveConstants {
     }
 
     /* Drive Gear Ratios for all supported modules */
-    public class driveGearRatios{
+    public class driveGearRatios {
         /* SDS MK3 */
         /** SDS MK3 - 8.16 : 1 */
         public static final double SDSMK3_Standard = (8.16 / 1.0);
@@ -110,6 +110,8 @@ public class COTSFalconSwerveConstants {
         public static final double SDSMK4i_L2 = (6.75 / 1.0);
         /** SDS MK4i - 6.12 : 1 */
         public static final double SDSMK4i_L3 = (6.12 / 1.0);
+        /** SDS MK4i - L3_PLUS - 5.3571 : 1 */
+        public static final double SDSMK4i_L3_PLUS = (5.3571 / 1.0);
     }
 }
 
