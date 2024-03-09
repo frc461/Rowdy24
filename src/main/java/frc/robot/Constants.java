@@ -11,7 +11,6 @@ import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public final class Constants {
     public static final double STICK_DEADBAND = 0.1;
@@ -27,7 +26,6 @@ public final class Constants {
     }
 
     public static final class Angler {
-        public static double ANGLER_TRIM = 0;
 
         // basic configs
         public static final int ANGLER_ID = 62;
@@ -46,16 +44,20 @@ public final class Constants {
         public static final double ANGLER_LOWER_LIMIT = 0;
         public static final double ANGLER_UPPER_LIMIT = 20;
 
-        //setpoint(s)
-        public static final double ANGLER_LAYUP_POSITION = 18;
+        // preset
+        public static final double ANGLER_LAYUP_PRESET = 18;
 
+        public static double ANGLER_ENCODER_OFFSET = 0;
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
         public static final double Y_COMPONENT_AIM = SPEAKER_HEIGHT - SHOOTER_HEIGHT;
         public static final double Z_DEPTH_OFFSET = -0.23; // or 0.04 // Half of the depth of the speaker into the field
-        public static final Function<Double, Double> ANGLE_TO_ENCODER_VALUE = (angle) -> 4.0 / 9.0 * (angle - 10.0);
+        public static final BiFunction<Double, Double, Double> ANGLE_TO_ENCODER_VALUE = (angle, dist) -> 20.0 / 41.0 * (angle + dist * .9967 - 12.0);
         public static final BiFunction<Double, Double, Double> AUTO_ANGLER_AIM_EQUATION =
-                (x, z) -> ANGLE_TO_ENCODER_VALUE.apply(Math.toDegrees(Math.atan(Y_COMPONENT_AIM / Math.hypot(x, z + Z_DEPTH_OFFSET))));
+                (x, z) -> ANGLE_TO_ENCODER_VALUE.apply(
+                        Math.toDegrees(Math.atan(Y_COMPONENT_AIM / Math.hypot(x, z + Z_DEPTH_OFFSET))),
+                        Math.hypot(x, z)
+                );
     }
 
     public static final class Elevator {
@@ -80,17 +82,15 @@ public final class Constants {
         // presets
         public static final double ELEVATOR_LOWER_LIMIT = 0;
         public static final double ELEVATOR_UPPER_LIMIT = 37;
-        public static final double ELEVATOR_AMP = 36;
         public static final double ELEVATOR_STOW = ELEVATOR_LOWER_LIMIT;
+        public static final double ELEVATOR_OUTTAKE = 10;
+        public static final double ELEVATOR_AMP = 36;
     }
 
     public static final class IntakeCarriage {
         // basic configs
         public static final int INTAKE_ID = 41;
         public static final int CARRIAGE_ID = 42;
-
-        // idle when intake is not actively being used
-        public static final double IDLE_INTAKE_SPEED = -0.15;
 
         // beam breaks
         public static final int CARRIAGE_BEAM = 4;
@@ -120,9 +120,6 @@ public final class Constants {
         // baseline shooter speed in RPM
         public static final double BASE_SHOOTER_SPEED = 6000;
 
-        // percentage to idle at when shooter is not in use
-        public static final double IDLE_SHOOTER_SPEED = 0.3;
-
         // required accuracy to consider shooter up to speed
         public static final double SHOOTER_ACCURACY_REQUIREMENT = 0.8;
 
@@ -147,7 +144,7 @@ public final class Constants {
         public static final double MAXIMUM_ANGLE = 180.0;
 
         public static final COTSFalconSwerveConstants CHOSEN_MODULE = COTSFalconSwerveConstants
-                .SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L3);
+                .SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L3_PLUS);
 
         /* Drivetrain Constants */
         public static final double TRACK_WIDTH = Units.inchesToMeters(18.375);
@@ -227,8 +224,8 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double MAX_SPEED = 4.1;
-        public static final double MAX_ACCEL = 4.1;
+        public static final double MAX_SPEED = 5.5;
+        public static final double MAX_ACCEL = 5.5;
 
         /** Radians per Second */
         public static final double MAX_ANGULAR_VELOCITY = 10.0;

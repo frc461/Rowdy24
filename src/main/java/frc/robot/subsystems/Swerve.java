@@ -7,6 +7,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveModule[] swerveMods;
+    private final PIDController limelightRotController;
     public final Pigeon2 gyro;
     final Field2d field = new Field2d();
 
@@ -53,6 +55,13 @@ public class Swerve extends SubsystemBase {
                 getHeading(),
                 getModulePositions()
         );
+
+        limelightRotController = new PIDController(
+                Constants.Limelight.LIMELIGHT_P,
+                Constants.Limelight.LIMELIGHT_I,
+                Constants.Limelight.LIMELIGHT_D
+        );
+        limelightRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
 
         AutoBuilder.configureHolonomic(
                 this::getPose, // Robot pose supplier
@@ -122,6 +131,21 @@ public class Swerve extends SubsystemBase {
                 )
         );
         setModuleStates(swerveModuleStates, isOpenLoop);
+    }
+
+    public void driveTurret(Translation2d translation, boolean fieldRelative) {
+        if (Limelight.tagExists()) {
+            drive(
+                    translation,
+                    -limelightRotController.calculate(
+                            getYaw(),
+                            getYaw() + Limelight.getLateralOffset()
+                    ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
+                    fieldRelative,
+                    true
+            );
+
+        }
     }
 
     public double getYaw() {
