@@ -16,10 +16,11 @@ import frc.lib.util.CTREConfigs;
 */
 public class Robot extends TimedRobot {
     public static CTREConfigs ctreConfigs;
+
     private Command autonomousCommand;
+
     private RobotContainer robotContainer;
-    @SuppressWarnings("unused")
-    private final SysIdRoutineBot robotSysIdRoutine = new SysIdRoutineBot(); // can replace robot container for testing purposes
+    private  SysIdRoutineBot robotSysIdRoutine;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -33,7 +34,9 @@ public class Robot extends TimedRobot {
          * Instantiate our RobotContainer. This will perform all our button bindings,
          * and put our autonomous chooser on the dashboard.
          */
-        robotContainer = new RobotContainer();
+        
+        robotSysIdRoutine = new SysIdRoutineBot();
+        robotSysIdRoutine.configureBindings();
     }
 
     /**
@@ -59,7 +62,7 @@ public class Robot extends TimedRobot {
          * block in order for anything in the Command-based framework to work.
          */
         CommandScheduler.getInstance().run();
-        robotContainer.printValues();
+        //robotContainer.printValues();
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
@@ -77,7 +80,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        autonomousCommand = robotContainer.getAutonomousCommand();
+        autonomousCommand = robotSysIdRoutine.getAutonomousCommand();
         // schedule the autonomous command (example)
         if (autonomousCommand != null) {
           autonomousCommand.schedule();

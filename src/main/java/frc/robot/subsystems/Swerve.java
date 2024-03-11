@@ -121,8 +121,7 @@ public class Swerve extends SubsystemBase {
                 new SysIdRoutine.Mechanism(
                         (Measure<Voltage> volts) -> {
                             for (SwerveModule mod : swerveMods) {
-                                mod.getDriveMotor().setVoltage(volts.in(Volts));
-                                mod.getAngleMotor().setVoltage(volts.in(Volts));
+                                mod.getDriveMotor().setVoltage(mod.moduleNumber == 3 || mod.moduleNumber == 2 || mod.moduleNumber == 0 ? -1 * volts.in(Volts) : volts.in(Volts));
                             }
                         },
                         log -> {
@@ -139,19 +138,6 @@ public class Swerve extends SubsystemBase {
                                         .linearVelocity(
                                                 velocity.mut_replace(
                                                         mod.getDriveEncoder().getVelocity(), MetersPerSecond
-                                                ));
-                                log.motor("angleMotor" + mod.moduleNumber)
-                                        .voltage(
-                                                appliedVoltage.mut_replace(
-                                                        mod.getAngleMotor().get() * RobotController.getBatteryVoltage(), Volts
-                                                ))
-                                        .angularPosition(
-                                                angle.mut_replace(
-                                                        mod.getAngleEncoder().getPosition(), Degrees
-                                                ))
-                                        .angularVelocity(
-                                                angularVelocity.mut_replace(
-                                                        mod.getAngleEncoder().getVelocity() / 60, DegreesPerSecond
                                                 ));
                             }
                         },
