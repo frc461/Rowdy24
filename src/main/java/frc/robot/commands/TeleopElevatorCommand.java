@@ -27,6 +27,5 @@ public class TeleopElevatorCommand extends Command {
         } else {
             elevator.holdTarget();
         }
-        elevator.checkLimitSwitch();
     }
 }

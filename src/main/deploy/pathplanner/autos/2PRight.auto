@@ -2,19 +2,37 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.59,
-      "y": 4.48
+      "x": 0.7509152340242001,
+      "y": 4.584108541436456
     },
-    "rotation": -150.0
+    "rotation": 120.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "autoShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "1.1.0"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoShoot"
           }
         }
       ]

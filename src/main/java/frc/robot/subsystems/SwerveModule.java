@@ -110,7 +110,6 @@ public class SwerveModule {
     }
 
     private void configAngleMotor(){
-
         angleMotor.restoreFactoryDefaults();
         CANSparkUtil.setCANSparkMaxBusUsage(angleMotor, Usage.kPositionOnly);
         angleMotor.setSmartCurrentLimit(Constants.Swerve.ANGLE_CONTINUOUS_SUPPLY_CURRENT_LIMIT);
@@ -127,7 +126,6 @@ public class SwerveModule {
     }
 
     private void configDriveMotor() {
-
         driveMotor.restoreFactoryDefaults();
         CANSparkUtil.setCANSparkMaxBusUsage(driveMotor, Usage.kAll);
         driveMotor.setSmartCurrentLimit(Constants.Swerve.DRIVE_CONTINUOUS_SUPPLY_CURRENT_LIMIT);

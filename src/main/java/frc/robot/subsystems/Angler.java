@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -8,6 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
@@ -17,16 +19,19 @@ import static edu.wpi.first.units.Units.*;
 
 public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
-    private final SparkLimitSwitch lowerLimitSwitch, upperLimitSwitch;
-    private final PIDController anglerPIDController;
     private final RelativeEncoder encoder;
+    private final SparkPIDController anglerPIDController;
+    private final SparkLimitSwitch lowerMagnetLimitSwitch, upperMagnetLimitSwitch;
+    private final DigitalInput lowerLimitSwitch;
+
     private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
 
     /* Specified units are estimates because encoder "rotation" default unit position values are very inaccurate */
     private final MutableMeasure<Angle> angle = mutable(Degrees.of(0));
     private final MutableMeasure<Velocity<Angle>> velocity = mutable(DegreesPerSecond.of(0));
     private final SysIdRoutine sysIdRoutine;
-    private double target, error;
+
+    private double target, limelightTarget, error, accuracy;
 
     public Angler() {
         angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
@@ -35,14 +40,15 @@ public class Angler extends SubsystemBase {
         angler.setInverted(Constants.Angler.ANGLER_INVERT);
         encoder = angler.getEncoder();
 
-        lowerLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-        upperLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        anglerPIDController = angler.getPIDController();
+        anglerPIDController.setP(Constants.Angler.ANGLER_P);
+        anglerPIDController.setI(Constants.Angler.ANGLER_I);
+        anglerPIDController.setD(Constants.Angler.ANGLER_D);
+        angler.burnFlash();
 
-        anglerPIDController = new PIDController(
-                Constants.Angler.ANGLER_P,
-                Constants.Angler.ANGLER_I,
-                Constants.Angler.ANGLER_D
-        );
+        lowerMagnetLimitSwitch = angler.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        lowerLimitSwitch = new DigitalInput(Constants.Angler.ANGLER_LOWER_LIMIT_SWITCH);
+        upperMagnetLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
         sysIdRoutine = new SysIdRoutine(
                 new SysIdRoutine.Config(),
@@ -66,12 +72,17 @@ public class Angler extends SubsystemBase {
         );
 
         target = 0.0;
-        error = 1000;
+        limelightTarget = getPosition();
+        error = 0.0;
+        accuracy = 1.0;
     }
 
     @Override
     public void periodic() {
+        updateLimelightTarget();
         error = Math.abs(target - getPosition());
+        accuracy = Limelight.tagExists() ? (target > limelightTarget) ?
+                limelightTarget / target : target / limelightTarget : -1.0;
     }
 
     public double getPosition() { 
@@ -90,69 +101,58 @@ public class Angler extends SubsystemBase {
         return error;
     }
 
-    public boolean lowerSwitchTriggered() { 
-        return lowerLimitSwitch.isPressed();
+    public boolean lowerSwitchTriggered() {
+        return !lowerLimitSwitch.get();
     }
 
-    public boolean upperSwitchTriggered() {
-        return upperLimitSwitch.isPressed();
+    public void updateLimelightTarget() {
+        limelightTarget = Limelight.tagExists() ?
+                Math.min(
+                        Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
+                                Limelight.getRX(),
+                                Limelight.getRZ()) + Constants.Angler.ANGLER_ENCODER_OFFSET,
+                        Constants.Angler.ANGLER_UPPER_LIMIT
+                ) : getPosition();
     }
 
     public void checkLimitSwitches() {
-        if (upperSwitchTriggered()) {
-            encoder.setPosition(Constants.Angler.ANGLER_UPPER_LIMIT);
-            //target = Constants.Angler.ANGLER_UPPER_LIMIT;
-        }
-        if (lowerSwitchTriggered()) {
-            encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
-            //target = Constants.Angler.ANGLER_LOWER_LIMIT;
-        }
+       if (lowerSwitchTriggered()) {
+           encoder.setPosition(Constants.Angler.ANGLER_LOWER_LIMIT);
+       }
     }
 
     public void holdTarget() {
         checkLimitSwitches();
-        angler.set(anglerPIDController.calculate(encoder.getPosition(), target));
+        anglerPIDController.setReference(target, CANSparkBase.ControlType.kPosition);
     }
 
     public void moveAngle(double axisValue) {
-        target = encoder.getPosition();
         checkLimitSwitches();
         if (axisValue < 0 && lowerSwitchTriggered()) {
             target = Constants.Angler.ANGLER_LOWER_LIMIT;
             holdTarget();
-        } else if (axisValue > 0 && upperSwitchTriggered()) {
+        } else if (axisValue > 0 && getPosition() > Constants.Angler.ANGLER_UPPER_LIMIT) {
             target = Constants.Angler.ANGLER_UPPER_LIMIT;
             holdTarget();
         } else {
             angler.set(axisValue);
+            target = encoder.getPosition();
         }
     }
 
-    public void setAngle(double encoderVal) {
+    public void setEncoderVal(double encoderVal) {
         checkLimitSwitches();
         encoderVal = (encoderVal < encoder.getPosition() && lowerSwitchTriggered()) ?
                 Constants.Angler.ANGLER_LOWER_LIMIT :
-                (encoderVal > encoder.getPosition() && upperSwitchTriggered()) ?
+                (encoderVal > encoder.getPosition() && getPosition() > Constants.Angler.ANGLER_UPPER_LIMIT) ?
                 Constants.Angler.ANGLER_UPPER_LIMIT : encoderVal;
         target = encoderVal;
         holdTarget();
     }
 
-    public void setAlignedAngle(double x, double z, boolean tag) {
-        double dist = Math.hypot(x, z);
-        if (tag) {
-            if (dist < Constants.Angler.UPPER_BOUND_LIMIT) {
-                setAngle(Math.min(
-                        34.8 - 11.5*dist + 1.04*Math.pow(dist, 2), Constants.Angler.ANGLER_UPPER_LIMIT
-                ));
-            } else {
-                setAngle(Math.min(
-                        38.2 - 12.3*dist + 1.1*Math.pow(dist, 2), Constants.Angler.ANGLER_UPPER_LIMIT
-                ));
-            }
-        } else {
-            target = getPosition();
-        }
+    public void setAlignedAngle() {
+        updateLimelightTarget();
+        setEncoderVal(limelightTarget);
     }
 
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {

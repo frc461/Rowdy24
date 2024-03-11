@@ -3,59 +3,64 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.019581195857548,
-        "y": 6.759221267730286
+        "x": 0.7509152340242001,
+        "y": 4.584108541436456
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3308275200749984,
-        "y": 6.809603387675039
+        "x": 1.2489281075073815,
+        "y": 4.3874947461770955
       },
       "isLocked": false,
-      "linkedName": "0.3.0"
+      "linkedName": "1.0.0"
     },
     {
       "anchor": {
-        "x": 8.353572822885871,
-        "y": 7.43
+        "x": 2.850819676730133,
+        "y": 4.0834168565894355
       },
       "prevControl": {
-        "x": 9.348885001047137,
-        "y": 7.526714362965793
+        "x": 2.3068587739935125,
+        "y": 4.040066260628984
       },
       "nextControl": {
-        "x": 8.254041605069744,
-        "y": 7.42032856370342
+        "x": 3.168512919379429,
+        "y": 4.108735204529827
       },
       "isLocked": false,
-      "linkedName": "0.0.5"
+      "linkedName": "0.1.0"
     },
     {
       "anchor": {
-        "x": 3.019581195857548,
-        "y": 6.759221267730286
+        "x": 2.38,
+        "y": 4.38
       },
       "prevControl": {
-        "x": 3.3906741741546154,
-        "y": 6.7592806521083135
+        "x": 2.7768657983612264,
+        "y": 4.297336945785002
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "0.3.0"
+      "linkedName": "shoot 0.1"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": -172.72855145767954,
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 180.0,
       "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 1.85,
+      "rotationDegrees": 175.0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.85,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,7 +68,7 @@
             {
               "type": "named",
               "data": {
-                "name": "intakeNote"
+                "name": "intakeThenShoot"
               }
             }
           ]
@@ -72,21 +77,21 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.1,
-    "maxAcceleration": 4.1,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -155.0,
+    "rotation": 175.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -155.0,
-    "velocity": 0.0
+    "rotation": 120.0,
+    "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

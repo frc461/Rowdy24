@@ -7,13 +7,21 @@ public class IntakeCarriageCommand extends Command {
     private final IntakeCarriage intakeCarriage;
     private final double intakeSpeed;
     private final double carriageSpeed;
-    private final boolean idleMode;
+    private final boolean override;
 
-    public IntakeCarriageCommand(IntakeCarriage intakeCarriage, double intakeSpeed, double carriageSpeed, boolean idleMode) {
+    public IntakeCarriageCommand(IntakeCarriage intakeCarriage, double intakeSpeed, double carriageSpeed, boolean override) {
         this.intakeCarriage = intakeCarriage;
         this.intakeSpeed = intakeSpeed;
         this.carriageSpeed = carriageSpeed;
-        this.idleMode = idleMode;
+        this.override = override;
+        addRequirements(this.intakeCarriage);
+    }
+
+    public IntakeCarriageCommand(IntakeCarriage intakeCarriage, double intakeSpeed, double carriageSpeed) {
+        this.intakeCarriage = intakeCarriage;
+        this.intakeSpeed = intakeSpeed;
+        this.carriageSpeed = carriageSpeed;
+        this.override = false;
         addRequirements(this.intakeCarriage);
     }
 
@@ -24,8 +32,9 @@ public class IntakeCarriageCommand extends Command {
 
     @Override
     public void execute() {
-        if (intakeCarriage.noteInSystem() && intakeSpeed > 0) {
-            intakeCarriage.setIntakeIdle(idleMode);
+        if (intakeCarriage.noteInShootingSystem() && intakeSpeed > 0 && !override) {
+            intakeCarriage.setIntakeSpeed(0);
+            intakeCarriage.setCarriageSpeed(carriageSpeed);
         } else {
             intakeCarriage.setIntakeCarriageSpeed(intakeSpeed, carriageSpeed);
         }
@@ -33,7 +42,7 @@ public class IntakeCarriageCommand extends Command {
 
     @Override
     public void end(boolean isFinished) {
-        intakeCarriage.setIntakeIdle(idleMode);
-        intakeCarriage.setCarriageIdle();
+        intakeCarriage.setIntakeSpeed(0);
+        intakeCarriage.setCarriageSpeed(0);
     }
 }

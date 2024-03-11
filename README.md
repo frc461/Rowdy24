@@ -28,7 +28,7 @@
 
 ## Vendor Dependencies (Install before deploying our code)
 
-  - Phoenix v5 and v6: https://pro.docs.ctr-electronics.com/en/stable/docs/installation/installation-frc.html  
+  - Phoenix v6: https://pro.docs.ctr-electronics.com/en/stable/docs/installation/installation-frc.html  
   - RevLib 2024: https://software-metadata.revrobotics.com/REVLib-2024.json
   - Pathplanner 2024: https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json
   - WPIlib New Commands 1.0: Pre-installed with WPIlib
@@ -40,3 +40,5 @@
   3. Indicate the button 'Install new library (online)', and use each link to install/check installation.
 
   To update, follow above steps until Step 3, and then indicate the button 'Check for updates (online)'.
+
+  If you do use another code editor than VSCode, follow instructions by the WPILib extension on that code editor via Gradle.

@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
-
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -12,10 +12,10 @@ import frc.robot.Constants;
 public class IntakeCarriage extends SubsystemBase {
     private final CANSparkFlex intake;
     private final CANSparkMax carriage;
-
-    DigitalInput carriageBeam = new DigitalInput(Constants.IntakeCarriage.CARRIAGE_BEAM); // end of carriage (on shooter side)
-    DigitalInput ampBeam = new DigitalInput(Constants.IntakeCarriage.AMP_BEAM); // entrance of carriage (which is the amp shooter)
-    DigitalInput shooterBeam = new DigitalInput(Constants.IntakeCarriage.SHOOTER_BEAM); // completely exit through shooter
+    private final DigitalInput carriageBeam; // end of carriage (on shooter side)
+    private final DigitalInput ampBeam; // entrance of carriage (which is the amp shooter)
+    private final DigitalInput shooterBeam; // completely exit through shooter
+    private final Spark lights;
 
     public IntakeCarriage() {
         intake = new CANSparkFlex(Constants.IntakeCarriage.INTAKE_ID, MotorType.kBrushless);
@@ -27,6 +27,21 @@ public class IntakeCarriage extends SubsystemBase {
         carriage = new CANSparkMax(Constants.IntakeCarriage.CARRIAGE_ID, MotorType.kBrushless);
         carriage.restoreFactoryDefaults();
         carriage.setInverted(true);
+
+        carriageBeam = new DigitalInput(Constants.IntakeCarriage.CARRIAGE_BEAM);
+        ampBeam = new DigitalInput(Constants.IntakeCarriage.AMP_BEAM);
+        shooterBeam = new DigitalInput(Constants.IntakeCarriage.SHOOTER_BEAM);
+
+        lights = new Spark(Constants.IntakeCarriage.LIGHT_ID);
+    }
+
+    @Override
+    public void periodic() {
+        if (noteInShootingSystem()) {
+            lights.set(0.71);
+        } else {
+            lights.set(-0.99);
+        }
     }
 
     public double getIntakeSpeed() {
@@ -49,28 +64,28 @@ public class IntakeCarriage extends SubsystemBase {
         return !carriageBeam.get();
     }
 
-    public boolean noteInSystem() {
+    public boolean noteInAmpSystem() {
+        return getCarriageBeamBroken() || getAmpBeamBroken();
+    }
+
+    public boolean noteInShootingSystem() {
         return getShooterBeamBroken() || getCarriageBeamBroken();
     }
 
-    public void overrideIntakeSpeed(double speed) {
+    public void setIntakeSpeed(double speed) {
         intake.set(speed);
     }
 
-    public void overrideCarriageSpeed(double speed) {
+    public void setCarriageSpeed(double speed) {
         carriage.set(speed);
     }
 
     public void setIntakeCarriageSpeed(double intakeSpeed, double carriageSpeed) {
-        intake.set(intakeSpeed);
-        carriage.set(carriageSpeed);
+        setIntakeSpeed(intakeSpeed);
+        setCarriageSpeed(carriageSpeed);
     }
 
-    public void setIntakeIdle(boolean idleMode) {
-        intake.set(idleMode ? Constants.IntakeCarriage.IDLE_INTAKE_SPEED : 0);
-    }
-
-    public void setCarriageIdle() {
-        carriage.set(0);
+    public void setIntakeCarriageSpeed(double speed){
+        setIntakeCarriageSpeed(speed, speed);
     }
 }
