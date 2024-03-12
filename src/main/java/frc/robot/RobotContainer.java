@@ -128,6 +128,7 @@ public class RobotContainer {
                 )
         );
 
+        // TODO: Add and test constant shooter function
         // TODO: Add constant angler align function (if the new equation works) and get rid of the buttons for it
 
         // Configure controller button bindings
@@ -163,9 +164,7 @@ public class RobotContainer {
                                         swerve.getVectorToSpeakerTarget().getX() + Constants.Angler.ANGLER_ENCODER_OFFSET
                                 )
                         ), angler),
-                        new RevUpShooterCommand(
-                                shooter
-                        ).until(() -> !intakeCarriage.noteInShootingSystem()),
+                        new RevUpShooterCommand(shooter, swerve).until(() -> !intakeCarriage.noteInShootingSystem()),
                         new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
@@ -177,9 +176,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "autoShootWithoutAngler",
                 new ParallelCommandGroup(
-                        new RevUpShooterCommand(
-                                shooter
-                        ).until(() -> !intakeCarriage.noteInShootingSystem()),
+                        new RevUpShooterCommand(shooter, swerve).until(() -> !intakeCarriage.noteInShootingSystem()),
                         new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
@@ -190,7 +187,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "startShooter",
-                new RevUpShooterCommand(shooter)
+                new RevUpShooterCommand(shooter, swerve)
         );
 
         NamedCommands.registerCommand(
@@ -336,7 +333,7 @@ public class RobotContainer {
 
         opXbox.leftTrigger().whileTrue(
                 new ParallelCommandGroup(
-                        new RevUpShooterCommand(shooter),
+                        new RevUpShooterCommand(shooter, swerve),
                         new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
@@ -353,7 +350,7 @@ public class RobotContainer {
         opXbox.rightTrigger().whileTrue(
                 new ParallelCommandGroup(
                         new AutoAlignCommand(angler, swerve).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
-                        new RevUpShooterCommand(shooter),
+                        new RevUpShooterCommand(shooter, swerve),
                         new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
