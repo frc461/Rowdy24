@@ -149,7 +149,7 @@ public class Swerve extends SubsystemBase {
     public void driveTurret(Translation2d translation, boolean fieldRelative) {
         drive(
                 translation,
-                -limelightRotController.calculate(
+                limelightRotController.calculate(
                         getFusedPoseEstimator().getRotation().getDegrees(),
                         getAngleToSpeakerTarget()
                 ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
@@ -189,14 +189,18 @@ public class Swerve extends SubsystemBase {
         resetOdometry(newPose);
     }
 
-    public Transform2d getVectorToSpeakerTarget() {
-        Pose2d fusedPose = getFusedPoseEstimator();
-        Pose2d speakerTagPose = Limelight.getSpeakerTagPose();
-        return fusedPose.minus(speakerTagPose);
+    public Translation2d getVectorToSpeakerTarget() {
+        Translation2d fusedPose = getFusedPoseEstimator().getTranslation();
+        Translation2d speakerTagPose = Limelight.getSpeakerTagPose().getTranslation();
+        return fusedPose.minus(speakerTagPose).unaryMinus();
     }
 
     public double getAngleToSpeakerTarget() {
-        return getVectorToSpeakerTarget().getRotation().getDegrees();
+        return getVectorToSpeakerTarget().getAngle().getDegrees();
+//        return new Rotation2d(
+//                getVectorToSpeakerTarget().getX(),
+//                getVectorToSpeakerTarget().getY()
+//        ).getDegrees();
     }
 
     public boolean turretNearTarget() {

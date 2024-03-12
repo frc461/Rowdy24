@@ -20,7 +20,7 @@ public class AutoAlignCommand extends Command {
         angler.setEncoderVal(
                 Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
                         swerve.getVectorToSpeakerTarget().getY(),
-                        swerve.getVectorToSpeakerTarget().getX() + Constants.Angler.ANGLER_ENCODER_OFFSET
+                        swerve.getVectorToSpeakerTarget().getX()
                 )
         );
     }

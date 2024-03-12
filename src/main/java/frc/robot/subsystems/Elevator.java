@@ -90,7 +90,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public boolean nearTarget() {
-        return accuracy > 0.95;
+        return accuracy > Constants.Elevator.ELEVATOR_ACCURACY_REQUIREMENT;
     }
 
     public void checkLimitSwitch() {

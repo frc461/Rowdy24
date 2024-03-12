@@ -160,7 +160,7 @@ public class RobotContainer {
                         new InstantCommand(() -> angler.setEncoderVal(
                                 Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
                                         swerve.getVectorToSpeakerTarget().getY(),
-                                        swerve.getVectorToSpeakerTarget().getX() + Constants.Angler.ANGLER_ENCODER_OFFSET
+                                        swerve.getVectorToSpeakerTarget().getX()
                                 )
                         ), angler),
                         new RevUpShooterCommand(shooter, swerve).until(() -> !intakeCarriage.noteInShootingSystem()),
@@ -233,6 +233,12 @@ public class RobotContainer {
 
         /* Zero Gyro */
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
+
+        /* Increment Trim */
+        driverXbox.povUp().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET++));
+
+        /* Decrement Trim */
+        driverXbox.povDown().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET--));
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
@@ -371,6 +377,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
+        SmartDashboard.putString("vector to speaker", swerve.getVectorToSpeakerTarget().toString());
+        SmartDashboard.putNumber("angle to speaker", swerve.getAngleToSpeakerTarget());
         SmartDashboard.putBoolean("Turret near target", swerve.turretNearTarget());
         SmartDashboard.putData("Swerve Command", swerve);
 
@@ -401,7 +409,6 @@ public class RobotContainer {
         SmartDashboard.putString("botpose_helpers_pose", LimelightHelpers.getBotPose2d_wpiBlue("limelight").getTranslation().toString());
 
         // shooter debug
-         SmartDashboard.getNumber("Shooter Trim", Constants.Angler.ANGLER_ENCODER_OFFSET);
          SmartDashboard.putBoolean("Shooter Min Error", shooter.nearTarget());
          SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
          SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
@@ -413,9 +420,8 @@ public class RobotContainer {
          SmartDashboard.putNumber("Angler error", angler.getError());
          SmartDashboard.putBoolean("Angler Min Error", angler.anglerNearTarget());
          SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
+         SmartDashboard.putNumber("Angler trim offset", Constants.Angler.ANGLER_ENCODER_OFFSET);
          SmartDashboard.putData("Angler Cmd", angler);
-         SmartDashboard.putNumber("Angler trim", Constants.Angler.ANGLER_ENCODER_OFFSET);
-         Constants.Angler.ANGLER_ENCODER_OFFSET = SmartDashboard.getNumber("Angler trim", 0.0);
     }
 
     /**

@@ -55,7 +55,7 @@ public final class Constants {
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
         public static final double Y_COMPONENT_AIM = SPEAKER_HEIGHT - SHOOTER_HEIGHT;
         public static final double Z_DEPTH_OFFSET = -0.23; // or 0.04 // Half of the depth of the speaker into the field
-        public static final BiFunction<Double, Double, Double> ANGLE_TO_ENCODER_VALUE = (angle, dist) -> 20.0 / 41.0 * (angle + dist * .9967 - 12.0);
+        public static final BiFunction<Double, Double, Double> ANGLE_TO_ENCODER_VALUE = (angle, dist) -> 20.0 / 41.0 * (angle + dist * .65 - 12.0) + Constants.Angler.ANGLER_ENCODER_OFFSET;
         public static final BiFunction<Double, Double, Double> AUTO_ANGLER_AIM_EQUATION =
                 (x, z) -> ANGLE_TO_ENCODER_VALUE.apply(
                         Math.toDegrees(Math.atan(Y_COMPONENT_AIM / Math.hypot(x, z + Z_DEPTH_OFFSET))),
@@ -82,6 +82,9 @@ public final class Constants {
         public static final double ELEVATOR_I = 0.0;
         public static final double ELEVATOR_D = 0.0;
 
+        // required accuracy to consider angler accurate to shoot a note
+        public static final double ELEVATOR_ACCURACY_REQUIREMENT = 0.9;
+
         // presets
         public static final double ELEVATOR_LOWER_LIMIT = 0;
         public static final double ELEVATOR_UPPER_LIMIT = 37;
@@ -106,8 +109,8 @@ public final class Constants {
     public static final class Limelight {
         // pid for limelight alignment
         public static final double LIMELIGHT_P = 0.01;
-        public static final double LIMELIGHT_I = 0.0001;
-        public static final double LIMELIGHT_D = 0.001;
+        public static final double LIMELIGHT_I = 0;
+        public static final double LIMELIGHT_D = 0;
         
         // turn slightly to the right 
         public static final double YAW_OFFSET = 0;
