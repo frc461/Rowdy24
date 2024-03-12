@@ -15,7 +15,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public static boolean tagExists() {
-        return !LimelightHelpers.getTV("limelight");
+        return LimelightHelpers.getTV("limelight");
     }
 
     // X+ is to the right when looking at the tag
@@ -48,10 +48,7 @@ public class Limelight extends SubsystemBase {
 
     // returns lateral angle of tag from center of limelight in degrees
     public static double getTagLateralAngle() {
-        if (LimelightHelpers.getFiducialID("limelight") == 7.0) {
-            return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees() + Constants.Limelight.YAW_OFFSET / tagPose[2]);
-        }
-        return 0.0;
+        return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees() + Constants.Limelight.YAW_OFFSET / tagPose[2]);
     }
 
     public static void refreshValues() {
