@@ -12,13 +12,13 @@ import frc.robot.Constants;
 public class Limelight extends SubsystemBase {
     private static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     private final static DoubleArraySubscriber tagPoseTopic = table.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]);
-    private final static DoubleArraySubscriber fusedPoseTopic = table.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[11]);
+    private final static DoubleArraySubscriber botPoseFieldSpaceTopic = table.getDoubleArrayTopic("botpose").subscribe(new double[6]);
 
     private static double[] tagPose = new double[6];
-    private static double[] fusedPose = new double[11]; // TODO: figure out what this network table consists of
+    private static double[] botPose = new double[6]; // TODO: figure out what this network table consists of
 
-    public static Pose2d getBluePoseRobotSpace() {
-        return new Pose2d(getFusedRX(), getFusedRY(), new Rotation2d(getFusedYaw()));
+    public static Pose2d getRobotPoseBlueSpace() {
+        return new Pose2d(getBotRX(), getBotRY(), new Rotation2d(getBotYaw()));
     }
 
     @Override
@@ -29,32 +29,32 @@ public class Limelight extends SubsystemBase {
     public static boolean tagExists() {
         return !(table.getEntry("tv").getDouble(0) == 0);
     }
-    public static double[] getFusedPoseTable() {
-        return fusedPose;
+    public static double[] getBotPoseTable() {
+        return botPose;
     }
 
-    public static double getFusedRX() {
-        return fusedPose[0];
+    public static double getBotRX() {
+        return botPose[0];
     }
    
-    public static double getFusedRY() {
-        return fusedPose[1];
+    public static double getBotRY() {
+        return botPose[1];
     }
     
-    public static double getFusedRZ() {
-        return fusedPose[2];
+    public static double getBotRZ() {
+        return botPose[2];
     }
 
-    public static double getFusedPitch() {
-        return fusedPose[3];
+    public static double getBotPitch() {
+        return botPose[3];
     }
     
-    public static double getFusedRoll() {
-        return fusedPose[4];
+    public static double getBotRoll() {
+        return botPose[4];
     }
 
-    public static double getFusedYaw() {
-        return fusedPose[5];
+    public static double getBotYaw() {
+        return botPose[5];
     }
 
     // X+ is to the right when looking at the tag
@@ -98,6 +98,6 @@ public class Limelight extends SubsystemBase {
     public static void refreshValues() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tagPose = tagPoseTopic.get(new double[6]);
-        fusedPose = fusedPoseTopic.get(new double[6]);
+        botPose = botPoseFieldSpaceTopic.get(new double[6]);
     }
 }

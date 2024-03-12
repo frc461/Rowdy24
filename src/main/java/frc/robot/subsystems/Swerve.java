@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
 
 public class Swerve extends SubsystemBase {
@@ -61,8 +62,8 @@ public class Swerve extends SubsystemBase {
         limelightRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
 
         AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
-                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getFusedPose, // Robot pose supplier
+                this::setFusedPose, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
                 speeds -> {
@@ -108,7 +109,7 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        updateFusedPose(Limelight.getBluePoseRobotSpace());
+        updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -177,6 +178,7 @@ public class Swerve extends SubsystemBase {
 
     public void setFusedPose(Pose2d newPose){
         fusedPose.resetPosition(getHeading(), getModulePositions(), newPose);
+        swerveOdometry.resetPosition(getHeading(), getModulePositions(), newPose);
     }
 
     public void resetFusedPose(){
@@ -186,15 +188,11 @@ public class Swerve extends SubsystemBase {
     public void updateFusedPose(Pose2d limelightPose){
         fusedPose.update(getHeading(), getModulePositions());
 
-        if (!limelightPose.equals(new Pose2d())) { // TODO: comment out add vision measurement to test swerve odometry itself in pose estimator
+        if (Limelight.tagExists()) { // TODO: comment out add vision measurement to test swerve odometry itself in pose estimator
             fusedPose.addVisionMeasurement(
                     limelightPose,
-                    Timer.getFPGATimestamp(),
-                    VecBuilder.fill(
-                            Math.hypot(Limelight.getTagRX(), Limelight.getTagRZ()) * 0.5,
-                            Math.hypot(Limelight.getTagRX(), Limelight.getTagRZ()) * 0.5,
-                            5
-                    ));
+                    Timer.getFPGATimestamp()
+            );
         }
     }
 
