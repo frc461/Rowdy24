@@ -23,7 +23,7 @@ public enum TagLocation {
     ID_15,
     ID_16;
 
-    public Pose2d getTagLocation(TagLocation tag) {
+    public static Pose2d getTagLocation(TagLocation tag) {
         return switch (tag) {
             case ID_1 ->
                     new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), Rotation2d.fromDegrees(120));

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
+import frc.lib.util.TagLocation;
 import frc.robot.Constants;
 
 import java.util.Optional;
@@ -140,18 +141,15 @@ public class Swerve extends SubsystemBase {
     }
 
     public void driveTurret(Translation2d translation, boolean fieldRelative) {
-        if (Limelight.tagExists()) {
-            drive(
-                    translation,
-                    -limelightRotController.calculate(
-                            0,
-                            Limelight.getTagLateralAngle()
-                    ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
-                    fieldRelative,
-                    true
-            );
-
-        }
+        drive(
+                translation,
+                -limelightRotController.calculate(
+                        getYaw(),
+                        getAngleToSpeakerTarget()
+                ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
+                fieldRelative,
+                true
+        );
     }
 
     public double getYaw() {
@@ -178,6 +176,13 @@ public class Swerve extends SubsystemBase {
 
     public Pose2d getFusedPoseEstimator(){
         return fusedPoseEstimator.getEstimatedPosition();
+    }
+
+    public double getAngleToSpeakerTarget() {
+        Pose2d pose = getFusedPoseEstimator();
+        boolean isRed = DriverStation.getAlliance().filter(value -> value == DriverStation.Alliance.Red).isPresent();
+        Pose2d speakerTag = TagLocation.getTagLocation(isRed ? TagLocation.ID_4 : TagLocation.ID_7);
+        return pose.minus(speakerTag).getRotation().getDegrees();
     }
 
     public void setFusedPoseEstimator(Pose2d newPose){
@@ -220,7 +225,7 @@ public class Swerve extends SubsystemBase {
 
     public Optional<Rotation2d> getRotationTargetOverride() { // only for auto
         if (Limelight.overrideTargetNow) {
-            return Optional.of(Rotation2d.fromDegrees(getYaw() + Limelight.getTagLateralAngle()));
+            return Optional.of(Rotation2d.fromDegrees(getAngleToSpeakerTarget()));
         }
         return Optional.empty();
     }
