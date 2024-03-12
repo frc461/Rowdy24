@@ -7,14 +7,12 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
-    private static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    private final static DoubleArraySubscriber tagPoseTopic = table.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]);
 
-    private static double[] tagPose = new double[6];
-    private static int updates;
+    private static double[] tagPose = LimelightHelpers.getTargetPose_RobotSpace("limelight");
     public static boolean overrideTargetNow = false; // only for auto
 
     @Override
@@ -23,7 +21,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public static boolean tagExists() {
-        return !(table.getEntry("tv").getDouble(0) == 0);
+        return !LimelightHelpers.getTV("limelight");
     }
 
     // X+ is to the right when looking at the tag
@@ -56,16 +54,13 @@ public class Limelight extends SubsystemBase {
 
     // returns lateral angle of tag from center of limelight in degrees
     public static double getTagLateralAngle() {
-        return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees() + Constants.Limelight.YAW_OFFSET / tagPose[2]);
-    }
-
-    public static NetworkTable getTable() {
-        refreshValues();
-        return table;
+        if (LimelightHelpers.getFiducialID("limelight") == 7.0) {
+            return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees() + Constants.Limelight.YAW_OFFSET / tagPose[2]);
+        }
+        return 0.0;
     }
 
     public static void refreshValues() {
-        table = NetworkTableInstance.getDefault().getTable("limelight");
-        tagPose = tagPoseTopic.get(new double[6]);
+        tagPose = LimelightHelpers.getTargetPose_RobotSpace("limelight");
     }
 }
