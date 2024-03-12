@@ -7,7 +7,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.controller.PIDController;
@@ -26,7 +25,7 @@ import java.util.Optional;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
-    private final SwerveDrivePoseEstimator fusedPose;
+    private final SwerveDrivePoseEstimator fusedPoseEstimator;
     private final SwerveModule[] swerveMods;
     private final PIDController limelightRotController;
     public final Pigeon2 gyro;
@@ -65,8 +64,8 @@ public class Swerve extends SubsystemBase {
         limelightRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
 
         AutoBuilder.configureHolonomic(
-                this::getFusedPose, // Robot pose supplier
-                this::setFusedPose, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getFusedPoseEstimator, // Robot pose supplier
+                this::setFusedPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
                 speeds -> {
@@ -102,7 +101,7 @@ public class Swerve extends SubsystemBase {
                 this // Reference to this subsystem to set requirements
         );
 
-        fusedPose = new SwerveDrivePoseEstimator(
+        fusedPoseEstimator = new SwerveDrivePoseEstimator(
             Constants.Swerve.SWERVE_KINEMATICS,
             getHeading(), getModulePositions(),
             getPose()
@@ -114,7 +113,7 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
+        updateFusedPose();
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -177,28 +176,28 @@ public class Swerve extends SubsystemBase {
         return swerveOdometry.getPoseMeters();
     }
 
-    public Pose2d getFusedPose(){
-        return fusedPose.getEstimatedPosition();
+    public Pose2d getFusedPoseEstimator(){
+        return fusedPoseEstimator.getEstimatedPosition();
     }
 
-    public void setFusedPose(Pose2d newPose){
-        fusedPose.resetPosition(getHeading(), getModulePositions(), newPose);
-        swerveOdometry.resetPosition(getHeading(), getModulePositions(), newPose);
+    public void setFusedPoseEstimator(Pose2d newPose){
+        fusedPoseEstimator.resetPosition(getHeading(), getModulePositions(), newPose);
+        resetOdometry(newPose);
     }
 
     public void resetFusedPose(){
-        setFusedPose(new Pose2d());
+        setFusedPoseEstimator(new Pose2d());
     }
 
-    public void updateFusedPose(Pose2d limelightPose){
-        fusedPose.update(getHeading(), getModulePositions());
+    public void updateFusedPose(){
+        fusedPoseEstimator.update(getHeading(), getModulePositions());
 
-        if (Limelight.tagExists()) { // TODO: comment out add vision measurement to test swerve odometry itself in pose estimator
-            fusedPose.addVisionMeasurement(
-                    limelightPose,
-                    Timer.getFPGATimestamp()
-                            - LimelightHelpers.getLatency_Pipeline("limelight")
-                            - LimelightHelpers.getLatency_Capture("limelight")
+        LimelightHelpers.PoseEstimate visionMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+        if (visionMeasurement.tagCount >= 2) {
+            fusedPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
+            fusedPoseEstimator.addVisionMeasurement(
+                    visionMeasurement.pose,
+                    visionMeasurement.timestampSeconds
             );
         }
     }
