@@ -244,8 +244,7 @@ public class RobotContainer {
                                 () -> -driverXbox.getLeftY(), // Ordinate Translation
                                 () -> -driverXbox.getLeftX(), // Coordinate Translation
                                 driverXbox.b() // Robot-centric trigger
-                        ),
-                        new AutoAlignCommand(angler,  swerve)
+                        )
                 )
         );
 
