@@ -192,6 +192,8 @@ public class Swerve extends SubsystemBase {
             fusedPose.addVisionMeasurement(
                     limelightPose,
                     Timer.getFPGATimestamp()
+                            - LimelightHelpers.getLatency_Pipeline("limelight")
+                            - LimelightHelpers.getLatency_Capture("limelight")
             );
         }
     }
