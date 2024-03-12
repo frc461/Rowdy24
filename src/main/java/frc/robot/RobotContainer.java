@@ -88,7 +88,7 @@ public class RobotContainer {
 
 
     /* Variables */
-    private final BooleanSupplier readyToShoot = () -> shooter.nearTarget() && angler.anglerNearTarget() && swerve.turretNearTarget();
+    private final BooleanSupplier readyToShoot = () -> shooter.nearTarget() && angler.anglerNearTarget();
     private final SendableChooser<Command> chooser;
 
     /**
@@ -128,6 +128,8 @@ public class RobotContainer {
                 )
         );
 
+        // TODO: Add constant angler align function (if the new equation works) and get rid of the buttons for it
+
         // Configure controller button bindings
         configureButtonBindings();
     }
@@ -164,7 +166,7 @@ public class RobotContainer {
                         new RevUpShooterCommand(
                                 shooter
                         ).until(() -> !intakeCarriage.noteInShootingSystem()),
-                        new WaitUntilCommand(shooter::nearTarget).andThen(new IntakeCarriageCommand(
+                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
@@ -178,7 +180,7 @@ public class RobotContainer {
                         new RevUpShooterCommand(
                                 shooter
                         ).until(() -> !intakeCarriage.noteInShootingSystem()),
-                        new WaitUntilCommand(shooter::nearTarget).andThen(new IntakeCarriageCommand(
+                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
@@ -198,7 +200,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "intakeThenShoot",
-                new WaitUntilCommand(shooter::nearTarget).andThen(new IntakeCarriageCommand(
+                new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0.9,
                                 1
@@ -290,6 +292,7 @@ public class RobotContainer {
                         .andThen(new InstantCommand(elevator::stopElevator))
         );
 
+        // TODO: Test this
         /* Auto-Outtake Note */
         opXbox.povRight().whileTrue(
                 new ParallelCommandGroup(
@@ -326,12 +329,15 @@ public class RobotContainer {
                         ).until(intakeCarriage::getAmpBeamBroken))
         );
 
-        /* Override Shooter (deadband defaults to 0.5) */
+        /* Layup Shoot (deadband defaults to 0.5) */
+        opXbox.leftTrigger().onTrue(
+                new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET), angler)
+        );
 
         opXbox.leftTrigger().whileTrue(
                 new ParallelCommandGroup(
                         new RevUpShooterCommand(shooter),
-                        new WaitUntilCommand(shooter::nearTarget).andThen(new IntakeCarriageCommand(
+                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
@@ -339,20 +345,16 @@ public class RobotContainer {
                 ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
 
-        opXbox.leftTrigger().onTrue(
-                new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET), angler)
-        );
-
         opXbox.leftTrigger().onFalse(
                 new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LOWER_LIMIT), angler)
         );
 
-        /* Rev up shooter and run carriage when its up to speed */
+        /* Aim then Shoot */
         opXbox.rightTrigger().whileTrue(
                 new ParallelCommandGroup(
                         new AutoAlignCommand(angler, swerve).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
                         new RevUpShooterCommand(shooter),
-                        new WaitUntilCommand(shooter::nearTarget).andThen(new IntakeCarriageCommand(
+                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
