@@ -12,6 +12,8 @@ import frc.lib.util.LimelightHelpers;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
+import java.util.function.BooleanSupplier;
+
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -86,6 +88,7 @@ public class RobotContainer {
 
 
     /* Variables */
+    private final BooleanSupplier readyToShoot = () -> shooter.nearTarget() && angler.anglerNearTarget() && swerve.turretNearTarget();
     private final SendableChooser<Command> chooser;
 
     /**
@@ -161,7 +164,7 @@ public class RobotContainer {
                         new RevUpShooterCommand(
                                 shooter
                         ).until(() -> !intakeCarriage.noteInShootingSystem()),
-                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                        new WaitUntilCommand(shooter::nearTarget).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
@@ -175,7 +178,7 @@ public class RobotContainer {
                         new RevUpShooterCommand(
                                 shooter
                         ).until(() -> !intakeCarriage.noteInShootingSystem()),
-                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                        new WaitUntilCommand(shooter::nearTarget).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
@@ -195,7 +198,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "intakeThenShoot",
-                new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                new WaitUntilCommand(shooter::nearTarget).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0.9,
                                 1
@@ -329,7 +332,7 @@ public class RobotContainer {
         opXbox.leftTrigger().whileTrue(
                 new ParallelCommandGroup(
                         new RevUpShooterCommand(shooter),
-                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                        new WaitUntilCommand(shooter::nearTarget).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
@@ -350,7 +353,7 @@ public class RobotContainer {
                 new ParallelCommandGroup(
                         new AutoAlignCommand(angler, swerve).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
                         new RevUpShooterCommand(shooter),
-                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                        new WaitUntilCommand(shooter::nearTarget).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
@@ -369,6 +372,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
+        SmartDashboard.putBoolean("Turret near target", swerve.turretNearTarget());
         SmartDashboard.putData("Swerve Command", swerve);
 
         // intake-carriage debug
@@ -398,8 +402,8 @@ public class RobotContainer {
         SmartDashboard.putString("botpose_helpers_pose", LimelightHelpers.getBotPose2d_wpiBlue("limelight").getTranslation().toString());
 
         // shooter debug
-         SmartDashboard.getNumber("Shooter Trip", Constants.Angler.ANGLER_ENCODER_OFFSET);
-         SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
+         SmartDashboard.getNumber("Shooter Trim", Constants.Angler.ANGLER_ENCODER_OFFSET);
+         SmartDashboard.putBoolean("Shooter Min Error", shooter.nearTarget());
          SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
          SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
          SmartDashboard.putNumber("Shooter error", shooter.getError());
@@ -408,6 +412,7 @@ public class RobotContainer {
         // angler debug
          SmartDashboard.putNumber("Angler encoder", angler.getPosition());
          SmartDashboard.putNumber("Angler error", angler.getError());
+         SmartDashboard.putBoolean("Angler Min Error", angler.anglerNearTarget());
          SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
          SmartDashboard.putData("Angler Cmd", angler);
          SmartDashboard.putNumber("Angler trim", Constants.Angler.ANGLER_ENCODER_OFFSET);

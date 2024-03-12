@@ -37,6 +37,9 @@ public final class Constants {
         public static final double ANGLER_I = 0.00001;
         public static final double ANGLER_D = 0.0001;
 
+        // required accuracy to consider angler accurate to shoot a note
+        public static final double ANGLER_ACCURACY_REQUIREMENT = 0.97;
+
         // limit switches
         public static final int ANGLER_LOWER_LIMIT_SWITCH = 6;
 
@@ -134,6 +137,8 @@ public final class Constants {
     }
 
     public static final class Swerve {
+        // required accuracy to consider turret accurate to shoot a note
+        public static final double TURRET_ACCURACY_REQUIREMENT = 2.0;
         // gyro config
         public static final double GYRO_OFFSET = 0;
         public static final int PIGEON_ID = 51;

@@ -77,7 +77,7 @@ public class Shooter extends SubsystemBase {
         bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
     }
 
-    public boolean minimalError() {
+    public boolean nearTarget() {
         return accuracy > Constants.Shooter.SHOOTER_ACCURACY_REQUIREMENT && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 4500;
     }
 

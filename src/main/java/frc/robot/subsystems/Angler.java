@@ -39,9 +39,7 @@ public class Angler extends SubsystemBase {
     @Override
     public void periodic() {
         error = Math.abs(target - getPosition());
-        // TODO: change accuracy + create accuracy check using turret
-        accuracy = Limelight.tagExists() ? (target > getPosition()) ?
-                getPosition() / target : target / getPosition() : -1.0;
+        accuracy = target > getPosition() ? getPosition() / target : target / getPosition();
     }
 
     public double getPosition() { 
@@ -62,6 +60,10 @@ public class Angler extends SubsystemBase {
 
     public boolean lowerSwitchTriggered() {
         return !lowerLimitSwitch.get();
+    }
+
+    public boolean anglerNearTarget() {
+        return accuracy > Constants.Angler.ANGLER_ACCURACY_REQUIREMENT;
     }
 
     public void checkLimitSwitches() {

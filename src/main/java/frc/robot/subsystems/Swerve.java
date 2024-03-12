@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
-import frc.lib.util.TagLocation;
 import frc.robot.Constants;
 
 import java.util.Optional;
@@ -31,6 +30,7 @@ public class Swerve extends SubsystemBase {
     private final SwerveModule[] swerveMods;
     private final PIDController limelightRotController;
     public final Pigeon2 gyro;
+    private double turretError;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
@@ -103,19 +103,24 @@ public class Swerve extends SubsystemBase {
                 this // Reference to this subsystem to set requirements
         );
 
+        PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
+
         fusedPoseEstimator = new SwerveDrivePoseEstimator(
             Constants.Swerve.SWERVE_KINEMATICS,
             getHeading(), getModulePositions(),
             getPose()
         );
 
-        PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
+        turretError = 1.0;
     }
 
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
         updateFusedPose();
+        turretError = Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees()) > 180 ?
+                getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees() - 360 :
+                getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees();
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -145,7 +150,7 @@ public class Swerve extends SubsystemBase {
         drive(
                 translation,
                 -limelightRotController.calculate(
-                        getYaw(),
+                        getFusedPoseEstimator().getRotation().getDegrees(),
                         getAngleToSpeakerTarget()
                 ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
                 fieldRelative,
@@ -179,6 +184,11 @@ public class Swerve extends SubsystemBase {
         return fusedPoseEstimator.getEstimatedPosition();
     }
 
+    public void setFusedPoseEstimator(Pose2d newPose){
+        fusedPoseEstimator.resetPosition(getHeading(), getModulePositions(), newPose);
+        resetOdometry(newPose);
+    }
+
     public Transform2d getVectorToSpeakerTarget() {
         Pose2d fusedPose = getFusedPoseEstimator();
         Pose2d speakerTagPose = Limelight.getSpeakerTagPose();
@@ -189,9 +199,8 @@ public class Swerve extends SubsystemBase {
         return getVectorToSpeakerTarget().getRotation().getDegrees();
     }
 
-    public void setFusedPoseEstimator(Pose2d newPose){
-        fusedPoseEstimator.resetPosition(getHeading(), getModulePositions(), newPose);
-        resetOdometry(newPose);
+    public boolean turretNearTarget() {
+        return Math.abs(turretError) > Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
     }
 
     public void resetFusedPose(){
@@ -235,6 +244,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void zeroGyro() {
+        // TODO: two options: use getFusedPoseEstimator rotation for alignments or use gyro zeroed to said rotation for alignments
         gyro.setYaw(Constants.Swerve.GYRO_OFFSET);
     }
 
