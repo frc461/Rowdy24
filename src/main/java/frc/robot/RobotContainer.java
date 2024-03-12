@@ -152,7 +152,12 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "autoShoot",
                 new ParallelCommandGroup(
-                        new InstantCommand(angler::setAlignedAngle, angler),
+                        new InstantCommand(() -> angler.setEncoderVal(
+                                Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
+                                        swerve.getVectorToSpeakerTarget().getY(),
+                                        swerve.getVectorToSpeakerTarget().getX() + Constants.Angler.ANGLER_ENCODER_OFFSET
+                                )
+                        ), angler),
                         new RevUpShooterCommand(
                                 shooter
                         ).until(() -> !intakeCarriage.noteInShootingSystem()),
@@ -185,7 +190,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "alignAngler",
-                new AutoAlignCommand(angler)
+                new AutoAlignCommand(angler, swerve)
         );
 
         NamedCommands.registerCommand(
@@ -237,7 +242,7 @@ public class RobotContainer {
                                 () -> -driverXbox.getLeftX(), // Coordinate Translation
                                 driverXbox.b() // Robot-centric trigger
                         ),
-                        new AutoAlignCommand(angler)
+                        new AutoAlignCommand(angler,  swerve)
                 )
         );
 
@@ -257,7 +262,7 @@ public class RobotContainer {
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, true));
 
         /* Auto-align */
-        opXbox.x().whileTrue(new AutoAlignCommand(angler));
+        opXbox.x().whileTrue(new AutoAlignCommand(angler, swerve));
 
         /* Amp Elevator Preset */
         opXbox.y().onTrue(
@@ -343,7 +348,7 @@ public class RobotContainer {
         /* Rev up shooter and run carriage when its up to speed */
         opXbox.rightTrigger().whileTrue(
                 new ParallelCommandGroup(
-                        new AutoAlignCommand(angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
+                        new AutoAlignCommand(angler, swerve).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
                         new RevUpShooterCommand(shooter),
                         new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,

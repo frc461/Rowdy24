@@ -12,6 +12,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -178,11 +179,14 @@ public class Swerve extends SubsystemBase {
         return fusedPoseEstimator.getEstimatedPosition();
     }
 
+    public Transform2d getVectorToSpeakerTarget() {
+        Pose2d fusedPose = getFusedPoseEstimator();
+        Pose2d speakerTagPose = Limelight.getSpeakerTagPose();
+        return fusedPose.minus(speakerTagPose);
+    }
+
     public double getAngleToSpeakerTarget() {
-        Pose2d pose = getFusedPoseEstimator();
-        boolean isRed = DriverStation.getAlliance().filter(value -> value == DriverStation.Alliance.Red).isPresent();
-        Pose2d speakerTag = TagLocation.getTagLocation(isRed ? TagLocation.ID_4 : TagLocation.ID_7);
-        return pose.minus(speakerTag).getRotation().getDegrees();
+        return getVectorToSpeakerTarget().getRotation().getDegrees();
     }
 
     public void setFusedPoseEstimator(Pose2d newPose){

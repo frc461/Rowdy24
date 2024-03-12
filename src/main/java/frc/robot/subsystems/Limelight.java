@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
+import frc.lib.util.TagLocation;
 import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
@@ -44,6 +47,13 @@ public class Limelight extends SubsystemBase {
 
     public static double getTagRoll() {
         return tagPose[5];
+    }
+
+    public static Pose2d getSpeakerTagPose() {
+        return TagLocation.getTagLocation(
+                DriverStation.getAlliance().filter(value -> value == DriverStation.Alliance.Red).isPresent() ?
+                        TagLocation.ID_4 : TagLocation.ID_7
+        );
     }
 
     // returns lateral angle of tag from center of limelight in degrees
