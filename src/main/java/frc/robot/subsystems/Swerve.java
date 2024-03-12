@@ -7,6 +7,9 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,26 +17,24 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
 
 import java.util.Optional;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
+    private final SwerveDrivePoseEstimator fusedPose;
     private final SwerveModule[] swerveMods;
     private final PIDController limelightRotController;
     public final Pigeon2 gyro;
-    final Field2d field = new Field2d();
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
-        
-        SmartDashboard.putData("Field", field);
 
         swerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
@@ -64,8 +65,8 @@ public class Swerve extends SubsystemBase {
         limelightRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
 
         AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
-                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getFusedPose, // Robot pose supplier
+                this::setFusedPose, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
                 speeds -> {
@@ -86,7 +87,7 @@ public class Swerve extends SubsystemBase {
                                 Constants.Auto.AUTO_ANGLE_I,
                                 Constants.Auto.AUTO_ANGLE_D
                         ),
-                        Constants.Swerve.MAX_SPEED - 2, // Max module speed, in m/s
+                        Constants.Swerve.MAX_SPEED, // Max module speed, in m/s
                         Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to
                                                           // furthest module.
                         new ReplanningConfig(true, true) // Default path replanning config. See the API for the options here
@@ -101,13 +102,19 @@ public class Swerve extends SubsystemBase {
                 this // Reference to this subsystem to set requirements
         );
 
+        fusedPose = new SwerveDrivePoseEstimator(
+            Constants.Swerve.SWERVE_KINEMATICS,
+            getHeading(), getModulePositions(),
+            getPose()
+        );
+
         PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
     }
 
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        field.setRobotPose(swerveOdometry.getPoseMeters());
+        updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -139,7 +146,7 @@ public class Swerve extends SubsystemBase {
                     translation,
                     -limelightRotController.calculate(
                             0,
-                            Limelight.getLateralOffset()
+                            Limelight.getTagLateralAngle()
                     ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
                     fieldRelative,
                     true
@@ -170,6 +177,32 @@ public class Swerve extends SubsystemBase {
         return swerveOdometry.getPoseMeters();
     }
 
+    public Pose2d getFusedPose(){
+        return fusedPose.getEstimatedPosition();
+    }
+
+    public void setFusedPose(Pose2d newPose){
+        fusedPose.resetPosition(getHeading(), getModulePositions(), newPose);
+        swerveOdometry.resetPosition(getHeading(), getModulePositions(), newPose);
+    }
+
+    public void resetFusedPose(){
+        setFusedPose(new Pose2d());
+    }
+
+    public void updateFusedPose(Pose2d limelightPose){
+        fusedPose.update(getHeading(), getModulePositions());
+
+        if (Limelight.tagExists()) { // TODO: comment out add vision measurement to test swerve odometry itself in pose estimator
+            fusedPose.addVisionMeasurement(
+                    limelightPose,
+                    Timer.getFPGATimestamp()
+                            - LimelightHelpers.getLatency_Pipeline("limelight")
+                            - LimelightHelpers.getLatency_Capture("limelight")
+            );
+        }
+    }
+
     public SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (SwerveModule mod : swerveMods) {
@@ -188,7 +221,7 @@ public class Swerve extends SubsystemBase {
 
     public Optional<Rotation2d> getRotationTargetOverride() { // only for auto
         if (Limelight.overrideTargetNow) {
-            return Optional.of(Rotation2d.fromDegrees(getYaw() + Limelight.getLateralOffset()));
+            return Optional.of(Rotation2d.fromDegrees(getYaw() + Limelight.getTagLateralAngle()));
         }
         return Optional.empty();
     }

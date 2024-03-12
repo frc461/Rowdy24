@@ -69,8 +69,8 @@ public class Angler extends SubsystemBase {
         limelightTarget = Limelight.tagExists() ?
                 Math.min(
                         Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
-                                Limelight.getRX(),
-                                Limelight.getRZ()) + Constants.Angler.ANGLER_ENCODER_OFFSET,
+                                Limelight.getTagRX(),
+                                Limelight.getTagRZ()) + Constants.Angler.ANGLER_ENCODER_OFFSET,
                         Constants.Angler.ANGLER_UPPER_LIMIT
                 ) : getPosition();
     }

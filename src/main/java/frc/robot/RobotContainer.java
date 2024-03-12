@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.lib.util.LimelightHelpers;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -358,52 +359,54 @@ public class RobotContainer {
         SmartDashboard.putData("Scheduled Commands", CommandScheduler.getInstance());
 
         // robot position
-        SmartDashboard.putString("Robot Pose2d", swerve.getPose().getTranslation().toString());
+        SmartDashboard.putString("Robot Unfused Pose2d", swerve.getPose().getTranslation().toString());
+        SmartDashboard.putString("Robot Fused Pose2d", swerve.getFusedPose().getTranslation().toString());
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
         SmartDashboard.putData("Swerve Command", swerve);
 
         // intake-carriage debug
-        SmartDashboard.putBoolean("Beam Brake carriage", intakeCarriage.getCarriageBeamBroken());
-        SmartDashboard.putBoolean("Beam Brake amp", intakeCarriage.getAmpBeamBroken());
-        SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
-        SmartDashboard.putBoolean("note in shooting system", intakeCarriage.noteInShootingSystem());
-        SmartDashboard.putData("Intake-Carriage Cmd", intakeCarriage);
+         SmartDashboard.putBoolean("Beam Brake carriage", intakeCarriage.getCarriageBeamBroken());
+         SmartDashboard.putBoolean("Beam Brake amp", intakeCarriage.getAmpBeamBroken());
+         SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
+         SmartDashboard.putBoolean("note in shooting system", intakeCarriage.noteInShootingSystem());
+         SmartDashboard.putData("Intake-Carriage Cmd", intakeCarriage);
 
         // elevator debug
-       SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
-       SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
-       SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
-       SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
-       SmartDashboard.putBoolean("Servo Limit Triggered?", elevator.servoSwitchTriggered());
-       SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
-       SmartDashboard.putData("Elevator Cmd", elevator);
+        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
+        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
+        SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
+        SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
+        SmartDashboard.putBoolean("Servo Limit Triggered?", elevator.servoSwitchTriggered());
+        SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
+        SmartDashboard.putData("Elevator Cmd", elevator);
 
         // limelight debug
-        SmartDashboard.putNumber("Limelight Updates", Limelight.getUpdates());
-        SmartDashboard.putNumber("Limelight Yaw", Limelight.getYaw());
-        SmartDashboard.putNumber("Limelight Pitch", Limelight.getPitch());
-        SmartDashboard.putNumber("Limelight Roll", Limelight.getRoll());
-        SmartDashboard.putNumber("Limelight X", Limelight.getRX());
-        SmartDashboard.putNumber("Limelight Y", Limelight.getRY());
-        SmartDashboard.putNumber("Limelight Z", Limelight.getRZ());
-        SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getRZ(), Limelight.getRX()));
+        SmartDashboard.putNumber("Limelight Yaw", Limelight.getTagYaw());
+        SmartDashboard.putNumber("Limelight Pitch", Limelight.getTagPitch());
+        SmartDashboard.putNumber("Limelight Roll", Limelight.getTagRoll());
+        SmartDashboard.putNumber("Limelight X", Limelight.getTagRX());
+        SmartDashboard.putNumber("Limelight Y", Limelight.getTagRY());
+        SmartDashboard.putNumber("Limelight Z", Limelight.getTagRZ());
+        SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getTagRZ(), Limelight.getTagRX()));
+        SmartDashboard.putString("botpose_helpers_pose", LimelightHelpers.getBotPose2d_wpiBlue("limelight").getTranslation().toString());
 
         // shooter debug
-        SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
-        SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
-        SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
-        SmartDashboard.putNumber("Shooter error", shooter.getError());
-        SmartDashboard.putData("Shooter Cmd", shooter);
+         SmartDashboard.getNumber("Shooter Trip", Constants.Angler.ANGLER_ENCODER_OFFSET);
+         SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
+         SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
+         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
+         SmartDashboard.putNumber("Shooter error", shooter.getError());
+         SmartDashboard.putData("Shooter Cmd", shooter);
 
         // angler debug
-        SmartDashboard.putNumber("Angler encoder", angler.getPosition());
-        SmartDashboard.putNumber("Angler error", angler.getError());
-        SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
-        SmartDashboard.putData("Angler Cmd", angler);
-        SmartDashboard.putNumber("Angler trim", Constants.Angler.ANGLER_ENCODER_OFFSET);
-        Constants.Angler.ANGLER_ENCODER_OFFSET = SmartDashboard.getNumber("Angler trim", 0.0);
+         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
+         SmartDashboard.putNumber("Angler error", angler.getError());
+         SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
+         SmartDashboard.putData("Angler Cmd", angler);
+         SmartDashboard.putNumber("Angler trim", Constants.Angler.ANGLER_ENCODER_OFFSET);
+         Constants.Angler.ANGLER_ENCODER_OFFSET = SmartDashboard.getNumber("Angler trim", 0.0);
     }
 
     /**
