@@ -117,7 +117,7 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        updateFusedPose();
+        updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
         turretError = Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees()) > 180 ?
                 getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees() - 360 :
                 getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees();
@@ -207,15 +207,15 @@ public class Swerve extends SubsystemBase {
         setFusedPoseEstimator(new Pose2d());
     }
 
-    public void updateFusedPose(){
+    public void updateFusedPose(Pose2d limelightPose){
         fusedPoseEstimator.update(getHeading(), getModulePositions());
 
-        LimelightHelpers.PoseEstimate visionMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-        if (visionMeasurement.tagCount >= 2) {
-            fusedPoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
+        if (Limelight.tagExists()) {
             fusedPoseEstimator.addVisionMeasurement(
-                    visionMeasurement.pose,
-                    visionMeasurement.timestampSeconds
+                    limelightPose,
+                    Timer.getFPGATimestamp()
+                            - LimelightHelpers.getLatency_Pipeline("limelight") / 1000.0
+                            - LimelightHelpers.getLatency_Capture("limelight") / 1000.0
             );
         }
     }
