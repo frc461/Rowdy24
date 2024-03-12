@@ -129,7 +129,6 @@ public class RobotContainer {
         );
 
         // TODO: Add and test constant shooter function
-        // TODO: Add constant angler align function (if the new equation works) and get rid of the buttons for it
 
         // Configure controller button bindings
         configureButtonBindings();
@@ -262,6 +261,7 @@ public class RobotContainer {
         /* Intake Override */
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, true));
 
+        // TODO: Change to toggle constant angler align function (if the new equation works)
         /* Auto-align */
         opXbox.x().whileTrue(new AutoAlignCommand(angler, swerve));
 
