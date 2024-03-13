@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.proto.Photon;
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -8,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
-    private static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    private final static DoubleArraySubscriber tagPoseTopic = table.getDoubleArrayTopic("targetpose_robotspace").subscribe(new double[6]);
-    private static double[] tagPose = new double[6];
+    private static PhotonCamera camera = new PhotonCamera("photonvision");
+    private static PhotonPipelineResult result = camera.getLatestResult();
+    // private static double[] tagPose = new double[6];
     private static int updates;
 
     @Override
@@ -20,7 +24,7 @@ public class Limelight extends SubsystemBase {
 
     public static boolean tagExists() {
         refreshValues();
-        return !(getTable().getEntry("tv").getDouble(0) == 0);
+        return result.hasTargets();
     }
 
     public static int getUpdates() {
@@ -28,53 +32,58 @@ public class Limelight extends SubsystemBase {
     }
 
     // X+ is to the right when looking at the tag
+    // The tag is gotten in camera space (relative to camera position)
     public static double getRX() {
         refreshValues();
-        return tagPose[0];
+        return result.getBestTarget().getBestCameraToTarget().getX();
     }
 
     // Y+ is upwards
     public static double getRY() {
         refreshValues();
-        return tagPose[1];
+        return result.getBestTarget().getBestCameraToTarget().getY();
     }
 
     // Z+ is perpendicular to the plane of the limelight (Z+ is towards tag on data
     // side, Z- is on other side of robot)
     public static double getRZ() {
         refreshValues();
-        return tagPose[2];
+        return result.getBestTarget().getBestCameraToTarget().getZ();
     }
 
     public static double getPitch() {
         refreshValues();
-        return tagPose[3];
+        return result.getBestTarget().getPitch();
     }
 
     public static double getYaw() {
         refreshValues();
-        return tagPose[4];
+        return result.getBestTarget().getYaw();
     }
 
-    public static double getRoll() {
-        refreshValues();
-        return tagPose[5];
-    }
+
+    //This is an unused functin, and photonVision does not return roll
+
+
+    // public static double getRoll() {
+    //     refreshValues();
+    //     return result.getBestTarget().getRoll();
+    // }
+
 
     // returns lateral angle of tag from center of limelight in degrees
     public static double getLateralOffset() {
         refreshValues();
-        return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees() + Constants.Limelight.YAW_OFFSET / tagPose[2]);
-    }
-
-    public static NetworkTable getTable() {
-        refreshValues();
-        return table;
+        return (new Rotation2d(
+            result.getBestTarget().getBestCameraToTarget().getZ(),
+            result.getBestTarget().getBestCameraToTarget().getX()
+            )
+            .getDegrees() + Constants.Limelight.YAW_OFFSET / 
+            result.getBestTarget().getBestCameraToTarget().getZ());
     }
 
     public static void refreshValues() {
-        table = NetworkTableInstance.getDefault().getTable("limelight");
-        tagPose = tagPoseTopic.get(new double[6]);
+        result = camera.getLatestResult();
         updates++;
     }
 }
