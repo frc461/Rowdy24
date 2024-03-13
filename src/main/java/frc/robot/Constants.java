@@ -53,13 +53,15 @@ public final class Constants {
         public static double ANGLER_ENCODER_OFFSET = 0;
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
-        public static final double Y_COMPONENT_AIM = SPEAKER_HEIGHT - SHOOTER_HEIGHT;
-        public static final double Z_DEPTH_OFFSET = -0.23; // or 0.04 // Half of the depth of the speaker into the field
-        public static final BiFunction<Double, Double, Double> ANGLE_TO_ENCODER_VALUE = (angle, dist) -> 20.0 / 41.0 * (angle + dist * .65 - 12.0) + Constants.Angler.ANGLER_ENCODER_OFFSET;
+        public static final double Z_COMPONENT_AIM = SPEAKER_HEIGHT - SHOOTER_HEIGHT;
+        public static final double X_DEPTH_OFFSET = -0.23; // Half of the depth of the speaker into the field
+        // TODO: Tune dist * .65 (measure difference in angle for it to work)
+        public static final BiFunction<Double, Double, Double> ANGLE_TO_ENCODER_VALUE =
+                (angle, dist) -> 20.0 / 41.0 * (angle + dist * .65 - 12.0) + Constants.Angler.ANGLER_ENCODER_OFFSET;
         public static final BiFunction<Double, Double, Double> AUTO_ANGLER_AIM_EQUATION =
-                (x, z) -> ANGLE_TO_ENCODER_VALUE.apply(
-                        Math.toDegrees(Math.atan(Y_COMPONENT_AIM / Math.hypot(x, z + Z_DEPTH_OFFSET))),
-                        Math.hypot(x, z)
+                (y, x) -> ANGLE_TO_ENCODER_VALUE.apply(
+                        Math.toDegrees(Math.atan(Z_COMPONENT_AIM / Math.hypot(y, x + X_DEPTH_OFFSET))), // angle
+                        Math.hypot(y, x) // error due to gravity, friction, etc.
                 );
     }
 
