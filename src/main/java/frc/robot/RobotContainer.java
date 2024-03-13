@@ -128,10 +128,9 @@ public class RobotContainer {
                 )
         );
 
-        // TODO: Add and test constant shooter function
-
+        // TODO: Test constant shooter function
         shooter.setDefaultCommand(
-                new ConstantShooterCommand(shooter)
+                new RunCommand(() -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED), shooter)
         );
 
         // Configure controller button bindings
@@ -339,13 +338,15 @@ public class RobotContainer {
                         ).until(intakeCarriage::getAmpBeamBroken))
         );
 
-        /* Layup Shoot (deadband defaults to 0.5) */
-        opXbox.leftTrigger().onTrue(
-                new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET), angler)
-        );
-
         opXbox.leftTrigger().whileTrue(
                 new ParallelCommandGroup(
+                        new FunctionalCommand(
+                                () -> {},
+                                () -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET),
+                                isFinished -> angler.setEncoderVal(Constants.Angler.ANGLER_LOWER_LIMIT),
+                                () -> false,
+                                angler
+                        ),
                         new RevUpShooterCommand(shooter, swerve),
                         new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
@@ -353,10 +354,6 @@ public class RobotContainer {
                                 1
                         ))
                 ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
-        );
-
-        opXbox.leftTrigger().onFalse(
-                new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LOWER_LIMIT), angler)
         );
 
         /* Aim then Shoot */
