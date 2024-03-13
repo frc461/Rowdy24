@@ -235,10 +235,10 @@ public class RobotContainer {
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
         /* Increment Trim */
-        driverXbox.povUp().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET++));
+        driverXbox.povUp().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
 
         /* Decrement Trim */
-        driverXbox.povDown().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET--));
+        driverXbox.povDown().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
