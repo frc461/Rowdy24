@@ -7,12 +7,10 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -91,7 +89,7 @@ public class Swerve extends SubsystemBase {
                         Constants.Swerve.MAX_SPEED, // Max module speed, in m/s
                         Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to
                                                           // furthest module.
-                        new ReplanningConfig(true, true) // Default path replanning config. See the API for the options here
+                        new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {
                     // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -147,6 +145,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void driveTurret(Translation2d translation, boolean fieldRelative) {
+        // aligns with speaker April Tag
         drive(
                 translation,
                 limelightRotController.calculate(
