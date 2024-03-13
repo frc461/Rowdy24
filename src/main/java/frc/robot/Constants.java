@@ -83,7 +83,7 @@ public final class Constants {
         public static final double ELEVATOR_D = 0.0;
 
         // required accuracy to consider angler accurate to shoot a note
-        public static final double ELEVATOR_ACCURACY_REQUIREMENT = 0.9;
+        public static final double ELEVATOR_ACCURACY_REQUIREMENT = 0.85;
 
         // presets
         public static final double ELEVATOR_LOWER_LIMIT = 0;
