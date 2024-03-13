@@ -77,6 +77,10 @@ public class Elevator extends SubsystemBase {
         return elevator.getVelocity().getValueAsDouble();
     }
 
+    public boolean isClamped() {
+        return clamped;
+    }
+
     public boolean elevatorSwitchTriggered() {
         return !elevatorSwitch.get();
     }

@@ -395,6 +395,7 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
         SmartDashboard.putBoolean("Servo Limit Triggered?", elevator.servoSwitchTriggered());
         SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
+        SmartDashboard.putBoolean("Clamped?", elevator.isClamped());
         SmartDashboard.putData("Elevator Cmd", elevator);
 
         // limelight debug
