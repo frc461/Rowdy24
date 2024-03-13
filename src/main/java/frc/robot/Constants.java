@@ -74,8 +74,8 @@ public final class Constants {
 
         // servo to hold elevator in endgame
         public static final int ELEVATOR_SERVO_PORT = 1;
-        public static final double ELEVATOR_SERVO_CLAMPED_POS = 0.4185; // 1540 .5285
-        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 0.7357; // 1630 .5957
+        public static final double ELEVATOR_SERVO_CLAMPED_POS = .07; // 1540 .4185
+        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = .39; // 1630 .7357
         
         // pid
         public static final double ELEVATOR_P = 0.05;

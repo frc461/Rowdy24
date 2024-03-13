@@ -291,11 +291,10 @@ public class RobotContainer {
         opXbox.povDown().whileTrue(
                 new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
                         .andThen(new InstantCommand(() -> elevator.climb(true)))
-                        .andThen(new WaitCommand(0.75))
+                        .andThen(new WaitCommand(0.25))
                         .andThen(new InstantCommand(elevator::stopElevator))
         );
 
-        // TODO: Test this
         /* Auto-Outtake Note */
         opXbox.povRight().whileTrue(
                 new ParallelCommandGroup(
@@ -383,11 +382,11 @@ public class RobotContainer {
         SmartDashboard.putData("Swerve Command", swerve);
 
         // intake-carriage debug
-         SmartDashboard.putBoolean("Beam Brake carriage", intakeCarriage.getCarriageBeamBroken());
-         SmartDashboard.putBoolean("Beam Brake amp", intakeCarriage.getAmpBeamBroken());
-         SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
-         SmartDashboard.putBoolean("note in shooting system", intakeCarriage.noteInShootingSystem());
-         SmartDashboard.putData("Intake-Carriage Cmd", intakeCarriage);
+        SmartDashboard.putBoolean("Beam Brake carriage", intakeCarriage.getCarriageBeamBroken());
+        SmartDashboard.putBoolean("Beam Brake amp", intakeCarriage.getAmpBeamBroken());
+        SmartDashboard.putBoolean("Beam Brake shooter", intakeCarriage.getShooterBeamBroken());
+        SmartDashboard.putBoolean("note in shooting system", intakeCarriage.noteInShootingSystem());
+        SmartDashboard.putData("Intake-Carriage Cmd", intakeCarriage);
 
         // elevator debug
         SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
@@ -409,19 +408,19 @@ public class RobotContainer {
         SmartDashboard.putString("botpose_helpers_pose", LimelightHelpers.getBotPose2d_wpiBlue("limelight").getTranslation().toString());
 
         // shooter debug
-         SmartDashboard.putBoolean("Shooter Min Error", shooter.nearTarget());
-         SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
-         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
-         SmartDashboard.putNumber("Shooter error", shooter.getError());
-         SmartDashboard.putData("Shooter Cmd", shooter);
+        SmartDashboard.putBoolean("Shooter Min Error", shooter.nearTarget());
+        SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
+        SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
+        SmartDashboard.putNumber("Shooter error", shooter.getError());
+        SmartDashboard.putData("Shooter Cmd", shooter);
 
         // angler debug
-         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
-         SmartDashboard.putNumber("Angler error", angler.getError());
-         SmartDashboard.putBoolean("Angler Min Error", angler.anglerNearTarget());
-         SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
-         SmartDashboard.putNumber("Angler trim offset", Constants.Angler.ANGLER_ENCODER_OFFSET);
-         SmartDashboard.putData("Angler Cmd", angler);
+        SmartDashboard.putNumber("Angler encoder", angler.getPosition());
+        SmartDashboard.putNumber("Angler error", angler.getError());
+        SmartDashboard.putBoolean("Angler Min Error", angler.anglerNearTarget());
+        SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
+        SmartDashboard.putNumber("Angler trim offset", Constants.Angler.ANGLER_ENCODER_OFFSET);
+        SmartDashboard.putData("Angler Cmd", angler);
     }
 
     /**
