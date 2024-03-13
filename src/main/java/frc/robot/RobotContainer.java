@@ -35,10 +35,10 @@ public class RobotContainer {
     public final static CommandXboxController driverXbox = new CommandXboxController(0);
     /* Currently Allocated For Driver:
      * POV buttons / Dpad:
-     * Up
-     * Down
-     * Left
-     * Right
+     * Up: Angler trim up by 0.1 encoder counts
+     * Down: Angler trim down by 0.1 encoder counts
+     * Left:
+     * Right:
      * 
      * Triggers:
      * Left:
@@ -49,7 +49,7 @@ public class RobotContainer {
      * Right: Rotation
      * 
      * Bumpers:
-     * Left: auto-align angler and drivetrain to april tag
+     * Left: auto-align drivetrain to april tag
      * Right: stow elevator
      * 
      * Buttons: 
@@ -62,13 +62,13 @@ public class RobotContainer {
     public final static CommandXboxController opXbox = new CommandXboxController(1);
     /* Currently Allocated For Operator:
      * POV buttons / Dpad:
-     * Up - toggle auto subsystems
+     * Up - 
      * Down - auto climb
      * Left - toggle clamp
-     * Right - angler layup setpoint
+     * Right - auto outtake
      * 
      * Triggers:
-     * Left: Manual shooter rev
+     * Left: Subwoofer auto shoot
      * Right: Auto shoot
      * 
      * Joysticks:
@@ -83,7 +83,7 @@ public class RobotContainer {
      * A: Stow elevator
      * B: Force intake
      * X: Auto angler align
-     * Y: Elevator amp preset
+     * Y: Elevator amp auto score
      */
 
 
@@ -129,6 +129,10 @@ public class RobotContainer {
         );
 
         // TODO: Add and test constant shooter function
+
+        shooter.setDefaultCommand(
+                new ConstantShooterCommand(shooter)
+        );
 
         // Configure controller button bindings
         configureButtonBindings();
