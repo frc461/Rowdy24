@@ -267,7 +267,6 @@ public class RobotContainer {
         /* Intake Override */
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, true));
 
-        // TODO: Change to toggle constant angler align function (if the new equation works)
         /* Auto-align */
         opXbox.x().whileTrue(new AutoAlignCommand(angler, swerve));
 
@@ -289,8 +288,13 @@ public class RobotContainer {
 
         /* Auto-Climb */
         opXbox.povDown().whileTrue(
-                new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
-                        .andThen(new InstantCommand(() -> elevator.climb(true)))
+                new FunctionalCommand(
+                        () -> {},
+                        () -> elevator.climb(false),
+                        isFinished -> elevator.climb(true),
+                        elevator::elevatorSwitchTriggered,
+                        elevator
+                )
                         .andThen(new WaitCommand(0.25))
                         .andThen(new InstantCommand(elevator::stopElevator))
         );

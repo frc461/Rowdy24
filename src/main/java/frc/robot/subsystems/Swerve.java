@@ -196,10 +196,6 @@ public class Swerve extends SubsystemBase {
 
     public double getAngleToSpeakerTarget() {
         return getVectorToSpeakerTarget().getAngle().getDegrees();
-//        return new Rotation2d(
-//                getVectorToSpeakerTarget().getX(),
-//                getVectorToSpeakerTarget().getY()
-//        ).getDegrees();
     }
 
     public boolean turretNearTarget() {
@@ -247,7 +243,6 @@ public class Swerve extends SubsystemBase {
     }
 
     public void zeroGyro() {
-        // TODO: two options: use getFusedPoseEstimator rotation for alignments or use gyro zeroed to said rotation for alignments
         gyro.setYaw(Constants.Swerve.GYRO_OFFSET);
     }
 
