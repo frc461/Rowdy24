@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8093860062363999,
-      "y": 6.5136440244390466
+      "x": 0.7509152340242001,
+      "y": 4.584108541436456
     },
-    "rotation": -120.0
+    "rotation": 120.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "1.0.0-0.0.1-1.0.0s"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1.0.0s-0.1.0-0.1.0s"
           }
         },
         {

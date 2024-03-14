@@ -20,7 +20,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "3.0.0-0.3.0"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "autoShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "0.3.0-0.0.5-0.0.5s"
           }
         },
         {
