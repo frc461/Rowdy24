@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import org.photonvision.PhotonCamera;
 import org.photonvision.proto.Photon;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
@@ -14,6 +15,7 @@ import frc.robot.Constants;
 public class Limelight extends SubsystemBase {
     private static PhotonCamera camera = new PhotonCamera("photonvision");
     private static PhotonPipelineResult result = camera.getLatestResult();
+    private static PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
     // private static double[] tagPose = new double[6];
     private static int updates;
 
@@ -35,30 +37,30 @@ public class Limelight extends SubsystemBase {
     // The tag is gotten in camera space (relative to camera position)
     public static double getRX() {
         refreshValues();
-        return result.getBestTarget().getBestCameraToTarget().getX();
+        return target.getBestCameraToTarget().getX();
     }
 
     // Y+ is upwards
     public static double getRY() {
         refreshValues();
-        return result.getBestTarget().getBestCameraToTarget().getY();
+        return target.getBestCameraToTarget().getY();
     }
 
     // Z+ is perpendicular to the plane of the limelight (Z+ is towards tag on data
     // side, Z- is on other side of robot)
     public static double getRZ() {
         refreshValues();
-        return result.getBestTarget().getBestCameraToTarget().getZ();
+        return target.getBestCameraToTarget().getZ();
     }
 
     public static double getPitch() {
         refreshValues();
-        return result.getBestTarget().getPitch();
+        return target.getPitch();
     }
 
     public static double getYaw() {
         refreshValues();
-        return result.getBestTarget().getYaw();
+        return target.getYaw();
     }
 
 
@@ -75,15 +77,16 @@ public class Limelight extends SubsystemBase {
     public static double getLateralOffset() {
         refreshValues();
         return (new Rotation2d(
-            result.getBestTarget().getBestCameraToTarget().getZ(),
-            result.getBestTarget().getBestCameraToTarget().getX()
+            target.getBestCameraToTarget().getZ(),
+            target.getBestCameraToTarget().getX()
             )
             .getDegrees() + Constants.Limelight.YAW_OFFSET / 
-            result.getBestTarget().getBestCameraToTarget().getZ());
+            target.getBestCameraToTarget().getZ());
     }
 
     public static void refreshValues() {
         result = camera.getLatestResult();
+        target = result.getBestTarget();
         updates++;
     }
 }
