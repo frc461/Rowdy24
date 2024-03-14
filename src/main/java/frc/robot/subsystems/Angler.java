@@ -12,7 +12,7 @@ public class Angler extends SubsystemBase {
     private final SparkPIDController anglerPIDController;
     private final SparkLimitSwitch lowerMagnetLimitSwitch, upperMagnetLimitSwitch;
     private final DigitalInput lowerLimitSwitch;
-    private double target, limelightTarget, error, accuracy;
+    private double target, error, accuracy;
 
     public Angler() {
         angler = new CANSparkMax(Constants.Angler.ANGLER_ID, MotorType.kBrushless);
@@ -32,17 +32,14 @@ public class Angler extends SubsystemBase {
         upperMagnetLimitSwitch = angler.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
         target = 0.0;
-        limelightTarget = getPosition();
         error = 0.0;
         accuracy = 1.0;
     }
 
     @Override
     public void periodic() {
-        updateLimelightTarget();
         error = Math.abs(target - getPosition());
-        accuracy = Limelight.tagExists() ? (target > limelightTarget) ?
-                limelightTarget / target : target / limelightTarget : -1.0;
+        accuracy = target > getPosition() ? getPosition() / target : target / getPosition();
     }
 
     public double getPosition() { 
@@ -65,14 +62,8 @@ public class Angler extends SubsystemBase {
         return !lowerLimitSwitch.get();
     }
 
-    public void updateLimelightTarget() {
-        limelightTarget = Limelight.tagExists() ?
-                Math.min(
-                        Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
-                                Limelight.getRX(),
-                                Limelight.getRZ()) + Constants.Angler.ANGLER_ENCODER_OFFSET,
-                        Constants.Angler.ANGLER_UPPER_LIMIT
-                ) : getPosition();
+    public boolean anglerNearTarget() {
+        return accuracy > Constants.Angler.ANGLER_ACCURACY_REQUIREMENT;
     }
 
     public void checkLimitSwitches() {
@@ -102,16 +93,11 @@ public class Angler extends SubsystemBase {
 
     public void setEncoderVal(double encoderVal) {
         checkLimitSwitches();
-        encoderVal = (encoderVal < encoder.getPosition() && lowerSwitchTriggered()) ?
-                Constants.Angler.ANGLER_LOWER_LIMIT :
-                (encoderVal > encoder.getPosition() && getPosition() > Constants.Angler.ANGLER_UPPER_LIMIT) ?
-                Constants.Angler.ANGLER_UPPER_LIMIT : encoderVal;
+        encoderVal = Math.max(
+                Constants.Angler.ANGLER_LOWER_LIMIT,
+                Math.min(encoderVal, Constants.Angler.ANGLER_UPPER_LIMIT)
+        );
         target = encoderVal;
         holdTarget();
-    }
-
-    public void setAlignedAngle() {
-        updateLimelightTarget();
-        setEncoderVal(limelightTarget);
     }
 }

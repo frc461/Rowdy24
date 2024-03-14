@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7509152340242001,
-      "y": 4.584108541436456
+      "x": 0.81,
+      "y": 6.51
     },
-    "rotation": 120.0
+    "rotation": -120.0
   },
   "command": {
     "type": "sequential",
@@ -16,9 +16,22 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "parallel",
                 "data": {
-                  "name": "startShooterAngler"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "alignAngler"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "startShooter"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -28,13 +41,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "shoot"
+                        "name": "intakeThenShoot"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "1.1.0Backup"
+                        "pathName": ".1L"
                       }
                     },
                     {
@@ -46,43 +59,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "shoot"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "0.1to2.0Backup"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "turretRealign"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "shoot"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "0.2to3.0Backup"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "turretRealign"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "shoot"
+                        "name": "intakeThenShoot"
                       }
                     }
                   ]

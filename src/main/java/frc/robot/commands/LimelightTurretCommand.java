@@ -23,7 +23,6 @@ public class LimelightTurretCommand extends Command {
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
         this.robotCentricSup = robotCentricSup;
-        addRequirements(swerve);
     }
     
     @Override
@@ -36,5 +35,10 @@ public class LimelightTurretCommand extends Command {
                 new Translation2d(translationVal, strafeVal).times(Constants.Swerve.MAX_SPEED),
                 !robotCentricSup.getAsBoolean()
         );
+    }
+
+    @Override
+    public void end(boolean isFinished) {
+        swerve.drive(new Translation2d(0, 0), 0.0, true, true);
     }
 }

@@ -17,10 +17,10 @@ public final class Constants {
 
     public static final class Auto {
         // pid values for pathplanner
-        public static final double AUTO_DRIVE_P = 0.1;
+        public static final double AUTO_DRIVE_P = 1.0;
         public static final double AUTO_DRIVE_I = 0.0;
-        public static final double AUTO_DRIVE_D = 0.00001;
-        public static final double AUTO_ANGLE_P = 0.2;
+        public static final double AUTO_DRIVE_D = 0.0;
+        public static final double AUTO_ANGLE_P = 2.5;
         public static final double AUTO_ANGLE_I = 0.0;
         public static final double AUTO_ANGLE_D = 0.0;
     }
@@ -37,6 +37,9 @@ public final class Constants {
         public static final double ANGLER_I = 0.00001;
         public static final double ANGLER_D = 0.0001;
 
+        // required accuracy to consider angler accurate to shoot a note
+        public static final double ANGLER_ACCURACY_REQUIREMENT = 0.97;
+
         // limit switches
         public static final int ANGLER_LOWER_LIMIT_SWITCH = 6;
 
@@ -50,13 +53,15 @@ public final class Constants {
         public static double ANGLER_ENCODER_OFFSET = 0;
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
-        public static final double Y_COMPONENT_AIM = SPEAKER_HEIGHT - SHOOTER_HEIGHT;
-        public static final double Z_DEPTH_OFFSET = -0.23; // or 0.04 // Half of the depth of the speaker into the field
-        public static final BiFunction<Double, Double, Double> ANGLE_TO_ENCODER_VALUE = (angle, dist) -> 20.0 / 41.0 * (angle + dist * .9967 - 12.0);
+        public static final double Z_COMPONENT_AIM = SPEAKER_HEIGHT - SHOOTER_HEIGHT;
+        public static final double X_DEPTH_OFFSET = -0.23; // Half of the depth of the speaker into the field
+        // TODO: Tune dist * .65 (measure difference in angle for it to work)
+        public static final BiFunction<Double, Double, Double> ANGLE_TO_ENCODER_VALUE =
+                (angle, dist) -> 20.0 / 41.0 * (angle + dist * .65 - 12.0) + Constants.Angler.ANGLER_ENCODER_OFFSET;
         public static final BiFunction<Double, Double, Double> AUTO_ANGLER_AIM_EQUATION =
-                (x, z) -> ANGLE_TO_ENCODER_VALUE.apply(
-                        Math.toDegrees(Math.atan(Y_COMPONENT_AIM / Math.hypot(x, z + Z_DEPTH_OFFSET))),
-                        Math.hypot(x, z)
+                (y, x) -> ANGLE_TO_ENCODER_VALUE.apply(
+                        Math.toDegrees(Math.atan(Z_COMPONENT_AIM / Math.hypot(y, x + X_DEPTH_OFFSET))), // angle
+                        Math.hypot(y, x) // error due to gravity, friction, etc.
                 );
     }
 
@@ -71,13 +76,16 @@ public final class Constants {
 
         // servo to hold elevator in endgame
         public static final int ELEVATOR_SERVO_PORT = 1;
-        public static final double ELEVATOR_SERVO_CLAMPED_POS = 0.4185; // 1540 .5285
-        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = 0.7357; // 1630 .5957
+        public static final double ELEVATOR_SERVO_CLAMPED_POS = .07; // new servo values
+        public static final double ELEVATOR_SERVO_UNCLAMPED_POS = .39;
         
         // pid
         public static final double ELEVATOR_P = 0.05;
         public static final double ELEVATOR_I = 0.0;
         public static final double ELEVATOR_D = 0.0;
+
+        // required accuracy to consider angler accurate to shoot a note
+        public static final double ELEVATOR_ACCURACY_REQUIREMENT = 0.85;
 
         // presets
         public static final double ELEVATOR_LOWER_LIMIT = 0;
@@ -102,12 +110,12 @@ public final class Constants {
 
     public static final class Limelight {
         // pid for limelight alignment
-        public static final double LIMELIGHT_P = 0.07;
-        public static final double LIMELIGHT_I = 0.03;
+        public static final double LIMELIGHT_P = 0.01;
+        public static final double LIMELIGHT_I = 0;
         public static final double LIMELIGHT_D = 0;
         
         // turn slightly to the right 
-        public static final double YAW_OFFSET = -10.5;
+        public static final double YAW_OFFSET = 0;
     }
 
     public static final class Shooter {
@@ -134,6 +142,8 @@ public final class Constants {
     }
 
     public static final class Swerve {
+        // required accuracy to consider turret accurate to shoot a note
+        public static final double TURRET_ACCURACY_REQUIREMENT = 6.0;
         // gyro config
         public static final double GYRO_OFFSET = 0;
         public static final int PIGEON_ID = 51;

@@ -3,9 +3,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,24 +15,25 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
+
+import java.util.Optional;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
+    private final SwerveDrivePoseEstimator fusedPoseEstimator;
     private final SwerveModule[] swerveMods;
     private final PIDController limelightRotController;
     public final Pigeon2 gyro;
-    final Field2d field = new Field2d();
+    private double turretError;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         zeroGyro();
-        
-        SmartDashboard.putData("Field", field);
 
         swerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.SWERVE_MODULE_CONSTANTS),
@@ -61,8 +64,8 @@ public class Swerve extends SubsystemBase {
         limelightRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
 
         AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
-                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getFusedPoseEstimator, // Robot pose supplier
+                this::setFusedPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
                 speeds -> {
@@ -83,10 +86,10 @@ public class Swerve extends SubsystemBase {
                                 Constants.Auto.AUTO_ANGLE_I,
                                 Constants.Auto.AUTO_ANGLE_D
                         ),
-                        Constants.Swerve.MAX_SPEED - 2, // Max module speed, in m/s
+                        Constants.Swerve.MAX_SPEED, // Max module speed, in m/s
                         Constants.Swerve.CENTER_TO_WHEEL, // Drive base radius in meters. Distance from robot center to
                                                           // furthest module.
-                        new ReplanningConfig(true, true) // Default path replanning config. See the API for the options here
+                        new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {
                     // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -97,12 +100,25 @@ public class Swerve extends SubsystemBase {
                 },
                 this // Reference to this subsystem to set requirements
         );
+
+        PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
+
+        fusedPoseEstimator = new SwerveDrivePoseEstimator(
+            Constants.Swerve.SWERVE_KINEMATICS,
+            getHeading(), getModulePositions(),
+            getPose()
+        );
+
+        turretError = 1.0;
     }
 
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        field.setRobotPose(swerveOdometry.getPoseMeters());
+        updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
+        turretError = Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees()) > 180 ?
+                Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees()) - 360 :
+                Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees());
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -129,18 +145,16 @@ public class Swerve extends SubsystemBase {
     }
 
     public void driveTurret(Translation2d translation, boolean fieldRelative) {
-        if (Limelight.tagExists()) {
-            drive(
-                    translation,
-                    -limelightRotController.calculate(
-                            getYaw(),
-                            getYaw() + Limelight.getLateralOffset()
-                    ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
-                    fieldRelative,
-                    true
-            );
-
-        }
+        // aligns with speaker April Tag
+        drive(
+                translation,
+                limelightRotController.calculate(
+                        getFusedPoseEstimator().getRotation().getDegrees(),
+                        getAngleToSpeakerTarget()
+                ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
+                fieldRelative,
+                true
+        );
     }
 
     public double getYaw() {
@@ -165,6 +179,50 @@ public class Swerve extends SubsystemBase {
         return swerveOdometry.getPoseMeters();
     }
 
+    public Pose2d getFusedPoseEstimator(){
+        return fusedPoseEstimator.getEstimatedPosition();
+    }
+
+    public void setFusedPoseEstimator(Pose2d newPose){
+        fusedPoseEstimator.resetPosition(getHeading(), getModulePositions(), newPose);
+        resetOdometry(newPose);
+    }
+
+    public Translation2d getVectorToSpeakerTarget() {
+        Translation2d fusedPose = getFusedPoseEstimator().getTranslation();
+        Translation2d speakerTagPose = Limelight.getSpeakerTagPose().getTranslation();
+        return fusedPose.minus(speakerTagPose).unaryMinus();
+    }
+
+    public double getAngleToSpeakerTarget() {
+        return getVectorToSpeakerTarget().getAngle().getDegrees();
+    }
+
+    public double getTurretError() {
+        return turretError;
+    }
+
+    public boolean turretNearTarget() {
+        return Math.abs(turretError) < Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
+    }
+
+    public void resetFusedPose(){
+        setFusedPoseEstimator(new Pose2d());
+    }
+
+    public void updateFusedPose(Pose2d limelightPose){
+        fusedPoseEstimator.update(getHeading(), getModulePositions());
+
+        if (Limelight.tagExists()) {
+            fusedPoseEstimator.addVisionMeasurement(
+                    limelightPose,
+                    Timer.getFPGATimestamp()
+                            - LimelightHelpers.getLatency_Pipeline("limelight") / 1000.0
+                            - LimelightHelpers.getLatency_Capture("limelight") / 1000.0
+            );
+        }
+    }
+
     public SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (SwerveModule mod : swerveMods) {
@@ -179,6 +237,13 @@ public class Swerve extends SubsystemBase {
             positions[mod.moduleNumber] = mod.getPosition();
         }
         return positions;
+    }
+
+    public Optional<Rotation2d> getRotationTargetOverride() { // only for auto
+        if (Limelight.overrideTargetNow) {
+            return Optional.of(Rotation2d.fromDegrees(getAngleToSpeakerTarget()));
+        }
+        return Optional.empty();
     }
 
     public void zeroGyro() {

@@ -8,8 +8,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.lib.util.LimelightHelpers;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+
+import java.util.function.BooleanSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -32,10 +35,10 @@ public class RobotContainer {
     public final static CommandXboxController driverXbox = new CommandXboxController(0);
     /* Currently Allocated For Driver:
      * POV buttons / Dpad:
-     * Up
-     * Down
-     * Left
-     * Right
+     * Up: Angler trim up by 0.1 encoder counts
+     * Down: Angler trim down by 0.1 encoder counts
+     * Left:
+     * Right:
      * 
      * Triggers:
      * Left:
@@ -46,7 +49,7 @@ public class RobotContainer {
      * Right: Rotation
      * 
      * Bumpers:
-     * Left: auto-align angler and drivetrain to april tag
+     * Left: auto-align drivetrain to april tag
      * Right: stow elevator
      * 
      * Buttons: 
@@ -62,10 +65,10 @@ public class RobotContainer {
      * Up - 
      * Down - auto climb
      * Left - toggle clamp
-     * Right - 
+     * Right - auto outtake
      * 
      * Triggers:
-     * Left: Manual shooter rev
+     * Left: Subwoofer auto shoot
      * Right: Auto shoot
      * 
      * Joysticks:
@@ -80,11 +83,13 @@ public class RobotContainer {
      * A: Stow elevator
      * B: Force intake
      * X: Auto angler align
-     * Y: Elevator amp preset
+     * Y: Elevator amp auto score
      */
 
 
     /* Variables */
+    private final BooleanSupplier readyToShoot = () -> shooter.nearTarget() && angler.anglerNearTarget();
+    private boolean constantShooter = false;
     private final SendableChooser<Command> chooser;
 
     /**
@@ -124,6 +129,18 @@ public class RobotContainer {
                 )
         );
 
+        // TODO: Test constant shooter function
+        shooter.setDefaultCommand(
+                !constantShooter ? new InstantCommand(() -> {}, shooter).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf) :
+                new FunctionalCommand(
+                        () -> {},
+                        () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED),
+                        isFinished -> shooter.shoot(0),
+                        () -> false,
+                        shooter
+                )
+        );
+
         // Configure controller button bindings
         configureButtonBindings();
     }
@@ -151,16 +168,63 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "autoShoot",
                 new ParallelCommandGroup(
-                        new InstantCommand(angler::setAlignedAngle, angler),
-                        new RevUpShooterCommand(
-                                shooter
-                        ).until(() -> !intakeCarriage.noteInShootingSystem()),
-                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                        new InstantCommand(() -> angler.setEncoderVal(
+                                Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
+                                        swerve.getVectorToSpeakerTarget().getY(),
+                                        swerve.getVectorToSpeakerTarget().getX()
+                                )
+                        ), angler),
+                        new RevUpShooterCommand(shooter, swerve).until(() -> !intakeCarriage.noteInShootingSystem()),
+                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
                         ).until(() -> !intakeCarriage.noteInShootingSystem()))
                 )
+        );
+
+        NamedCommands.registerCommand(
+                "autoShootWithoutAngler",
+                new ParallelCommandGroup(
+                        new RevUpShooterCommand(shooter, swerve).until(() -> !intakeCarriage.noteInShootingSystem()),
+                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1
+                        ).until(() -> !intakeCarriage.noteInShootingSystem()))
+                )
+        );
+
+        NamedCommands.registerCommand(
+                "startShooterAngler",
+                new ParallelCommandGroup(
+                        new RevUpShooterCommand(shooter, swerve),
+                        new AutoAlignCommand(angler, swerve)
+                )
+        );
+
+        NamedCommands.registerCommand(
+                "shoot",
+                new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
+                        intakeCarriage,
+                        0.9,
+                        1
+                ).until(() -> !intakeCarriage.noteInShootingSystem()))
+        );
+
+        NamedCommands.registerCommand(
+                "enableTurret",
+                new InstantCommand(() -> Limelight.overrideTargetNow = true)
+        );
+
+        NamedCommands.registerCommand(
+                "turretRealign",
+                new LimelightTurretCommand(swerve, () -> 0.0, () -> 0.0, () -> false).until(swerve::turretNearTarget)
+        );
+
+        NamedCommands.registerCommand(
+                "disableTurret",
+                new InstantCommand(() -> Limelight.overrideTargetNow = false)
         );
     }
 
@@ -179,6 +243,12 @@ public class RobotContainer {
         /* Zero Gyro */
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
+        /* Increment Trim */
+        driverXbox.povUp().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
+
+        /* Decrement Trim */
+        driverXbox.povDown().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
+
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
                 new ParallelCommandGroup(
@@ -187,8 +257,7 @@ public class RobotContainer {
                                 () -> -driverXbox.getLeftY(), // Ordinate Translation
                                 () -> -driverXbox.getLeftX(), // Coordinate Translation
                                 driverXbox.b() // Robot-centric trigger
-                        ),
-                        new AutoAlignCommand(angler)
+                        )
                 )
         );
 
@@ -199,31 +268,22 @@ public class RobotContainer {
 
         /* Op Controls */
 
-        /* Stow Elevator Preset */
-        opXbox.a().onTrue(
-                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
-        );
-
         /* Intake Override */
-        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1));
+        opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, true));
 
         /* Auto-align */
-        opXbox.x().whileTrue(new AutoAlignCommand(angler));
+        opXbox.x().whileTrue(new InstantCommand(() -> constantShooter = !constantShooter));
 
         /* Amp Elevator Preset */
         opXbox.y().onTrue(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator),
-                        new IntakeCarriageCommand(intakeCarriage, 0, 0.5)
-                                .until(() -> !intakeCarriage.getAmpBeamBroken())
-                )
+                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_AMP), elevator)
         );
 
         /* Amp Shoot Preset */
         opXbox.y().onFalse(
                 new IntakeCarriageCommand(intakeCarriage, 0, -1)
                         .until(() -> !intakeCarriage.noteInAmpSystem())
-                        .andThen(new WaitCommand(0.75))
+                        .andThen(new WaitCommand(0.25))
                         .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
         );
 
@@ -232,9 +292,14 @@ public class RobotContainer {
 
         /* Auto-Climb */
         opXbox.povDown().whileTrue(
-                new ClimbCommand(elevator).until(elevator::elevatorSwitchTriggered)
-                        .andThen(new InstantCommand(() -> elevator.climb(true)))
-                        .andThen(new WaitCommand(0.75))
+                new FunctionalCommand(
+                        () -> {},
+                        () -> elevator.climb(false),
+                        isFinished -> elevator.climb(true),
+                        elevator::elevatorSwitchTriggered,
+                        elevator
+                )
+                        .andThen(new WaitCommand(0.25))
                         .andThen(new InstantCommand(elevator::stopElevator))
         );
 
@@ -274,33 +339,30 @@ public class RobotContainer {
                         ).until(intakeCarriage::getAmpBeamBroken))
         );
 
-        /* Override Shooter (deadband defaults to 0.5) */
-
         opXbox.leftTrigger().whileTrue(
                 new ParallelCommandGroup(
-                        new RevUpShooterCommand(shooter),
-                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                        new FunctionalCommand(
+                                () -> {},
+                                () -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET),
+                                isFinished -> angler.setEncoderVal(Constants.Angler.ANGLER_LOWER_LIMIT),
+                                () -> false,
+                                angler
+                        ),
+                        new RevUpShooterCommand(shooter, swerve),
+                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
                         ))
                 ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
-       
-        opXbox.leftTrigger().onTrue(
-                new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LAYUP_PRESET), angler)     
-        );
 
-        opXbox.leftTrigger().onFalse(
-                new InstantCommand(() -> angler.setEncoderVal(Constants.Angler.ANGLER_LOWER_LIMIT), angler)
-        );
-
-        /* Rev up shooter and run carriage when its up to speed */
+        /* Aim then Shoot */
         opXbox.rightTrigger().whileTrue(
                 new ParallelCommandGroup(
-                        new AutoAlignCommand(angler).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
-                        new RevUpShooterCommand(shooter),
-                        new WaitUntilCommand(shooter::minimalError).andThen(new IntakeCarriageCommand(
+                        new AutoAlignCommand(angler, swerve).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming),
+                        new RevUpShooterCommand(shooter, swerve),
+                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
@@ -314,10 +376,16 @@ public class RobotContainer {
         SmartDashboard.putData("Scheduled Commands", CommandScheduler.getInstance());
 
         // robot position
-        SmartDashboard.putString("Robot Pose2d", swerve.getPose().getTranslation().toString());
+        SmartDashboard.putString("Robot Unfused Pose2d", swerve.getPose().getTranslation().toString());
+        SmartDashboard.putString("Robot Fused Pose2d", swerve.getFusedPoseEstimator().getTranslation().toString());
+        SmartDashboard.putString("Robot Fused Rotation", swerve.getFusedPoseEstimator().getRotation().toString());
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
+        SmartDashboard.putString("vector to speaker", swerve.getVectorToSpeakerTarget().toString());
+        SmartDashboard.putNumber("angle to speaker", swerve.getAngleToSpeakerTarget());
+        SmartDashboard.putNumber("turret error", swerve.getTurretError());
+        SmartDashboard.putBoolean("Turret near target", swerve.turretNearTarget());
         SmartDashboard.putData("Swerve Command", swerve);
 
         // intake-carriage debug
@@ -328,26 +396,27 @@ public class RobotContainer {
         SmartDashboard.putData("Intake-Carriage Cmd", intakeCarriage);
 
         // elevator debug
-       SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
-       SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
-       SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
-       SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
-       SmartDashboard.putBoolean("Servo Limit Triggered?", elevator.servoSwitchTriggered());
-       SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
-       SmartDashboard.putData("Elevator Cmd", elevator);
+        SmartDashboard.putNumber("Elevator Position", elevator.getPosition());
+        SmartDashboard.putNumber("Elevator Target", elevator.getTarget());
+        SmartDashboard.putNumber("Elevator Power", elevator.elevatorVelocity());
+        SmartDashboard.putBoolean("Elevator Limit Triggered?", elevator.elevatorSwitchTriggered());
+        SmartDashboard.putBoolean("Servo Limit Triggered?", elevator.servoSwitchTriggered());
+        SmartDashboard.putNumber("Elevator Clamp Pos", elevator.getClampPosition());
+        SmartDashboard.putBoolean("Clamped?", elevator.isClamped());
+        SmartDashboard.putData("Elevator Cmd", elevator);
 
         // limelight debug
-        SmartDashboard.putNumber("Limelight Updates", Limelight.getUpdates());
-        SmartDashboard.putNumber("Limelight Yaw", Limelight.getYaw());
-        SmartDashboard.putNumber("Limelight Pitch", Limelight.getPitch());
-        SmartDashboard.putNumber("Limelight Roll", Limelight.getRoll());
-        SmartDashboard.putNumber("Limelight X", Limelight.getRX());
-        SmartDashboard.putNumber("Limelight Y", Limelight.getRY());
-        SmartDashboard.putNumber("Limelight Z", Limelight.getRZ());
-        SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getRZ(), Limelight.getRX()));
+        SmartDashboard.putNumber("Limelight Yaw", Limelight.getTagYaw());
+        SmartDashboard.putNumber("Limelight Pitch", Limelight.getTagPitch());
+        SmartDashboard.putNumber("Limelight Roll", Limelight.getTagRoll());
+        SmartDashboard.putNumber("Limelight X", Limelight.getTagRX());
+        SmartDashboard.putNumber("Limelight Y", Limelight.getTagRY());
+        SmartDashboard.putNumber("Limelight Z", Limelight.getTagRZ());
+        SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getTagRZ(), Limelight.getTagRX()));
+        SmartDashboard.putString("botpose_helpers_pose", LimelightHelpers.getBotPose2d_wpiBlue("limelight").getTranslation().toString());
 
         // shooter debug
-        SmartDashboard.putBoolean("Shooter Min Error", shooter.minimalError());
+        SmartDashboard.putBoolean("Shooter Min Error", shooter.nearTarget());
         SmartDashboard.putNumber("Shooter Left", shooter.getBottomShooterSpeed());
         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
         SmartDashboard.putNumber("Shooter error", shooter.getError());
@@ -356,10 +425,10 @@ public class RobotContainer {
         // angler debug
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
         SmartDashboard.putNumber("Angler error", angler.getError());
+        SmartDashboard.putBoolean("Angler Min Error", angler.anglerNearTarget());
         SmartDashboard.putBoolean("Angler bottom triggered", angler.lowerSwitchTriggered());
+        SmartDashboard.putNumber("Angler trim offset", Constants.Angler.ANGLER_ENCODER_OFFSET);
         SmartDashboard.putData("Angler Cmd", angler);
-        SmartDashboard.putNumber("Angler trim", Constants.Angler.ANGLER_ENCODER_OFFSET);
-        Constants.Angler.ANGLER_ENCODER_OFFSET = SmartDashboard.getNumber("Angler trim", 0.0);
     }
 
     /**
