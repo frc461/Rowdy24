@@ -12,7 +12,7 @@
         "y": 5.947274749614697
       },
       "isLocked": false,
-      "linkedName": "0.2.0"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "0.3.0"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -56,8 +56,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.1,
-    "maxAcceleration": 4.1,
+    "maxVelocity": 5.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

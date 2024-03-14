@@ -41,7 +41,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": ".1L"
+                        "pathName": "3.3.0"
                       }
                     },
                     {
@@ -72,7 +72,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": ".2L"
+                        "pathName": "0.3to2.0"
                       }
                     },
                     {
@@ -103,7 +103,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": ".3L"
+                        "pathName": "0.2to1.0"
                       }
                     },
                     {
