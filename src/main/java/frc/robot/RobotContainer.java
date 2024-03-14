@@ -89,6 +89,7 @@ public class RobotContainer {
 
     /* Variables */
     private final BooleanSupplier readyToShoot = () -> shooter.nearTarget() && angler.anglerNearTarget();
+    private boolean constantShooter = false;
     private final SendableChooser<Command> chooser;
 
     /**
@@ -130,7 +131,14 @@ public class RobotContainer {
 
         // TODO: Test constant shooter function
         shooter.setDefaultCommand(
-                new RunCommand(() -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED), shooter)
+                !constantShooter ? new InstantCommand(() -> {}, shooter).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf) :
+                new FunctionalCommand(
+                        () -> {},
+                        () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED),
+                        isFinished -> shooter.shoot(0),
+                        () -> false,
+                        shooter
+                )
         );
 
         // Configure controller button bindings
@@ -262,16 +270,11 @@ public class RobotContainer {
 
         /* Op Controls */
 
-        /* Stow Elevator Preset */
-        opXbox.a().onTrue(
-                new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator)
-        );
-
         /* Intake Override */
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, true));
 
         /* Auto-align */
-        opXbox.x().whileTrue(new AutoAlignCommand(angler, swerve));
+        opXbox.x().whileTrue(new InstantCommand(() -> constantShooter = !constantShooter));
 
         /* Amp Elevator Preset */
         opXbox.y().onTrue(
