@@ -17,10 +17,10 @@ public final class Constants {
 
     public static final class Auto {
         // pid values for pathplanner
-        public static final double AUTO_DRIVE_P = 0.1;
+        public static final double AUTO_DRIVE_P = 1.0;
         public static final double AUTO_DRIVE_I = 0.0;
         public static final double AUTO_DRIVE_D = 0.0;
-        public static final double AUTO_ANGLE_P = 0.2;
+        public static final double AUTO_ANGLE_P = 2.5;
         public static final double AUTO_ANGLE_I = 0.0;
         public static final double AUTO_ANGLE_D = 0.0;
     }
@@ -143,7 +143,7 @@ public final class Constants {
 
     public static final class Swerve {
         // required accuracy to consider turret accurate to shoot a note
-        public static final double TURRET_ACCURACY_REQUIREMENT = 2.0;
+        public static final double TURRET_ACCURACY_REQUIREMENT = 6.0;
         // gyro config
         public static final double GYRO_OFFSET = 0;
         public static final int PIGEON_ID = 51;
