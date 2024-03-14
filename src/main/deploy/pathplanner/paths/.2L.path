@@ -3,37 +3,59 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.64331381428773,
-        "y": 6.802524789819331
+        "x": 3.0590153728860496,
+        "y": 6.769350580679595
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.415935977338504,
-        "y": 6.514509510883844
+        "x": 2.8316375359368235,
+        "y": 6.481335301744108
       },
       "isLocked": false,
       "linkedName": ".1L"
     },
     {
       "anchor": {
-        "x": 2.5323158647940316,
-        "y": 5.544433497675314
+        "x": 1.8188504948202682,
+        "y": 5.547479528126421
       },
       "prevControl": {
-        "x": 1.9429702812558138,
-        "y": 5.549448906343071
+        "x": 1.9465506130590358,
+        "y": 5.879019967764901
+      },
+      "nextControl": {
+        "x": 1.6911503765815015,
+        "y": 5.215939088487941
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.990036412236117,
+        "y": 5.388453891144963
+      },
+      "prevControl": {
+        "x": 2.4442412131000544,
+        "y": 5.338458148651002
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": ".2L"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.1,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.55,
+      "waypointRelativePos": 1.1,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +63,7 @@
             {
               "type": "named",
               "data": {
-                "name": "intakeThenShoot"
+                "name": "intakeNote"
               }
             }
           ]

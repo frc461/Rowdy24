@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.64331381428773,
-        "y": 6.802524789819331
+        "x": 3.0590153728860496,
+        "y": 6.769350580679595
       },
       "prevControl": {
-        "x": 2.2419082213687096,
-        "y": 6.517241058318494
+        "x": 2.4360117262543066,
+        "y": 5.955540869598464
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 0.85,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,24 @@
             {
               "type": "named",
               "data": {
-                "name": "intakeThenShoot"
+                "name": "intakeNote"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "wait",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
               }
             }
           ]
@@ -58,7 +75,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": -145.0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,

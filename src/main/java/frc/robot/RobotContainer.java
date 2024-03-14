@@ -196,32 +196,30 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
-                "startShooter",
-                new RevUpShooterCommand(shooter, swerve)
+                "startShooterAngler",
+                new ParallelCommandGroup(
+                        new RevUpShooterCommand(shooter, swerve),
+                        new AutoAlignCommand(angler, swerve)
+                )
         );
 
         NamedCommands.registerCommand(
-                "alignAngler",
-                new AutoAlignCommand(angler, swerve)
-        );
-
-        NamedCommands.registerCommand(
-                "intakeThenShoot",
+                "shoot",
                 new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
-                                intakeCarriage,
-                                0.9,
-                                1
-                        ).until(intakeCarriage::noteInShootingSystem)
-                                .andThen(new IntakeCarriageCommand(
-                                        intakeCarriage,
-                                        0.9,
-                                        1
-                                ).until(() -> !intakeCarriage.noteInShootingSystem())))
+                        intakeCarriage,
+                        0.9,
+                        1
+                ).until(() -> !intakeCarriage.noteInShootingSystem()))
         );
 
         NamedCommands.registerCommand(
                 "enableTurret",
                 new InstantCommand(() -> Limelight.overrideTargetNow = true)
+        );
+
+        NamedCommands.registerCommand(
+                "turretRealign",
+                new LimelightTurretCommand(swerve, () -> 0.0, () -> 0.0, () -> false).until(swerve::turretNearTarget)
         );
 
         NamedCommands.registerCommand(
@@ -386,6 +384,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
         SmartDashboard.putString("vector to speaker", swerve.getVectorToSpeakerTarget().toString());
         SmartDashboard.putNumber("angle to speaker", swerve.getAngleToSpeakerTarget());
+        SmartDashboard.putNumber("turret error", swerve.getTurretError());
         SmartDashboard.putBoolean("Turret near target", swerve.turretNearTarget());
         SmartDashboard.putData("Swerve Command", swerve);
 
