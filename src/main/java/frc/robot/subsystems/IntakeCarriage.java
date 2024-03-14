@@ -38,9 +38,9 @@ public class IntakeCarriage extends SubsystemBase {
     @Override
     public void periodic() {
         if (noteInShootingSystem()) {
-            lights.set(0.71);
+            lights.set(0.77);
         } else {
-            lights.set(-0.99);
+            lights.set(0.61);
         }
     }
 
