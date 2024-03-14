@@ -117,8 +117,8 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.update(getHeading(), getModulePositions());
         updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
         turretError = Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees()) > 180 ?
-                getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees() - 360 :
-                getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees();
+                Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees()) - 360 :
+                Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees());
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -198,8 +198,12 @@ public class Swerve extends SubsystemBase {
         return getVectorToSpeakerTarget().getAngle().getDegrees();
     }
 
+    public double getTurretError() {
+        return turretError;
+    }
+
     public boolean turretNearTarget() {
-        return Math.abs(turretError) > Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
+        return Math.abs(turretError) < Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
     }
 
     public void resetFusedPose(){
