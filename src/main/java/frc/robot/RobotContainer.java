@@ -166,36 +166,6 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
-                "autoShoot",
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> angler.setEncoderVal(
-                                Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
-                                        swerve.getVectorToSpeakerTarget().getY(),
-                                        swerve.getVectorToSpeakerTarget().getX()
-                                )
-                        ), angler),
-                        new RevUpShooterCommand(shooter, swerve).until(() -> !intakeCarriage.noteInShootingSystem()),
-                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
-                                intakeCarriage,
-                                0,
-                                1
-                        ).until(() -> !intakeCarriage.noteInShootingSystem()))
-                )
-        );
-
-        NamedCommands.registerCommand(
-                "autoShootWithoutAngler",
-                new ParallelCommandGroup(
-                        new RevUpShooterCommand(shooter, swerve).until(() -> !intakeCarriage.noteInShootingSystem()),
-                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
-                                intakeCarriage,
-                                0,
-                                1
-                        ).until(() -> !intakeCarriage.noteInShootingSystem()))
-                )
-        );
-
-        NamedCommands.registerCommand(
                 "startShooterAngler",
                 new ParallelCommandGroup(
                         new RevUpShooterCommand(shooter, swerve),
