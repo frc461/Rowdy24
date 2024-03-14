@@ -12,45 +12,91 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "autoShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2.0.0-0.2.0"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeNote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autoShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "0.2.0-0.0.4-0.0.4s"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeNote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "autoShoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "startShooterAngler"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "2.0.0-0.2.0"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "intakeNote"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "turretRealign"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "0.2.0-0.0.4-0.0.4s"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "intakeNote"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "turretRealign"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]
