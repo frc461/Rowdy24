@@ -89,7 +89,7 @@ public class RobotContainer {
 
     /* Variables */
     private final BooleanSupplier readyToShoot = () -> shooter.nearTarget() && angler.anglerNearTarget();
-    private boolean constantShooter = false;
+    private boolean constantShooter = true;
     private final SendableChooser<Command> chooser;
 
     /**
@@ -131,14 +131,13 @@ public class RobotContainer {
 
         // TODO: Test constant shooter function
         shooter.setDefaultCommand(
-                !constantShooter ? new InstantCommand(() -> {}, shooter).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf) :
                 new FunctionalCommand(
                         () -> {},
-                        () -> shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED),
+                        () -> shooter.shoot(Constants.Shooter.IDLE_SHOOTER_SPEED),
                         isFinished -> shooter.shoot(0),
                         () -> false,
                         shooter
-                )
+                ).onlyIf(() -> constantShooter)
         );
 
         // Configure controller button bindings
@@ -238,6 +237,25 @@ public class RobotContainer {
 
         /* Op Controls */
 
+        /* Shuttle note */
+        opXbox.a().whileTrue(
+                new ParallelCommandGroup(
+                        new FunctionalCommand(
+                                () -> {},
+                                () -> angler.setEncoderVal(Constants.Angler.ANGLER_SHUTTLE_PRESET),
+                                isFinished -> angler.setEncoderVal(Constants.Angler.ANGLER_LOWER_LIMIT),
+                                () -> false,
+                                angler
+                        ),
+                        new RevUpShooterCommand(shooter, swerve),
+                        new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1
+                        )
+                ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
+        );
+
         /* Intake Override */
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, true));
 
@@ -309,6 +327,7 @@ public class RobotContainer {
                         ).until(intakeCarriage::getAmpBeamBroken))
         );
 
+        /* Subwoofer Auto-Shoot */
         opXbox.leftTrigger().whileTrue(
                 new ParallelCommandGroup(
                         new FunctionalCommand(

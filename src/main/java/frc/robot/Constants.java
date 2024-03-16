@@ -49,6 +49,7 @@ public final class Constants {
 
         // preset
         public static final double ANGLER_LAYUP_PRESET = 18;
+        public static final double ANGLER_SHUTTLE_PRESET = 15;
 
         public static double ANGLER_ENCODER_OFFSET = 1.1;
         public static final double SPEAKER_HEIGHT = 1.98;
@@ -124,6 +125,9 @@ public final class Constants {
         public static final int TOP_SHOOTER_ID = 61; // TOP WHEEL
         public static final int SHOOTER_CURRENT_LIMIT = 60;
         public static final boolean SHOOTER_INVERT = false;
+
+        // idle shooter speed in RPM
+        public static final double IDLE_SHOOTER_SPEED = 3000;
 
         // baseline shooter speed in RPM
         public static final double BASE_SHOOTER_SPEED = 6000;
