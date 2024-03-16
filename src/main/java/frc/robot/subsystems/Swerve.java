@@ -64,8 +64,11 @@ public class Swerve extends SubsystemBase {
         limelightRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
 
         AutoBuilder.configureHolonomic(
-                this::getFusedPoseEstimator, // Robot pose supplier
-                this::setFusedPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getPose, // Robot pose supplier
+                newPose -> {
+                    this.setFusedPoseEstimator(newPose);
+                    this.resetOdometry(newPose);
+                }, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
                 speeds -> {
@@ -183,11 +186,6 @@ public class Swerve extends SubsystemBase {
         return fusedPoseEstimator.getEstimatedPosition();
     }
 
-    public void setFusedPoseEstimator(Pose2d newPose){
-        fusedPoseEstimator.resetPosition(getHeading(), getModulePositions(), newPose);
-        resetOdometry(newPose);
-    }
-
     public Translation2d getVectorToSpeakerTarget() {
         Translation2d fusedPose = getFusedPoseEstimator().getTranslation();
         Translation2d speakerTagPose = Limelight.getSpeakerTagPose().getTranslation();
@@ -204,6 +202,14 @@ public class Swerve extends SubsystemBase {
 
     public boolean turretNearTarget() {
         return Math.abs(turretError) < Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        swerveOdometry.resetPosition(getHeading(), getModulePositions(), pose);
+    }
+
+    public void setFusedPoseEstimator(Pose2d newPose){
+        fusedPoseEstimator.resetPosition(getHeading(), getModulePositions(), newPose);
     }
 
     public void resetFusedPose(){
@@ -260,10 +266,6 @@ public class Swerve extends SubsystemBase {
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         setModuleStates(desiredStates, true);
-    }
-
-    public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(getHeading(), getModulePositions(), pose);
     }
 
     public void resetModulesToAbsolute() {

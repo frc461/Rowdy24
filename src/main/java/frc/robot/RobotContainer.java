@@ -242,7 +242,7 @@ public class RobotContainer {
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, true));
 
         /* Auto-align */
-        opXbox.x().whileTrue(new InstantCommand(() -> constantShooter = !constantShooter));
+        opXbox.x().onTrue(new InstantCommand(() -> constantShooter = !constantShooter));
 
         /* Amp Elevator Preset */
         opXbox.y().onTrue(
@@ -353,6 +353,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
         SmartDashboard.putString("vector to speaker", swerve.getVectorToSpeakerTarget().toString());
+        SmartDashboard.putNumber("dist", swerve.getVectorToSpeakerTarget().getNorm());
         SmartDashboard.putNumber("angle to speaker", swerve.getAngleToSpeakerTarget());
         SmartDashboard.putNumber("turret error", swerve.getTurretError());
         SmartDashboard.putBoolean("Turret near target", swerve.turretNearTarget());
