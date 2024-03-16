@@ -129,15 +129,14 @@ public class RobotContainer {
                 )
         );
 
-        // TODO: Test constant shooter function
         shooter.setDefaultCommand(
                 new FunctionalCommand(
                         () -> {},
                         () -> shooter.shoot(Constants.Shooter.IDLE_SHOOTER_SPEED),
-                        isFinished -> shooter.shoot(0),
+                        isFinished -> shooter.setShooterSpeed(0),
                         () -> false,
                         shooter
-                ).onlyIf(() -> constantShooter)
+                ).onlyWhile(() -> constantShooter)
         );
 
         // Configure controller button bindings
@@ -247,7 +246,13 @@ public class RobotContainer {
                                 () -> false,
                                 angler
                         ),
-                        new RevUpShooterCommand(shooter, swerve),
+                        new FunctionalCommand(
+                                () -> shooter.shoot(Constants.Shooter.SHUTTLE_SHOOTER_SPEED),
+                                () -> {},
+                                isFinished -> shooter.setShooterSpeed(0),
+                                () -> false,
+                                shooter
+                        ),
                         new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
