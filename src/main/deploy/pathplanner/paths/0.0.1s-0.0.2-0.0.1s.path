@@ -3,32 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.055465713793683,
-        "y": 2.158795301490425
+        "x": 2.701205153524414,
+        "y": 3.020441325323673
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.217008219347387,
-        "y": 2.055995525228976
+        "x": 3.5229726522393188,
+        "y": 0.8793941958620057
       },
       "isLocked": false,
       "linkedName": "0.0.1s"
-    },
-    {
-      "anchor": {
-        "x": 6.287689426899427,
-        "y": 1.8797673373522068
-      },
-      "prevControl": {
-        "x": 5.231840530420921,
-        "y": 1.7758169688477339
-      },
-      "nextControl": {
-        "x": 7.343538323377934,
-        "y": 1.9837177058566797
-      },
-      "isLocked": false,
-      "linkedName": null
     },
     {
       "anchor": {
@@ -48,28 +32,12 @@
     },
     {
       "anchor": {
-        "x": 6.287689426899427,
-        "y": 1.8797673373522068
+        "x": 2.701205153524414,
+        "y": 3.020441325323673
       },
       "prevControl": {
-        "x": 7.2927832750845685,
-        "y": 1.9669797984887984
-      },
-      "nextControl": {
-        "x": 5.282595578714286,
-        "y": 1.7925548762156147
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.055465713793683,
-        "y": 2.158795301490425
-      },
-      "prevControl": {
-        "x": 4.217008219347387,
-        "y": 2.0413098429059118
+        "x": 3.5093682845541307,
+        "y": 0.8548248242650766
       },
       "nextControl": null,
       "isLocked": false,
@@ -78,8 +46,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.5,
-      "rotationDegrees": -170.0,
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": -155.0,
       "rotateFast": false
     }
   ],
@@ -87,7 +55,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 1.1,
+      "waypointRelativePos": 0.55,
       "command": {
         "type": "parallel",
         "data": {
