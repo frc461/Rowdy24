@@ -127,7 +127,7 @@ public final class Constants {
         public static final boolean SHOOTER_INVERT = false;
 
         // idle shooter speed in RPM
-        public static final double IDLE_SHOOTER_SPEED = 20;
+        public static final double IDLE_SHOOTER_SPEED = 3000;
 
         // shuttle speed in RPM
         public static final double SHUTTLE_SHOOTER_SPEED = 25;

@@ -196,6 +196,10 @@ public class RobotContainer {
         );
     }
 
+    public void zeroGyro() {
+        swerve.zeroGyro(swerve.getFusedPoseEstimator().getRotation().getDegrees());
+    }
+
     /**
      * Use this method to define your button->command mappings. Buttons can be
      * created by
