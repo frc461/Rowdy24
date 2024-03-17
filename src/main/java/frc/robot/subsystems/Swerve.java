@@ -235,12 +235,9 @@ public class Swerve extends SubsystemBase {
             if (Limelight.getNumTag() >= 2) {
                 xyStdDev = 0.7;
                 degStdDev = 30.0;
-            } else if (dist < 2.0 && poseDifference < 0.5) {
-                xyStdDev = 1.0;
-                degStdDev = 60.0;
-            } else if (dist < 4.0 && poseDifference < 0.3) {
-                xyStdDev = 2.0;
-                degStdDev = 90.0;
+            } else if (dist < 4.0) {
+                xyStdDev = 1.0 * dist + 2.5 * poseDifference;
+                degStdDev = 30.0 * dist;
             } else {
                 return;
             }
