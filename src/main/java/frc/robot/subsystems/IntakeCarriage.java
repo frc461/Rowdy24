@@ -3,7 +3,9 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import edu.wpi.first.hal.RelayJNI;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,6 +18,7 @@ public class IntakeCarriage extends SubsystemBase {
     private final DigitalInput ampBeam; // entrance of carriage (which is the amp shooter)
     private final DigitalInput shooterBeam; // completely exit through shooter
     private final Spark lights;
+    private boolean intaking;
 
     public IntakeCarriage() {
         intake = new CANSparkFlex(Constants.IntakeCarriage.INTAKE_ID, MotorType.kBrushless);
@@ -32,7 +35,10 @@ public class IntakeCarriage extends SubsystemBase {
         ampBeam = new DigitalInput(Constants.IntakeCarriage.AMP_BEAM);
         shooterBeam = new DigitalInput(Constants.IntakeCarriage.SHOOTER_BEAM);
 
+        RelayJNI.initializeRelayPort(0, true);
         lights = new Spark(Constants.IntakeCarriage.LIGHT_ID);
+
+        intaking = false;
     }
 
     @Override
@@ -41,6 +47,11 @@ public class IntakeCarriage extends SubsystemBase {
             lights.set(0.77);
         } else {
             lights.set(0.61);
+        }
+        if (intaking) {
+            RelayJNI.setRelay(0, true);
+        } else {
+            RelayJNI.setRelay(0, false);
         }
     }
 
@@ -70,6 +81,10 @@ public class IntakeCarriage extends SubsystemBase {
 
     public boolean noteInShootingSystem() {
         return getShooterBeamBroken() || getCarriageBeamBroken();
+    }
+
+    public void setIntaking(boolean intaking) {
+        this.intaking = intaking;
     }
 
     public void setIntakeSpeed(double speed) {
