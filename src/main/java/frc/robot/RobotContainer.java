@@ -164,6 +164,20 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
+                "intakeThenShoot",
+                new IntakeCarriageCommand(
+                        intakeCarriage,
+                        0.9,
+                        1
+                ).until(intakeCarriage::noteInShootingSystem)
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1
+                        )).until(() -> !intakeCarriage.noteInShootingSystem())
+        );
+
+        NamedCommands.registerCommand(
                 "startShooterAngler",
                 new ParallelCommandGroup(
                         new RevUpShooterCommand(shooter, swerve),
