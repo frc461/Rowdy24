@@ -35,8 +35,8 @@ public class RobotContainer {
     public final static CommandXboxController driverXbox = new CommandXboxController(0);
     /* Currently Allocated For Driver:
      * POV buttons / Dpad:
-     * Up: Angler trim up by 0.1 encoder counts
-     * Down: Angler trim down by 0.1 encoder counts
+     * Up:
+     * Down:
      * Left:
      * Right:
      * 
@@ -47,6 +47,8 @@ public class RobotContainer {
      * Joysticks:
      * Left: Translation
      * Right: Rotation
+     * Left Joystick Button: Angler trim up by 0.1 encoder counts
+     * Right Joystick Button: Angler trim down by 0.1 encoder counts
      * 
      * Bumpers:
      * Left: auto-align drivetrain to april tag
@@ -80,9 +82,9 @@ public class RobotContainer {
      * Right: Intake note (with beam breaks)
      * 
      * Buttons: 
-     * A: Stow elevator
+     * A: Shuttle note
      * B: Force intake
-     * X: Auto angler align
+     * X: Enable/disable constant shooter when close to speaker
      * Y: Elevator amp auto score
      */
 
@@ -230,10 +232,10 @@ public class RobotContainer {
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
         /* Increment Trim */
-        driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
+        driverXbox.leftStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
 
         /* Decrement Trim */
-        driverXbox.leftStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
+        driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
@@ -265,7 +267,7 @@ public class RobotContainer {
                                 angler
                         ),
                         new FunctionalCommand(
-                                () -> shooter.shoot(Constants.Shooter.SHUTTLE_SHOOTER_SPEED),
+                                () -> shooter.setShooterSpeed(0.4167),
                                 () -> {},
                                 isFinished -> shooter.setShooterSpeed(0),
                                 () -> false,
