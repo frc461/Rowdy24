@@ -52,7 +52,7 @@ public final class Constants {
         public static final double ANGLER_LAYUP_PRESET = 18;
         public static final double ANGLER_SHUTTLE_PRESET = 15;
 
-        public static double ANGLER_ENCODER_OFFSET = 2.95;
+        public static double ANGLER_ENCODER_OFFSET = 1.85;
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
         public static final double SLANT_HEIGHT = .23 * Math.tan(Math.toRadians(14));
@@ -128,7 +128,7 @@ public final class Constants {
         public static final boolean SHOOTER_INVERT = false;
 
         // idle shooter speed in RPM
-        public static final double IDLE_SHOOTER_SPEED = 3000;
+        public static final double IDLE_SHOOTER_SPEED = 20;
 
         // shuttle speed in RPM
         public static final double SHUTTLE_SHOOTER_SPEED = 25;
