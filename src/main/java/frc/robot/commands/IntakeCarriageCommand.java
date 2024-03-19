@@ -28,6 +28,9 @@ public class IntakeCarriageCommand extends Command {
     @Override
     public void initialize() {
         intakeCarriage.setIntakeCarriageSpeed(intakeSpeed, carriageSpeed);
+        if (intakeSpeed > 0) {
+            intakeCarriage.setIntaking(true);
+        }
     }
 
     @Override
@@ -44,5 +47,6 @@ public class IntakeCarriageCommand extends Command {
     public void end(boolean isFinished) {
         intakeCarriage.setIntakeSpeed(0);
         intakeCarriage.setCarriageSpeed(0);
+        intakeCarriage.setIntaking(false);
     }
 }
