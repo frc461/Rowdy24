@@ -69,13 +69,13 @@ public enum TagLocation {
             case 3 ->
                     new Pose2d(Units.inchesToMeters(652.73), Units.inchesToMeters(196.17), Rotation2d.fromDegrees(180));
             case 4 ->
-                    new Pose2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42), Rotation2d.fromDegrees(180));
+                    new Pose2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42), Rotation2d.fromDegrees(180)); //+0.0127
             case 5 ->
                     new Pose2d(Units.inchesToMeters(578.77), Units.inchesToMeters(323.00), Rotation2d.fromDegrees(-90));
             case 6 ->
                     new Pose2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323.00), Rotation2d.fromDegrees(-90));
             case 7 ->
-                    new Pose2d(Units.inchesToMeters(-1.50), Units.inchesToMeters(218.42), Rotation2d.fromDegrees(0));
+                    new Pose2d(Units.inchesToMeters(-1.50), Units.inchesToMeters(218.42), Rotation2d.fromDegrees(0)); //+0.0127
             case 8 ->
                     new Pose2d(Units.inchesToMeters(-1.50), Units.inchesToMeters(196.17), Rotation2d.fromDegrees(0));
             case 9 ->

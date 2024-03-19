@@ -6,6 +6,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.hal.RelayJNI;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Relay.Direction;
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,6 +20,7 @@ public class IntakeCarriage extends SubsystemBase {
     private final DigitalInput ampBeam; // entrance of carriage (which is the amp shooter)
     private final DigitalInput shooterBeam; // completely exit through shooter
     private final Spark lights;
+    Relay intakeLights;
     private boolean intaking;
 
     public IntakeCarriage() {
@@ -35,7 +38,10 @@ public class IntakeCarriage extends SubsystemBase {
         ampBeam = new DigitalInput(Constants.IntakeCarriage.AMP_BEAM);
         shooterBeam = new DigitalInput(Constants.IntakeCarriage.SHOOTER_BEAM);
 
-        RelayJNI.initializeRelayPort(0, true);
+        //RelayJNI.initializeRelayPort(0, true); old relay code
+
+        intakeLights = new Relay(0);
+        intakeLights.setDirection(Direction.kForward);
         lights = new Spark(Constants.IntakeCarriage.LIGHT_ID);
 
         intaking = false;
@@ -49,9 +55,9 @@ public class IntakeCarriage extends SubsystemBase {
             lights.set(0.61);
         }
         if (intaking) {
-            RelayJNI.setRelay(0, true);
+            intakeLights.set(Value.kOn);
         } else {
-            RelayJNI.setRelay(0, false);
+            intakeLights.set(Value.kOff);
         }
     }
 
