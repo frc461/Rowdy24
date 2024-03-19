@@ -136,6 +136,9 @@ public final class Constants {
         // baseline shooter speed in RPM
         public static final double BASE_SHOOTER_SPEED = 6000;
 
+        // boundary within which shooter will automatically rev up (if default command is enabled)
+        public static final double SHOOTER_TRIGGER_DISTANCE = 2.0;
+
         // required accuracy to consider shooter up to speed
         public static final double SHOOTER_ACCURACY_REQUIREMENT = 0.8;
 

@@ -129,15 +129,7 @@ public class RobotContainer {
                 )
         );
 
-        shooter.setDefaultCommand(
-                new FunctionalCommand(
-                        () -> shooter.shoot(Constants.Shooter.IDLE_SHOOTER_SPEED),
-                        () -> {},
-                        isFinished -> shooter.setShooterSpeed(0),
-                        () -> false,
-                        shooter
-                )
-        );
+        shooter.setDefaultCommand(new TeleopShooterCommand(shooter, swerve));
 
         // Configure controller button bindings
         configureButtonBindings();
@@ -286,14 +278,11 @@ public class RobotContainer {
         opXbox.x().onTrue(
                 new InstantCommand(() -> constantShooter = !constantShooter).andThen(
                         constantShooter ? new InstantCommand(() -> shooter.setDefaultCommand(
-                                new FunctionalCommand(
-                                        () -> shooter.shoot(Constants.Shooter.IDLE_SHOOTER_SPEED),
-                                        () -> {},
-                                        isFinished -> shooter.setShooterSpeed(0),
-                                        () -> false,
-                                        shooter
-                                )
-                        )) : new InstantCommand(shooter::removeDefaultCommand)
+                                new TeleopShooterCommand(shooter, swerve)
+                        )) : new InstantCommand(() -> {
+                            shooter.removeDefaultCommand();
+                            shooter.setShooterSpeed(0);
+                        })
                 )
         );
 
