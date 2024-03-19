@@ -131,8 +131,8 @@ public class RobotContainer {
 
         shooter.setDefaultCommand(
                 new FunctionalCommand(
-                        () -> {},
                         () -> shooter.shoot(Constants.Shooter.IDLE_SHOOTER_SPEED),
+                        () -> {},
                         isFinished -> shooter.setShooterSpeed(0),
                         () -> false,
                         shooter
@@ -230,10 +230,10 @@ public class RobotContainer {
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
         /* Increment Trim */
-        driverXbox.povUp().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
+        driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
 
         /* Decrement Trim */
-        driverXbox.povDown().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
+        driverXbox.leftStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(

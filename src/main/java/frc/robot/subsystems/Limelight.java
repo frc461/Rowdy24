@@ -21,6 +21,14 @@ public class Limelight extends SubsystemBase {
         return LimelightHelpers.getTV("limelight");
     }
 
+    public static int getNumTag() {
+        return (int) LimelightHelpers.extractBotPoseEntry(LimelightHelpers.getBotPose_wpiBlue("limelight"), 7);
+    }
+
+    public static Pose2d getNearestTagPose() {
+        return TagLocation.getTagLocation(LimelightHelpers.getFiducialID("limelight"));
+    }
+
     // X+ is to the right when looking at the tag
     public static double getTagRX() {
         return tagPose[0];

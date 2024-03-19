@@ -443,7 +443,7 @@ public class LimelightHelpers {
         return new Pose2d(tran2d, r2d);
     }
 
-    private static double extractBotPoseEntry(double[] inData, int position){
+    public static double extractBotPoseEntry(double[] inData, int position){
         if(inData.length < position+1)
         {
             return 0;

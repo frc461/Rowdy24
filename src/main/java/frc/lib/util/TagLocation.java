@@ -59,4 +59,42 @@ public enum TagLocation {
                     new Pose2d(Units.inchesToMeters(182.73), Units.inchesToMeters(146.19), Rotation2d.fromDegrees(-120));
         };
     }
+
+    public static Pose2d getTagLocation(double tagID) {
+        return switch ((int) tagID) {
+            case 1 ->
+                    new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), Rotation2d.fromDegrees(120));
+            case 2 ->
+                    new Pose2d(Units.inchesToMeters(637.21), Units.inchesToMeters(34.79), Rotation2d.fromDegrees(120));
+            case 3 ->
+                    new Pose2d(Units.inchesToMeters(652.73), Units.inchesToMeters(196.17), Rotation2d.fromDegrees(180));
+            case 4 ->
+                    new Pose2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42), Rotation2d.fromDegrees(180));
+            case 5 ->
+                    new Pose2d(Units.inchesToMeters(578.77), Units.inchesToMeters(323.00), Rotation2d.fromDegrees(-90));
+            case 6 ->
+                    new Pose2d(Units.inchesToMeters(72.5), Units.inchesToMeters(323.00), Rotation2d.fromDegrees(-90));
+            case 7 ->
+                    new Pose2d(Units.inchesToMeters(-1.50), Units.inchesToMeters(218.42), Rotation2d.fromDegrees(0));
+            case 8 ->
+                    new Pose2d(Units.inchesToMeters(-1.50), Units.inchesToMeters(196.17), Rotation2d.fromDegrees(0));
+            case 9 ->
+                    new Pose2d(Units.inchesToMeters(14.02), Units.inchesToMeters(34.79), Rotation2d.fromDegrees(60));
+            case 10 ->
+                    new Pose2d(Units.inchesToMeters(57.54), Units.inchesToMeters(9.68), Rotation2d.fromDegrees(60));
+            case 11 ->
+                    new Pose2d(Units.inchesToMeters(468.69), Units.inchesToMeters(146.19), Rotation2d.fromDegrees(-60));
+            case 12 ->
+                    new Pose2d(Units.inchesToMeters(468.69), Units.inchesToMeters(177.10), Rotation2d.fromDegrees(60));
+            case 13 ->
+                    new Pose2d(Units.inchesToMeters(441.74), Units.inchesToMeters(161.62), Rotation2d.fromDegrees(180));
+            case 14 ->
+                    new Pose2d(Units.inchesToMeters(209.48), Units.inchesToMeters(161.62), Rotation2d.fromDegrees(0));
+            case 15 ->
+                    new Pose2d(Units.inchesToMeters(182.73), Units.inchesToMeters(177.10), Rotation2d.fromDegrees(120));
+            case 16 ->
+                    new Pose2d(Units.inchesToMeters(182.73), Units.inchesToMeters(146.19), Rotation2d.fromDegrees(-120));
+            default -> new Pose2d(0, 0, new Rotation2d());
+        };
+    }
 }

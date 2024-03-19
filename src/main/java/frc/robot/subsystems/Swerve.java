@@ -7,12 +7,14 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -107,9 +109,11 @@ public class Swerve extends SubsystemBase {
         PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
 
         fusedPoseEstimator = new SwerveDrivePoseEstimator(
-            Constants.Swerve.SWERVE_KINEMATICS,
-            getHeading(), getModulePositions(),
-            getPose()
+                Constants.Swerve.SWERVE_KINEMATICS,
+                getHeading(), getModulePositions(),
+                getPose(),
+                VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(2.0)),
+                VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
         );
 
         turretError = 1.0;
@@ -220,11 +224,30 @@ public class Swerve extends SubsystemBase {
         fusedPoseEstimator.update(getHeading(), getModulePositions());
 
         if (Limelight.tagExists()) {
+            double poseDifference = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
+                    limelightPose.getTranslation()
+            );
+            double dist = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
+                    Limelight.getNearestTagPose().getTranslation()
+            );
+            double xyStdDev, degStdDev;
+
+            if (Limelight.getNumTag() >= 2) {
+                xyStdDev = 0.4 * dist + 1.25 * poseDifference;
+                degStdDev = 30.0 * dist;
+            } else if (dist < 4.0) {
+                xyStdDev = 0.8 * dist + 2.5 * poseDifference;
+                degStdDev = 30.0 * dist;
+            } else {
+                return;
+            }
+
             fusedPoseEstimator.addVisionMeasurement(
                     limelightPose,
                     Timer.getFPGATimestamp()
                             - LimelightHelpers.getLatency_Pipeline("limelight") / 1000.0
-                            - LimelightHelpers.getLatency_Capture("limelight") / 1000.0
+                            - LimelightHelpers.getLatency_Capture("limelight") / 1000.0,
+                    VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(degStdDev))
             );
         }
     }
