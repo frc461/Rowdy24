@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 2.020973537160543,
-        "y": 5.289940873297515
+        "x": 2.3519265643182456,
+        "y": 5.507130871149041
       },
       "prevControl": {
-        "x": 1.9485613949634142,
-        "y": 5.075940684149417
+        "x": 2.1296512122982274,
+        "y": 5.466717170781766
       },
       "nextControl": {
-        "x": 2.0720265248023897,
-        "y": 5.440818180340696
+        "x": 2.5134690698719506,
+        "y": 5.536502235795169
       },
       "isLocked": false,
       "linkedName": null
@@ -52,28 +52,28 @@
         "y": 5.659570555896483
       },
       "prevControl": {
-        "x": 2.357184652844149,
-        "y": 5.660706752601095
+        "x": 2.6603258931025917,
+        "y": 5.521816553472107
       },
       "nextControl": {
-        "x": 3.8482828716828315,
-        "y": 5.65761157247651
+        "x": 3.2391178126646087,
+        "y": 5.848288515338122
       },
       "isLocked": false,
       "linkedName": "0.2.0"
     },
     {
       "anchor": {
-        "x": 2.233511127866226,
-        "y": 6.612678052944685
+        "x": 2.557526116841143,
+        "y": 6.43232885750208
       },
       "prevControl": {
-        "x": 2.0490317147260493,
-        "y": 6.442873799240296
+        "x": 2.740712135496813,
+        "y": 6.23950146944348
       },
       "nextControl": {
-        "x": 2.437847460215717,
-        "y": 6.80075962708181
+        "x": 2.278498152702925,
+        "y": 6.726042503963363
       },
       "isLocked": false,
       "linkedName": null
@@ -84,12 +84,12 @@
         "y": 6.988252887333411
       },
       "prevControl": {
-        "x": 2.6451202044438706,
-        "y": 6.834410823168356
+        "x": 2.293183835025989,
+        "y": 6.858213644870939
       },
       "nextControl": {
-        "x": 3.191466614161909,
-        "y": 7.179133051567882
+        "x": 3.238423575093604,
+        "y": 7.064535785853237
       },
       "isLocked": false,
       "linkedName": "0.3.0"
@@ -144,8 +144,8 @@
   "constraintZones": [
     {
       "name": "shoot3",
-      "minWaypointRelativePos": 4.55,
-      "maxWaypointRelativePos": 5.15,
+      "minWaypointRelativePos": 4.8,
+      "maxWaypointRelativePos": 5.2,
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 1.0,
@@ -156,7 +156,7 @@
   ],
   "eventMarkers": [
     {
-      "name": "enableTurret,intake1",
+      "name": "enableTurret,intake1,disableTurret",
       "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
@@ -180,7 +180,7 @@
     },
     {
       "name": "intake2",
-      "waypointRelativePos": 1.75,
+      "waypointRelativePos": 2.0,
       "command": {
         "type": "parallel",
         "data": {
