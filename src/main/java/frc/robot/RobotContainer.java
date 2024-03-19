@@ -136,7 +136,7 @@ public class RobotContainer {
                         isFinished -> shooter.setShooterSpeed(0),
                         () -> false,
                         shooter
-                ).onlyWhile(() -> constantShooter)
+                )
         );
 
         // Configure controller button bindings
@@ -283,7 +283,19 @@ public class RobotContainer {
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, true));
 
         /* Auto-align */
-        opXbox.x().onTrue(new InstantCommand(() -> constantShooter = !constantShooter));
+        opXbox.x().onTrue(
+                new InstantCommand(() -> constantShooter = !constantShooter).andThen(
+                        constantShooter ? new InstantCommand(() -> shooter.setDefaultCommand(
+                                new FunctionalCommand(
+                                        () -> shooter.shoot(Constants.Shooter.IDLE_SHOOTER_SPEED),
+                                        () -> {},
+                                        isFinished -> shooter.setShooterSpeed(0),
+                                        () -> false,
+                                        shooter
+                                )
+                        )) : new InstantCommand(shooter::removeDefaultCommand)
+                )
+        );
 
         /* Amp Elevator Preset */
         opXbox.y().onTrue(
