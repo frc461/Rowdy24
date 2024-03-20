@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 2.3519265643182456,
-        "y": 5.507130871149041
+        "x": 2.1238813779756742,
+        "y": 5.442127276543837
       },
       "prevControl": {
-        "x": 2.1296512122982274,
-        "y": 5.466717170781766
+        "x": 1.901606025955656,
+        "y": 5.401713576176562
       },
       "nextControl": {
-        "x": 2.5134690698719506,
-        "y": 5.536502235795169
+        "x": 2.285423883529379,
+        "y": 5.471498641189965
       },
       "isLocked": false,
       "linkedName": null
@@ -52,12 +52,12 @@
         "y": 5.659570555896483
       },
       "prevControl": {
-        "x": 2.6603258931025917,
-        "y": 5.521816553472107
+        "x": 2.649427928697407,
+        "y": 5.610702523327912
       },
       "nextControl": {
-        "x": 3.2391178126646087,
-        "y": 5.848288515338122
+        "x": 3.871759287735598,
+        "y": 5.844841210838675
       },
       "isLocked": false,
       "linkedName": "0.2.0"
@@ -147,8 +147,41 @@
       "minWaypointRelativePos": 4.8,
       "maxWaypointRelativePos": 5.2,
       "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    },
+    {
+      "name": "shoot1",
+      "minWaypointRelativePos": 0.65,
+      "maxWaypointRelativePos": 1.4500000000000002,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    },
+    {
+      "name": "shoot2",
+      "minWaypointRelativePos": 2.0500000000000003,
+      "maxWaypointRelativePos": 3.55,
+      "constraints": {
         "maxVelocity": 1.0,
-        "maxAcceleration": 1.0,
+        "maxAcceleration": 3.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    },
+    {
+      "name": "close constraint",
+      "minWaypointRelativePos": 0.39999999999999997,
+      "maxWaypointRelativePos": 5.3,
+      "constraints": {
+        "maxVelocity": 3.5,
+        "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -208,7 +241,7 @@
     },
     {
       "name": "intake3,disableTurret",
-      "waypointRelativePos": 3.8,
+      "waypointRelativePos": 4.2,
       "command": {
         "type": "sequential",
         "data": {
