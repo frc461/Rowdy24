@@ -278,10 +278,16 @@ public class RobotContainer {
         /* Toggle constant shooter */
         opXbox.x().onTrue(
                 new InstantCommand(() -> constantShooter = !constantShooter).andThen(
-                        constantShooter ? new InstantCommand(() -> shooter.setDefaultCommand(
-                                new TeleopShooterCommand(shooter, swerve)
-                        )) : new InstantCommand(() -> shooter.setDefaultCommand(new InstantCommand(() -> {})))
+                        new InstantCommand(shooter::removeDefaultCommand).onlyIf(() -> !constantShooter)
+                ).andThen(
+                        new InstantCommand(() -> shooter.setDefaultCommand(
+                                new TeleopShooterCommand(shooter, swerve).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf)
+                        )).onlyIf(() -> constantShooter)
                 )
+        );
+
+        opXbox.x().onFalse(
+                new InstantCommand(() -> shooter.setShooterSpeed(0.0), shooter).onlyIf(() -> !constantShooter)
         );
 
         /* Amp Elevator Preset */
