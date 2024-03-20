@@ -38,8 +38,6 @@ public class IntakeCarriage extends SubsystemBase {
         ampBeam = new DigitalInput(Constants.IntakeCarriage.AMP_BEAM);
         shooterBeam = new DigitalInput(Constants.IntakeCarriage.SHOOTER_BEAM);
 
-        //RelayJNI.initializeRelayPort(0, true); old relay code
-
         intakeLights = new Relay(0);
         intakeLights.setDirection(Direction.kForward);
         lights = new Spark(Constants.IntakeCarriage.LIGHT_ID);
