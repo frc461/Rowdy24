@@ -222,10 +222,10 @@ public class RobotContainer {
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
         /* Increment Trim */
-        driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
+        driverXbox.leftStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
 
         /* Decrement Trim */
-        driverXbox.leftStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
+        driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
@@ -274,15 +274,12 @@ public class RobotContainer {
         /* Intake Override */
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, true));
 
-        /* Auto-align */
+        /* Toggle constant shooter */
         opXbox.x().onTrue(
                 new InstantCommand(() -> constantShooter = !constantShooter).andThen(
                         constantShooter ? new InstantCommand(() -> shooter.setDefaultCommand(
                                 new TeleopShooterCommand(shooter, swerve)
-                        )) : new InstantCommand(() -> {
-                            shooter.removeDefaultCommand();
-                            shooter.setShooterSpeed(0);
-                        })
+                        )) : new InstantCommand(() -> shooter.setDefaultCommand(new InstantCommand(() -> {})))
                 )
         );
 
@@ -435,6 +432,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
         SmartDashboard.putNumber("Shooter error", shooter.getError());
         SmartDashboard.putData("Shooter Cmd", shooter);
+        SmartDashboard.putBoolean("Constant shooter?", constantShooter);
 
         // angler debug
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
