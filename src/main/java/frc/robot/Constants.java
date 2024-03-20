@@ -52,7 +52,7 @@ public final class Constants {
         public static final double ANGLER_LAYUP_PRESET = 18;
         public static final double ANGLER_SHUTTLE_PRESET = 15;
 
-        public static double ANGLER_ENCODER_OFFSET = 1.85;
+        public static double ANGLER_ENCODER_OFFSET = 2.15;
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
         public static final double SLANT_HEIGHT = .23 * Math.tan(Math.toRadians(14));
@@ -130,11 +130,14 @@ public final class Constants {
         // idle shooter speed in RPM
         public static final double IDLE_SHOOTER_SPEED = 20;
 
-        // shuttle speed in RPM
-        public static final double SHUTTLE_SHOOTER_SPEED = 25;
+        // shuttle power out of full power 1
+        public static final double SHUTTLE_SHOOTER_POWER = 0.4167;
 
         // baseline shooter speed in RPM
         public static final double BASE_SHOOTER_SPEED = 6000;
+
+        // boundary within which shooter will automatically rev up (if default command is enabled)
+        public static final double SHOOTER_TRIGGER_DISTANCE = 3.5;
 
         // required accuracy to consider shooter up to speed
         public static final double SHOOTER_ACCURACY_REQUIREMENT = 0.8;

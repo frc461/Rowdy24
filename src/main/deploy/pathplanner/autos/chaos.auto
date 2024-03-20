@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.832227734960532,
-      "y": 4.609420355985849
+      "x": 0.3899353412741913,
+      "y": 1.9554697004130854
     },
-    "rotation": 120.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -26,6 +26,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "path",
+                      "data": {
+                        "pathName": "-1.0.0-0.~1.0"
+                      }
+                    },
+                    {
                       "type": "named",
                       "data": {
                         "name": "shoot"
@@ -34,13 +40,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "1,123,5"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "shoot"
+                        "pathName": "-1,[1,5]Ce"
                       }
                     }
                   ]

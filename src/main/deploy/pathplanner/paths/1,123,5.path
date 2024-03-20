@@ -157,7 +157,7 @@
   "eventMarkers": [
     {
       "name": "enableTurret,intake1,disableTurret",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.09999999999999999,
       "command": {
         "type": "parallel",
         "data": {

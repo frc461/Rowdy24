@@ -47,9 +47,9 @@ public class RobotContainer {
      * Joysticks:
      * Left: Translation
      * Right: Rotation
-     * Left Joystick Button: Angler trim up by 0.1 encoder counts
-     * Right Joystick Button: Angler trim down by 0.1 encoder counts
-     * 
+     * Left Joystick Button: Angler trim down by 0.1 encoder counts
+     * Right Joystick Button: Angler trim up by 0.1 encoder counts
+     *
      * Bumpers:
      * Left: auto-align drivetrain to april tag
      * Right: stow elevator
@@ -131,15 +131,7 @@ public class RobotContainer {
                 )
         );
 
-        shooter.setDefaultCommand(
-                new FunctionalCommand(
-                        () -> shooter.shoot(Constants.Shooter.IDLE_SHOOTER_SPEED),
-                        () -> {},
-                        isFinished -> shooter.setShooterSpeed(0),
-                        () -> false,
-                        shooter
-                ).onlyWhile(() -> constantShooter)
-        );
+        shooter.setDefaultCommand(new TeleopShooterCommand(shooter, swerve));
 
         // Configure controller button bindings
         configureButtonBindings();
@@ -232,10 +224,10 @@ public class RobotContainer {
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
         /* Increment Trim */
-        driverXbox.leftStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
+        driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
 
         /* Decrement Trim */
-        driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
+        driverXbox.leftStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
@@ -267,7 +259,7 @@ public class RobotContainer {
                                 angler
                         ),
                         new FunctionalCommand(
-                                () -> shooter.setShooterSpeed(0.4167),
+                                () -> shooter.setShooterSpeed(Constants.Shooter.SHUTTLE_SHOOTER_POWER),
                                 () -> {},
                                 isFinished -> shooter.setShooterSpeed(0),
                                 () -> false,
@@ -284,8 +276,14 @@ public class RobotContainer {
         /* Intake Override */
         opXbox.b().whileTrue(new IntakeCarriageCommand(intakeCarriage, 0.9, 1, true));
 
-        /* Auto-align */
-        opXbox.x().onTrue(new InstantCommand(() -> constantShooter = !constantShooter));
+        /* Toggle constant shooter */
+        opXbox.x().onTrue(
+                new InstantCommand(() -> constantShooter = !constantShooter).andThen(
+                        constantShooter ? new InstantCommand(() -> shooter.setDefaultCommand(
+                                new TeleopShooterCommand(shooter, swerve)
+                        )) : new InstantCommand(() -> shooter.setDefaultCommand(new InstantCommand(() -> {})))
+                )
+        );
 
         /* Amp Elevator Preset */
         opXbox.y().onTrue(
@@ -436,6 +434,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Shooter Right", shooter.getTopShooterSpeed());
         SmartDashboard.putNumber("Shooter error", shooter.getError());
         SmartDashboard.putData("Shooter Cmd", shooter);
+        SmartDashboard.putBoolean("Constant shooter?", constantShooter);
 
         // angler debug
         SmartDashboard.putNumber("Angler encoder", angler.getPosition());
