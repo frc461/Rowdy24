@@ -42,6 +42,24 @@
                       "data": {
                         "name": "shoot"
                       }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "disableTurret"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "0.0.5s-0.0.4-0.0.4s"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
+                      }
                     }
                   ]
                 }

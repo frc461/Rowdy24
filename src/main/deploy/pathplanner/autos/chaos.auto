@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "-1.0.0-0.~1.0"
+                        "pathName": "-1.0.0--1.0.0s"
                       }
                     },
                     {
@@ -40,7 +40,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "-1,[1,5]Ce"
+                        "pathName": "-1.0.0s-0.0.[1,5]"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "0.0.5-0.0.5s"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
                       }
                     }
                   ]
