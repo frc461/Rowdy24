@@ -167,7 +167,7 @@ public class RobotContainer {
                                 intakeCarriage,
                                 0,
                                 1
-                        )).until(() -> !intakeCarriage.noteInShootingSystem())
+                        ).until(() -> !intakeCarriage.noteInShootingSystem()))
         );
 
         NamedCommands.registerCommand(
