@@ -9,7 +9,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
-
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -27,7 +26,6 @@ public final class Constants {
     }
 
     public static final class Angler {
-
         // basic configs
         public static final int ANGLER_ID = 62;
         public static final int ANGLER_CURRENT_LIMIT = 35;
@@ -52,6 +50,7 @@ public final class Constants {
         public static final double ANGLER_LAYUP_PRESET = 18;
         public static final double ANGLER_SHUTTLE_PRESET = 15;
 
+        // angler equation to shoot from anywhere
         public static double ANGLER_ENCODER_OFFSET = 2.15;
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
@@ -107,6 +106,7 @@ public final class Constants {
         public static final int SHOOTER_BEAM = 3;
         public static final int AMP_BEAM = 5;
 
+        // Blinkin
         public static final int LIGHT_ID = 0;
     }
 
