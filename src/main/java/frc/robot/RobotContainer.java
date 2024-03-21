@@ -315,7 +315,7 @@ public class RobotContainer {
                         elevator::elevatorSwitchTriggered,
                         elevator
                 )
-                        .andThen(new WaitCommand(0.25))
+                        .andThen(new WaitCommand(0.5))
                         .andThen(new InstantCommand(elevator::stopElevator))
         );
 
