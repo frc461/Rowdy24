@@ -269,7 +269,7 @@ public class Swerve extends SubsystemBase {
 
     public Optional<Rotation2d> getRotationTargetOverride() { // only for auto
         if (Limelight.overrideTargetNow) {
-            return Optional.of(Rotation2d.fromDegrees(getAngleToSpeakerTarget()));
+            return Optional.of(getPose().getRotation());
         }
         return Optional.empty();
     }
