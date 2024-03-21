@@ -31,30 +31,30 @@ public class Limelight extends SubsystemBase {
 
     // X+ is to the right when looking at the tag
     public static double getTagRX() {
-        return tagPose[0];
+        return tagPose.length == 0 ? 0.0 : tagPose[0];
     }
 
     // Y+ is upwards
     public static double getTagRY() {
-        return tagPose[1];
+        return tagPose.length == 0 ? 0.0 : tagPose[1];
     }
 
     // Z+ is perpendicular to the plane of the limelight (Z+ is towards tag on data
     // side, Z- is on other side of robot)
     public static double getTagRZ() {
-        return tagPose[2];
+        return tagPose.length == 0 ? 0.0 : tagPose[2];
     }
 
     public static double getTagPitch() {
-        return tagPose[3];
+        return tagPose.length == 0 ? 0.0 : tagPose[3];
     }
 
     public static double getTagYaw() {
-        return tagPose[4];
+        return tagPose.length == 0 ? 0.0 : tagPose[4];
     }
 
     public static double getTagRoll() {
-        return tagPose[5];
+        return tagPose.length == 0 ? 0.0 : tagPose[5];
     }
 
     public static Pose2d getSpeakerTagPose() {
