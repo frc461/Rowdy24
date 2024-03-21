@@ -74,6 +74,11 @@ public class Swerve extends SubsystemBase {
                                                                                              // MUST BE ROBOT RELATIVE
                 speeds -> {
                     // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                    speeds.omegaRadiansPerSecond = Limelight.overrideTargetNow ? limelightRotController.calculate(
+                            getFusedPoseEstimator().getRotation().getDegrees(),
+                            getAngleToSpeakerTarget()
+                    ) * Constants.Swerve.MAX_ANGULAR_VELOCITY : speeds.omegaRadiansPerSecond;
+
                     SwerveModuleState[] swerveModuleStates =
                             Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
                     setModuleStates(swerveModuleStates);
@@ -104,8 +109,6 @@ public class Swerve extends SubsystemBase {
                 },
                 this // Reference to this subsystem to set requirements
         );
-
-        PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
 
         fusedPoseEstimator = new SwerveDrivePoseEstimator(
                 Constants.Swerve.SWERVE_KINEMATICS,
@@ -265,13 +268,6 @@ public class Swerve extends SubsystemBase {
             positions[mod.moduleNumber] = mod.getPosition();
         }
         return positions;
-    }
-
-    public Optional<Rotation2d> getRotationTargetOverride() { // only for auto
-        if (Limelight.overrideTargetNow) {
-            return Optional.of(getPose().getRotation());
-        }
-        return Optional.empty();
     }
 
     public void zeroGyro() {

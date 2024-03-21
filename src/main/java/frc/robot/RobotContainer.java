@@ -189,14 +189,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "enableTurret",
-                new InstantCommand(() -> Limelight.overrideTargetNow = true).andThen(
-                        new LimelightTurretCommand(
-                                swerve,
-                                () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(swerve.getModuleStates()).vxMetersPerSecond,
-                                () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(swerve.getModuleStates()).vyMetersPerSecond,
-                                () -> false
-                        ).until(() -> !Limelight.overrideTargetNow)
-                )
+                new InstantCommand(() -> Limelight.overrideTargetNow = true)
         );
 
         NamedCommands.registerCommand(
