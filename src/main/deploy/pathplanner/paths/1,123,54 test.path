@@ -205,6 +205,17 @@
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
+    },
+    {
+      "name": "shoot2",
+      "minWaypointRelativePos": 1.95,
+      "maxWaypointRelativePos": 2.1,
+      "constraints": {
+        "maxVelocity": 0.3,
+        "maxAcceleration": 3.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
     }
   ],
   "eventMarkers": [
