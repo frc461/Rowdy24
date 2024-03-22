@@ -77,18 +77,6 @@ public class Shooter extends SubsystemBase {
         bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
     }
 
-    //added pidEnabled so pid won't try to backdrive
-    // public void shoot(double speed, boolean pidEnabled) {
-    //     target = speed;
-    //     if(pidEnabled){
-    //         topController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
-    //         bottomController.setReference(speed, ControlType.kVelocity, 0, Constants.Shooter.SHOOTER_FF);
-    //     }else{
-    //         topShooter.set(speed);
-    //         bottomShooter.set(speed);
-    //     }   
-    // }
-
     public boolean nearTarget() {
         return accuracy > Constants.Shooter.SHOOTER_ACCURACY_REQUIREMENT && (getBottomShooterSpeed() + getTopShooterSpeed()) / 2 > 4500;
     }

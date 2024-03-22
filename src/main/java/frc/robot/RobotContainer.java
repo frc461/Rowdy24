@@ -230,8 +230,8 @@ public class RobotContainer {
         /* Zero Gyro */
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
-        /* Zero pose at (subwoofer center) */
-        driverXbox.x().onTrue(new InstantCommand(() -> swerve.setFusedPoseEstimator(new Pose2d(1.35, 5.45, new Rotation2d(0)))));
+        /* Sync pose at subwoofer center */
+        driverXbox.x().onTrue(new InstantCommand(() -> swerve.setFusedPoseEstimator(new Pose2d(1.25, 5.55, new Rotation2d(180)))));
 
         /* Increment Trim */
         driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));

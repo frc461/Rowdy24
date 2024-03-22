@@ -8,6 +8,7 @@ import frc.robot.subsystems.Swerve;
 public class TeleopShooterCommand extends Command {
     private final Shooter shooter;
     private final Swerve swerve;
+
     public TeleopShooterCommand(Shooter shooter, Swerve swerve) {
         this.shooter = shooter;
         this.swerve = swerve;
@@ -16,15 +17,16 @@ public class TeleopShooterCommand extends Command {
 
     @Override
     public void initialize() {
-        shooter.shoot(Constants.Shooter.IDLE_SHOOTER_SPEED);
+        shooter.setShooterSpeed(Constants.Shooter.IDLE_SHOOTER_POWER);
     }
 
     @Override
     public void execute() {
         if (swerve.getVectorToSpeakerTarget().getNorm() < Constants.Shooter.SHOOTER_TRIGGER_DISTANCE) {
-            shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED);
+            shooter.shoot(Constants.Shooter.BASE_SHOOTER_SPEED +
+                    swerve.getVectorToSpeakerTarget().getNorm() * Constants.Shooter.DISTANCE_MULTIPLIER);
         } else {
-            shooter.shoot(Constants.Shooter.IDLE_SHOOTER_SPEED);
+            shooter.setShooterSpeed(Constants.Shooter.IDLE_SHOOTER_POWER);
         }
     }
 }

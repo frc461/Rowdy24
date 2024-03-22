@@ -128,7 +128,7 @@ public final class Constants {
         public static final boolean SHOOTER_INVERT = false;
 
         // idle shooter speed in RPM
-        public static final double IDLE_SHOOTER_SPEED = 20;
+        public static final double IDLE_SHOOTER_POWER = 0.2;
 
         // shuttle power out of full power 1
         public static final double SHUTTLE_SHOOTER_POWER = 0.4167;
