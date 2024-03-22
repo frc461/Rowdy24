@@ -3,6 +3,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -226,6 +229,9 @@ public class RobotContainer {
 
         /* Zero Gyro */
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
+
+        /* Zero pose at (subwoofer center) */
+        driverXbox.x().onTrue(new InstantCommand(() -> swerve.setFusedPoseEstimator(new Pose2d(1.35, 5.45, new Rotation2d(0)))));
 
         /* Increment Trim */
         driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
