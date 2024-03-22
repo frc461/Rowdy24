@@ -36,12 +36,12 @@
         "y": 5.57091093873814
       },
       "prevControl": {
-        "x": 1.5910144357434797,
-        "y": 5.75811931347315
+        "x": 1.7446758257944281,
+        "y": 5.7443963987998545
       },
       "nextControl": {
-        "x": 4.82897960005317,
-        "y": 5.29108721461556
+        "x": 3.6002095617786947,
+        "y": 5.463073824179848
       },
       "isLocked": false,
       "linkedName": "0.2.0"
@@ -116,12 +116,12 @@
         "y": 5.771983391189005
       },
       "prevControl": {
-        "x": 8.766783989505308,
-        "y": 5.602832558654373
+        "x": 8.887055198075664,
+        "y": 5.551187918112187
       },
       "nextControl": {
-        "x": 7.893792582397005,
-        "y": 5.907744743939092
+        "x": 7.895750529503756,
+        "y": 5.913225765230759
       },
       "isLocked": false,
       "linkedName": "0.0.4"
@@ -174,22 +174,11 @@
   ],
   "constraintZones": [
     {
-      "name": "shoot1",
-      "minWaypointRelativePos": 0.65,
-      "maxWaypointRelativePos": 1.2,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.5,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
-    },
-    {
       "name": "shoot2",
       "minWaypointRelativePos": 2.15,
-      "maxWaypointRelativePos": 2.4,
+      "maxWaypointRelativePos": 2.25,
       "constraints": {
-        "maxVelocity": 1.0,
+        "maxVelocity": 0.2,
         "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
@@ -198,9 +187,9 @@
     {
       "name": "shoot3",
       "minWaypointRelativePos": 3.95,
-      "maxWaypointRelativePos": 4.05,
+      "maxWaypointRelativePos": 4.1,
       "constraints": {
-        "maxVelocity": 0.6,
+        "maxVelocity": 0.5,
         "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
@@ -208,10 +197,21 @@
     },
     {
       "name": "shoot5",
-      "minWaypointRelativePos": 6.0,
-      "maxWaypointRelativePos": 6.25,
+      "minWaypointRelativePos": 6.1,
+      "maxWaypointRelativePos": 6.15,
       "constraints": {
-        "maxVelocity": 1.0,
+        "maxVelocity": 0.3,
+        "maxAcceleration": 3.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    },
+    {
+      "name": "shoot1",
+      "minWaypointRelativePos": 1.1,
+      "maxWaypointRelativePos": 1.2,
+      "constraints": {
+        "maxVelocity": 0.7,
         "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
