@@ -275,11 +275,11 @@ public class RobotContainer {
                                 () -> false,
                                 shooter
                         ),
-                        new IntakeCarriageCommand(
+                        new WaitCommand(0.5).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
-                        )
+                        ))
                 ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
 
