@@ -100,13 +100,9 @@ public class Swerve extends SubsystemBase {
                                                           // furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-                    var alliance = DriverStation.getAlliance();
-                    return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
-                },
+                Limelight::isRedAlliance, // Boolean supplier that controls when the path will be mirrored for the red alliance
+                                  // This will flip the path being followed to the red side of the field.
+                                  // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
                 this // Reference to this subsystem to set requirements
         );
 
@@ -143,7 +139,7 @@ public class Swerve extends SubsystemBase {
                         translation.getX(),
                         translation.getY(),
                         rotation,
-                        getHeading()
+                        Limelight.isRedAlliance() ? getHeading().rotateBy(Rotation2d.fromDegrees(180)) : getHeading()
                 ) : new ChassisSpeeds(
                         translation.getX(),
                         translation.getY(),
