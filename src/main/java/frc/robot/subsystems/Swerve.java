@@ -114,16 +114,14 @@ public class Swerve extends SubsystemBase {
                 VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
         );
 
-        turretError = 1.0;
+        turretError = 0.0;
     }
 
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
         updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
-        turretError = Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees()) > 180 ?
-                Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees()) - 360 :
-                Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees());
+        turretError = getVectorToSpeakerTarget().getAngle().minus(getFusedPoseEstimator().getRotation()).getDegrees();
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());

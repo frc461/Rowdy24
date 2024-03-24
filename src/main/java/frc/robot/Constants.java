@@ -113,8 +113,8 @@ public final class Constants {
     public static final class Limelight {
         // pid for limelight alignment
         public static final double LIMELIGHT_P = 0.01;
-        public static final double LIMELIGHT_I = 0;
-        public static final double LIMELIGHT_D = 0;
+        public static final double LIMELIGHT_I = 0.0005;
+        public static final double LIMELIGHT_D = 0.00004;
         
         // turn slightly to the right 
         public static final double YAW_OFFSET = 0;
@@ -154,7 +154,7 @@ public final class Constants {
 
     public static final class Swerve {
         // required accuracy to consider turret accurate to shoot a note
-        public static final double TURRET_ACCURACY_REQUIREMENT = 2.0;
+        public static final double TURRET_ACCURACY_REQUIREMENT = 2.5;
         // gyro config
         public static final double GYRO_OFFSET = 0;
         public static final int PIGEON_ID = 51;
