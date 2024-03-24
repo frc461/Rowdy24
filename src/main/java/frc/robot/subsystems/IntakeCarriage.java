@@ -3,13 +3,19 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.util.Color;
+
 import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
 
 public class IntakeCarriage extends SubsystemBase {
@@ -18,7 +24,9 @@ public class IntakeCarriage extends SubsystemBase {
     private final DigitalInput carriageBeam; // end of carriage (on shooter side)
     private final DigitalInput ampBeam; // entrance of carriage (which is the amp shooter)
     private final DigitalInput shooterBeam; // completely exit through shooter
+    private final AddressableLED led;
     private final Spark lights;
+    private final AddressableLEDBuffer buffer;
     Relay intakeLights;
     private boolean intaking;
 
@@ -39,6 +47,10 @@ public class IntakeCarriage extends SubsystemBase {
 
         intakeLights = new Relay(0);
         intakeLights.setDirection(Direction.kForward);
+        led = new AddressableLED(2);
+        buffer = new AddressableLEDBuffer(12);
+        led.setLength(buffer.getLength());
+        configureLights(false);
         lights = new Spark(Constants.IntakeCarriage.LIGHT_ID);
 
         intaking = false;
@@ -56,6 +68,7 @@ public class IntakeCarriage extends SubsystemBase {
         } else {
             intakeLights.set(Value.kOff);
         }
+        configureLights(noteInShootingSystem());
     }
 
     public double getIntakeSpeed() {
@@ -105,5 +118,19 @@ public class IntakeCarriage extends SubsystemBase {
 
     public void setIntakeCarriageSpeed(double speed){
         setIntakeCarriageSpeed(speed, speed);
+    }
+
+    public void configureLights(boolean on) {
+        if (on) {
+            for (int i = 0; i < buffer.getLength(); i++) {
+                buffer.setLED(i, Color.kOrange);
+            }
+        } else {
+            for (int i = 0; i < buffer.getLength(); i++) {
+                buffer.setRGB(i, 0, 0, 0);
+            }
+        }
+        led.setData(buffer);
+        led.start();
     }
 }
