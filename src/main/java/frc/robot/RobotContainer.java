@@ -231,7 +231,7 @@ public class RobotContainer {
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
         /* Sync pose at subwoofer center */
-        driverXbox.x().onTrue(new InstantCommand(() -> swerve.setFusedPoseEstimator(new Pose2d(1.25, 5.55, new Rotation2d(180)))));
+        driverXbox.x().onTrue(new InstantCommand(() -> swerve.setFusedPoseEstimator(Limelight.isRedAlliance() ? new Pose2d(15.29, 5.55, new Rotation2d()) : new Pose2d(1.25, 5.55, new Rotation2d(180)))));
 
         /* Increment Trim */
         driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
@@ -275,11 +275,11 @@ public class RobotContainer {
                                 () -> false,
                                 shooter
                         ),
-                        new IntakeCarriageCommand(
+                        new WaitCommand(0.5).andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
                                 0,
                                 1
-                        )
+                        ))
                 ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
 
@@ -326,7 +326,7 @@ public class RobotContainer {
                         elevator::elevatorSwitchTriggered,
                         elevator
                 )
-                        .andThen(new WaitCommand(0.5))
+                        .andThen(new WaitCommand(0.75))
                         .andThen(new InstantCommand(elevator::stopElevator))
         );
 

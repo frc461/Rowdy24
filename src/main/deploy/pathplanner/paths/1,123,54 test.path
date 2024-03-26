@@ -84,12 +84,12 @@
         "y": 7.494126664583896
       },
       "prevControl": {
-        "x": 7.978243082989196,
-        "y": 7.476825413644109
+        "x": 7.977995228199825,
+        "y": 7.482475555705154
       },
       "nextControl": {
-        "x": 9.279423277844135,
-        "y": 7.545069032596527
+        "x": 9.685249228048313,
+        "y": 7.54272961537376
       },
       "isLocked": false,
       "linkedName": "0.0.5"
@@ -116,12 +116,12 @@
         "y": 5.771983391189005
       },
       "prevControl": {
-        "x": 8.887055198075664,
-        "y": 5.551187918112187
+        "x": 9.474754448084393,
+        "y": 5.309146116867734
       },
       "nextControl": {
-        "x": 7.895750529503756,
-        "y": 5.913225765230759
+        "x": 7.898671840031236,
+        "y": 5.920981527824561
       },
       "isLocked": false,
       "linkedName": "0.0.4"
@@ -176,7 +176,7 @@
     {
       "name": "shoot3",
       "minWaypointRelativePos": 3.95,
-      "maxWaypointRelativePos": 4.1,
+      "maxWaypointRelativePos": 4.05,
       "constraints": {
         "maxVelocity": 0.5,
         "maxAcceleration": 3.5,
@@ -187,9 +187,9 @@
     {
       "name": "shoot5",
       "minWaypointRelativePos": 6.1,
-      "maxWaypointRelativePos": 6.15,
+      "maxWaypointRelativePos": 6.1,
       "constraints": {
-        "maxVelocity": 0.3,
+        "maxVelocity": 0.05,
         "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
@@ -200,7 +200,7 @@
       "minWaypointRelativePos": 0.85,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 0.75,
+        "maxVelocity": 0.5,
         "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
@@ -324,7 +324,7 @@
     },
     {
       "name": "shoot5,disableTurret",
-      "waypointRelativePos": 6.05,
+      "waypointRelativePos": 5.95,
       "command": {
         "type": "sequential",
         "data": {
@@ -371,7 +371,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 5.5,
-    "maxAcceleration": 3.5,
+    "maxAcceleration": 3.75,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -386,5 +386,5 @@
     "rotation": 120.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

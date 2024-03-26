@@ -100,13 +100,9 @@ public class Swerve extends SubsystemBase {
                                                           // furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-                    var alliance = DriverStation.getAlliance();
-                    return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
-                },
+                Limelight::isRedAlliance, // Boolean supplier that controls when the path will be mirrored for the red alliance
+                                  // This will flip the path being followed to the red side of the field.
+                                  // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
                 this // Reference to this subsystem to set requirements
         );
 
@@ -118,16 +114,14 @@ public class Swerve extends SubsystemBase {
                 VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
         );
 
-        turretError = 1.0;
+        turretError = 0.0;
     }
 
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
         updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
-        turretError = Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees()) > 180 ?
-                Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees()) - 360 :
-                Math.abs(getAngleToSpeakerTarget() - getFusedPoseEstimator().getRotation().getDegrees());
+        turretError = getVectorToSpeakerTarget().getAngle().minus(getFusedPoseEstimator().getRotation()).getDegrees();
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -143,7 +137,7 @@ public class Swerve extends SubsystemBase {
                         translation.getX(),
                         translation.getY(),
                         rotation,
-                        getHeading()
+                        Limelight.isRedAlliance() ? getHeading().rotateBy(Rotation2d.fromDegrees(180)) : getHeading()
                 ) : new ChassisSpeeds(
                         translation.getX(),
                         translation.getY(),

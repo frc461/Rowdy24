@@ -57,10 +57,13 @@ public class Limelight extends SubsystemBase {
         return tagPose.length == 0 ? 0.0 : tagPose[5];
     }
 
+    public static boolean isRedAlliance() {
+        return DriverStation.getAlliance().filter(value -> value == DriverStation.Alliance.Red).isPresent();
+    }
+
     public static Pose2d getSpeakerTagPose() {
         return TagLocation.getTagLocation(
-                DriverStation.getAlliance().filter(value -> value == DriverStation.Alliance.Red).isPresent() ?
-                        TagLocation.ID_4 : TagLocation.ID_7
+                isRedAlliance() ? TagLocation.ID_4 : TagLocation.ID_7
         );
     }
 
