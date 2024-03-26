@@ -141,6 +141,14 @@ public class RobotContainer {
 
     public void registerAutoCommands() {
         NamedCommands.registerCommand(
+                "startShooterAngler",
+                new ParallelCommandGroup(
+                        new RevUpShooterCommand(shooter, swerve),
+                        new AutoAlignCommand(angler, swerve)
+                )
+        );
+
+        NamedCommands.registerCommand(
                 "intakeNote",
                 new IntakeCarriageCommand(
                         intakeCarriage,
@@ -171,14 +179,6 @@ public class RobotContainer {
                                 0,
                                 1
                         ).until(() -> !intakeCarriage.noteInShootingSystem()))
-        );
-
-        NamedCommands.registerCommand(
-                "startShooterAngler",
-                new ParallelCommandGroup(
-                        new RevUpShooterCommand(shooter, swerve),
-                        new AutoAlignCommand(angler, swerve)
-                )
         );
 
         NamedCommands.registerCommand(

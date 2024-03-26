@@ -1,0 +1,50 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7947499752044678,
+      "y": 4.449203014373779
+    },
+    "rotation": 119.99999413330205
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "startShooterAngler"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "enableTurret"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "1,123,54"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": true
+}
