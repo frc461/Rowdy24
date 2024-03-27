@@ -8,7 +8,11 @@
     "x.0.0-..."
   ],
   "autoFolders": [
-    "New Folder"
+    "2P",
+    "3P",
+    "4P",
+    "5P",
+    "6P"
   ],
   "defaultMaxVel": 5.5,
   "defaultMaxAccel": 3.5,
