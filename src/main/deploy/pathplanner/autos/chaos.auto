@@ -26,6 +26,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "enableTurret"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "-1.0.0-0.0.1s"
@@ -35,6 +41,12 @@
                       "type": "named",
                       "data": {
                         "name": "shoot"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "disableTurret"
                       }
                     },
                     {

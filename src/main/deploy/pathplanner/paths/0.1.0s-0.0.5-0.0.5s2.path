@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.300999345651035,
-        "y": 4.30310154799447
+        "x": 1.9107748067773866,
+        "y": 4.0057955674340056
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9898471695600963,
-        "y": 6.96468158379071
+        "x": 3.599622630686448,
+        "y": 6.667375603230245
       },
       "isLocked": false,
       "linkedName": "0.1.0s"
@@ -48,8 +48,31 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
+      "name": "intake,enableTurret",
       "waypointRelativePos": 0.5,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "enableTurret"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "disableTurret",
+      "waypointRelativePos": 0.05,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,7 +80,7 @@
             {
               "type": "named",
               "data": {
-                "name": "intakeNote"
+                "name": "disableTurret"
               }
             }
           ]

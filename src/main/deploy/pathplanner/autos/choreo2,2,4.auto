@@ -32,28 +32,15 @@
                       }
                     },
                     {
-                      "type": "path",
+                      "type": "named",
                       "data": {
-                        "pathName": "200-020"
+                        "name": "enableTurret"
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "path",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeNote"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "turretRealign"
-                            }
-                          }
-                        ]
+                        "pathName": "200-020"
                       }
                     },
                     {
@@ -66,25 +53,6 @@
                       "type": "path",
                       "data": {
                         "pathName": "020-004"
-                      }
-                    },
-                    {
-                      "type": "parallel",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeNote"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "turretRealign"
-                            }
-                          }
-                        ]
                       }
                     },
                     {

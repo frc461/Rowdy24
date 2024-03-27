@@ -93,11 +93,24 @@
   ],
   "eventMarkers": [
     {
-      "timestamp": 0.35,
+      "timestamp": 0.25,
       "command": {
-        "type": "named",
+        "type": "parallel",
         "data": {
-          "name": "intakeNote"
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "enableTurret"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeNote"
+              }
+            }
+          ]
         }
       }
     }

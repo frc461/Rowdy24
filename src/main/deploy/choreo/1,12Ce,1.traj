@@ -1304,18 +1304,22 @@
     {
       "timestamp": 8.34855960188841,
       "command": {
-        "type": "named",
+        "type": "sequential",
         "data": {
-          "name": "shoot"
-        }
-      }
-    },
-    {
-      "timestamp": 8.64855960188841,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "intakeNote"
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeThenShoot"
+              }
+            }
+          ]
         }
       }
     }

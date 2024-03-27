@@ -70,7 +70,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
+      "name": "intake,enableTurret",
       "waypointRelativePos": 0.55,
       "command": {
         "type": "parallel",
@@ -80,6 +80,29 @@
               "type": "named",
               "data": {
                 "name": "intakeNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "enableTurret"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "disableTurret",
+      "waypointRelativePos": 0.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "disableTurret"
               }
             }
           ]
@@ -96,7 +119,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 132.0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "0.x.0,0.0.xs-0.0.x-...",

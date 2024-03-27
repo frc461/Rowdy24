@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.832227734960532,
-      "y": 4.609420355985849
+      "x": 0.78,
+      "y": 4.45
     },
     "rotation": 120.0
   },
@@ -35,12 +35,6 @@
                       "type": "path",
                       "data": {
                         "pathName": "1,123,54"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "turretRealign"
                       }
                     },
                     {
