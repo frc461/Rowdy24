@@ -185,7 +185,11 @@ public class Swerve extends SubsystemBase {
 
     public Translation2d getVectorToSpeakerTarget() {
         Translation2d fusedPose = getFusedPoseEstimator().getTranslation();
-        Translation2d speakerTagPose = Limelight.getSpeakerTagPose().getTranslation();
+        Translation2d speakerTagPose = Limelight.getSpeakerTagPose().getTranslation()
+                .plus(new Translation2d(
+                        Limelight.isRedAlliance() ? Constants.Angler.X_DEPTH_OFFSET : -Constants.Angler.X_DEPTH_OFFSET,
+                        0.0
+                ));
         return fusedPose.minus(speakerTagPose).unaryMinus();
     }
 
