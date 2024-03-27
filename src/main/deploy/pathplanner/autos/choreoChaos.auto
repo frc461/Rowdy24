@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3465077877044678,
-      "y": 5.433950901031494
+      "x": 0.4550510048866272,
+      "y": 2.0392463207244873
     },
-    "rotation": 179.99984796050427
+    "rotation": 179.90874767107852
   },
   "command": {
     "type": "sequential",
@@ -26,33 +26,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "shoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "enableTurret"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
-                        "pathName": "2,2"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "shoot"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "0,2,4"
+                        "pathName": "-1,3Ce,2"
                       }
                     },
                     {
