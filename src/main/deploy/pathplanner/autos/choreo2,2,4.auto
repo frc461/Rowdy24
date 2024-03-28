@@ -32,12 +32,6 @@
                       }
                     },
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "enableTurret"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
                         "pathName": "2,2"
