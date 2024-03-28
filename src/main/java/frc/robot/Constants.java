@@ -9,7 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
-import java.util.function.BiFunction;
+
 import java.util.function.Function;
 
 public final class Constants {
@@ -51,14 +51,11 @@ public final class Constants {
         public static final double ANGLER_SHUTTLE_PRESET = 15;
 
         // angler equation to shoot from anywhere
-        // TODO: change angler encoder offset
-        public static double ANGLER_ENCODER_OFFSET = 0;
+        public static double ANGLER_ENCODER_OFFSET = 1.9;
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
         public static final double SLANT_HEIGHT = .23 * Math.tan(Math.toRadians(14));
         public static final double Z_COMPONENT_AIM = SPEAKER_HEIGHT + SLANT_HEIGHT - SHOOTER_HEIGHT;
-        public static final double X_DEPTH_OFFSET = -0.23; // Half of the depth of the speaker into the field
-        // TODO: Tune (implement dist correction) -> + x * dist
         public static final Function<Double, Double> ANGLE_TO_ENCODER_VALUE =
                 (angle) -> 20.0 / 46.4 * (angle - 12.4) + ANGLER_ENCODER_OFFSET;
         public static final Function<Double, Double> AUTO_ANGLER_AIM_EQUATION =
@@ -114,11 +111,13 @@ public final class Constants {
     public static final class Limelight {
         // pid for limelight alignment
         public static final double LIMELIGHT_P = 0.01;
-        public static final double LIMELIGHT_I = 0.0005;
-        public static final double LIMELIGHT_D = 0.00004;
+        public static final double LIMELIGHT_I = 0.0001;
+        public static final double LIMELIGHT_D = 0.0008;
         
         // turn slightly to the right 
         public static final double YAW_OFFSET = 0;
+        public static final double X_DEPTH_OFFSET = -0.23; // Half of the depth of the speaker into the field
+        public static final double Y_DEPTH_OFFSET = Units.inchesToMeters(6.5 / 2);
     }
 
     public static final class Shooter {
@@ -247,7 +246,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double MAX_SPEED = 5.5;
+        public static final double MAX_SPEED = 4.671;
         public static final double MAX_ACCEL = 5.5;
 
         /** Radians per Second */
