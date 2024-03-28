@@ -40,6 +40,12 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "intakeNote"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "shoot"
                       }
                     },
