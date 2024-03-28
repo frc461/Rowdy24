@@ -30,7 +30,10 @@ public class LimelightTurretCommand extends Command {
         /* Apply Deadband */
 
         swerve.driveTurret(
-                new Translation2d(translationSup.getAsDouble(), strafeSup.getAsDouble()),
+                new Translation2d(
+                        translationSup.getAsDouble() * Constants.Swerve.MAX_SPEED,
+                        strafeSup.getAsDouble() * Constants.Swerve.MAX_SPEED
+                ),
                 !robotCentricSup.getAsBoolean()
         );
     }

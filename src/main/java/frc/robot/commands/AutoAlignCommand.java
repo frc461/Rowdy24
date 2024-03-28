@@ -19,8 +19,7 @@ public class AutoAlignCommand extends Command {
     public void execute() {
         angler.setEncoderVal(
                 Constants.Angler.AUTO_ANGLER_AIM_EQUATION.apply(
-                        Math.abs(swerve.getVectorToSpeakerTarget().getY()),
-                        Math.abs(swerve.getVectorToSpeakerTarget().getX())
+                        swerve.getVectorToSpeakerTarget().getNorm()
                 )
         );
     }

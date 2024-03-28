@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -15,13 +14,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
-import java.util.Optional;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
@@ -68,7 +65,7 @@ public class Swerve extends SubsystemBase {
                 this::getPose, // Robot pose supplier
                 newPose -> {
                     this.setFusedPoseEstimator(newPose);
-                    this.resetOdometry(newPose);
+                    this.setOdometry(newPose);
                 }, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
@@ -188,7 +185,11 @@ public class Swerve extends SubsystemBase {
 
     public Translation2d getVectorToSpeakerTarget() {
         Translation2d fusedPose = getFusedPoseEstimator().getTranslation();
-        Translation2d speakerTagPose = Limelight.getSpeakerTagPose().getTranslation();
+        Translation2d speakerTagPose = Limelight.getSpeakerTagPose().getTranslation()
+                .plus(new Translation2d(
+                        Limelight.isRedAlliance() ? Constants.Limelight.X_DEPTH_OFFSET : -Constants.Limelight.X_DEPTH_OFFSET,
+                        Limelight.isRedAlliance() ? Constants.Limelight.Y_DEPTH_OFFSET : -Constants.Limelight.Y_DEPTH_OFFSET
+                ));
         return fusedPose.minus(speakerTagPose).unaryMinus();
     }
 
@@ -204,12 +205,17 @@ public class Swerve extends SubsystemBase {
         return Math.abs(turretError) < Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
     }
 
-    public void resetOdometry(Pose2d pose) {
+    public void setOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(getHeading(), getModulePositions(), pose);
+    }
+
+    public void resetOdometry() {
+        setOdometry(new Pose2d());
     }
 
     public void setFusedPoseEstimator(Pose2d newPose){
         fusedPoseEstimator.resetPosition(getHeading(), getModulePositions(), newPose);
+        setOdometry(newPose);
     }
 
     public void resetFusedPose(){
