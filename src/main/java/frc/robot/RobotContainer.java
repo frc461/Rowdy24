@@ -314,6 +314,10 @@ public class RobotContainer {
                         .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
         );
 
+        opXbox.leftStick().whileTrue(
+                new RevUpShooterCommand(shooter, swerve)
+        );
+
         /* Toggle clamp */
         opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
 

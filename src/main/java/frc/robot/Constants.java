@@ -10,6 +10,7 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public final class Constants {
@@ -51,16 +52,17 @@ public final class Constants {
         public static final double ANGLER_SHUTTLE_PRESET = 15;
 
         // angler equation to shoot from anywhere
-        public static double ANGLER_ENCODER_OFFSET = 1.9;
+        public static double ANGLER_ENCODER_OFFSET = 0;
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
         public static final double SLANT_HEIGHT = .23 * Math.tan(Math.toRadians(14));
         public static final double Z_COMPONENT_AIM = SPEAKER_HEIGHT + SLANT_HEIGHT - SHOOTER_HEIGHT;
-        public static final Function<Double, Double> ANGLE_TO_ENCODER_VALUE =
-                (angle) -> 20.0 / 46.4 * (angle - 12.4) + ANGLER_ENCODER_OFFSET;
+        public static final BiFunction<Double, Double, Double> ANGLE_TO_ENCODER_VALUE =
+                (angle, dist) -> 20.0 / 46.4 * (angle - 12.4) + 0.55 * dist + ANGLER_ENCODER_OFFSET;
         public static final Function<Double, Double> AUTO_ANGLER_AIM_EQUATION =
                 (dist) -> ANGLE_TO_ENCODER_VALUE.apply(
-                        Math.toDegrees(Math.atan(Z_COMPONENT_AIM / dist))
+                        Math.toDegrees(Math.atan(Z_COMPONENT_AIM / dist)),
+                        dist
                 );
     }
 
@@ -234,7 +236,6 @@ public final class Constants {
          * Drive Motor Characterization Values
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE
          */
-        // TODO: Tune (set V and A to zero, then tune S by increasing it until the robot moves, then decrease until it doesn't, then apply V and A values calculated here: https://www.reca.lc/drive?appliedVoltageRamp=%7B%22s%22%3A1200%2C%22u%22%3A%22V%2Fs%22%7D&batteryAmpHours=%7B%22s%22%3A18%2C%22u%22%3A%22A%2Ah%22%7D&batteryResistance=%7B%22s%22%3A0.018%2C%22u%22%3A%22Ohm%22%7D&batteryVoltageAtRest=%7B%22s%22%3A12.3%2C%22u%22%3A%22V%22%7D&efficiency=97&filtering=1&gearRatioMax=%7B%22magnitude%22%3A15%2C%22ratioType%22%3A%22Reduction%22%7D&gearRatioMin=%7B%22magnitude%22%3A3%2C%22ratioType%22%3A%22Reduction%22%7D&maxSimulationTime=%7B%22s%22%3A4%2C%22u%22%3A%22s%22%7D&maxSpeedAccelerationThreshold=%7B%22s%22%3A0.15%2C%22u%22%3A%22ft%2Fs2%22%7D&motor=%7B%22quantity%22%3A4%2C%22name%22%3A%22NEO%22%7D&motorCurrentLimit=%7B%22s%22%3A60%2C%22u%22%3A%22A%22%7D&numCyclesPerMatch=24&peakBatteryDischarge=20&ratio=%7B%22magnitude%22%3A5.3571%2C%22ratioType%22%3A%22Reduction%22%7D&sprintDistance=%7B%22s%22%3A45%2C%22u%22%3A%22ft%22%7D&swerve=1&targetTimeToGoal=%7B%22s%22%3A2%2C%22u%22%3A%22s%22%7D&throttleResponseMax=0.99&throttleResponseMin=0.5&weightAuxilliary=%7B%22s%22%3A24%2C%22u%22%3A%22lbs%22%7D&weightDistributionFrontBack=0.5&weightDistributionLeftRight=0.5&weightInspected=%7B%22s%22%3A105%2C%22u%22%3A%22lbs%22%7D&wheelBaseLength=%7B%22s%22%3A27%2C%22u%22%3A%22in%22%7D&wheelBaseWidth=%7B%22s%22%3A20%2C%22u%22%3A%22in%22%7D&wheelCOFDynamic=0.9&wheelCOFLateral=1.1&wheelCOFStatic=1.1&wheelDiameter=%7B%22s%22%3A4%2C%22u%22%3A%22in%22%7D)
         public static final double DRIVE_S = (0.16861 / 12);
         public static final double DRIVE_V = (2.6686 / 12);
         public static final double DRIVE_A = (0.34757 / 12);
