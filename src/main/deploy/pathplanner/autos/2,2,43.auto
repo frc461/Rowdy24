@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.78,
-      "y": 4.45
+      "x": 1.3533001663498863,
+      "y": 5.419016777210657
     },
-    "rotation": 120.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -32,9 +32,15 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "enableTurret"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
-                        "pathName": "1.0.0-0.0.1-0.0.1s"
+                        "pathName": "2.0.0-0.2.0"
                       }
                     },
                     {
@@ -46,7 +52,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "0.0.1s-0.0.2-0.0.1s"
+                        "pathName": "0.2.0-0.0.4-0.0.4s"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "shoot"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "0.0.4s-0.0.3-0.0.3s"
                       }
                     },
                     {
