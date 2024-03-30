@@ -96,15 +96,15 @@
     },
     {
       "anchor": {
-        "x": 4.946870593840219,
+        "x": 4.081905566842604,
         "y": 6.6672066733630615
       },
       "prevControl": {
-        "x": 5.106691869194666,
+        "x": 4.241726842197051,
         "y": 6.687922585526539
       },
       "nextControl": {
-        "x": 4.7870493184857725,
+        "x": 3.922084291488157,
         "y": 6.646490761199584
       },
       "isLocked": false,
@@ -116,23 +116,23 @@
         "y": 5.771983391189005
       },
       "prevControl": {
-        "x": 7.046104664736845,
-        "y": 6.103271768920232
+        "x": 6.856815490011922,
+        "y": 5.960602590631899
       },
       "nextControl": {
-        "x": 10.050133984495847,
-        "y": 5.298344538651392
+        "x": 10.09668102134674,
+        "y": 5.5319627029592375
       },
       "isLocked": false,
       "linkedName": "0.0.4"
     },
     {
       "anchor": {
-        "x": 4.946870593840219,
+        "x": 4.081905566842604,
         "y": 6.6672066733630615
       },
       "prevControl": {
-        "x": 5.165605220143648,
+        "x": 4.300640193146033,
         "y": 6.571027798745739
       },
       "nextControl": null,
@@ -149,21 +149,21 @@
     {
       "waypointRelativePos": 1.95,
       "rotationDegrees": 180.0,
-      "rotateFast": false
+      "rotateFast": true
     },
     {
-      "waypointRelativePos": 3.8999999999999995,
+      "waypointRelativePos": 4.3,
       "rotationDegrees": -150.0,
-      "rotateFast": false
+      "rotateFast": true
     },
     {
-      "waypointRelativePos": 4.949999999999999,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
+      "waypointRelativePos": 5.4,
+      "rotationDegrees": 170.0,
+      "rotateFast": true
     },
     {
       "waypointRelativePos": 7.4,
-      "rotationDegrees": 165.0,
+      "rotationDegrees": 145.0,
       "rotateFast": true
     },
     {
@@ -177,7 +177,7 @@
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 6.3,
+      "waypointRelativePos": 6.45,
       "rotationDegrees": -170.0,
       "rotateFast": true
     }
@@ -188,7 +188,7 @@
       "minWaypointRelativePos": 3.95,
       "maxWaypointRelativePos": 4.05,
       "constraints": {
-        "maxVelocity": 0.5,
+        "maxVelocity": 0.4,
         "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
@@ -199,7 +199,7 @@
       "minWaypointRelativePos": 6.1,
       "maxWaypointRelativePos": 6.1,
       "constraints": {
-        "maxVelocity": 0.05,
+        "maxVelocity": 0.1,
         "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
@@ -334,7 +334,7 @@
     },
     {
       "name": "shoot4,disableTurret",
-      "waypointRelativePos": 5.95,
+      "waypointRelativePos": 5.7,
       "command": {
         "type": "sequential",
         "data": {
@@ -381,7 +381,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.671,
-    "maxAcceleration": 6.844,
+    "maxAcceleration": 5.25,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

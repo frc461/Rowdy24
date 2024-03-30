@@ -199,8 +199,8 @@ public class RobotContainer {
                 "turretRealign",
                 new LimelightTurretCommand(
                         swerve,
-                        () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(swerve.getModuleStates()).vxMetersPerSecond,
-                        () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(swerve.getModuleStates()).vyMetersPerSecond,
+                        () -> 0,
+                        () -> 0,
                         () -> false
                 ).until(swerve::turretNearTarget)
                 // ).withTimeout(0.5) // TODO: Test turret near target then timeout

@@ -46,6 +46,12 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "turretRealign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "shoot"
                       }
                     },
@@ -58,6 +64,12 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "turretRealign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "shoot"
                       }
                     },
@@ -65,6 +77,12 @@
                       "type": "path",
                       "data": {
                         "pathName": "0.0.4s-0.0.3-0.0.3s"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "turretRealign"
                       }
                     },
                     {

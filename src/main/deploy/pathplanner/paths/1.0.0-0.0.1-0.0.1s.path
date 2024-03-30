@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.5159296752649037,
-        "y": 2.9645704287300716
+        "x": 1.1512996452489388,
+        "y": 3.1972954588102183
       },
       "isLocked": false,
       "linkedName": "1.0.0"
+    },
+    {
+      "anchor": {
+        "x": 3.4523978997891978,
+        "y": 1.0228293262759505
+      },
+      "prevControl": {
+        "x": 1.5340722621767866,
+        "y": 1.8053683933732372
+      },
+      "nextControl": {
+        "x": 5.27400967715943,
+        "y": 0.2797425672151078
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,12 +36,12 @@
         "y": 0.7624920813497
       },
       "prevControl": {
-        "x": 10.141349243422264,
-        "y": 0.11595849474771192
+        "x": 10.201061267618387,
+        "y": 0.32247787105923614
       },
       "nextControl": {
-        "x": 7.931126061682322,
-        "y": 0.8887557376254367
+        "x": 6.6665404740223,
+        "y": 1.1372438051461722
       },
       "isLocked": false,
       "linkedName": "0.0.1"
@@ -36,8 +52,8 @@
         "y": 3.020441325323673
       },
       "prevControl": {
-        "x": 3.585523879455631,
-        "y": 2.202852348459617
+        "x": 3.6099755034704835,
+        "y": 1.1772329891628317
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,16 +62,16 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.1,
-      "rotationDegrees": 160.0,
+      "waypointRelativePos": 2.1,
+      "rotationDegrees": 175.0,
       "rotateFast": true
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake,enableTurret",
-      "waypointRelativePos": 0.65,
+      "name": "intake",
+      "waypointRelativePos": 1.3,
       "command": {
         "type": "sequential",
         "data": {
@@ -65,12 +81,6 @@
               "data": {
                 "name": "intakeNote"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "enableTurret"
-              }
             }
           ]
         }
@@ -78,7 +88,7 @@
     },
     {
       "name": "disableTurret",
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -92,11 +102,28 @@
           ]
         }
       }
+    },
+    {
+      "name": "enableTurret",
+      "waypointRelativePos": 2.3000000000000003,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "enableTurret"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
     "maxVelocity": 4.671,
-    "maxAcceleration": 6.844,
+    "maxAcceleration": 5.25,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

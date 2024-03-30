@@ -15,7 +15,7 @@
     "6P"
   ],
   "defaultMaxVel": 4.671,
-  "defaultMaxAccel": 6.844,
+  "defaultMaxAccel": 5.25,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 5.5
