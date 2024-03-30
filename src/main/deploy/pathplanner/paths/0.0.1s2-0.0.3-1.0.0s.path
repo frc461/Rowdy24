@@ -3,32 +3,48 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.78,
-        "y": 4.45
+        "x": 3.468038420871118,
+        "y": 2.687479865120732
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7268972550756905,
-        "y": 3.1511274837423513
+        "x": 4.231693901670451,
+        "y": 2.995879193905079
       },
       "isLocked": false,
-      "linkedName": "1.0.0"
+      "linkedName": "0.0.1s2"
     },
     {
       "anchor": {
-        "x": 8.292243887455975,
-        "y": 0.7624920813497
+        "x": 8.272350741581985,
+        "y": 4.112008787948034
       },
       "prevControl": {
-        "x": 10.363510185709828,
-        "y": 0.24557724329123998
+        "x": 6.199575332961041,
+        "y": 5.389645412564528
       },
       "nextControl": {
-        "x": 7.933254418911933,
-        "y": 0.852083160562245
+        "x": 9.787574556256857,
+        "y": 3.178041011184547
       },
       "isLocked": false,
-      "linkedName": "0.0.1"
+      "linkedName": "0.0.3"
+    },
+    {
+      "anchor": {
+        "x": 5.435919852157381,
+        "y": 1.703539149477633
+      },
+      "prevControl": {
+        "x": 7.546486568386961,
+        "y": 1.590660406923908
+      },
+      "nextControl": {
+        "x": 3.3253531359278012,
+        "y": 1.816417892031358
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -36,8 +52,8 @@
         "y": 3.7595346747044127
       },
       "prevControl": {
-        "x": 1.749813589072617,
-        "y": 2.7609082767360533
+        "x": 1.8379276830110018,
+        "y": 3.2749071580432965
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,8 +62,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.85,
-      "rotationDegrees": 160.0,
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 155.0,
       "rotateFast": true
     }
   ],
@@ -55,7 +71,7 @@
   "eventMarkers": [
     {
       "name": "intake,enableTurret",
-      "waypointRelativePos": 0.65,
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "sequential",
         "data": {
@@ -106,7 +122,7 @@
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "x.0.0-...",
+  "folder": "0.x.0,0.0.xs-0.0.x-...",
   "previewStartingState": {
     "rotation": 120.0,
     "velocity": 0
