@@ -319,6 +319,25 @@ public class RobotContainer {
                 new RevUpShooterCommand(shooter, swerve)
         );
 
+        /* Farther Shot */
+        opXbox.povUp().whileTrue(
+                new ParallelCommandGroup(
+                        new FunctionalCommand(
+                                () -> {},
+                                () -> angler.setEncoderVal(5.91),
+                                isFinished -> angler.setEncoderVal(Constants.Angler.ANGLER_LOWER_LIMIT),
+                                () -> false,
+                                angler
+                        ),
+                        new RevUpShooterCommand(shooter, swerve),
+                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1
+                        ))
+                ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
+        );
+
         /* Toggle clamp */
         opXbox.povLeft().onTrue(new InstantCommand(elevator::toggleClamp));
 
