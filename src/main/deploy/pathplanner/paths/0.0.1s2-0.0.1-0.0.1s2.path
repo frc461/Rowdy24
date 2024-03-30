@@ -48,7 +48,7 @@
     {
       "waypointRelativePos": 0.75,
       "rotationDegrees": 165.0,
-      "rotateFast": false
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
@@ -102,13 +102,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 140.0,
-    "rotateFast": false
+    "rotation": 135.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "0.x.0,0.0.xs-0.0.x-...",
   "previewStartingState": {
-    "rotation": 140.0,
+    "rotation": 135.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
