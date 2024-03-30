@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.834512384006062,
-        "y": 6.9700255897196985
+        "x": 4.164633900927435,
+        "y": 6.488661953437363
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.391862805192516,
-        "y": 6.770099550932555
+        "x": 6.248147324219105,
+        "y": 7.801332654046011
       },
       "isLocked": false,
       "linkedName": "0.0.5s"
@@ -20,24 +20,24 @@
         "y": 5.771983391189005
       },
       "prevControl": {
-        "x": 7.05134490769876,
-        "y": 6.212043622656119
+        "x": 9.596469305679266,
+        "y": 4.676901340017454
       },
       "nextControl": {
-        "x": 9.71143073190921,
-        "y": 5.261222915328519
+        "x": 7.146189572593543,
+        "y": 6.718985851961094
       },
       "isLocked": false,
       "linkedName": "0.0.4"
     },
     {
       "anchor": {
-        "x": 4.834512384006062,
-        "y": 6.9700255897196985
+        "x": 4.164633900927435,
+        "y": 6.488661953437363
       },
       "prevControl": {
-        "x": 5.597462357715413,
-        "y": 6.681985456994171
+        "x": 5.288443934083042,
+        "y": 7.1437209678269795
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,8 +46,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.4,
-      "rotationDegrees": 170.0,
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 140.0,
       "rotateFast": true
     }
   ],
@@ -78,7 +78,7 @@
     },
     {
       "name": "disableTurret",
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {

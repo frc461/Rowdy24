@@ -75,23 +75,6 @@
           ]
         }
       }
-    },
-    {
-      "name": "disableTurret",
-      "waypointRelativePos": 0.05,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "disableTurret"
-              }
-            }
-          ]
-        }
-      }
     }
   ],
   "globalConstraints": {
