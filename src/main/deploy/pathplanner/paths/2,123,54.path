@@ -333,7 +333,7 @@
       }
     },
     {
-      "name": "shoot5,disableTurret",
+      "name": "shoot4,disableTurret",
       "waypointRelativePos": 5.95,
       "command": {
         "type": "sequential",
@@ -342,7 +342,7 @@
             {
               "type": "named",
               "data": {
-                "name": "intakeThenShoot"
+                "name": "shoot"
               }
             },
             {
@@ -356,7 +356,7 @@
       }
     },
     {
-      "name": "intake6,enableTurret",
+      "name": "intake5,enableTurret",
       "waypointRelativePos": 6.6,
       "command": {
         "type": "sequential",
