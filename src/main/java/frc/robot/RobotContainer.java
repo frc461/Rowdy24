@@ -203,6 +203,7 @@ public class RobotContainer {
                         () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(swerve.getModuleStates()).vyMetersPerSecond,
                         () -> false
                 ).until(swerve::turretNearTarget)
+                // ).withTimeout(0.5) // TODO: Test turret near target then timeout
         );
 
         NamedCommands.registerCommand(
