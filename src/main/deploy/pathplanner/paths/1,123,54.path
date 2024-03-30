@@ -84,12 +84,12 @@
         "y": 7.494126664583896
       },
       "prevControl": {
-        "x": 7.977995228199825,
-        "y": 7.482475555705154
+        "x": 7.019671840022397,
+        "y": 7.430885583830142
       },
       "nextControl": {
-        "x": 9.685249228048313,
-        "y": 7.54272961537376
+        "x": 10.118905753867255,
+        "y": 7.583005627046809
       },
       "isLocked": false,
       "linkedName": "0.0.5"
@@ -116,12 +116,12 @@
         "y": 5.771983391189005
       },
       "prevControl": {
-        "x": 9.526569840619212,
-        "y": 5.475372234853416
+        "x": 7.046104664736845,
+        "y": 6.103271768920232
       },
       "nextControl": {
-        "x": 7.815576722824994,
-        "y": 5.883303878252922
+        "x": 10.050133984495847,
+        "y": 5.298344538651392
       },
       "isLocked": false,
       "linkedName": "0.0.4"
@@ -162,8 +162,8 @@
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 6.8,
-      "rotationDegrees": 160.0,
+      "waypointRelativePos": 7.4,
+      "rotationDegrees": 165.0,
       "rotateFast": true
     },
     {
@@ -357,7 +357,7 @@
     },
     {
       "name": "intake6,enableTurret",
-      "waypointRelativePos": 6.45,
+      "waypointRelativePos": 6.6,
       "command": {
         "type": "sequential",
         "data": {
