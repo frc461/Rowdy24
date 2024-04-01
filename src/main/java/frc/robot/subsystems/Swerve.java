@@ -109,7 +109,7 @@ public class Swerve extends SubsystemBase {
                 Constants.Swerve.SWERVE_KINEMATICS,
                 getHeading(), getModulePositions(),
                 getPose(),
-                VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(2.0)),
+                VecBuilder.fill(0.2, 0.2, Units.degreesToRadians(2.0)),
                 VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
         );
 
@@ -234,14 +234,13 @@ public class Swerve extends SubsystemBase {
             double dist = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
                     Limelight.getNearestTagPose().getTranslation()
             );
-            double xyStdDev, degStdDev;
+            double xyStdDev;
+            double degStdDev = 360.0;
 
             if (Limelight.getNumTag() >= 2) {
-                xyStdDev = 0.4 * dist + 1.25 * poseDifference;
-                degStdDev = 30.0 * dist;
+                xyStdDev = 0.25 * dist + 1.25 * Math.max(0, dist - 1.5) * poseDifference;
             } else if (dist < 4.0) {
-                xyStdDev = 0.8 * dist + 2.5 * poseDifference;
-                degStdDev = 30.0 * dist;
+                xyStdDev = 0.5 * dist + 2.5 * Math.max(0, dist - 1) * poseDifference;
             } else {
                 return;
             }
