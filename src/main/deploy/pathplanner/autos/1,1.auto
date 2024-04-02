@@ -32,15 +32,15 @@
                       }
                     },
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "enableTurret"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
                         "pathName": "1.0.0-0.1.0-0.1.0s"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "turretRealign"
                       }
                     },
                     {

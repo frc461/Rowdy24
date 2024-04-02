@@ -44,16 +44,9 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "shoot"
-                            }
-                          }
-                        ]
+                        "name": "shoot"
                       }
                     },
                     {
@@ -69,16 +62,9 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "shoot"
-                            }
-                          }
-                        ]
+                        "name": "shoot"
                       }
                     },
                     {
@@ -94,16 +80,9 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "shoot"
-                            }
-                          }
-                        ]
+                        "name": "shoot"
                       }
                     }
                   ]

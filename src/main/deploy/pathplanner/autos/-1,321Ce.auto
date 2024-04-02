@@ -18,7 +18,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "startShooter"
+                  "name": "startShooterAngler"
                 }
               },
               {
@@ -38,22 +38,9 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "angle"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "shoot"
-                            }
-                          }
-                        ]
+                        "name": "shoot"
                       }
                     },
                     {
@@ -69,22 +56,9 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "angle"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "shoot"
-                            }
-                          }
-                        ]
+                        "name": "shoot"
                       }
                     },
                     {
@@ -100,22 +74,9 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "angle"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "shoot"
-                            }
-                          }
-                        ]
+                        "name": "shoot"
                       }
                     },
                     {
@@ -131,22 +92,9 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "angle"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "shoot"
-                            }
-                          }
-                        ]
+                        "name": "shoot"
                       }
                     }
                   ]
