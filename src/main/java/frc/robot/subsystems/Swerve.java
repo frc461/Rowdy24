@@ -110,7 +110,7 @@ public class Swerve extends SubsystemBase {
                 getHeading(), getModulePositions(),
                 getPose(),
                 VecBuilder.fill(0.2, 0.2, Units.degreesToRadians(2.0)),
-                VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
+                VecBuilder.fill(0.6, 0.6, Units.degreesToRadians(360.0))
         );
 
         turretError = 0.0;
