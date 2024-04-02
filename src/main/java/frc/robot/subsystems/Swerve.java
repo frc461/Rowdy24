@@ -71,9 +71,12 @@ public class Swerve extends SubsystemBase {
                                                                                              // MUST BE ROBOT RELATIVE
                 speeds -> {
                     // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                speeds.omegaRadiansPerSecond = Limelight.overrideTargetNow ?
-                        Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()).omegaRadiansPerSecond :
-                        speeds.omegaRadiansPerSecond;
+                    if (speeds.omegaRadiansPerSecond != 0.0) {
+                        speeds.omegaRadiansPerSecond = Limelight.overrideTargetNow ? limelightRotController.calculate(
+                                getFusedPoseEstimator().getRotation().getDegrees(),
+                                getAngleToSpeakerTarget()
+                        ) * Constants.Swerve.MAX_ANGULAR_VELOCITY : speeds.omegaRadiansPerSecond;
+                    }
 
                     SwerveModuleState[] swerveModuleStates =
                             Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
