@@ -182,6 +182,25 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
+                "shootThenIntakeThenShoot",
+                new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
+                        intakeCarriage,
+                        0.9,
+                        1
+                ).until(() -> !intakeCarriage.noteInShootingSystem()))
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0.9,
+                                1
+                        ).until(intakeCarriage::noteInShootingSystem))
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1
+                        ).until(() -> !intakeCarriage.noteInShootingSystem()))
+        );
+
+        NamedCommands.registerCommand(
                 "shoot",
                 new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                         intakeCarriage,
@@ -203,7 +222,6 @@ public class RobotContainer {
                         () -> 0,
                         () -> false
                 ).until(swerve::turretNearTarget)
-                // ).withTimeout(0.5) // TODO: Test turret near target then timeout
         );
 
         NamedCommands.registerCommand(
@@ -466,6 +484,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight Y", Limelight.getTagRY());
         SmartDashboard.putNumber("Limelight Z", Limelight.getTagRZ());
         SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getTagRZ(), Limelight.getTagRX()));
+        SmartDashboard.putNumber("Num tags", Limelight.getNumTag());
+        SmartDashboard.putNumber("Tag ID", LimelightHelpers.getFiducialID("limelight"));
         SmartDashboard.putString("botpose_helpers_pose", LimelightHelpers.getBotPose2d_wpiBlue("limelight").getTranslation().toString());
 
         // shooter debug
