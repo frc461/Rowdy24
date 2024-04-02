@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.5,
-      "y": 2.05
+      "x": 0.78,
+      "y": 4.45
     },
     "rotation": 120.0
   },
@@ -34,94 +34,76 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "1.0.0-0.0.1-0.0.1s"
-                      }
-                    },
-                    {
-                      "type": "parallel",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeNote"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "turretRealign"
-                            }
-                          }
-                        ]
+                        "pathName": "1.0.0-0.0.3-0.0.3s"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "shoot"
+                        "name": "turretRealign"
+                      }
+                    },
+                    {
+                      "type": "race",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "shoot"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "0.0.1s-0.0.2-1.0.0s"
-                      }
-                    },
-                    {
-                      "type": "parallel",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeNote"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "turretRealign"
-                            }
-                          }
-                        ]
+                        "pathName": "0.0.3s-0.0.2-0.0.1s2"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "shoot"
+                        "name": "turretRealign"
+                      }
+                    },
+                    {
+                      "type": "race",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "shoot"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "1.0.0s-0.1.0-0.1.0s"
-                      }
-                    },
-                    {
-                      "type": "parallel",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeNote"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "turretRealign"
-                            }
-                          }
-                        ]
+                        "pathName": "0.0.1s2-0.0.1-0.0.1s"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "shoot"
+                        "name": "turretRealign"
+                      }
+                    },
+                    {
+                      "type": "race",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "shoot"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]

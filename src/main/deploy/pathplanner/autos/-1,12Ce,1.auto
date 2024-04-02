@@ -5,7 +5,7 @@
       "x": 0.5,
       "y": 2.05
     },
-    "rotation": 120.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -26,15 +26,9 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
-                      "data": {
-                        "name": "shoot"
-                      }
-                    },
-                    {
                       "type": "path",
                       "data": {
-                        "pathName": "1.0.0-0.0.1-0.0.1s"
+                        "pathName": "-1.0.0-0.0.1-0.0.1s"
                       }
                     },
                     {
