@@ -115,6 +115,10 @@ public final class Constants {
         public static final double LIMELIGHT_P = 0.01;
         public static final double LIMELIGHT_I = 0.0001;
         public static final double LIMELIGHT_D = 0.0008;
+
+        public static final double CAMERA_FORWARD = 0.0223774;
+        public static final double CAMERA_UP = 0.5916676;
+        public static final double CAMERA_PITCH = 23.6838871;
         
         // turn slightly to the right 
         public static final double YAW_OFFSET = 0;
