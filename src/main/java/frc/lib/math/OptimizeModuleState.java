@@ -44,12 +44,12 @@ public class OptimizeModuleState {
       upperBound = scopeReference - lowerOffset;
       lowerBound = scopeReference - (360 + lowerOffset);
     }
-
+    
     if(newAngle < lowerBound) {
       newAngle = lowerBound + (newAngle % 360);
     }
     else if(newAngle > upperBound) {
-      newAngle = upperBound - (newAngle % 360);
+      newAngle = lowerBound + (newAngle % 360);
     }
     
     if (newAngle - scopeReference > 180) {
