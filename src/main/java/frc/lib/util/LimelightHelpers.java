@@ -663,6 +663,10 @@ public class LimelightHelpers {
         return getLimelightNTDoubleArray(limelightName, "botpose_wpiblue");
     }
 
+    public static double[] getBotPose_orb_wpiBlue(String limelightName) {
+        return getLimelightNTDoubleArray(limelightName, "botpose_orb_wpiblue");
+    }
+
     public static double[] getBotPose_TargetSpace(String limelightName) {
         return getLimelightNTDoubleArray(limelightName, "botpose_targetspace");
     }
@@ -756,6 +760,12 @@ public class LimelightHelpers {
      */
     public static PoseEstimate getBotPoseEstimate_wpiBlue(String limelightName) {
         return getBotPoseEstimate(limelightName, "botpose_wpiblue");
+    }
+
+    public static Pose2d getBotPose2d_orb_wpiBlue(String limelightName) {
+
+        double[] result = getBotPose_orb_wpiBlue(limelightName);
+        return toPose2D(result);
     }
 
     /**
