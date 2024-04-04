@@ -105,16 +105,7 @@ public class Swerve extends SubsystemBase {
                 this // Reference to this subsystem to set requirements
         );
 
-        // 0.0223774 forward, 0.5916676 up, 23.6838871 degrees pitch
-        LimelightHelpers.setCameraPose_RobotSpace(
-                "limelight",
-                0.0223774,
-                0,
-                0.5916676,
-                0,
-                23.6838871,
-                0
-        );
+        Limelight.configureRobotPose();
 
         fusedPoseEstimator = new SwerveDrivePoseEstimator(
                 Constants.Swerve.SWERVE_KINEMATICS,

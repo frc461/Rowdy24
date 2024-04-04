@@ -75,4 +75,17 @@ public class Limelight extends SubsystemBase {
     public static void refreshValues() {
         tagPose = LimelightHelpers.getTargetPose_RobotSpace("limelight");
     }
+
+    public static void configureRobotPose() {
+        // 0.0223774 m forward, 0.5916676 m up, 23.6838871 deg pitch
+        LimelightHelpers.setCameraPose_RobotSpace(
+                "limelight",
+                Constants.Limelight.CAMERA_FORWARD,
+                0,
+                Constants.Limelight.CAMERA_UP,
+                0,
+                Constants.Limelight.CAMERA_PITCH,
+                0
+        );
+    }
 }
