@@ -94,7 +94,7 @@
     },
     {
       "name": "disableTurret",
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {

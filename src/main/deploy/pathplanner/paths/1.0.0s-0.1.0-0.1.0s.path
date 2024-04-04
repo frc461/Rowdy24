@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6323281304881043,
-        "y": 4.802218119641965
+        "x": 1.550079988639291,
+        "y": 5.718761181346636
       },
       "isLocked": false,
       "linkedName": "1.0.0s"
@@ -64,6 +64,23 @@
               "type": "named",
               "data": {
                 "name": "intakeNote"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "disableTurret",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "disableTurret"
               }
             }
           ]
