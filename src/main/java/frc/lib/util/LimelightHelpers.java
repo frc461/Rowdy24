@@ -663,7 +663,6 @@ public class LimelightHelpers {
         return getLimelightNTDoubleArray(limelightName, "botpose_wpiblue");
     }
 
-    // TODO: "botpose_wpiblue_orb" on documentation - check network tables
     public static double[] getBotPose_orb_wpiBlue(String limelightName) {
         return getLimelightNTDoubleArray(limelightName, "botpose_orb_wpiblue");
     }
@@ -897,7 +896,7 @@ public class LimelightHelpers {
         setLimelightNTDoubleArray(limelightName, "crop", entries);
     }
 
-    public static void setRobotOrientation(String limelightName, double yaw, double yawRate,
+    public static void SetRobotOrientation(String limelightName, double yaw, double yawRate,
                                            double pitch, double pitchRate,
                                            double roll, double rollRate) {
 

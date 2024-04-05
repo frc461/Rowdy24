@@ -487,7 +487,6 @@ public class RobotContainer {
         SmartDashboard.putNumber("Num tags", Limelight.getNumTag());
         SmartDashboard.putNumber("Tag ID", LimelightHelpers.getFiducialID("limelight"));
         SmartDashboard.putString("botpose_helpers_pose", LimelightHelpers.getBotPose2d_wpiBlue("limelight").getTranslation().toString());
-        SmartDashboard.putString("botpose_helpers_pose2", LimelightHelpers.getBotPose2d_orb_wpiBlue("limelight").getTranslation().toString());
 
         // shooter debug
         SmartDashboard.putBoolean("Shooter Min Error", shooter.nearTarget());

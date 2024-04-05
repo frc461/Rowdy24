@@ -119,9 +119,7 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        // TODO: Test, use 3D visualizer in GUI
-        updateFusedPose(LimelightHelpers.getBotPose2d_orb_wpiBlue("limelight"));
-//        updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
+        updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
         turretError = getVectorToSpeakerTarget().getAngle().minus(getFusedPoseEstimator().getRotation()).getDegrees();
 
         for (SwerveModule mod : swerveMods) {
@@ -228,54 +226,33 @@ public class Swerve extends SubsystemBase {
 
     public void updateFusedPose(Pose2d limelightPose){
         fusedPoseEstimator.update(getHeading(), getModulePositions());
-        double angVel = Math.toDegrees(Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()).omegaRadiansPerSecond);
 
-        LimelightHelpers.setRobotOrientation(
-                "limelight",
-                fusedPoseEstimator.getEstimatedPosition().getRotation().getDegrees(),
-                angVel, // TODO: 0?
-                0,
-                0,
-                0,
-                0
-        );
+        if (Limelight.tagExists()) {
+            double poseDifference = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
+                    limelightPose.getTranslation()
+            );
+            double dist = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
+                    Limelight.getNearestTagPose().getTranslation()
+            );
+            double xyStdDev;
+            double degStdDev = 360.0;
 
-        if (Limelight.tagExists() && Math.abs(angVel) < 720.0) {
+            if (Limelight.getNumTag() >= 2) {
+                xyStdDev = 0.25 * dist + 1.25 * Math.max(0, dist - 1.5) * poseDifference;
+            } else if (dist < 4.0) {
+                xyStdDev = 0.5 * dist + 2.5 * Math.max(0, dist - 1) * poseDifference;
+            } else {
+                return;
+            }
+
             fusedPoseEstimator.addVisionMeasurement(
                     limelightPose,
                     Timer.getFPGATimestamp()
                             - LimelightHelpers.getLatency_Pipeline("limelight") / 1000.0
                             - LimelightHelpers.getLatency_Capture("limelight") / 1000.0,
-                    VecBuilder.fill(0.6, 0.6, Units.degreesToRadians(360.0))
+                    VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(degStdDev))
             );
         }
-
-//        if (Limelight.tagExists()) {
-//            double poseDifference = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
-//                    limelightPose.getTranslation()
-//            );
-//            double dist = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
-//                    Limelight.getNearestTagPose().getTranslation()
-//            );
-//            double xyStdDev;
-//            double degStdDev = 360.0;
-//
-//            if (Limelight.getNumTag() >= 2) {
-//                xyStdDev = 0.25 * dist + 1.25 * Math.max(0, dist - 1.5) * poseDifference;
-//            } else if (dist < 4.0) {
-//                xyStdDev = 0.5 * dist + 2.5 * Math.max(0, dist - 1) * poseDifference;
-//            } else {
-//                return;
-//            }
-//
-//            fusedPoseEstimator.addVisionMeasurement(
-//                    limelightPose,
-//                    Timer.getFPGATimestamp()
-//                            - LimelightHelpers.getLatency_Pipeline("limelight") / 1000.0
-//                            - LimelightHelpers.getLatency_Capture("limelight") / 1000.0,
-//                    VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(degStdDev))
-//            );
-//        }
     }
 
     public SwerveModuleState[] getModuleStates() {
