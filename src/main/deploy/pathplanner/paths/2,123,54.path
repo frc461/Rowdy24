@@ -120,8 +120,8 @@
         "y": 5.960602590631899
       },
       "nextControl": {
-        "x": 10.09668102134674,
-        "y": 5.5319627029592375
+        "x": 10.493225567567462,
+        "y": 5.479499164548361
       },
       "isLocked": false,
       "linkedName": "0.0.4"
@@ -334,7 +334,7 @@
     },
     {
       "name": "shoot4,disableTurret",
-      "waypointRelativePos": 5.7,
+      "waypointRelativePos": 5.75,
       "command": {
         "type": "sequential",
         "data": {
