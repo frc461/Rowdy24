@@ -141,6 +141,14 @@ public class RobotContainer {
 
     public void registerAutoCommands() {
         NamedCommands.registerCommand(
+                "startShooterAngler",
+                new ParallelCommandGroup(
+                        new RevUpShooterCommand(shooter, swerve),
+                        new AutoAlignCommand(angler, swerve)
+                )
+        );
+
+        NamedCommands.registerCommand(
                 "intakeNote",
                 new IntakeCarriageCommand(
                         intakeCarriage,
@@ -174,11 +182,22 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
-                "startShooterAngler",
-                new ParallelCommandGroup(
-                        new RevUpShooterCommand(shooter, swerve),
-                        new AutoAlignCommand(angler, swerve)
-                )
+                "shootThenIntakeThenShoot",
+                new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
+                        intakeCarriage,
+                        0.9,
+                        1
+                ).until(() -> !intakeCarriage.noteInShootingSystem()))
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0.9,
+                                1
+                        ).until(intakeCarriage::noteInShootingSystem))
+                        .andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1
+                        ).until(() -> !intakeCarriage.noteInShootingSystem()))
         );
 
         NamedCommands.registerCommand(
@@ -199,8 +218,8 @@ public class RobotContainer {
                 "turretRealign",
                 new LimelightTurretCommand(
                         swerve,
-                        () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(swerve.getModuleStates()).vxMetersPerSecond,
-                        () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(swerve.getModuleStates()).vyMetersPerSecond,
+                        () -> 0,
+                        () -> 0,
                         () -> false
                 ).until(swerve::turretNearTarget)
         );
@@ -312,6 +331,29 @@ public class RobotContainer {
                         .until(() -> !intakeCarriage.noteInAmpSystem())
                         .andThen(new WaitCommand(0.25))
                         .andThen(new InstantCommand(() -> elevator.setHeight(Constants.Elevator.ELEVATOR_STOW), elevator))
+        );
+
+        opXbox.leftStick().whileTrue(
+                new RevUpShooterCommand(shooter, swerve)
+        );
+
+        /* Farther Shot */
+        opXbox.povUp().whileTrue(
+                new ParallelCommandGroup(
+                        new FunctionalCommand(
+                                () -> {},
+                                () -> angler.setEncoderVal(5.91),
+                                isFinished -> angler.setEncoderVal(Constants.Angler.ANGLER_LOWER_LIMIT),
+                                () -> false,
+                                angler
+                        ),
+                        new RevUpShooterCommand(shooter, swerve),
+                        new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
+                                intakeCarriage,
+                                0,
+                                1
+                        ))
+                ).withInterruptBehavior(Command.InterruptionBehavior.kCancelIncoming)
         );
 
         /* Toggle clamp */
@@ -442,6 +484,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("Limelight Y", Limelight.getTagRY());
         SmartDashboard.putNumber("Limelight Z", Limelight.getTagRZ());
         SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getTagRZ(), Limelight.getTagRX()));
+        SmartDashboard.putNumber("Num tags", Limelight.getNumTag());
+        SmartDashboard.putNumber("Tag ID", LimelightHelpers.getFiducialID("limelight"));
         SmartDashboard.putString("botpose_helpers_pose", LimelightHelpers.getBotPose2d_wpiBlue("limelight").getTranslation().toString());
 
         // shooter debug

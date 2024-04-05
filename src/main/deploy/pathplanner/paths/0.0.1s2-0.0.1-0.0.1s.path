@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.1971598432771025,
-        "y": 1.5216505545109464
+        "x": 3.468038420871118,
+        "y": 2.687479865120732
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.078103959643768,
-        "y": 1.2075794975753684
+        "x": 4.158265490055131,
+        "y": 2.0413098429059118
       },
       "isLocked": false,
       "linkedName": "0.0.1s2"
@@ -20,50 +20,56 @@
         "y": 0.7624920813497
       },
       "prevControl": {
-        "x": 9.965908934666873,
-        "y": 0.7484258843161573
+        "x": 9.820276070069266,
+        "y": 0.2410533874959928
       },
       "nextControl": {
-        "x": 8.229327246963154,
-        "y": 0.7630208597114967
+        "x": 6.93857466302056,
+        "y": 1.2244296768605392
       },
       "isLocked": false,
       "linkedName": "0.0.1"
     },
     {
       "anchor": {
-        "x": 4.1971598432771025,
-        "y": 1.5216505545109464
+        "x": 2.701205153524414,
+        "y": 3.020441325323673
       },
       "prevControl": {
-        "x": 5.068454226917256,
-        "y": 1.230228449742221
+        "x": 3.3975012532787634,
+        "y": 2.3420571616579884
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "0.0.1s2"
+      "linkedName": "0.0.1s"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.75,
-      "rotationDegrees": 165.0,
-      "rotateFast": false
+      "rotationDegrees": 160.0,
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
+      "name": "intake,enableTurret",
       "waypointRelativePos": 0.55,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "intakeNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "enableTurret"
               }
             }
           ]
@@ -72,18 +78,18 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.5,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 4.671,
+    "maxAcceleration": 5.25,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 140.0,
-    "rotateFast": false
+    "rotation": 135.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "0.x.0,0.0.xs-0.0.x-...",
   "previewStartingState": {
     "rotation": 140.0,
     "velocity": 0

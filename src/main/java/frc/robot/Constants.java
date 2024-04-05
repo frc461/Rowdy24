@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
+
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -51,18 +52,17 @@ public final class Constants {
         public static final double ANGLER_SHUTTLE_PRESET = 15;
 
         // angler equation to shoot from anywhere
-        public static double ANGLER_ENCODER_OFFSET = 1.85;
+        public static double ANGLER_ENCODER_OFFSET = 0;
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
         public static final double SLANT_HEIGHT = .23 * Math.tan(Math.toRadians(14));
-        public static final double Z_COMPONENT_AIM = SPEAKER_HEIGHT - SHOOTER_HEIGHT + SLANT_HEIGHT;
-        public static final double X_DEPTH_OFFSET = -0.23; // Half of the depth of the speaker into the field
-        // TODO: Test this equation
-        public static final Function<Double, Double> ANGLE_TO_ENCODER_VALUE =
-                (angle) -> 20.0 / 46.4 * (angle - 12.4) + ANGLER_ENCODER_OFFSET;
-        public static final BiFunction<Double, Double, Double> AUTO_ANGLER_AIM_EQUATION =
-                (y, x) -> ANGLE_TO_ENCODER_VALUE.apply(
-                        Math.toDegrees(Math.atan(Z_COMPONENT_AIM / Math.hypot(y, x + X_DEPTH_OFFSET)))
+        public static final double Z_COMPONENT_AIM = SPEAKER_HEIGHT + SLANT_HEIGHT - SHOOTER_HEIGHT;
+        public static final BiFunction<Double, Double, Double> ANGLE_TO_ENCODER_VALUE =
+                (angle, dist) -> 20.0 / 46.4 * (angle - 12.4) + 0.55 * dist + ANGLER_ENCODER_OFFSET;
+        public static final Function<Double, Double> AUTO_ANGLER_AIM_EQUATION =
+                (dist) -> ANGLE_TO_ENCODER_VALUE.apply(
+                        Math.toDegrees(Math.atan(Z_COMPONENT_AIM / dist)),
+                        dist
                 );
     }
 
@@ -113,11 +113,13 @@ public final class Constants {
     public static final class Limelight {
         // pid for limelight alignment
         public static final double LIMELIGHT_P = 0.01;
-        public static final double LIMELIGHT_I = 0.0005;
-        public static final double LIMELIGHT_D = 0.00004;
+        public static final double LIMELIGHT_I = 0.0001;
+        public static final double LIMELIGHT_D = 0.0008;
         
         // turn slightly to the right 
         public static final double YAW_OFFSET = 0;
+        public static final double X_DEPTH_OFFSET = -0.23; // Half of the depth of the speaker into the field
+        public static final double Y_DEPTH_OFFSET = Units.inchesToMeters(6.5 / 2);
     }
 
     public static final class Shooter {
@@ -131,7 +133,8 @@ public final class Constants {
         public static final double IDLE_SHOOTER_POWER = 0.2;
 
         // shuttle power out of full power 1
-        public static final double SHUTTLE_SHOOTER_POWER = 0.4167;
+        // TODO: test shuttle power
+        public static final double SHUTTLE_SHOOTER_POWER = 0.46;
 
         // baseline shooter speed in RPM
         public static final double BASE_SHOOTER_SPEED = 6000;
@@ -245,7 +248,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double MAX_SPEED = 5.5;
+        public static final double MAX_SPEED = 4.671;
         public static final double MAX_ACCEL = 5.5;
 
         /** Radians per Second */
@@ -262,7 +265,7 @@ public final class Constants {
             public static final int DRIVE_MOTOR_ID = 4;
             public static final int ANGLE_MOTOR_ID = 14;
             public static final int CANCODER_ID = 24;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(225.14);
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(226.05);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS = new SwerveModuleConstants(
                     DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
@@ -274,7 +277,7 @@ public final class Constants {
             public static final int DRIVE_MOTOR_ID = 3;
             public static final int ANGLE_MOTOR_ID = 13;
             public static final int CANCODER_ID = 23;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(139.65);
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(138.87);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS = new SwerveModuleConstants(
                     DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }
@@ -294,7 +297,7 @@ public final class Constants {
             public static final int DRIVE_MOTOR_ID = 2;
             public static final int ANGLE_MOTOR_ID = 12;
             public static final int CANCODER_ID = 22;
-            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(167.78);
+            public static final Rotation2d ANGLE_OFFSET = Rotation2d.fromDegrees(168.31);
             public static final SwerveModuleConstants SWERVE_MODULE_CONSTANTS = new SwerveModuleConstants(
                     DRIVE_MOTOR_ID, ANGLE_MOTOR_ID, CANCODER_ID, ANGLE_OFFSET);
         }

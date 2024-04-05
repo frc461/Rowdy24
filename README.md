@@ -7,7 +7,7 @@
 
   2. If you are interested in deploying our Robot/Auto code, we advise you to use the master branch instead of others, as they are experimental and may (will) cause issues. Use other branches at your own risk.
   
-  3. Our drivetrain is made up of 4 SDS-l3 swerve drives with NEO brushless motors for rotation and propulsion and CTRE CanCoders to measure wheel rotation.
+  3. Our drivetrain is made up of 4 SDSMK4-l3.5 swerve drives with NEO brushless motors for rotation and propulsion and CTRE CanCoders to measure wheel rotation.
   
   4. This project uses a command-based structure. You can read more about WPILib command-based programming in the [WPILib Docs](https://docs.wpilib.org/en/stable/docs/software/commandbased/index.html).
 

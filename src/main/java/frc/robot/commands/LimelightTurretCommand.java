@@ -28,9 +28,14 @@ public class LimelightTurretCommand extends Command {
     @Override
     public void execute() {
         /* Apply Deadband */
+        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.STICK_DEADBAND);
+        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.STICK_DEADBAND);
 
         swerve.driveTurret(
-                new Translation2d(translationSup.getAsDouble(), strafeSup.getAsDouble()),
+                new Translation2d(
+                        translationVal * Constants.Swerve.MAX_SPEED,
+                        strafeVal * Constants.Swerve.MAX_SPEED
+                ),
                 !robotCentricSup.getAsBoolean()
         );
     }

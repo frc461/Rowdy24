@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9200310879254237,
-        "y": 2.8182912206280255
+        "x": 3.864551843593849,
+        "y": 2.2469093954288093
       },
       "isLocked": false,
       "linkedName": "0.0.1s"
     },
     {
       "anchor": {
-        "x": 8.272350741581985,
-        "y": 4.112008787948034
+        "x": 8.279924798185865,
+        "y": 4.095621267620727
       },
       "prevControl": {
-        "x": 6.223779513086091,
-        "y": 4.899850711382335
+        "x": 7.111380725563053,
+        "y": 5.643909911182005
       },
       "nextControl": {
-        "x": 9.9336722699373,
-        "y": 3.4730958079472076
+        "x": 9.528424907489146,
+        "y": 2.4413930823024312
       },
       "isLocked": false,
       "linkedName": "0.0.3"
@@ -47,15 +47,38 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
+      "rotationDegrees": 170.0,
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
+      "name": "intake,enableTurret",
       "waypointRelativePos": 0.6,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "enableTurret"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "disableTurret",
+      "waypointRelativePos": 0.05,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,7 +86,7 @@
             {
               "type": "named",
               "data": {
-                "name": "intakeNote"
+                "name": "disableTurret"
               }
             }
           ]
@@ -72,8 +95,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.5,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 4.671,
+    "maxAcceleration": 5.25,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -83,9 +106,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "0.x.0,0.0.xs-0.0.x-...",
   "previewStartingState": {
-    "rotation": 120.0,
+    "rotation": 140.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

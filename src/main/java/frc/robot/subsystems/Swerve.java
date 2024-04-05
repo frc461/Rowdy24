@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -15,13 +14,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
-import java.util.Optional;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
@@ -68,16 +65,18 @@ public class Swerve extends SubsystemBase {
                 this::getPose, // Robot pose supplier
                 newPose -> {
                     this.setFusedPoseEstimator(newPose);
-                    this.resetOdometry(newPose);
+                    this.setOdometry(newPose);
                 }, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
                 speeds -> {
                     // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                    speeds.omegaRadiansPerSecond = Limelight.overrideTargetNow ? limelightRotController.calculate(
-                            getFusedPoseEstimator().getRotation().getDegrees(),
-                            getAngleToSpeakerTarget()
-                    ) * Constants.Swerve.MAX_ANGULAR_VELOCITY : speeds.omegaRadiansPerSecond;
+                    if (speeds.omegaRadiansPerSecond != 0.0) {
+                        speeds.omegaRadiansPerSecond = Limelight.overrideTargetNow ? limelightRotController.calculate(
+                                getFusedPoseEstimator().getRotation().getDegrees(),
+                                getAngleToSpeakerTarget()
+                        ) * Constants.Swerve.MAX_ANGULAR_VELOCITY : speeds.omegaRadiansPerSecond;
+                    }
 
                     SwerveModuleState[] swerveModuleStates =
                             Constants.Swerve.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
@@ -110,8 +109,8 @@ public class Swerve extends SubsystemBase {
                 Constants.Swerve.SWERVE_KINEMATICS,
                 getHeading(), getModulePositions(),
                 getPose(),
-                VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(2.0)),
-                VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
+                VecBuilder.fill(0.2, 0.2, Units.degreesToRadians(2.0)),
+                VecBuilder.fill(0.6, 0.6, Units.degreesToRadians(360.0))
         );
 
         turretError = 0.0;
@@ -188,7 +187,11 @@ public class Swerve extends SubsystemBase {
 
     public Translation2d getVectorToSpeakerTarget() {
         Translation2d fusedPose = getFusedPoseEstimator().getTranslation();
-        Translation2d speakerTagPose = Limelight.getSpeakerTagPose().getTranslation();
+        Translation2d speakerTagPose = Limelight.getSpeakerTagPose().getTranslation()
+                .plus(new Translation2d(
+                        Limelight.isRedAlliance() ? Constants.Limelight.X_DEPTH_OFFSET : -Constants.Limelight.X_DEPTH_OFFSET,
+                        Limelight.isRedAlliance() ? Constants.Limelight.Y_DEPTH_OFFSET : -Constants.Limelight.Y_DEPTH_OFFSET
+                ));
         return fusedPose.minus(speakerTagPose).unaryMinus();
     }
 
@@ -204,12 +207,17 @@ public class Swerve extends SubsystemBase {
         return Math.abs(turretError) < Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
     }
 
-    public void resetOdometry(Pose2d pose) {
+    public void setOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(getHeading(), getModulePositions(), pose);
+    }
+
+    public void resetOdometry() {
+        setOdometry(new Pose2d());
     }
 
     public void setFusedPoseEstimator(Pose2d newPose){
         fusedPoseEstimator.resetPosition(getHeading(), getModulePositions(), newPose);
+        setOdometry(newPose);
     }
 
     public void resetFusedPose(){
@@ -226,14 +234,13 @@ public class Swerve extends SubsystemBase {
             double dist = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
                     Limelight.getNearestTagPose().getTranslation()
             );
-            double xyStdDev, degStdDev;
+            double xyStdDev;
+            double degStdDev = 360.0;
 
             if (Limelight.getNumTag() >= 2) {
-                xyStdDev = 0.4 * dist + 1.25 * poseDifference;
-                degStdDev = 30.0 * dist;
+                xyStdDev = 0.25 * dist + 1.25 * Math.max(0, dist - 1.5) * poseDifference;
             } else if (dist < 4.0) {
-                xyStdDev = 0.8 * dist + 2.5 * poseDifference;
-                degStdDev = 30.0 * dist;
+                xyStdDev = 0.5 * dist + 2.5 * Math.max(0, dist - 1) * poseDifference;
             } else {
                 return;
             }

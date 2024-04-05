@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7509152340242001,
-      "y": 4.584108541436456
+      "x": 0.78,
+      "y": 4.45
     },
     "rotation": 120.0
   },
@@ -38,22 +38,9 @@
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeNote"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "turretRealign"
-                            }
-                          }
-                        ]
+                        "name": "turretRealign"
                       }
                     },
                     {
@@ -71,6 +58,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "2P",
   "choreoAuto": false
 }

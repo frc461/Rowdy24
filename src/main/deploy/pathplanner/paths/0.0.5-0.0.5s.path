@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 4.834512384006062,
-        "y": 6.9700255897196985
+        "x": 4.164633900927435,
+        "y": 6.488661953437363
       },
       "prevControl": {
-        "x": 5.205605362303129,
-        "y": 6.970084974097726
+        "x": 4.5357268792245025,
+        "y": 6.488721337815391
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,20 +30,38 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "enableTurret",
+      "waypointRelativePos": 0.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "enableTurret"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 5.5,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 4.671,
+    "maxAcceleration": 5.25,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -155.0,
+    "rotation": -160.0,
     "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "0.x.0,0.0.xs-0.0.x-...",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0.0

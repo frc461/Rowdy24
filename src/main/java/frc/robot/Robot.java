@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -36,6 +37,10 @@ public class Robot extends TimedRobot {
          */
         robotContainer = new RobotContainer();
         CameraServer.startAutomaticCapture();
+
+        for (int port = 5800; port <= 5807; port++) {
+            PortForwarder.add(port, "10.4.61.11", port);
+        }
     }
 
     /**

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.3899353412741913,
-      "y": 1.9554697004130854
+      "x": 0.5,
+      "y": 2.05
     },
     "rotation": 180.0
   },
@@ -50,22 +50,9 @@
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeNote"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "turretRealign"
-                            }
-                          }
-                        ]
+                        "name": "turretRealign"
                       }
                     },
                     {
@@ -81,22 +68,9 @@
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeNote"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "turretRealign"
-                            }
-                          }
-                        ]
+                        "name": "turretRealign"
                       }
                     },
                     {
@@ -108,26 +82,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "0.0.1s2-0.0.1-0.0.1s2"
+                        "pathName": "0.0.1s2-0.0.1-0.0.1s"
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "intakeNote"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "turretRealign"
-                            }
-                          }
-                        ]
+                        "name": "turretRealign"
                       }
                     },
                     {
@@ -145,6 +106,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "4P",
   "choreoAuto": false
 }

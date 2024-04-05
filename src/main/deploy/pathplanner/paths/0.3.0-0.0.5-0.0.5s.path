@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 4.834512384006062,
-        "y": 6.9700255897196985
+        "x": 4.164633900927435,
+        "y": 6.488661953437363
       },
       "prevControl": {
-        "x": 5.205605362303129,
-        "y": 6.970084974097726
+        "x": 4.569295906882528,
+        "y": 6.547966764977519
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,16 +46,39 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": -172.72855145767954,
+      "waypointRelativePos": 1.15,
+      "rotationDegrees": 170.0,
       "rotateFast": true
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
+      "name": "intake,enableTurret",
       "waypointRelativePos": 0.5,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "enableTurret"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "disableTurret",
+      "waypointRelativePos": 0.05,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,7 +86,7 @@
             {
               "type": "named",
               "data": {
-                "name": "intakeNote"
+                "name": "disableTurret"
               }
             }
           ]
@@ -72,18 +95,18 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.5,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 4.671,
+    "maxAcceleration": 5.25,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -155.0,
-    "rotateFast": false
+    "rotation": -160.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "0.x.0,0.0.xs-0.0.x-...",
   "previewStartingState": {
     "rotation": -155.0,
     "velocity": 0.0
