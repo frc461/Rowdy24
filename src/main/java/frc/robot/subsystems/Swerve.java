@@ -230,12 +230,12 @@ public class Swerve extends SubsystemBase {
 
     public void updateFusedPose(Pose2d limelightPose){
         fusedPoseEstimator.update(getHeading(), getModulePositions());
-        double angVel = Math.toDegrees(gyro.getRate());
+        double angVel = Math.toDegrees(Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()).omegaRadiansPerSecond);
 
         LimelightHelpers.setRobotOrientation(
                 "limelight",
-                getHeading().getDegrees(),
-                0, // TODO: 0?
+                fusedPoseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+                angVel, // TODO: 0?
                 0,
                 0,
                 0,
