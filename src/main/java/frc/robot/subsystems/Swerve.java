@@ -234,8 +234,8 @@ public class Swerve extends SubsystemBase {
 
         LimelightHelpers.setRobotOrientation(
                 "limelight",
-                getHeading().getDegrees(),
-                0, // TODO: 0?
+                fusedPoseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+                angVel, // TODO: 0?
                 0,
                 0,
                 0,
