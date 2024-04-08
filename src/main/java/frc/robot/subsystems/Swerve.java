@@ -121,9 +121,7 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        // TODO: Test, use 3D visualizer in GUI
         updateFusedPose(LimelightHelpers.getBotPose2d_orb_wpiBlue("limelight"));
-//        updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
         turretError = getVectorToSpeakerTarget().getAngle().minus(getFusedPoseEstimator().getRotation()).getDegrees();
 
         for (SwerveModule mod : swerveMods) {
@@ -230,12 +228,12 @@ public class Swerve extends SubsystemBase {
 
     public void updateFusedPose(Pose2d limelightPose){
         fusedPoseEstimator.update(getHeading(), getModulePositions());
-        double angVel = Math.toDegrees(gyro.getRate());
+        double angVel = gyro.getRate();
 
         LimelightHelpers.setRobotOrientation(
                 "limelight",
                 fusedPoseEstimator.getEstimatedPosition().getRotation().getDegrees(),
-                angVel, // TODO: 0?
+                0, // TODO: 0?
                 0,
                 0,
                 0,

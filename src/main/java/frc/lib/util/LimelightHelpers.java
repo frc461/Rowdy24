@@ -663,7 +663,6 @@ public class LimelightHelpers {
         return getLimelightNTDoubleArray(limelightName, "botpose_wpiblue");
     }
 
-    // TODO: "botpose_wpiblue_orb" on documentation - check network tables
     public static double[] getBotPose_orb_wpiBlue(String limelightName) {
         return getLimelightNTDoubleArray(limelightName, "botpose_orb_wpiblue");
     }
