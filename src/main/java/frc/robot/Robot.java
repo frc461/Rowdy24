@@ -37,10 +37,6 @@ public class Robot extends TimedRobot {
          */
         robotContainer = new RobotContainer();
         CameraServer.startAutomaticCapture();
-
-        for (int port = 5800; port <= 5807; port++) {
-            PortForwarder.add(port, "10.4.61.11", port);
-        }
     }
 
     /**
