@@ -56,16 +56,9 @@
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "turretRealign"
-                            }
-                          }
-                        ]
+                        "name": "turretRealign"
                       }
                     },
                     {
@@ -81,16 +74,9 @@
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "turretRealign"
-                            }
-                          }
-                        ]
+                        "name": "turretRealign"
                       }
                     },
                     {

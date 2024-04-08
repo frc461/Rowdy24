@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.550079988639291,
-        "y": 5.718761181346636
+        "x": 1.2303755661642377,
+        "y": 4.0110949737569
       },
       "isLocked": false,
       "linkedName": "1.0.0s"
+    },
+    {
+      "anchor": {
+        "x": 1.5578118905525558,
+        "y": 4.712744240303296
+      },
+      "prevControl": {
+        "x": 1.1458817494508045,
+        "y": 4.687306887834222
+      },
+      "nextControl": {
+        "x": 1.9697420316543066,
+        "y": 4.738181592772371
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -36,8 +52,8 @@
         "y": 4.0057955674340056
       },
       "prevControl": {
-        "x": 1.9857876070698226,
-        "y": 3.881056518508834
+        "x": 2.095742994904793,
+        "y": 4.163118981508619
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +62,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 2.0,
       "rotationDegrees": 150.0,
       "rotateFast": true
     }
@@ -55,7 +71,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.35,
+      "waypointRelativePos": 0.7,
       "command": {
         "type": "parallel",
         "data": {
