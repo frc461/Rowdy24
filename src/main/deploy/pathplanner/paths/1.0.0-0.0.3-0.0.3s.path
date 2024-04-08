@@ -32,19 +32,19 @@
     },
     {
       "anchor": {
-        "x": 8.279924798185865,
-        "y": 4.095621267620727
+        "x": 8.550916247131639,
+        "y": 4.174813135951059
       },
       "prevControl": {
-        "x": 7.625229999785329,
-        "y": 4.366688756527338
+        "x": 7.6057156340636585,
+        "y": 5.0959841241370665
       },
       "nextControl": {
-        "x": 9.217934570469714,
-        "y": 3.7072510618942895
+        "x": 9.675710433095878,
+        "y": 3.0786143423135495
       },
       "isLocked": false,
-      "linkedName": "0.0.3"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -70,8 +70,31 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "enableTurret",
-      "waypointRelativePos": 0.1,
+      "name": "intakeNote,enableTurret",
+      "waypointRelativePos": 1.4,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "enableTurret"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "disableTurret",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -79,7 +102,7 @@
             {
               "type": "named",
               "data": {
-                "name": "enableTurret"
+                "name": "disableTurret"
               }
             }
           ]

@@ -44,6 +44,38 @@
                       }
                     },
                     {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "turretRealign"
+                            }
+                          },
+                          {
+                            "type": "race",
+                            "data": {
+                              "commands": [
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "intakeNote"
+                                  }
+                                },
+                                {
+                                  "type": "wait",
+                                  "data": {
+                                    "waitTime": 1.0
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
                       "type": "named",
                       "data": {
                         "name": "shoot"
@@ -53,6 +85,12 @@
                       "type": "path",
                       "data": {
                         "pathName": "0.2.0-0.0.4-0.0.4s"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "turretRealign"
                       }
                     },
                     {
@@ -70,6 +108,12 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "turretRealign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "shoot"
                       }
                     },
@@ -77,6 +121,12 @@
                       "type": "path",
                       "data": {
                         "pathName": "0.0.3s-0.0.2-0.0.1s2"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "turretRealign"
                       }
                     },
                     {
