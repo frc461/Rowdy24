@@ -63,7 +63,7 @@ public class Swerve extends SubsystemBase {
         limelightRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
 
         AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
+                this::getFusedPoseEstimator, // Robot pose supplier
                 newPose -> {
                     this.setFusedPoseEstimator(newPose);
                     this.setOdometry(newPose);
