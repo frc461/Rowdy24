@@ -471,6 +471,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("angle to speaker", swerve.getAngleToSpeakerTarget());
         SmartDashboard.putNumber("turret error", swerve.getTurretError());
         SmartDashboard.putBoolean("Turret near target", swerve.turretNearTarget());
+        SmartDashboard.putBoolean("heading configured", swerve.isHeadingConfigured()); // TODO: ADD TO COMP DASHBOARD
         SmartDashboard.putData("Swerve Command", swerve);
 
         // intake-carriage debug

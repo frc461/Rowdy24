@@ -211,6 +211,10 @@ public class Swerve extends SubsystemBase {
         return Math.abs(turretError) < Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
     }
 
+    public boolean isHeadingConfigured() {
+        return headingConfigured;
+    }
+
     public void setOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(getHeading(), getModulePositions(), pose);
     }
