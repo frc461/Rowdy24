@@ -20,12 +20,12 @@
         "y": 4.15
       },
       "prevControl": {
-        "x": 2.951914040263122,
-        "y": 3.969937508979502
+        "x": 2.9687463629565753,
+        "y": 3.9918697923631106
       },
       "nextControl": {
-        "x": 0.917087867406369,
-        "y": 5.698920963890564
+        "x": 1.2513053105329843,
+        "y": 5.179120626490765
       },
       "isLocked": false,
       "linkedName": "0.1.0"
@@ -48,16 +48,16 @@
     },
     {
       "anchor": {
-        "x": 2.306336220218105,
-        "y": 6.428711222230434
+        "x": 2.3990854152362604,
+        "y": 6.354228148824951
       },
       "prevControl": {
-        "x": 2.306336220218105,
-        "y": 6.223111669707537
+        "x": 2.3990854152362604,
+        "y": 6.1486285963020535
       },
       "nextControl": {
-        "x": 2.306336220218105,
-        "y": 6.633259107741452
+        "x": 2.3990854152362604,
+        "y": 6.558776034335969
       },
       "isLocked": false,
       "linkedName": null
@@ -68,12 +68,12 @@
         "y": 6.988252887333411
       },
       "prevControl": {
-        "x": 2.412307734290315,
-        "y": 6.775649062411682
+        "x": 2.437415167799086,
+        "y": 6.754327822010136
       },
       "nextControl": {
-        "x": 3.2156264701816895,
-        "y": 7.133970674856961
+        "x": 3.206558360564005,
+        "y": 7.152801512754883
       },
       "isLocked": false,
       "linkedName": "0.3.0"
@@ -81,15 +81,15 @@
     {
       "anchor": {
         "x": 8.726328563768236,
-        "y": 7.71814193201036
+        "y": 7.5002172352367165
       },
       "prevControl": {
         "x": 7.440181367651299,
-        "y": 7.654970522904172
+        "y": 7.437045826130529
       },
       "nextControl": {
         "x": 10.534149231561301,
-        "y": 7.806936262348731
+        "y": 7.589011565575087
       },
       "isLocked": false,
       "linkedName": null
@@ -197,9 +197,9 @@
     {
       "name": "shoot5",
       "minWaypointRelativePos": 6.1,
-      "maxWaypointRelativePos": 6.1,
+      "maxWaypointRelativePos": 6.15,
       "constraints": {
-        "maxVelocity": 0.1,
+        "maxVelocity": 0.3,
         "maxAcceleration": 3.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
@@ -334,7 +334,7 @@
     },
     {
       "name": "shoot4,disableTurret",
-      "waypointRelativePos": 5.75,
+      "waypointRelativePos": 5.65,
       "command": {
         "type": "sequential",
         "data": {
@@ -342,7 +342,7 @@
             {
               "type": "named",
               "data": {
-                "name": "shoot"
+                "name": "shootWhenMoving"
               }
             },
             {
