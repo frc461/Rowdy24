@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
@@ -21,7 +24,11 @@ public class Limelight extends SubsystemBase {
     }
 
     public static Pose2d getTargetPoseRobotSpace(String limelightName) {
-        return LimelightHelpers.toPose2D(getTargetPoseRobotSpaceTable(limelightName));
+        double[] inData = getTargetPoseRobotSpaceTable(limelightName);
+        
+        Translation2d tran2d = new Translation2d(inData[0], inData[2]);
+        Rotation2d r2d = new Rotation2d(Units.degreesToRadians(inData[5]));
+        return new Pose2d(tran2d, r2d);
     }
 
     public static boolean overrideTargetNow = false; // only for auto
