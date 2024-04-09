@@ -49,7 +49,7 @@ public final class Constants {
 
         // preset
         public static final double ANGLER_LAYUP_PRESET = 18;
-        public static final double ANGLER_SHUTTLE_PRESET = 15;
+        public static final double ANGLER_SHUTTLE_PRESET = 16;
 
         // angler equation to shoot from anywhere
         public static double ANGLER_ENCODER_OFFSET = 0.1;
@@ -137,8 +137,8 @@ public final class Constants {
         public static final double IDLE_SHOOTER_POWER = 0.2;
 
         // shuttle power out of full power 1
-        // TODO: test shuttle power
-        public static final double SHUTTLE_SHOOTER_POWER = 0.46;
+        // TODO: test shuttle power at worlds
+        public static final double SHUTTLE_SHOOTER_POWER = 0.5;
 
         // baseline shooter speed in RPM
         public static final double BASE_SHOOTER_SPEED = 6000;
