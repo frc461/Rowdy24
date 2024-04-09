@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
+import frc.robot.commands.TurretTargets;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
@@ -148,26 +149,13 @@ public class Swerve extends SubsystemBase {
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
-    public void driveLimelightTurret(Translation2d translation, boolean fieldRelative) {
+    public void driveTurret(Translation2d translation, boolean fieldRelative, TurretTargets targetType) {
         // aligns with speaker April Tag
         drive(
                 translation,
                 limelightRotController.calculate(
                         getFusedPoseEstimator().getRotation().getDegrees(),
-                        getAngleToSpeakerTarget()
-                ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
-                fieldRelative,
-                true
-        );
-    }
-
-    public void driveShuttleTurret(Translation2d translation, boolean fieldRelative) {
-        // aligns with shuttle
-        drive(
-                translation,
-                limelightRotController.calculate(
-                        getFusedPoseEstimator().getRotation().getDegrees(),
-                        getAngleToShuttleTarget()
+                        TurretTargets.getAngleToTarget(targetType, this)
                 ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
                 fieldRelative,
                 true
