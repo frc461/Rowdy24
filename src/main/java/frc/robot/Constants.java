@@ -139,6 +139,9 @@ public final class Constants {
         // shuttle power out of full power 1
         // TODO: test shuttle power at worlds
         public static final double SHUTTLE_SHOOTER_POWER = 0.5;
+        public static final double SHUTTLE_X_BLUE = 1.23;
+        public static final double SHUTTLE_X_RED = 15.31;
+        public static final double SHUTTLE_Y = 7.19;
 
         // baseline shooter speed in RPM
         public static final double BASE_SHOOTER_SPEED = 6000;

@@ -260,13 +260,21 @@ public class RobotContainer {
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
-                new ParallelCommandGroup(
-                        new LimelightTurretCommand(
-                                swerve,
-                                () -> -driverXbox.getLeftY(), // Ordinate Translation
-                                () -> -driverXbox.getLeftX(), // Coordinate Translation
-                                driverXbox.b() // Robot-centric trigger
-                        )
+                new LimelightTurretCommand(
+                        swerve,
+                        () -> -driverXbox.getLeftY(), // Ordinate Translation
+                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox.b() // Robot-centric trigger
+                )
+        );
+
+        /* Shuttle Turret */
+        driverXbox.leftTrigger().whileTrue(
+                new ShuttleTurretCommand(
+                        swerve,
+                        () -> -driverXbox.getLeftY(), // Ordinate Translation
+                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox.b() // Robot-centric trigger
                 )
         );
 

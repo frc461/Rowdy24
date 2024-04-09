@@ -148,13 +148,26 @@ public class Swerve extends SubsystemBase {
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
-    public void driveTurret(Translation2d translation, boolean fieldRelative) {
+    public void driveLimelightTurret(Translation2d translation, boolean fieldRelative) {
         // aligns with speaker April Tag
         drive(
                 translation,
                 limelightRotController.calculate(
                         getFusedPoseEstimator().getRotation().getDegrees(),
                         getAngleToSpeakerTarget()
+                ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
+                fieldRelative,
+                true
+        );
+    }
+
+    public void driveShuttleTurret(Translation2d translation, boolean fieldRelative) {
+        // aligns with shuttle
+        drive(
+                translation,
+                limelightRotController.calculate(
+                        getFusedPoseEstimator().getRotation().getDegrees(),
+                        getAngleToShuttleTarget()
                 ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
                 fieldRelative,
                 true
@@ -188,17 +201,30 @@ public class Swerve extends SubsystemBase {
     }
 
     public Translation2d getVectorToSpeakerTarget() {
-        Translation2d fusedPose = getFusedPoseEstimator().getTranslation();
-        Translation2d speakerTagPose = Limelight.getSpeakerTagPose().getTranslation()
+        Translation2d fusedTranslation = getFusedPoseEstimator().getTranslation();
+        Translation2d speakerTagTranslation = Limelight.getSpeakerTagPose().getTranslation()
                 .plus(new Translation2d(
                         Limelight.isRedAlliance() ? Constants.Limelight.X_DEPTH_OFFSET : -Constants.Limelight.X_DEPTH_OFFSET,
                         Limelight.isRedAlliance() ? Constants.Limelight.Y_DEPTH_OFFSET : -Constants.Limelight.Y_DEPTH_OFFSET
                 ));
-        return fusedPose.minus(speakerTagPose).unaryMinus();
+        return fusedTranslation.minus(speakerTagTranslation).unaryMinus();
+    }
+
+    public Translation2d getVectorToShuttleTarget() {
+        Translation2d fusedTranslation = getFusedPoseEstimator().getTranslation();
+        Translation2d shuttleTranslation = new Translation2d(
+                Limelight.isRedAlliance() ? Constants.Shooter.SHUTTLE_X_RED : Constants.Shooter.SHUTTLE_X_BLUE,
+                Constants.Shooter.SHUTTLE_Y
+        );
+        return fusedTranslation.minus(shuttleTranslation).unaryMinus();
     }
 
     public double getAngleToSpeakerTarget() {
         return getVectorToSpeakerTarget().getAngle().getDegrees();
+    }
+
+    public double getAngleToShuttleTarget() {
+        return getVectorToShuttleTarget().getAngle().getDegrees();
     }
 
     public double getTurretError() {
