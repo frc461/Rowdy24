@@ -140,7 +140,7 @@ public class Swerve extends SubsystemBase {
                         translation.getX(),
                         translation.getY(),
                         rotation,
-                        Limelight.isRedAlliance() ? getHeading().rotateBy(Rotation2d.fromDegrees(180)) : getHeading()
+                        Limelight.isRedAlliance() ? getHeading() : getHeading().rotateBy(Rotation2d.fromDegrees(180))
                 ) : new ChassisSpeeds(
                         translation.getX(),
                         translation.getY(),
@@ -252,9 +252,9 @@ public class Swerve extends SubsystemBase {
                         Timer.getFPGATimestamp()
                                 - LimelightHelpers.getLatency_Pipeline("limelight") / 1000.0
                                 - LimelightHelpers.getLatency_Capture("limelight") / 1000.0,
-                        VecBuilder.fill(0.6, 0.6, Units.degreesToRadians(360.0))
+                        VecBuilder.fill(0.0001, 0.0001, Units.degreesToRadians(0.1))
                 );
-                if (limelightPose.minus(limelightPoseDiff).getTranslation().getNorm() < 0.1) {
+                if (limelightPose.minus(limelightPoseDiff).getTranslation().getNorm() < 0.02) {
                     headingConfigured = true;
                 }
             }
