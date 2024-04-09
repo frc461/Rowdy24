@@ -49,10 +49,10 @@ public final class Constants {
 
         // preset
         public static final double ANGLER_LAYUP_PRESET = 18;
-        public static final double ANGLER_SHUTTLE_PRESET = 16;
+        public static final double ANGLER_SHUTTLE_PRESET = 18;
 
         // angler equation to shoot from anywhere
-        public static double ANGLER_ENCODER_OFFSET = 0.1;
+        public static double ANGLER_ENCODER_OFFSET = 0;
         public static final double SPEAKER_HEIGHT = 1.98;
         public static final double SHOOTER_HEIGHT = 0.2989; // CAD
         public static final double SLANT_HEIGHT = .23 * Math.tan(Math.toRadians(14));
