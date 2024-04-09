@@ -25,8 +25,8 @@ public class Limelight extends SubsystemBase {
         return (int) LimelightHelpers.extractBotPoseEntry(LimelightHelpers.getBotPose_wpiBlue("limelight"), 7);
     }
 
-    public static Pose2d getNearestTagPose() {
-        return TagLocation.getTagLocation(LimelightHelpers.getFiducialID("limelight"));
+    public static double getNearestTagDist() {
+        return LimelightHelpers.getTargetPose2d_RobotSpace("limelight").getTranslation().getNorm();
     }
 
     // X+ is to the right when looking at the tag

@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
           autonomousCommand.cancel();
         }
-        robotContainer.zeroGyro(); // won't work without an auto
+        robotContainer.zeroGyro();
     }
 
     /** This function is called periodically during operator control. */

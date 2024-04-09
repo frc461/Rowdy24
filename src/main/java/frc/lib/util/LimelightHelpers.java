@@ -698,6 +698,11 @@ public class LimelightHelpers {
     /////
     /////
 
+    public static Pose2d getTargetPose2d_RobotSpace(String limelightName) {
+        double[] poseArray = getLimelightNTDoubleArray(limelightName, "targetpose_robotspace");
+        return toPose2D(poseArray);
+    }
+
     public static Pose3d getBotPose3d(String limelightName) {
         double[] poseArray = getLimelightNTDoubleArray(limelightName, "botpose");
         return toPose3D(poseArray);

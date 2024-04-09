@@ -27,6 +27,7 @@ public class Swerve extends SubsystemBase {
     private final PIDController limelightRotController;
     public final Pigeon2 gyro;
     private double turretError;
+    private boolean headingConfigured;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
@@ -116,12 +117,13 @@ public class Swerve extends SubsystemBase {
         );
 
         turretError = 0.0;
+        headingConfigured = false;
     }
 
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        updateFusedPose(LimelightHelpers.getBotPose2d_orb_wpiBlue("limelight"));
+        updateFusedPose();
         turretError = getVectorToSpeakerTarget().getAngle().minus(getFusedPoseEstimator().getRotation()).getDegrees();
 
         for (SwerveModule mod : swerveMods) {
@@ -226,21 +228,41 @@ public class Swerve extends SubsystemBase {
         setFusedPoseEstimator(new Pose2d());
     }
 
-    public void updateFusedPose(Pose2d limelightPose){
+    public void updateFusedPose(){
         fusedPoseEstimator.update(getHeading(), getModulePositions());
+        Pose2d limelightPose;
         double angVel = gyro.getRate();
 
         LimelightHelpers.setRobotOrientation(
                 "limelight",
                 fusedPoseEstimator.getEstimatedPosition().getRotation().getDegrees(),
-                0, // TODO: 0?
+                0,
                 0,
                 0,
                 0,
                 0
         );
 
+        if (!headingConfigured) {
+            limelightPose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
+            Pose2d limelightPoseDiff = LimelightHelpers.getBotPose2d_orb_wpiBlue("limelight");
+            if (Limelight.tagExists() && Limelight.getNearestTagDist() < 2.0) {
+                fusedPoseEstimator.addVisionMeasurement(
+                        limelightPose,
+                        Timer.getFPGATimestamp()
+                                - LimelightHelpers.getLatency_Pipeline("limelight") / 1000.0
+                                - LimelightHelpers.getLatency_Capture("limelight") / 1000.0,
+                        VecBuilder.fill(0.6, 0.6, Units.degreesToRadians(360.0))
+                );
+                if (limelightPose.minus(limelightPoseDiff).getTranslation().getNorm() < 0.1) {
+                    headingConfigured = true;
+                }
+            }
+            return;
+        }
+
         if (Limelight.tagExists() && Math.abs(angVel) < 720.0) {
+            limelightPose = LimelightHelpers.getBotPose2d_orb_wpiBlue("limelight");
             fusedPoseEstimator.addVisionMeasurement(
                     limelightPose,
                     Timer.getFPGATimestamp()
@@ -249,33 +271,6 @@ public class Swerve extends SubsystemBase {
                     VecBuilder.fill(0.6, 0.6, Units.degreesToRadians(360.0))
             );
         }
-
-//        if (Limelight.tagExists()) {
-//            double poseDifference = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
-//                    limelightPose.getTranslation()
-//            );
-//            double dist = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
-//                    Limelight.getNearestTagPose().getTranslation()
-//            );
-//            double xyStdDev;
-//            double degStdDev = 360.0;
-//
-//            if (Limelight.getNumTag() >= 2) {
-//                xyStdDev = 0.25 * dist + 1.25 * Math.max(0, dist - 1.5) * poseDifference;
-//            } else if (dist < 4.0) {
-//                xyStdDev = 0.5 * dist + 2.5 * Math.max(0, dist - 1) * poseDifference;
-//            } else {
-//                return;
-//            }
-//
-//            fusedPoseEstimator.addVisionMeasurement(
-//                    limelightPose,
-//                    Timer.getFPGATimestamp()
-//                            - LimelightHelpers.getLatency_Pipeline("limelight") / 1000.0
-//                            - LimelightHelpers.getLatency_Capture("limelight") / 1000.0,
-//                    VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(degStdDev))
-//            );
-//        }
     }
 
     public SwerveModuleState[] getModuleStates() {
