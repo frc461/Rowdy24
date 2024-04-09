@@ -112,9 +112,9 @@ public final class Constants {
 
     public static final class Limelight {
         // pid for limelight alignment
-        public static final double LIMELIGHT_P = 0.04;
+        public static final double LIMELIGHT_P = 0.02;
         public static final double LIMELIGHT_I = 0;
-        public static final double LIMELIGHT_D = 0;
+        public static final double LIMELIGHT_D = 0.0006;
 
         public static final double CAMERA_FORWARD = 0.0223774;
         public static final double CAMERA_UP = 0.5916676;
