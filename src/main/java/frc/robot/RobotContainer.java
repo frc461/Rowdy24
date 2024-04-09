@@ -201,6 +201,24 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
+                "shootWhenMoving",
+                new WaitUntilCommand(
+                        () -> Math.hypot(
+                                Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(
+                                        swerve.getModuleStates()
+                                ).vxMetersPerSecond,
+                                Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(
+                                        swerve.getModuleStates()
+                                ).vyMetersPerSecond
+                        ) < 0.5
+                ).andThen(new IntakeCarriageCommand(
+                        intakeCarriage,
+                        0.9,
+                        1
+                ).until(() -> !intakeCarriage.noteInShootingSystem()))
+        );
+
+        NamedCommands.registerCommand(
                 "shoot",
                 new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                         intakeCarriage,
