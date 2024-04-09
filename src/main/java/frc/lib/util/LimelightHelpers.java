@@ -457,7 +457,7 @@ public class LimelightHelpers {
                         Units.degreesToRadians(inData[5])));
     }
 
-    private static Pose2d toPose2D(double[] inData){
+    public static Pose2d toPose2D(double[] inData){
         if(inData.length < 6)
         {
             //System.err.println("Bad LL 2D Pose Data!");
@@ -663,10 +663,6 @@ public class LimelightHelpers {
         return getLimelightNTDoubleArray(limelightName, "botpose_wpiblue");
     }
 
-    public static double[] getBotPose_orb_wpiBlue(String limelightName) {
-        return getLimelightNTDoubleArray(limelightName, "botpose_orb_wpiblue");
-    }
-
     public static double[] getBotPose_TargetSpace(String limelightName) {
         return getLimelightNTDoubleArray(limelightName, "botpose_targetspace");
     }
@@ -697,11 +693,6 @@ public class LimelightHelpers {
 
     /////
     /////
-
-    public static Pose2d getTargetPose2d_RobotSpace(String limelightName) {
-        double[] poseArray = getLimelightNTDoubleArray(limelightName, "targetpose_robotspace");
-        return toPose2D(poseArray);
-    }
 
     public static Pose3d getBotPose3d(String limelightName) {
         double[] poseArray = getLimelightNTDoubleArray(limelightName, "botpose");
@@ -765,12 +756,6 @@ public class LimelightHelpers {
      */
     public static PoseEstimate getBotPoseEstimate_wpiBlue(String limelightName) {
         return getBotPoseEstimate(limelightName, "botpose_wpiblue");
-    }
-
-    public static Pose2d getBotPose2d_orb_wpiBlue(String limelightName) {
-
-        double[] result = getBotPose_orb_wpiBlue(limelightName);
-        return toPose2D(result);
     }
 
     /**

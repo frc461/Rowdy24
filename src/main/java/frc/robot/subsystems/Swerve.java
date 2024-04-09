@@ -245,7 +245,7 @@ public class Swerve extends SubsystemBase {
 
         if (!headingConfigured) {
             limelightPose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
-            Pose2d limelightPoseDiff = LimelightHelpers.getBotPose2d_orb_wpiBlue("limelight");
+            Pose2d limelightPoseDiff = Limelight.getBotPoseBlueMegaTag2("limelight");
             if (Limelight.tagExists() && Limelight.getNearestTagDist() < 2.0) {
                 fusedPoseEstimator.addVisionMeasurement(
                         limelightPose,
@@ -262,7 +262,7 @@ public class Swerve extends SubsystemBase {
         }
 
         if (Limelight.tagExists() && Math.abs(angVel) < 720.0) {
-            limelightPose = LimelightHelpers.getBotPose2d_orb_wpiBlue("limelight");
+            limelightPose = Limelight.getBotPoseBlueMegaTag2("limelight");
             fusedPoseEstimator.addVisionMeasurement(
                     limelightPose,
                     Timer.getFPGATimestamp()
