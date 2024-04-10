@@ -80,16 +80,16 @@
     },
     {
       "anchor": {
-        "x": 8.534880452329265,
-        "y": 7.419077839559488
+        "x": 9.021652024016939,
+        "y": 7.464514963209614
       },
       "prevControl": {
-        "x": 8.046379103351201,
-        "y": 7.418548335937005
+        "x": 8.533150675038875,
+        "y": 7.46398545958713
       },
       "nextControl": {
-        "x": 8.907553901594035,
-        "y": 7.419481793288177
+        "x": 9.39432547328171,
+        "y": 7.464918916938302
       },
       "isLocked": false,
       "linkedName": null
@@ -112,16 +112,16 @@
     },
     {
       "anchor": {
-        "x": 8.534880452329265,
-        "y": 5.756095399825077
+        "x": 8.845108183380429,
+        "y": 5.661425950232272
       },
       "prevControl": {
-        "x": 8.09376812296105,
-        "y": 5.858456294549308
+        "x": 8.403995854012214,
+        "y": 5.763786844956503
       },
       "nextControl": {
-        "x": 8.890841456141953,
-        "y": 5.673494020513399
+        "x": 9.201069187193117,
+        "y": 5.5788245709205935
       },
       "isLocked": false,
       "linkedName": null
@@ -147,13 +147,13 @@
       "rotateFast": true
     },
     {
-      "waypointRelativePos": 4.05,
+      "waypointRelativePos": 4.15,
       "rotationDegrees": -150.0,
       "rotateFast": true
     },
     {
-      "waypointRelativePos": 4.45,
-      "rotationDegrees": -150.0,
+      "waypointRelativePos": 4.4,
+      "rotationDegrees": 180.0,
       "rotateFast": true
     },
     {
@@ -163,7 +163,7 @@
     },
     {
       "waypointRelativePos": 7.4,
-      "rotationDegrees": 160.0,
+      "rotationDegrees": 155.0,
       "rotateFast": true
     },
     {
@@ -177,13 +177,18 @@
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 6.35,
+      "waypointRelativePos": 6.15,
       "rotationDegrees": -170.0,
       "rotateFast": true
     },
     {
       "waypointRelativePos": 2.05,
       "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 6.45,
+      "rotationDegrees": 155.0,
       "rotateFast": false
     }
   ],
@@ -361,7 +366,7 @@
       }
     },
     {
-      "name": "intake5,enableTurret",
+      "name": "intake5",
       "waypointRelativePos": 6.6,
       "command": {
         "type": "sequential",
@@ -372,12 +377,6 @@
               "data": {
                 "name": "intakeNote"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "enableTurret"
-              }
             }
           ]
         }
@@ -386,7 +385,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.671,
-    "maxAcceleration": 5.25,
+    "maxAcceleration": 6.25,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
