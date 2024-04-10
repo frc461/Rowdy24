@@ -12,10 +12,11 @@
     "3P",
     "4P",
     "5P",
-    "6P"
+    "6P",
+    "1P"
   ],
   "defaultMaxVel": 4.671,
-  "defaultMaxAccel": 5.25,
+  "defaultMaxAccel": 6.25,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 5.5

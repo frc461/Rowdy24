@@ -201,6 +201,24 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
+                "shootWhenMoving",
+                new WaitUntilCommand(
+                        () -> Math.hypot(
+                                Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(
+                                        swerve.getModuleStates()
+                                ).vxMetersPerSecond,
+                                Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(
+                                        swerve.getModuleStates()
+                                ).vyMetersPerSecond
+                        ) < 1.0
+                ).andThen(new IntakeCarriageCommand(
+                        intakeCarriage,
+                        0.9,
+                        1
+                ).until(() -> !intakeCarriage.noteInShootingSystem()))
+        );
+
+        NamedCommands.registerCommand(
                 "shoot",
                 new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                         intakeCarriage,
@@ -216,11 +234,12 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "turretRealign",
-                new LimelightTurretCommand(
+                new TurretCommand(
                         swerve,
                         () -> 0,
                         () -> 0,
-                        () -> false
+                        () -> false,
+                        TurretTargets.SPEAKER
                 ).until(swerve::turretNearTarget)
         );
 
@@ -228,10 +247,6 @@ public class RobotContainer {
                 "disableTurret",
                 new InstantCommand(() -> Limelight.overrideTargetNow = false)
         );
-    }
-
-    public void zeroGyro() {
-        swerve.zeroGyro(swerve.getFusedPoseEstimator().getRotation().getDegrees());
     }
 
     /**
@@ -260,13 +275,23 @@ public class RobotContainer {
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
-                new ParallelCommandGroup(
-                        new LimelightTurretCommand(
-                                swerve,
-                                () -> -driverXbox.getLeftY(), // Ordinate Translation
-                                () -> -driverXbox.getLeftX(), // Coordinate Translation
-                                driverXbox.b() // Robot-centric trigger
-                        )
+                new TurretCommand(
+                        swerve,
+                        () -> -driverXbox.getLeftY(), // Ordinate Translation
+                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox.b(), // Robot-centric trigger,
+                        TurretTargets.SPEAKER
+                )
+        );
+
+        /* Shuttle Turret */
+        driverXbox.leftTrigger().whileTrue(
+                new TurretCommand(
+                        swerve,
+                        () -> -driverXbox.getLeftY(), // Ordinate Translation
+                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox.b(), // Robot-centric trigger
+                        TurretTargets.SHUTTLE
                 )
         );
 
@@ -453,10 +478,11 @@ public class RobotContainer {
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
         SmartDashboard.putString("vector to speaker", swerve.getVectorToSpeakerTarget().toString());
-        SmartDashboard.putNumber("dist", swerve.getVectorToSpeakerTarget().getNorm());
+        SmartDashboard.putNumber("est. dist to speaker", swerve.getVectorToSpeakerTarget().getNorm());
         SmartDashboard.putNumber("angle to speaker", swerve.getAngleToSpeakerTarget());
         SmartDashboard.putNumber("turret error", swerve.getTurretError());
         SmartDashboard.putBoolean("Turret near target", swerve.turretNearTarget());
+        SmartDashboard.putBoolean("heading configured", swerve.isHeadingConfigured()); // TODO: ADD TO COMP DASHBOARD
         SmartDashboard.putData("Swerve Command", swerve);
 
         // intake-carriage debug
@@ -477,16 +503,14 @@ public class RobotContainer {
         SmartDashboard.putData("Elevator Cmd", elevator);
 
         // limelight debug
-        SmartDashboard.putNumber("Limelight Yaw", Limelight.getTagYaw());
-        SmartDashboard.putNumber("Limelight Pitch", Limelight.getTagPitch());
-        SmartDashboard.putNumber("Limelight Roll", Limelight.getTagRoll());
-        SmartDashboard.putNumber("Limelight X", Limelight.getTagRX());
-        SmartDashboard.putNumber("Limelight Y", Limelight.getTagRY());
-        SmartDashboard.putNumber("Limelight Z", Limelight.getTagRZ());
-        SmartDashboard.putNumber("Limelight dist", Math.hypot(Limelight.getTagRZ(), Limelight.getTagRX()));
         SmartDashboard.putNumber("Num tags", Limelight.getNumTag());
         SmartDashboard.putNumber("Tag ID", LimelightHelpers.getFiducialID("limelight"));
-        SmartDashboard.putString("botpose_helpers_pose", LimelightHelpers.getBotPose2d_wpiBlue("limelight").getTranslation().toString());
+        SmartDashboard.putString("botPoseMegaTag1", LimelightHelpers.getBotPose2d_wpiBlue("limelight").getTranslation().toString());
+        SmartDashboard.putNumber("botRotationMegaTag1", LimelightHelpers.getBotPose2d_wpiBlue("limelight").getRotation().getDegrees());
+        SmartDashboard.putString("botPoseMegaTag2", Limelight.getBotPoseBlueMegaTag2("limelight").getTranslation().toString());
+        SmartDashboard.putNumber("botRotationMegaTag2", Limelight.getBotPoseBlueMegaTag2("limelight").getRotation().getDegrees());
+        SmartDashboard.putString("targetPoseRobotSpace", Limelight.getTargetPoseRobotSpace("limelight").getTranslation().toString());
+        SmartDashboard.putNumber("targetPoseRobotSpace dist", Limelight.getTargetPoseRobotSpace("limelight").getTranslation().getNorm());
 
         // shooter debug
         SmartDashboard.putBoolean("Shooter Min Error", shooter.nearTarget());

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
+import frc.robot.commands.TurretTargets;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
@@ -27,6 +28,7 @@ public class Swerve extends SubsystemBase {
     private final PIDController limelightRotController;
     public final Pigeon2 gyro;
     private double turretError;
+    private boolean headingConfigured;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
@@ -62,7 +64,7 @@ public class Swerve extends SubsystemBase {
         limelightRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
 
         AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
+                this::getFusedPoseEstimator, // Robot pose supplier
                 newPose -> {
                     this.setFusedPoseEstimator(newPose);
                     this.setOdometry(newPose);
@@ -105,6 +107,8 @@ public class Swerve extends SubsystemBase {
                 this // Reference to this subsystem to set requirements
         );
 
+        Limelight.configureRobotPose();
+
         fusedPoseEstimator = new SwerveDrivePoseEstimator(
                 Constants.Swerve.SWERVE_KINEMATICS,
                 getHeading(), getModulePositions(),
@@ -114,12 +118,13 @@ public class Swerve extends SubsystemBase {
         );
 
         turretError = 0.0;
+        headingConfigured = false;
     }
 
     @Override
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
-        updateFusedPose(LimelightHelpers.getBotPose2d_wpiBlue("limelight"));
+        updateFusedPose();
         turretError = getVectorToSpeakerTarget().getAngle().minus(getFusedPoseEstimator().getRotation()).getDegrees();
 
         for (SwerveModule mod : swerveMods) {
@@ -136,7 +141,7 @@ public class Swerve extends SubsystemBase {
                         translation.getX(),
                         translation.getY(),
                         rotation,
-                        Limelight.isRedAlliance() ? getHeading().rotateBy(Rotation2d.fromDegrees(180)) : getHeading()
+                        Limelight.isRedAlliance() ? getHeading() : getHeading().rotateBy(Rotation2d.fromDegrees(180))
                 ) : new ChassisSpeeds(
                         translation.getX(),
                         translation.getY(),
@@ -146,13 +151,13 @@ public class Swerve extends SubsystemBase {
         setModuleStates(swerveModuleStates, isOpenLoop);
     }
 
-    public void driveTurret(Translation2d translation, boolean fieldRelative) {
+    public void driveTurret(Translation2d translation, boolean fieldRelative, TurretTargets targetType) {
         // aligns with speaker April Tag
         drive(
                 translation,
                 limelightRotController.calculate(
                         getFusedPoseEstimator().getRotation().getDegrees(),
-                        getAngleToSpeakerTarget()
+                        TurretTargets.getAngleToTarget(targetType, this)
                 ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
                 fieldRelative,
                 true
@@ -186,17 +191,30 @@ public class Swerve extends SubsystemBase {
     }
 
     public Translation2d getVectorToSpeakerTarget() {
-        Translation2d fusedPose = getFusedPoseEstimator().getTranslation();
-        Translation2d speakerTagPose = Limelight.getSpeakerTagPose().getTranslation()
+        Translation2d fusedTranslation = getFusedPoseEstimator().getTranslation();
+        Translation2d speakerTagTranslation = Limelight.getSpeakerTagPose().getTranslation()
                 .plus(new Translation2d(
                         Limelight.isRedAlliance() ? Constants.Limelight.X_DEPTH_OFFSET : -Constants.Limelight.X_DEPTH_OFFSET,
                         Limelight.isRedAlliance() ? Constants.Limelight.Y_DEPTH_OFFSET : -Constants.Limelight.Y_DEPTH_OFFSET
                 ));
-        return fusedPose.minus(speakerTagPose).unaryMinus();
+        return fusedTranslation.minus(speakerTagTranslation).unaryMinus();
+    }
+
+    public Translation2d getVectorToShuttleTarget() {
+        Translation2d fusedTranslation = getFusedPoseEstimator().getTranslation();
+        Translation2d shuttleTranslation = new Translation2d(
+                Limelight.isRedAlliance() ? Constants.Shooter.SHUTTLE_X_RED : Constants.Shooter.SHUTTLE_X_BLUE,
+                Constants.Shooter.SHUTTLE_Y
+        );
+        return fusedTranslation.minus(shuttleTranslation).unaryMinus();
     }
 
     public double getAngleToSpeakerTarget() {
         return getVectorToSpeakerTarget().getAngle().getDegrees();
+    }
+
+    public double getAngleToShuttleTarget() {
+        return getVectorToShuttleTarget().getAngle().getDegrees();
     }
 
     public double getTurretError() {
@@ -205,6 +223,10 @@ public class Swerve extends SubsystemBase {
 
     public boolean turretNearTarget() {
         return Math.abs(turretError) < Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
+    }
+
+    public boolean isHeadingConfigured() {
+        return headingConfigured;
     }
 
     public void setOdometry(Pose2d pose) {
@@ -224,33 +246,47 @@ public class Swerve extends SubsystemBase {
         setFusedPoseEstimator(new Pose2d());
     }
 
-    public void updateFusedPose(Pose2d limelightPose){
+    public void updateFusedPose(){
         fusedPoseEstimator.update(getHeading(), getModulePositions());
+        Pose2d limelightPose;
+        double angVel = gyro.getRate();
 
-        if (Limelight.tagExists()) {
-            double poseDifference = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
-                    limelightPose.getTranslation()
-            );
-            double dist = fusedPoseEstimator.getEstimatedPosition().getTranslation().getDistance(
-                    Limelight.getNearestTagPose().getTranslation()
-            );
-            double xyStdDev;
-            double degStdDev = 360.0;
+        LimelightHelpers.setRobotOrientation(
+                "limelight",
+                fusedPoseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+                0,
+                0,
+                0,
+                0,
+                0
+        );
 
-            if (Limelight.getNumTag() >= 2) {
-                xyStdDev = 0.25 * dist + 1.25 * Math.max(0, dist - 1.5) * poseDifference;
-            } else if (dist < 4.0) {
-                xyStdDev = 0.5 * dist + 2.5 * Math.max(0, dist - 1) * poseDifference;
-            } else {
-                return;
+        if (!headingConfigured) {
+            limelightPose = LimelightHelpers.getBotPose2d_wpiBlue("limelight");
+            Pose2d limelightPoseDiff = Limelight.getBotPoseBlueMegaTag2("limelight");
+            if (Limelight.tagExists() && Limelight.getNearestTagDist() < 2.0) {
+                fusedPoseEstimator.addVisionMeasurement(
+                        limelightPose,
+                        Timer.getFPGATimestamp()
+                                - LimelightHelpers.getLatency_Pipeline("limelight") / 1000.0
+                                - LimelightHelpers.getLatency_Capture("limelight") / 1000.0,
+                        VecBuilder.fill(0.0001, 0.0001, Units.degreesToRadians(0.1))
+                );
+                if (limelightPose.minus(limelightPoseDiff).getTranslation().getNorm() < 0.02) {
+                    headingConfigured = true;
+                }
             }
+            return;
+        }
 
+        if (Limelight.tagExists() && Math.abs(angVel) < 720.0) {
+            limelightPose = Limelight.getBotPoseBlueMegaTag2("limelight");
             fusedPoseEstimator.addVisionMeasurement(
                     limelightPose,
                     Timer.getFPGATimestamp()
                             - LimelightHelpers.getLatency_Pipeline("limelight") / 1000.0
                             - LimelightHelpers.getLatency_Capture("limelight") / 1000.0,
-                    VecBuilder.fill(xyStdDev, xyStdDev, Units.degreesToRadians(degStdDev))
+                    VecBuilder.fill(0.6, 0.6, Units.degreesToRadians(360.0))
             );
         }
     }
