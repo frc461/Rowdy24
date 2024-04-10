@@ -210,7 +210,7 @@ public class RobotContainer {
                                 Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(
                                         swerve.getModuleStates()
                                 ).vyMetersPerSecond
-                        ) < 0.75
+                        ) < 1.0
                 ).andThen(new IntakeCarriageCommand(
                         intakeCarriage,
                         0.9,
