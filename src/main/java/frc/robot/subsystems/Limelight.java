@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
@@ -9,13 +11,27 @@ import frc.lib.util.TagLocation;
 import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
-    private static double[] tagPose = LimelightHelpers.getTargetPose_RobotSpace("limelight");
-    public static boolean overrideTargetNow = false; // only for auto
-
-    @Override
-    public void periodic() {
-        refreshValues();
+    public static double[] getBotPoseBlueTableMegaTag2(String limelightName) {
+        return LimelightHelpers.getLimelightNTDoubleArray(limelightName, "botpose_orb_wpiblue");
     }
+
+    public static Pose2d getBotPoseBlueMegaTag2(String limelightName) {
+        return LimelightHelpers.toPose2D(getBotPoseBlueTableMegaTag2(limelightName));
+    }
+
+    public static double[] getTargetPoseRobotSpaceTable(String limelightName) {
+        return LimelightHelpers.getLimelightNTDoubleArray(limelightName, "targetpose_robotspace");
+    }
+
+    public static Pose2d getTargetPoseRobotSpace(String limelightName) {
+        double[] inData = getTargetPoseRobotSpaceTable(limelightName);
+        
+        Translation2d tran2d = new Translation2d(inData[0], inData[2]);
+        Rotation2d r2d = new Rotation2d(Units.degreesToRadians(inData[5]));
+        return new Pose2d(tran2d, r2d);
+    }
+
+    public static boolean overrideTargetNow = false; // only for auto
 
     public static boolean tagExists() {
         return LimelightHelpers.getTV("limelight");
@@ -25,36 +41,8 @@ public class Limelight extends SubsystemBase {
         return (int) LimelightHelpers.extractBotPoseEntry(LimelightHelpers.getBotPose_wpiBlue("limelight"), 7);
     }
 
-    public static Pose2d getNearestTagPose() {
-        return TagLocation.getTagLocation(LimelightHelpers.getFiducialID("limelight"));
-    }
-
-    // X+ is to the right when looking at the tag
-    public static double getTagRX() {
-        return tagPose.length == 0 ? 0.0 : tagPose[0];
-    }
-
-    // Y+ is upwards
-    public static double getTagRY() {
-        return tagPose.length == 0 ? 0.0 : tagPose[1];
-    }
-
-    // Z+ is perpendicular to the plane of the limelight (Z+ is towards tag on data
-    // side, Z- is on other side of robot)
-    public static double getTagRZ() {
-        return tagPose.length == 0 ? 0.0 : tagPose[2];
-    }
-
-    public static double getTagPitch() {
-        return tagPose.length == 0 ? 0.0 : tagPose[3];
-    }
-
-    public static double getTagYaw() {
-        return tagPose.length == 0 ? 0.0 : tagPose[4];
-    }
-
-    public static double getTagRoll() {
-        return tagPose.length == 0 ? 0.0 : tagPose[5];
+    public static double getNearestTagDist() {
+        return getTargetPoseRobotSpace("limelight").getTranslation().getNorm();
     }
 
     public static boolean isRedAlliance() {
@@ -65,15 +53,6 @@ public class Limelight extends SubsystemBase {
         return TagLocation.getTagLocation(
                 isRedAlliance() ? TagLocation.ID_4 : TagLocation.ID_7
         );
-    }
-
-    // returns lateral angle of tag from center of limelight in degrees
-    public static double getTagLateralAngle() {
-        return (new Rotation2d(tagPose[2], tagPose[0]).getDegrees() + Constants.Limelight.YAW_OFFSET / tagPose[2]);
-    }
-
-    public static void refreshValues() {
-        tagPose = LimelightHelpers.getTargetPose_RobotSpace("limelight");
     }
 
     public static void configureRobotPose() {
