@@ -210,7 +210,7 @@ public class RobotContainer {
                                 Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(
                                         swerve.getModuleStates()
                                 ).vyMetersPerSecond
-                        ) < 0.5
+                        ) < 1.0
                 ).andThen(new IntakeCarriageCommand(
                         intakeCarriage,
                         0.9,
@@ -234,11 +234,12 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "turretRealign",
-                new LimelightTurretCommand(
+                new TurretCommand(
                         swerve,
                         () -> 0,
                         () -> 0,
-                        () -> false
+                        () -> false,
+                        TurretTargets.SPEAKER
                 ).until(swerve::turretNearTarget)
         );
 
@@ -274,13 +275,23 @@ public class RobotContainer {
 
         /* Limelight Turret */
         driverXbox.leftBumper().whileTrue(
-                new ParallelCommandGroup(
-                        new LimelightTurretCommand(
-                                swerve,
-                                () -> -driverXbox.getLeftY(), // Ordinate Translation
-                                () -> -driverXbox.getLeftX(), // Coordinate Translation
-                                driverXbox.b() // Robot-centric trigger
-                        )
+                new TurretCommand(
+                        swerve,
+                        () -> -driverXbox.getLeftY(), // Ordinate Translation
+                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox.b(), // Robot-centric trigger,
+                        TurretTargets.SPEAKER
+                )
+        );
+
+        /* Shuttle Turret */
+        driverXbox.leftTrigger().whileTrue(
+                new TurretCommand(
+                        swerve,
+                        () -> -driverXbox.getLeftY(), // Ordinate Translation
+                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox.b(), // Robot-centric trigger
+                        TurretTargets.SHUTTLE
                 )
         );
 
