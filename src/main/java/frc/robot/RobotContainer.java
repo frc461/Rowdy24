@@ -186,7 +186,8 @@ public class RobotContainer {
                 new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                         intakeCarriage,
                         0.9,
-                        1
+                        1,
+                        true
                 ).until(() -> !intakeCarriage.noteInShootingSystem()))
                         .andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
