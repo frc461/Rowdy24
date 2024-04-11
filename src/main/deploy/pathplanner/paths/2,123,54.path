@@ -147,7 +147,7 @@
       "rotateFast": true
     },
     {
-      "waypointRelativePos": 4.15,
+      "waypointRelativePos": 4.2,
       "rotationDegrees": -150.0,
       "rotateFast": true
     },
@@ -162,13 +162,13 @@
       "rotateFast": true
     },
     {
-      "waypointRelativePos": 7.4,
+      "waypointRelativePos": 7.2,
       "rotationDegrees": 155.0,
       "rotateFast": true
     },
     {
       "waypointRelativePos": 6.0,
-      "rotationDegrees": -170.0,
+      "rotationDegrees": -163.78,
       "rotateFast": true
     },
     {
@@ -178,7 +178,7 @@
     },
     {
       "waypointRelativePos": 6.15,
-      "rotationDegrees": -170.0,
+      "rotationDegrees": -163.78,
       "rotateFast": true
     },
     {
@@ -366,7 +366,7 @@
       }
     },
     {
-      "name": "intake5",
+      "name": "intake5,enableTurret",
       "waypointRelativePos": 6.6,
       "command": {
         "type": "sequential",
@@ -376,6 +376,12 @@
               "type": "named",
               "data": {
                 "name": "intakeNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "enableTurret"
               }
             }
           ]
@@ -391,7 +397,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -170.0,
+    "rotation": -163.78,
     "rotateFast": true
   },
   "reversed": false,
