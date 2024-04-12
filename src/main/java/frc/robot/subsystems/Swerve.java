@@ -152,7 +152,7 @@ public class Swerve extends SubsystemBase {
         // aligns with speaker April Tag
         drive(
                 translation,
-                limelightRotController.calculate(
+                TurretTargets.calculateAngularRate(
                         getFusedPoseEstimator().getRotation().getDegrees(),
                         TurretTargets.getAngleToTarget(targetType, this)
                 ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
