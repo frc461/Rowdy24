@@ -166,7 +166,7 @@ public final class Constants {
         // required accuracy to consider turret accurate to shoot a note
         public static final double TURRET_ACCURACY_REQUIREMENT = 2.5;
         // gyro config
-        public static final double GYRO_OFFSET = 0;
+        public static final double GYRO_OFFSET = 180;
         public static final int PIGEON_ID = 51;
         public static final boolean INVERT_GYRO = false; // Always ensure Gyro is CCW+ CW- (DO NOT USE, ENABLES ROBOT-CENTRIC)
         
