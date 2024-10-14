@@ -34,6 +34,10 @@ To update, follow above steps until Step 3, and then indicate the button 'Check 
 
 If you do use another code editor than VSCode, follow instructions by the WPILib extension on that code editor via Gradle.
 
+## Contributing (Version Control)
+
+On any issue/feature that doesn't have a branch yet, create an issue and create a respective branch to work on it. This will help keep the master branch and working tree clean and organized. If a branch already exists for an issue/feature, commit changes relevant to that issue/feature to that branch, and request write access if needed. After any issue/feature is solved/created, generate a pull request (PR) to the main branch.
+
 ## Event Best Practices
 
 #### In the pits:
