@@ -45,8 +45,9 @@ On any issue/feature that doesn't have a branch yet, create an issue and create 
 - Make as few changes as possible to the code. If a crucial change is needed, *tune/revise* existing code and avoid writing new code as possible, as malfunctions occur more in newly written software.
 - Confine to one laptop if possible. FRC events don't have Wi-Fi so Git is inaccessible.
 - Write a preflight checklist to *thoroughly evaluate* the robot with before each match. Test every subsystem thoroughly. catching a problem early often decides the result of a match.
-- You can help your alliance partners! Ask if any partners need code help before playoffs begins (this is especially true in week 1 events, where teams have had less time to write code)
+- Help alliance partners! Offer assistance before playoffs - this is especially important during earlier events, when software may be less stable.
 
-#### In a match:
-- MAKE SURE YOU SELECT AN AUTO.
-- Record auto in all matches. If you have to tweak something it's better to see what actually happened instead of relying on memory.
+#### Before/during a match:
+- MAKE SURE TO SELECT AN AUTO.
+- Check the driver station to ensure that everything including the robot, laptop, and controllers, is connected.
+- Record auto in all matches. It's better to base auto revisions/tweaks on a recording instead of recall.
