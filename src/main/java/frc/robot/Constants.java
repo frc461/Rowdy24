@@ -124,6 +124,15 @@ public final class Constants {
         public static final double YAW_OFFSET = 0;
         public static final double X_DEPTH_OFFSET = -0.23; // Half of the depth of the speaker into the field
         public static final double Y_DEPTH_OFFSET = Units.inchesToMeters(6.5 / 2);
+
+        // TODO: TEST 0.25 (1.0 / 4.0), then 0.5 (1.0 / 2.0), then 0.75 (1.0 / (4.0 / 3.0)), then 1.0
+        public static final Function<Double, Double> ANGLE_DIFFERENCE_TO_RATE = (angleDifference) -> {
+            double calculatedRate = Math.max(
+                    (angleDifference > 0 ? 1.0 / 4.0 : -1.0 / 4.0) / (1.0 + Math.exp(-Math.abs(angleDifference) + 4.0)),
+                    0.05 / 4.0
+            );
+            return calculatedRate == 0.05 / 4.0 ? 0 : calculatedRate;
+        };
     }
 
     public static final class Shooter {
@@ -147,7 +156,7 @@ public final class Constants {
         public static final double BASE_SHOOTER_SPEED = 6000;
 
         // boundary within which shooter will automatically rev up (if default command is enabled)
-        public static final double SHOOTER_TRIGGER_DISTANCE = 3.5;
+        public static final double SHOOTER_TRIGGER_DISTANCE = 5.75;
 
         // required accuracy to consider shooter up to speed
         public static final double SHOOTER_ACCURACY_REQUIREMENT = 0.8;
