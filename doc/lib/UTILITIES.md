@@ -5,6 +5,9 @@ This guide will include a rundown of the utility classes whose methods are imple
 2. Provide conversion factors and constants for compatability between two different brands of configurations.
 3. General utility methods that are used in localization, e.g. network table accessibility, specific game information and measurements (AprilTag locations).
 
+> [!NOTE]
+> These utility classes are technically part of the robot software, in contrast to the vendor dependencies that are installed as an add-on to the robot code through Gradle.
+
 ## [OptimizeModuleState.java](../../src/main/java/frc/lib/math/OptimizeModuleState.java)
 
 This utility class provides methods to improve efficiency in the robot's swerve module's rotation component, namely to place the rotation of each module within a 0-to-360-degree continuous scope. This allows for more accurate identification of the swerve module's actual rotational state based on a 360-degree scale.
