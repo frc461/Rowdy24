@@ -112,9 +112,9 @@ public class RobotContainer {
         swerve.setDefaultCommand(
                 new TeleopSwerveCommand(
                         swerve,
-                        () -> -driverXbox.getLeftY(), // Ordinate Translation
-                        () -> -driverXbox.getLeftX(), // Coordinate Translation
-                        () -> -driverXbox.getRightX(), // Rotation
+                        driverXbox::getLeftY, // Ordinate Translation
+                        driverXbox::getLeftX, // Coordinate Translation
+                        driverXbox::getRightX, // Rotation
                         driverXbox.b() // Robot-centric trigger
                 )
         );
