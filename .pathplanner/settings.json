@@ -8,12 +8,13 @@
     "x.0.0-..."
   ],
   "autoFolders": [
+    "1P",
     "2P",
     "3P",
     "4P",
     "5P",
     "6P",
-    "1P"
+    "7P"
   ],
   "defaultMaxVel": 4.671,
   "defaultMaxAccel": 6.25,
