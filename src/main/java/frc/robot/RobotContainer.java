@@ -278,8 +278,8 @@ public class RobotContainer {
         driverXbox.leftBumper().whileTrue(
                 new TurretCommand(
                         swerve,
-                        () -> -driverXbox.getLeftY(), // Ordinate Translation
-                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox::getLeftY, // Ordinate Translation
+                        driverXbox::getLeftX, // Coordinate Translation
                         driverXbox.b(), // Robot-centric trigger,
                         TurretTargets.SPEAKER
                 )
@@ -289,8 +289,8 @@ public class RobotContainer {
         driverXbox.leftTrigger().whileTrue(
                 new TurretCommand(
                         swerve,
-                        () -> -driverXbox.getLeftY(), // Ordinate Translation
-                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox::getLeftY, // Ordinate Translation
+                        driverXbox::getLeftX, // Coordinate Translation
                         driverXbox.b(), // Robot-centric trigger
                         TurretTargets.SHUTTLE
                 )
