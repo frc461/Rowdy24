@@ -112,9 +112,9 @@ public class RobotContainer {
         swerve.setDefaultCommand(
                 new TeleopSwerveCommand(
                         swerve,
-                        () -> -driverXbox.getLeftY(), // Ordinate Translation
-                        () -> -driverXbox.getLeftX(), // Coordinate Translation
-                        () -> -driverXbox.getRightX(), // Rotation
+                        driverXbox::getLeftY, // Ordinate Translation
+                        driverXbox::getLeftX, // Coordinate Translation
+                        driverXbox::getRightX, // Rotation
                         driverXbox.b() // Robot-centric trigger
                 )
         );
@@ -186,7 +186,8 @@ public class RobotContainer {
                 new WaitUntilCommand(readyToShoot).andThen(new IntakeCarriageCommand(
                         intakeCarriage,
                         0.9,
-                        1
+                        1,
+                        true
                 ).until(() -> !intakeCarriage.noteInShootingSystem()))
                         .andThen(new IntakeCarriageCommand(
                                 intakeCarriage,
@@ -277,8 +278,8 @@ public class RobotContainer {
         driverXbox.leftBumper().whileTrue(
                 new TurretCommand(
                         swerve,
-                        () -> -driverXbox.getLeftY(), // Ordinate Translation
-                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox::getLeftY, // Ordinate Translation
+                        driverXbox::getLeftX, // Coordinate Translation
                         driverXbox.b(), // Robot-centric trigger,
                         TurretTargets.SPEAKER
                 )
@@ -288,8 +289,8 @@ public class RobotContainer {
         driverXbox.leftTrigger().whileTrue(
                 new TurretCommand(
                         swerve,
-                        () -> -driverXbox.getLeftY(), // Ordinate Translation
-                        () -> -driverXbox.getLeftX(), // Coordinate Translation
+                        driverXbox::getLeftY, // Ordinate Translation
+                        driverXbox::getLeftX, // Coordinate Translation
                         driverXbox.b(), // Robot-centric trigger
                         TurretTargets.SHUTTLE
                 )
