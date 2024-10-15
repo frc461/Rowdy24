@@ -14,25 +14,8 @@ Now we are going to retrieve the code from this repository to deploy it.
 
 1. Open your terminal and enter the command: `git clone https://github.com/frc461/Rowdy24.git`
 2. Once it finishes cloning, open WPILib VSCode Client and open the cloned folder as a project.
-3. Check our [vendor dependencies](https://github.com/frc461/Rowdy24/edit/master/README.md#vendor-dependencies-install-before-deploying-our-code) to confirm that they are installed.
+3. Check our [vendor dependencies](lib/VENDOR%20LIBRARIES.md) to confirm that they are installed.
 4. Press `ctrl`+`shift`+`P` to open up a VSCode menu, then type in 'Deploy'. Press `enter`.
-
-## Vendor Dependencies (install before deployment)
-
-- Phoenix v6: https://pro.docs.ctr-electronics.com/en/stable/docs/installation/installation-frc.html
-- RevLib 2024: https://software-metadata.revrobotics.com/REVLib-2024.json
-- Pathplanner 2024: https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json
-- WPILib New Commands 1.0: Pre-installed with WPILib
-
-To install (or check installation):
-
-1. Open WPILib VSCode Client and open the cloned folder as a project.
-2. Press `ctrl`+`shift`+`P` to open up a VSCode menu, then type in 'Manage Vendor Libraries'. Press `enter`.
-3. Indicate the button 'Install new library (online)', and use each link to install/check installation.
-
-To update, follow above steps until Step 3, and then indicate the button 'Check for updates (online)'.
-
-If you do use another code editor than VSCode, follow instructions by the WPILib extension on that code editor via Gradle.
 
 ## Contributing (Version Control)
 
