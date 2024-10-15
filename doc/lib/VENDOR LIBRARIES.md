@@ -1,5 +1,13 @@
 # Vendor Dependencies (install before deployment)
 
+The following dependencies are imported into the project:
+- Phoenix v6 - CTRE Phoenix API for CAN Spark motor controllers
+- RevLib 2024 - REV Robotics API for brushless motor controllers
+- Pathplanner 2024 - Path generation for autonomous gamemode
+- Choreo - Efficient motion profiling tool for path generation
+- WPILib New Commands 1.0 - WPILib's command-based project structure
+
+## JSON Links
 - Phoenix v6: https://pro.docs.ctr-electronics.com/en/stable/docs/installation/installation-frc.html
 - RevLib 2024: https://software-metadata.revrobotics.com/REVLib-2024.json
 - Pathplanner 2024: https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json
