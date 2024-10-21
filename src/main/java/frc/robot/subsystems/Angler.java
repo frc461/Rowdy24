@@ -10,7 +10,6 @@ public class Angler extends SubsystemBase {
     private final CANSparkMax angler;
     private final RelativeEncoder encoder;
     private final SparkPIDController anglerPIDController;
-    private final SparkLimitSwitch lowerMagnetLimitSwitch, upperMagnetLimitSwitch;
     private final DigitalInput lowerLimitSwitch;
     private double target, error, accuracy;
 
