@@ -1,10 +1,17 @@
+Package frc.robot.subsystems
 # Class Angler
 
-Software implementation of the Angler subsystem on the Rowdy24 robot.
+java.lang.Object 
+<br> &nbsp;&nbsp;&nbsp;&nbsp;edu.wpi.first.wpilibj2.command.SubsystemBase
+<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;frc.robot.subsystems.Angler
 
-## Overview
+<b>All Implemented Interfaces:</b><br>`Sendable, Subsystem`<hr>
+```
+public class Angler
+extends SubsystemBase
+```
 
-The function of the angler subsystem is to raise or lower the angle of the shooter to aim for the speaker target and prepare to shoot a note. The motor controller is a Rev NEO 550.
+Software implementation of the Angler subsystem on the Rowdy24 robot. The function of the angler subsystem is to raise or lower the angle of the shooter to aim for the speaker target and prepare to shoot a note. The motor controller is a Rev NEO 550.
 
 ## Field Summary
 
@@ -21,3 +28,4 @@ The function of the angler subsystem is to raise or lower the angle of the shoot
 | double                |   | accuracy               |   | The percentage similarity between target state and current encoder position. |
 
 ## Constructor Summary
+
