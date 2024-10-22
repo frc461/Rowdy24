@@ -34,3 +34,7 @@ On any issue/feature that doesn't have a branch yet, create an issue and create 
 - MAKE SURE TO SELECT AN AUTO.
 - Check the driver station to ensure that everything including the robot, laptop, and controllers, is connected.
 - Record auto in all matches. It's better to base auto revisions/tweaks on a recording instead of recall.
+
+## Explore Documentation
+- [Libraries](lib/README.md)
+- [Subsystems](subsystems/README.md)
