@@ -4,4 +4,3 @@ Software implementation of the Angler subsystem on the Rowdy24 robot. The functi
 
 ## Implementation
 
-
