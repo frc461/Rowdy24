@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"frc.lib.math"},{"l":"frc.lib.util"},{"l":"frc.robot"},{"l":"frc.robot.commands"},{"l":"frc.robot.subsystems"}];updateSearchResults();
