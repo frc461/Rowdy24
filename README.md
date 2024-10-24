@@ -15,4 +15,4 @@
 
 ## DOCS
 
-  For a more in-depth look at our code including helpful tips regarding deployment, check out our [docs](doc/README.md).
+  For a more in-depth look at our code including helpful tips regarding deployment, check out our [docs](doc).
