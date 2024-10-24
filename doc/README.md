@@ -36,5 +36,5 @@ On any issue/feature that doesn't have a branch yet, create an issue and create 
 - Record auto in all matches. It's better to base auto revisions/tweaks on a recording instead of recall.
 
 ## Explore Documentation
-- [Libraries](lib/README.md)
-- [Subsystems](subsystems/README.md)
+- [Libraries](lib)
+- [Subsystems](subsystems)
