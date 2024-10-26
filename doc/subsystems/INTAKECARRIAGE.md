@@ -1,4 +1,4 @@
-# Elevator Documentation
+# Intake Carriage Documentation
 
 Software implementation of the Intake Carriage subsystem on the Rowdy24 robot. The function of the intake carriage subsystem is to move both the intake and carriage in order to pick up and store a note. The intake uses a REV VORTEX and the carriage uses a REV NEO. 
 
