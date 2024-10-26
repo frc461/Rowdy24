@@ -11,6 +11,8 @@ import frc.lib.util.TagLocation;
 import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
+    public static boolean overrideTargetNow = false; // only for auto
+
     public static double[] getBotPoseBlueTableMegaTag2(String limelightName) {
         return LimelightHelpers.getLimelightNTDoubleArray(limelightName, "botpose_orb_wpiblue");
     }
@@ -30,8 +32,6 @@ public class Limelight extends SubsystemBase {
         Rotation2d r2d = new Rotation2d(Units.degreesToRadians(inData[5]));
         return new Pose2d(tran2d, r2d);
     }
-
-    public static boolean overrideTargetNow = false; // only for auto
 
     public static boolean tagExists() {
         return LimelightHelpers.getTV("limelight");
