@@ -1,6 +1,6 @@
 # Elevator Documentation
 
-Software implementation of the Elevator subsystem on the Rowdy24 robot. The function of the elevator subsystem is to raise or lower the carriage to score in the amp or climb. The motor is two CTRE Falcon 500s.
+Software implementation of the Elevator subsystem on the Rowdy24 robot. The function of the elevator subsystem is to raise or lower the carriage to score in the amp or climb. The motors are two CTRE Falcon 500s.
 
 ## Implementation
 

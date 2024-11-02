@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.VoltageConfigs;
+import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -10,12 +14,37 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+/**
+ * Software implementation of the Elevator subsystem on the Rowdy24 robot. The function of the
+ * elevator subsystem is to raise or lower the carriage to score in the amp or climb.
+ * The motor controllers are two CTRE Falcon 500s.
+ */
 public class Elevator extends SubsystemBase {
+    /** Represents the motor controller of the elevator. */
     private final TalonFX elevator;
+
+    /** The motor's integrated PID controller. */
     private final PIDController elevatorPIDController;
+
+    /**
+     * Represents two external limit switches placed at the lower mechanical limit of the elevator
+     * and the unclamped position of the servo, respectively.
+     */
     private final DigitalInput elevatorSwitch, servoSwitch;
+
+    /** Represents the servo controller placed beside the bottom of the elevator. */
     private final Servo elevatorClamp;
-    private double target, accuracy;
+
+    /** The target position of the motor. */
+    private double target;
+
+    /**
+     * The accuracy of the elevator, which is the percentage similarity between
+     * motor position and current position.
+     */
+    private double accuracy;
+
+    /** Represents whether the elevator is clamped or is moving above the limit switch, respectively. */
     private boolean clamped, movingAboveLimitSwitch;
 
     public Elevator() {
