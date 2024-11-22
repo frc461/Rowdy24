@@ -46,10 +46,12 @@ public class IntakeCarriage extends SubsystemBase {
 
         intakeLights = new Relay(0);
         intakeLights.setDirection(Direction.kForward);
+
         led = new AddressableLED(2);
         buffer = new AddressableLEDBuffer(12);
         led.setLength(buffer.getLength());
         configureLights(false);
+
         lights = new Spark(Constants.IntakeCarriage.LIGHT_ID);
 
         intaking = false;
