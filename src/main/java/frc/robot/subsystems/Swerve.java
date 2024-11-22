@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.commands.TurretTargets;
 
 public class Swerve extends SubsystemBase {
@@ -98,7 +99,7 @@ public class Swerve extends SubsystemBase {
                                                           // furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
-                Limelight::isRedAlliance, // Boolean supplier that controls when the path will be mirrored for the red alliance
+                RobotContainer::isRedAlliance, // Boolean supplier that controls when the path will be mirrored for the red alliance
                                   // This will flip the path being followed to the red side of the field.
                                   // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
                 this // Reference to this subsystem to set requirements
@@ -138,7 +139,7 @@ public class Swerve extends SubsystemBase {
                         translation.getX(),
                         translation.getY(),
                         rotation,
-                        Limelight.isRedAlliance() ? getHeading() : getHeading().rotateBy(Rotation2d.fromDegrees(180))
+                        RobotContainer.isRedAlliance() ? getHeading() : getHeading().rotateBy(Rotation2d.fromDegrees(180))
                 ) : new ChassisSpeeds(
                         translation.getX(),
                         translation.getY(),
@@ -191,8 +192,8 @@ public class Swerve extends SubsystemBase {
         Translation2d fusedTranslation = getFusedPoseEstimator().getTranslation();
         Translation2d speakerTagTranslation = Limelight.getSpeakerTagPose().getTranslation()
                 .plus(new Translation2d(
-                        Limelight.isRedAlliance() ? Constants.Limelight.X_DEPTH_OFFSET : -Constants.Limelight.X_DEPTH_OFFSET,
-                        Limelight.isRedAlliance() ? Constants.Limelight.Y_DEPTH_OFFSET : -Constants.Limelight.Y_DEPTH_OFFSET
+                        RobotContainer.isRedAlliance() ? Constants.Limelight.X_DEPTH_OFFSET : -Constants.Limelight.X_DEPTH_OFFSET,
+                        RobotContainer.isRedAlliance() ? Constants.Limelight.Y_DEPTH_OFFSET : -Constants.Limelight.Y_DEPTH_OFFSET
                 ));
         return fusedTranslation.minus(speakerTagTranslation).unaryMinus();
     }
@@ -200,7 +201,7 @@ public class Swerve extends SubsystemBase {
     public Translation2d getVectorToShuttleTarget() {
         Translation2d fusedTranslation = getFusedPoseEstimator().getTranslation();
         Translation2d shuttleTranslation = new Translation2d(
-                Limelight.isRedAlliance() ? Constants.Shooter.SHUTTLE_X_RED : Constants.Shooter.SHUTTLE_X_BLUE,
+                RobotContainer.isRedAlliance() ? Constants.Shooter.SHUTTLE_X_RED : Constants.Shooter.SHUTTLE_X_BLUE,
                 Constants.Shooter.SHUTTLE_Y
         );
         return fusedTranslation.minus(shuttleTranslation).unaryMinus();

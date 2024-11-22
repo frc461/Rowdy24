@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -96,10 +97,14 @@ public class RobotContainer {
     private boolean constantShooter = true;
     private final SendableChooser<Command> chooser;
 
+    /* Static Robot Utilities */
+    public static boolean isRedAlliance() {
+        return DriverStation.getAlliance().filter(value -> value == DriverStation.Alliance.Red).isPresent();
+    }
+
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
      */
-
     public RobotContainer() {
         // Register autonomous commands
         registerAutoCommands();
@@ -266,7 +271,7 @@ public class RobotContainer {
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
         /* Sync pose at subwoofer center */
-        driverXbox.x().onTrue(new InstantCommand(() -> swerve.setFusedPoseEstimator(Limelight.isRedAlliance() ? new Pose2d(15.29, 5.55, new Rotation2d()) : new Pose2d(1.25, 5.55, new Rotation2d(180)))));
+        driverXbox.x().onTrue(new InstantCommand(() -> swerve.setFusedPoseEstimator(isRedAlliance() ? new Pose2d(15.29, 5.55, new Rotation2d()) : new Pose2d(1.25, 5.55, new Rotation2d(180)))));
 
         /* Increment Trim */
         driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));

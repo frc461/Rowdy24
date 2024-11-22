@@ -4,11 +4,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
 import frc.lib.util.TagLocation;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Limelight extends SubsystemBase {
     public static boolean overrideTargetNow = false; // only for auto
@@ -45,13 +45,9 @@ public class Limelight extends SubsystemBase {
         return getTargetPoseRobotSpace("limelight").getTranslation().getNorm();
     }
 
-    public static boolean isRedAlliance() {
-        return DriverStation.getAlliance().filter(value -> value == DriverStation.Alliance.Red).isPresent();
-    }
-
     public static Pose2d getSpeakerTagPose() {
         return TagLocation.getTagLocation(
-                isRedAlliance() ? TagLocation.ID_4 : TagLocation.ID_7
+                RobotContainer.isRedAlliance() ? TagLocation.ID_4 : TagLocation.ID_7
         );
     }
 
