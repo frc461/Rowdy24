@@ -26,7 +26,7 @@ public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveDrivePoseEstimator fusedPoseEstimator;
     private final SwerveModule[] swerveMods;
-    private final PIDController limelightRotController;
+    private final PIDController integratedRotController;
     public final Pigeon2 gyro;
     private double turretError;
     private boolean headingConfigured;
@@ -57,12 +57,12 @@ public class Swerve extends SubsystemBase {
                 getModulePositions()
         );
 
-        limelightRotController = new PIDController(
-                Constants.Limelight.LIMELIGHT_P,
-                Constants.Limelight.LIMELIGHT_I,
-                Constants.Limelight.LIMELIGHT_D
+        integratedRotController = new PIDController(
+                Constants.Swerve.ANGULAR_POSITION_P,
+                Constants.Swerve.ANGULAR_POSITION_I,
+                Constants.Swerve.ANGULAR_POSITION_D
         );
-        limelightRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
+        integratedRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
 
         AutoBuilder.configureHolonomic(
                 this::getFusedPoseEstimator, // Robot pose supplier
@@ -72,7 +72,7 @@ public class Swerve extends SubsystemBase {
                 speeds -> {
                     // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                     if (speeds.omegaRadiansPerSecond != 0.0) {
-                        speeds.omegaRadiansPerSecond = Limelight.overrideTargetNow ? limelightRotController.calculate(
+                        speeds.omegaRadiansPerSecond = Limelight.overrideTargetNow ? integratedRotController.calculate(
                                 getFusedPoseEstimator().getRotation().getDegrees(),
                                 getAngleToSpeakerTarget()
                         ) * Constants.Swerve.MAX_ANGULAR_VELOCITY : speeds.omegaRadiansPerSecond;
@@ -153,7 +153,7 @@ public class Swerve extends SubsystemBase {
         // aligns with speaker April Tag
         drive(
                 translation,
-                limelightRotController.calculate(
+                integratedRotController.calculate(
                         getFusedPoseEstimator().getRotation().getDegrees(),
                         TurretTargets.getAngleToTarget(targetType, this)
                 ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
