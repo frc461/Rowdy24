@@ -24,5 +24,5 @@ Many getter functions are defined in the class for utility. Additionally, a [`pe
 
 The most useful methods are:
 - [`holdTarget()`](../../src/main/java/frc/robot/subsystems/Angler.java#L76) sets the PID reference to the target variable.
-- [`moveAngle(double AxisValue)`](../../src/main/java/frc/robot/subsystems/Angler.java#L81) gives the angler power based on the joystick value from the operator.
+- [`moveAngle(double axisValue)`](../../src/main/java/frc/robot/subsystems/Angler.java#L81) gives the angler power based on the joystick value from the operator.
 - [`setEncoderVal(double encoderVal)`](../../src/main/java/frc/robot/subsystems/Angler.java#L95) sets the encoder value to the specified `encoderVal` value and remains in that position.
