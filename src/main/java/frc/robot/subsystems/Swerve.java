@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.commands.TurretTargets;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
@@ -30,6 +29,11 @@ public class Swerve extends SubsystemBase {
     public final Pigeon2 gyro;
     private double turretToSpeakerError;
     private boolean headingConfigured;
+
+    public enum TurretTargets {
+        SPEAKER,
+        SHUTTLE
+    }
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
@@ -155,7 +159,7 @@ public class Swerve extends SubsystemBase {
                 translation,
                 integratedRotController.calculate(
                         getFusedPoseEstimator().getRotation().getDegrees(),
-                        TurretTargets.getAngleToTarget(targetType, this)
+                        getAngleToTarget(targetType)
                 ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
                 fieldRelative,
                 true
@@ -205,6 +209,13 @@ public class Swerve extends SubsystemBase {
                 Constants.Shooter.SHUTTLE_Y
         );
         return fusedTranslation.minus(shuttleTranslation).unaryMinus();
+    }
+
+    public double getAngleToTarget(TurretTargets targetType) {
+        return switch (targetType) {
+            case SPEAKER -> getAngleToSpeakerTarget();
+            case SHUTTLE -> getAngleToShuttleTarget();
+        };
     }
 
     public double getAngleToSpeakerTarget() {

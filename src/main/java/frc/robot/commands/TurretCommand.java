@@ -12,14 +12,14 @@ public class TurretCommand extends Command {
     private final DoubleSupplier translationSup;
     private final DoubleSupplier strafeSup;
     private final BooleanSupplier robotCentricSup;
-    private final TurretTargets targetType;
+    private final Swerve.TurretTargets targetType;
 
     public TurretCommand(
             Swerve swerve,
             DoubleSupplier translationSup,
             DoubleSupplier strafeSup,
             BooleanSupplier robotCentricSup,
-            TurretTargets targetType
+            Swerve.TurretTargets targetType
     ) {
         this.swerve = swerve;
         this.translationSup = translationSup;

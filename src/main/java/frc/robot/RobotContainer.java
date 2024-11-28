@@ -245,7 +245,7 @@ public class RobotContainer {
                         () -> 0,
                         () -> 0,
                         () -> false,
-                        TurretTargets.SPEAKER
+                        Swerve.TurretTargets.SPEAKER
                 ).until(swerve::turretNearSpeakerTarget)
         );
 
@@ -286,7 +286,7 @@ public class RobotContainer {
                         driverXbox::getLeftY, // Ordinate Translation
                         driverXbox::getLeftX, // Coordinate Translation
                         driverXbox.b(), // Robot-centric trigger,
-                        TurretTargets.SPEAKER
+                        Swerve.TurretTargets.SPEAKER
                 )
         );
 
@@ -297,7 +297,7 @@ public class RobotContainer {
                         driverXbox::getLeftY, // Ordinate Translation
                         driverXbox::getLeftX, // Coordinate Translation
                         driverXbox.b(), // Robot-centric trigger
-                        TurretTargets.SHUTTLE
+                        Swerve.TurretTargets.SHUTTLE
                 )
         );
 
