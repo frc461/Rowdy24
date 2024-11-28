@@ -44,7 +44,7 @@ public class RobotContainer {
      * Right:
      * 
      * Triggers:
-     * Left:
+     * Left: align shuttle to speaker
      * Right:
      * 
      * Joysticks:
@@ -54,13 +54,13 @@ public class RobotContainer {
      * Right Joystick Button: Angler trim up by 0.1 encoder counts
      *
      * Bumpers:
-     * Left: auto-align drivetrain to april tag
+     * Left: align drivetrain to speaker
      * Right: stow elevator
      * 
      * Buttons: 
      * A: 
      * B: 
-     * X: 
+     * X: sync pose AT SUBWOOFER CENTER
      * Y: rezero gyro
      */  
 
@@ -279,7 +279,7 @@ public class RobotContainer {
         /* Decrement Trim */
         driverXbox.leftStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
 
-        /* Limelight Turret */
+        /* Speaker Turret */
         driverXbox.leftBumper().whileTrue(
                 new TurretCommand(
                         swerve,
