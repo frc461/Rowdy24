@@ -2,6 +2,8 @@
 
 This guide will help you get started with an in-depth analysis of 461's Robot Software. Below will include helpful advice and best practices when contributing to and deploying our code.
 
+*NOTE: The software and imported libraries for this project are likely outdated. Using this project as a template for a modern project might not work.*
+
 ## Deployment
 
 Before anything, make sure:
