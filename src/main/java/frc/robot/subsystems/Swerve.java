@@ -28,7 +28,7 @@ public class Swerve extends SubsystemBase {
     private final SwerveModule[] swerveMods;
     private final PIDController integratedRotController;
     public final Pigeon2 gyro;
-    private double turretError;
+    private double turretToSpeakerError;
     private boolean headingConfigured;
 
     public Swerve() {
@@ -115,7 +115,7 @@ public class Swerve extends SubsystemBase {
                 VecBuilder.fill(0.6, 0.6, Units.degreesToRadians(360.0))
         );
 
-        turretError = 0.0;
+        turretToSpeakerError = 0.0;
         headingConfigured = false;
     }
 
@@ -123,7 +123,7 @@ public class Swerve extends SubsystemBase {
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
         updateFusedPose();
-        turretError = getVectorToSpeakerTarget().getAngle().minus(getFusedPoseEstimator().getRotation()).getDegrees();
+        turretToSpeakerError = getVectorToSpeakerTarget().getAngle().minus(getFusedPoseEstimator().getRotation()).getDegrees();
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -215,12 +215,12 @@ public class Swerve extends SubsystemBase {
         return getVectorToShuttleTarget().getAngle().getDegrees();
     }
 
-    public double getTurretError() {
-        return turretError;
+    public double getTurretToSpeakerError() {
+        return turretToSpeakerError;
     }
 
-    public boolean turretNearTarget() {
-        return Math.abs(turretError) < Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
+    public boolean turretNearSpeakerTarget() {
+        return Math.abs(turretToSpeakerError) < Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
     }
 
     public boolean isHeadingConfigured() {

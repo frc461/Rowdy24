@@ -246,7 +246,7 @@ public class RobotContainer {
                         () -> 0,
                         () -> false,
                         TurretTargets.SPEAKER
-                ).until(swerve::turretNearTarget)
+                ).until(swerve::turretNearSpeakerTarget)
         );
 
         NamedCommands.registerCommand(
@@ -486,8 +486,8 @@ public class RobotContainer {
         SmartDashboard.putString("vector to speaker", swerve.getVectorToSpeakerTarget().toString());
         SmartDashboard.putNumber("est. dist to speaker", swerve.getVectorToSpeakerTarget().getNorm());
         SmartDashboard.putNumber("angle to speaker", swerve.getAngleToSpeakerTarget());
-        SmartDashboard.putNumber("turret error", swerve.getTurretError());
-        SmartDashboard.putBoolean("Turret near target", swerve.turretNearTarget());
+        SmartDashboard.putNumber("turret error", swerve.getTurretToSpeakerError());
+        SmartDashboard.putBoolean("Turret near target", swerve.turretNearSpeakerTarget());
         SmartDashboard.putBoolean("heading configured", swerve.isHeadingConfigured()); // TODO: ADD TO COMP DASHBOARD
         SmartDashboard.putData("Swerve Command", swerve);
 
