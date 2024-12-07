@@ -7,6 +7,7 @@ This section of the documentation contains a more in-depth specification of the 
 - [Intake/Carriage](INTAKECARRIAGE.md) - integrated mechanical system in the robot to collect, store, or transfer a game piece 
 - [Limelight](LIMELIGHT.md) - camera system on the robot used for vision processing and localization
 - [Shooter](SHOOTER.md) - mechanical system attached to the angler to launch a game piece
-- Swerve & Modules - drivetrain system on the robot that allows for omnidirectional movement
+- [Swerve](SWERVE.md) - drivetrain system on the robot that allows for omnidirectional movement
+- [Swerve Module](SWERVE%20MODULE.md) - component of the swerve subsystem representing one wheel
 
 Each of these subsystem classes contain primary, lower-level functions that are used to implement commands.
