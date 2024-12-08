@@ -1,6 +1,6 @@
 # Swerve Documentation
 
-Software implementation of the swerve subsystem on the Rowdy24 robot. The function of the swerve subsystem is to move the robot. The subsystem entails four swerve modules.
+Software implementation of the swerve subsystem on the Rowdy24 robot. The function of the swerve subsystem is to move the robot by coordinating the swerve modules to move together. The subsystem entails four swerve modules.
 
 ## Implementation
 

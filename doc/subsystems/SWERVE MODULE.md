@@ -1,12 +1,12 @@
 # Swerve Documentation
 
-Software implementation of the swerve module component on the Rowdy24 robot. The function of this component is to move in coordination with other modules to move the robot. This component contains two Rev NEOs, one for drive and one for rotation.
+Software implementation of the swerve module on the Rowdy24 robot. This class represents one wheel, a component of the drivetrain, on the robot. The [Swerve](SWERVE.md) subsystem is able to coordinate multiple instances of this module class to move the robot through the module class's specifications and tools/methods. Each swerve module contains two Rev NEOs, one for drive and one for rotation.
 
 ## Implementation
 
 ### Class Information
 
-The [`SwerveModule`](../../src/main/java/frc/robot/subsystems/Swerve.java) class does not extend the [`SubsystemBase`](https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj2/command/SubsystemBase.html) class, as it is only defined as a component of the swerve subsystem and is not functional on the robot without being configured by the [`Swerve`](../../src/main/java/frc/robot/subsystems/Swerve.java) class.
+The [`SwerveModule`](../../src/main/java/frc/robot/subsystems/Swerve.java) class does not extend the [`SubsystemBase`](https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj2/command/SubsystemBase.html) class, as it is only defined as a component of the Swerve subsystem and is not functional without being configured by the [`Swerve`](../../src/main/java/frc/robot/subsystems/Swerve.java) class.
 
 ### Variables
 
