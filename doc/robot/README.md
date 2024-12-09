@@ -2,7 +2,7 @@
 
 ## Robot Class
 
-The `Robot` class also contains methods that are run periodically and upon initialization of the robot.
+The `Robot` class is the  contains methods that are run periodically and upon initialization of the robot.
 
 ## Rowdy24 Robot Implementation
 This section of the documentation contains a more in-depth specification of the robot's general software implementation. The directories & upper-level classes include:
