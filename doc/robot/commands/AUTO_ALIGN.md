@@ -1,4 +1,4 @@
-# Auto Align Documentation
+# Auto Align Command
 
 ## Overview
 

@@ -1,4 +1,4 @@
-# Rev Up Shooter Documentation
+# Rev Up Shooter Command
 
 ## Overview
 

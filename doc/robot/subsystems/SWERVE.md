@@ -8,6 +8,10 @@ Software implementation of the swerve subsystem on the Rowdy24 robot. The functi
 
 The [`Swerve`](../../../src/main/java/frc/robot/subsystems/Swerve.java) class extends the [`SubsystemBase`](https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj2/command/SubsystemBase.html) class, which helps to register commands involving the subsystem.
 
+### Enums
+
+The swerve subsystem contains the [`TurretTargets`](../../../src/main/java/frc/robot/subsystems/Swerve.java#L33) enum class that is used to provide options to align with either the speaker for shooting notes or the corner of the field closest to the amp for shuttling notes.
+
 ### Variables
 
 The swerve subsystem uses [odometry](../../../src/main/java/frc/robot/subsystems/Swerve.java#L26) to primitively track the robot's position and a [pose estimator](../../../src/main/java/frc/robot/subsystems/Swerve.java#L27) to precisely estimate the robot's position. The swerve subsystem is made up of four [swerve modules](../../../src/main/java/frc/robot/subsystems/Swerve.java#L28), each with its own motor controller and encoder. An [integrated angle PID controller](../../../src/main/java/frc/robot/subsystems/Swerve.java#L29) is also used for control in reference to a desired gyro angle of the drivetrain. The swerve subsystem also has a [gyro](../../../src/main/java/frc/robot/subsystems/Swerve.java#L30) to primitively track the robot's heading.

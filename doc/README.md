@@ -45,3 +45,6 @@ The following links are to specialized documentation extensively explaining the 
 - [Robot](robot)
    - [Commands](robot/commands)
    - [Subsystems](robot/subsystems)
+
+As a to-do list to help beginner programmers, the following pages are recommended to read in order:
+- [ ] 

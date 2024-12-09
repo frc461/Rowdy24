@@ -22,5 +22,4 @@ This section of the documentation will focus on the commands that were created f
 - [IntakeCarriage](INTAKE_CARRIAGE) - command to run the intake and the carriage.
 - [RevUpShooter](REV_UP_SHOOTER) - command to speed up the shooter.
 - [Teleop Commands](TELEOP_COMMANDS) - commands to manually control the robot, triggered by joysticks and axes on a controller.
-- [Turret](TURRET.md) - command to align the robot rotationally 
-- [TurretTargets](TURRETTARGETS.md) - allows the robot to align to different places on the field. 
+- [Turret](TURRET.md) - command to align the robot rotationally with either the speaker to shoot notes or the near alliance wall to shuttle notes.
