@@ -38,5 +38,10 @@ On any issue/feature that doesn't have a branch yet, create an issue and create 
 - Record auto in all matches. It's better to base auto revisions/tweaks on a recording instead of recall.
 
 ## Explore Documentation
+
+The following links are to specialized documentation extensively explaining the software implementation of Rowdy24. The documentation directory structure is similar to that of the actual software implementation. Hence, the following items:
+
 - [Libraries](lib)
-- [Subsystems](subsystems)
+- [Robot](robot)
+   - [Commands](robot/commands)
+   - [Subsystems](robot/subsystems)
