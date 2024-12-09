@@ -65,14 +65,33 @@ public class SwerveModule {
         currentReferenceAngle = Rotation2d.fromDegrees(getAbsoluteAngle().getDegrees() - angleOffset.getDegrees());
     }
 
-    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-        /*
-         * This is a custom optimize function, since default WPILib optimize assumes
-         * continuous controller which CTRE and Rev onboard is not
-         */
-        desiredState = OptimizeModuleState.optimize(desiredState, getAngle());
-        setSpeed(desiredState, isOpenLoop);
-        setAngle(desiredState);
+    // everything below here is fine.
+
+    public Rotation2d getAngle() {
+        return Rotation2d.fromDegrees(relativeAngleEncoder.getPosition());
+    }
+
+    public Rotation2d getAbsoluteAngle() {
+        return Rotation2d.fromRotations(absoluteAngleEncoder.getAbsolutePosition().getValueAsDouble());
+    }
+
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(
+                driveEncoder.getPosition(),
+                getAngle()
+        );
+    }
+
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(
+                driveEncoder.getVelocity(),
+                getAngle()
+        );
+    }
+
+    public void resetToAbsolute() {
+        double absolutePosition = getAbsoluteAngle().getDegrees() - angleOffset.getDegrees();
+        relativeAngleEncoder.setPosition(absolutePosition);
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
@@ -89,7 +108,7 @@ public class SwerveModule {
         }
     }
 
-    public void setAngle(SwerveModuleState desiredState){
+    public void setAngle(SwerveModuleState desiredState) {
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.MAX_SPEED * 0.01)) ?
                 currentReferenceAngle :
                 desiredState.angle; //Prevent rotating module if speed is less than 1%. Prevents Jittering.
@@ -97,12 +116,17 @@ public class SwerveModule {
         currentReferenceAngle = angle;
     }
 
-    public void resetToAbsolute(){
-        double absolutePosition = getAbsoluteAngle().getDegrees() - angleOffset.getDegrees();
-        relativeAngleEncoder.setPosition(absolutePosition);
+    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
+        /*
+         * This is a custom optimize function, since default WPILib optimize assumes
+         * continuous controller which CTRE and Rev onboard is not
+         */
+        desiredState = OptimizeModuleState.optimize(desiredState, getAngle());
+        setSpeed(desiredState, isOpenLoop);
+        setAngle(desiredState);
     }
 
-    private void configAngleMotor(){
+    private void configAngleMotor() {
         angleMotor.restoreFactoryDefaults();
         CANSparkUtil.setCANSparkMaxBusUsage(angleMotor, Usage.kPositionOnly);
         angleMotor.setSmartCurrentLimit(Constants.Swerve.ANGLE_CONTINUOUS_SUPPLY_CURRENT_LIMIT);
@@ -133,29 +157,5 @@ public class SwerveModule {
         driveMotor.enableVoltageCompensation(Constants.Swerve.VOLTAGE_COMP);
         driveMotor.burnFlash();
         driveEncoder.setPosition(0.0);
-    }
-
-    // everything below here is fine.
-
-    public Rotation2d getAngle(){
-        return Rotation2d.fromDegrees(relativeAngleEncoder.getPosition());
-    }
-
-    public Rotation2d getAbsoluteAngle(){
-        return Rotation2d.fromRotations(absoluteAngleEncoder.getAbsolutePosition().getValueAsDouble());
-    }
-
-    public SwerveModuleState getState(){
-        return new SwerveModuleState(
-                driveEncoder.getVelocity(),
-                getAngle()
-        );
-    }
-
-    public SwerveModulePosition getPosition(){
-        return new SwerveModulePosition(
-                driveEncoder.getPosition(),
-                getAngle()
-        );
     }
 }
