@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide will help you get started with an in-depth analysis of 461's Robot Software. Below will include helpful advice and best practices when contributing to and deploying our code.
+This guide will help you get started with an in-depth analysis of 461's Robot Software. The goal of this documentation is help build understanding into what robot software development actually entails and how to develop robot software. Below will include helpful advice and best practices when contributing to and deploying our code.
 
 *NOTE: The software and imported libraries for this project are likely outdated. Using this project as a template for a modern project might not work.*
 
@@ -39,7 +39,7 @@ On any issue/feature that doesn't have a branch yet, create an issue and create 
 
 ## Explore Documentation
 
-The following links are to specialized documentation extensively explaining the software implementation of Rowdy24. The documentation directory structure is similar to that of the actual software implementation. Hence, the following items:
+The following links are to documentation extensively explaining the software implementation of Rowdy24. The documentation directory structure is similar to that of the actual software implementation. Hence, the following items:
 
 - [Libraries](lib)
 - [Robot](robot)
@@ -47,4 +47,4 @@ The following links are to specialized documentation extensively explaining the 
    - [Subsystems](robot/subsystems)
 
 As a to-do list to help beginner programmers, the following pages are recommended to read in order:
-- [ ] 
+- [ ] Follow the [Getting Started](README.md) guide to deploy the code.
