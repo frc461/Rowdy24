@@ -1,6 +1,6 @@
 # Subsystems Documentation
 
-This section of the documentation contains a more in-depth specification of the software implementation of each subsystem. Each subsystem has its own page that will go into detail about its functions (methods), objectives, and control. The subsystem classes include:
+This section of the documentation contains a more in-depth specification of each subsystem's software implementation. Each subsystem has its own page that will go into detail about its functions (methods), objectives, and control. The subsystem classes include:
 
 - [Angler](ANGLER.md) - mechanical system in the robot used to adjust the angle of the shooter
 - [Elevator](ELEVATOR.md) - mechanical system in the robot with the ability to extend upward to increase its height and reach
@@ -10,4 +10,4 @@ This section of the documentation contains a more in-depth specification of the 
 - [Swerve](SWERVE.md) - drivetrain system on the robot that allows for omnidirectional movement
 - [Swerve Module](SWERVE%20MODULE.md) - component of the swerve subsystem representing one wheel
 
-Each of these subsystem classes contain primary, lower-level functions that are used to implement commands.
+Each of these subsystem classes contains primary, lower-level functions that are used to implement more higher-level commands.
