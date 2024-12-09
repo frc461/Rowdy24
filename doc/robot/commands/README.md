@@ -28,7 +28,7 @@ The [`isFinished()`](https://github.wpilib.org/allwpilib/docs/release/java/edu/w
 
 ## Rowdy24 Command Implementation
 
-This section of the documentation will focus on the commands that were created for the robot to do specific actions. They include the following categories:
+This section of the documentation will focus on the commands created for the robot to perform specific actions. Each page will include an overview and events of their respective command(s):
 - [AutoAlign](AUTO_ALIGN) - command to align the angler with the speaker
 - [IntakeCarriage](INTAKE_CARRIAGE) - command to run the intake and the carriage
 - [RevUpShooter](REV_UP_SHOOTER) - command to speed up the shooter

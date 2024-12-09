@@ -1,6 +1,9 @@
 # Subsystems Documentation
 
-This section of the documentation contains a more in-depth specification of each subsystem's software implementation. Each subsystem has its own page that will go into detail about its functions (methods), objectives, and control. The subsystem classes include:
+Each of these subsystem classes contains primary, lower-level functions that are used to implement more higher-level commands.
+
+## Rowdy24 Subsystem Implementation
+This section of the documentation contains a more in-depth specification of each subsystem's software implementation. Each page will specify the functions (methods), objectives, and control of their respective subsystem:
 
 - [Angler](ANGLER.md) - mechanical system in the robot used to adjust the angle of the shooter
 - [Elevator](ELEVATOR.md) - mechanical system in the robot with the ability to extend upward to increase its height and reach
@@ -9,5 +12,3 @@ This section of the documentation contains a more in-depth specification of each
 - [Shooter](SHOOTER.md) - mechanical system attached to the angler to launch a game piece
 - [Swerve](SWERVE.md) - drivetrain system on the robot that allows for omnidirectional movement
 - [Swerve Module](SWERVE%20MODULE.md) - component of the swerve subsystem representing one wheel
-
-Each of these subsystem classes contains primary, lower-level functions that are used to implement more higher-level commands.
