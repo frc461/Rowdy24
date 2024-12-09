@@ -16,7 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.util.SwerveModuleConstants;
 import frc.lib.util.CANSparkUtil.Usage;
 import frc.lib.util.CANSparkUtil;
-import frc.lib.math.OptimizeModuleState;
+import frc.lib.util.OptimizeModuleState;
 import frc.robot.Constants;
 
 public class SwerveModule {
