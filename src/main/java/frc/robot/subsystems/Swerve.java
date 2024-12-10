@@ -19,16 +19,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
-import frc.robot.commands.TurretTargets;
+import frc.robot.RobotContainer;
 
 public class Swerve extends SubsystemBase {
     private final SwerveDriveOdometry swerveOdometry;
     private final SwerveDrivePoseEstimator fusedPoseEstimator;
     private final SwerveModule[] swerveMods;
-    private final PIDController limelightRotController;
+    private final PIDController integratedRotController;
     public final Pigeon2 gyro;
-    private double turretError;
+    private double turretToSpeakerError;
     private boolean headingConfigured;
+
+    public enum TurretTargets {
+        SPEAKER,
+        SHUTTLE
+    }
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.PIGEON_ID);
@@ -56,23 +61,23 @@ public class Swerve extends SubsystemBase {
                 getModulePositions()
         );
 
-        limelightRotController = new PIDController(
-                Constants.Limelight.LIMELIGHT_P,
-                Constants.Limelight.LIMELIGHT_I,
-                Constants.Limelight.LIMELIGHT_D
+        integratedRotController = new PIDController(
+                Constants.Swerve.ANGULAR_POSITION_P,
+                Constants.Swerve.ANGULAR_POSITION_I,
+                Constants.Swerve.ANGULAR_POSITION_D
         );
-        limelightRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
+        integratedRotController.enableContinuousInput(Constants.Swerve.MINIMUM_ANGLE, Constants.Swerve.MAXIMUM_ANGLE);
 
         AutoBuilder.configureHolonomic(
-                this::getFusedPoseEstimator, // Robot pose supplier
+                this::getFusedPoseEstimate, // Robot pose supplier
                 this::setFusedPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
                 () -> Constants.Swerve.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates()), // ChassisSpeeds supplier.
                                                                                              // MUST BE ROBOT RELATIVE
                 speeds -> {
                     // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                     if (speeds.omegaRadiansPerSecond != 0.0) {
-                        speeds.omegaRadiansPerSecond = Limelight.overrideTargetNow ? limelightRotController.calculate(
-                                getFusedPoseEstimator().getRotation().getDegrees(),
+                        speeds.omegaRadiansPerSecond = Limelight.overrideTargetNow ? integratedRotController.calculate(
+                                getFusedPoseEstimate().getRotation().getDegrees(),
                                 getAngleToSpeakerTarget()
                         ) * Constants.Swerve.MAX_ANGULAR_VELOCITY : speeds.omegaRadiansPerSecond;
                     }
@@ -98,7 +103,7 @@ public class Swerve extends SubsystemBase {
                                                           // furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
-                Limelight::isRedAlliance, // Boolean supplier that controls when the path will be mirrored for the red alliance
+                RobotContainer::isRedAlliance, // Boolean supplier that controls when the path will be mirrored for the red alliance
                                   // This will flip the path being followed to the red side of the field.
                                   // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
                 this // Reference to this subsystem to set requirements
@@ -114,7 +119,7 @@ public class Swerve extends SubsystemBase {
                 VecBuilder.fill(0.6, 0.6, Units.degreesToRadians(360.0))
         );
 
-        turretError = 0.0;
+        turretToSpeakerError = 0.0;
         headingConfigured = false;
     }
 
@@ -122,7 +127,7 @@ public class Swerve extends SubsystemBase {
     public void periodic() {
         swerveOdometry.update(getHeading(), getModulePositions());
         updateFusedPose();
-        turretError = getVectorToSpeakerTarget().getAngle().minus(getFusedPoseEstimator().getRotation()).getDegrees();
+        turretToSpeakerError = getVectorToSpeakerTarget().getAngle().minus(getFusedPoseEstimate().getRotation()).getDegrees();
 
         for (SwerveModule mod : swerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
@@ -138,7 +143,7 @@ public class Swerve extends SubsystemBase {
                         translation.getX(),
                         translation.getY(),
                         rotation,
-                        Limelight.isRedAlliance() ? getHeading() : getHeading().rotateBy(Rotation2d.fromDegrees(180))
+                        RobotContainer.isRedAlliance() ? getHeading() : getHeading().rotateBy(Rotation2d.fromDegrees(180))
                 ) : new ChassisSpeeds(
                         translation.getX(),
                         translation.getY(),
@@ -152,13 +157,31 @@ public class Swerve extends SubsystemBase {
         // aligns with speaker April Tag
         drive(
                 translation,
-                limelightRotController.calculate(
-                        getFusedPoseEstimator().getRotation().getDegrees(),
-                        TurretTargets.getAngleToTarget(targetType, this)
+                integratedRotController.calculate(
+                        getFusedPoseEstimate().getRotation().getDegrees(),
+                        getAngleToTarget(targetType)
                 ) * Constants.Swerve.MAX_ANGULAR_VELOCITY,
                 fieldRelative,
                 true
         );
+    }
+
+    // non-void module, gyro, pose, and fused pose methods
+
+    public SwerveModuleState[] getModuleStates() {
+        SwerveModuleState[] states = new SwerveModuleState[4];
+        for (SwerveModule mod : swerveMods) {
+            states[mod.moduleNumber] = mod.getState();
+        }
+        return states;
+    }
+
+    public SwerveModulePosition[] getModulePositions() {
+        SwerveModulePosition[] positions = new SwerveModulePosition[4];
+        for (SwerveModule mod : swerveMods) {
+            positions[mod.moduleNumber] = mod.getPosition();
+        }
+        return positions;
     }
 
     public double getYaw() {
@@ -183,24 +206,24 @@ public class Swerve extends SubsystemBase {
         return swerveOdometry.getPoseMeters();
     }
 
-    public Pose2d getFusedPoseEstimator(){
+    public Pose2d getFusedPoseEstimate(){
         return fusedPoseEstimator.getEstimatedPosition();
     }
 
     public Translation2d getVectorToSpeakerTarget() {
-        Translation2d fusedTranslation = getFusedPoseEstimator().getTranslation();
+        Translation2d fusedTranslation = getFusedPoseEstimate().getTranslation();
         Translation2d speakerTagTranslation = Limelight.getSpeakerTagPose().getTranslation()
                 .plus(new Translation2d(
-                        Limelight.isRedAlliance() ? Constants.Limelight.X_DEPTH_OFFSET : -Constants.Limelight.X_DEPTH_OFFSET,
-                        Limelight.isRedAlliance() ? Constants.Limelight.Y_DEPTH_OFFSET : -Constants.Limelight.Y_DEPTH_OFFSET
+                        RobotContainer.isRedAlliance() ? Constants.Limelight.X_DEPTH_OFFSET : -Constants.Limelight.X_DEPTH_OFFSET,
+                        RobotContainer.isRedAlliance() ? Constants.Limelight.Y_DEPTH_OFFSET : -Constants.Limelight.Y_DEPTH_OFFSET
                 ));
         return fusedTranslation.minus(speakerTagTranslation).unaryMinus();
     }
 
     public Translation2d getVectorToShuttleTarget() {
-        Translation2d fusedTranslation = getFusedPoseEstimator().getTranslation();
+        Translation2d fusedTranslation = getFusedPoseEstimate().getTranslation();
         Translation2d shuttleTranslation = new Translation2d(
-                Limelight.isRedAlliance() ? Constants.Shooter.SHUTTLE_X_RED : Constants.Shooter.SHUTTLE_X_BLUE,
+                RobotContainer.isRedAlliance() ? Constants.Shooter.SHUTTLE_X_RED : Constants.Shooter.SHUTTLE_X_BLUE,
                 Constants.Shooter.SHUTTLE_Y
         );
         return fusedTranslation.minus(shuttleTranslation).unaryMinus();
@@ -214,16 +237,51 @@ public class Swerve extends SubsystemBase {
         return getVectorToShuttleTarget().getAngle().getDegrees();
     }
 
-    public double getTurretError() {
-        return turretError;
+    public double getAngleToTarget(TurretTargets targetType) {
+        return switch (targetType) {
+            case SPEAKER -> getAngleToSpeakerTarget();
+            case SHUTTLE -> getAngleToShuttleTarget();
+        };
     }
 
-    public boolean turretNearTarget() {
-        return Math.abs(turretError) < Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
+    public double getTurretToSpeakerError() {
+        return turretToSpeakerError;
+    }
+
+    public boolean turretNearSpeakerTarget() {
+        return Math.abs(turretToSpeakerError) < Constants.Swerve.TURRET_ACCURACY_REQUIREMENT;
     }
 
     public boolean isHeadingConfigured() {
         return headingConfigured;
+    }
+
+    // void module, gyro, pose, and fused pose methods
+
+    public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.MAX_SPEED);
+
+        for (SwerveModule mod : swerveMods) {
+            mod.setDesiredState(desiredStates[mod.moduleNumber], isOpenLoop);
+        }
+    }
+
+    public void setModuleStates(SwerveModuleState[] desiredStates) {
+        setModuleStates(desiredStates, true);
+    }
+
+    public void resetModulesToAbsolute() {
+        for (SwerveModule mod : swerveMods) {
+            mod.resetToAbsolute();
+        }
+    }
+
+    public void zeroGyro() {
+        zeroGyro(Constants.Swerve.GYRO_OFFSET);
+    }
+
+    public void zeroGyro(double rotation) {
+        gyro.setYaw(rotation);
     }
 
     public void setOdometry(Pose2d pose) {
@@ -285,48 +343,6 @@ public class Swerve extends SubsystemBase {
                             - LimelightHelpers.getLatency_Capture("limelight") / 1000.0,
                     VecBuilder.fill(0.6, 0.6, Units.degreesToRadians(360.0))
             );
-        }
-    }
-
-    public SwerveModuleState[] getModuleStates() {
-        SwerveModuleState[] states = new SwerveModuleState[4];
-        for (SwerveModule mod : swerveMods) {
-            states[mod.moduleNumber] = mod.getState();
-        }
-        return states;
-    }
-
-    public SwerveModulePosition[] getModulePositions() {
-        SwerveModulePosition[] positions = new SwerveModulePosition[4];
-        for (SwerveModule mod : swerveMods) {
-            positions[mod.moduleNumber] = mod.getPosition();
-        }
-        return positions;
-    }
-
-    public void zeroGyro() {
-        zeroGyro(Constants.Swerve.GYRO_OFFSET);
-    }
-
-    public void zeroGyro(double rotation) {
-        gyro.setYaw(rotation);
-    }
-
-    public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.MAX_SPEED);
-
-        for (SwerveModule mod : swerveMods) {
-            mod.setDesiredState(desiredStates[mod.moduleNumber], isOpenLoop);
-        }
-    }
-
-    public void setModuleStates(SwerveModuleState[] desiredStates) {
-        setModuleStates(desiredStates, true);
-    }
-
-    public void resetModulesToAbsolute() {
-        for (SwerveModule mod : swerveMods) {
-            mod.resetToAbsolute();
         }
     }
 }

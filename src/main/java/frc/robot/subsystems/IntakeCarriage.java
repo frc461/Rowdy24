@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.util.Color;
 
 import com.revrobotics.CANSparkFlex;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.util.LimelightHelpers;
 import frc.robot.Constants;
 
 public class IntakeCarriage extends SubsystemBase {
@@ -47,10 +46,12 @@ public class IntakeCarriage extends SubsystemBase {
 
         intakeLights = new Relay(0);
         intakeLights.setDirection(Direction.kForward);
+
         led = new AddressableLED(2);
         buffer = new AddressableLEDBuffer(12);
         led.setLength(buffer.getLength());
         configureLights(false);
+
         lights = new Spark(Constants.IntakeCarriage.LIGHT_ID);
 
         intaking = false;

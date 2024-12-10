@@ -111,11 +111,6 @@ public final class Constants {
     }
 
     public static final class Limelight {
-        // pid for limelight alignment
-        public static final double LIMELIGHT_P = 0.02;
-        public static final double LIMELIGHT_I = 0;
-        public static final double LIMELIGHT_D = 0.0006;
-
         public static final double CAMERA_FORWARD = 0.0223774;
         public static final double CAMERA_UP = 0.5916676;
         public static final double CAMERA_PITCH = 23.6838871;
@@ -228,11 +223,16 @@ public final class Constants {
         public static final double OPEN_LOOP_RAMP = 0.25;
         public static final double CLOSED_LOOP_RAMP = 0.0;
 
-        /* Angle Motor PID Values */
+        /* Angle Motor (Velocity) PID Values */
         public static final double ANGLE_P = CHOSEN_MODULE.angleKP;
         public static final double ANGLE_I = CHOSEN_MODULE.angleKI;
         public static final double ANGLE_D = CHOSEN_MODULE.angleKD;
         public static final double ANGLE_F = CHOSEN_MODULE.angleKF;
+
+        /* Integrated Angular Position PID Values */
+        public static final double ANGULAR_POSITION_P = 0.02;
+        public static final double ANGULAR_POSITION_I = 0;
+        public static final double ANGULAR_POSITION_D = 0.0006;
 
         /* Drive Motor PID Values */
         public static final double DRIVE_P = 0.05;

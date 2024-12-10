@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -43,7 +44,7 @@ public class RobotContainer {
      * Right:
      * 
      * Triggers:
-     * Left:
+     * Left: align shuttle to speaker
      * Right:
      * 
      * Joysticks:
@@ -53,13 +54,13 @@ public class RobotContainer {
      * Right Joystick Button: Angler trim up by 0.1 encoder counts
      *
      * Bumpers:
-     * Left: auto-align drivetrain to april tag
+     * Left: align drivetrain to speaker
      * Right: stow elevator
      * 
      * Buttons: 
      * A: 
      * B: 
-     * X: 
+     * X: sync pose AT SUBWOOFER CENTER
      * Y: rezero gyro
      */  
 
@@ -91,15 +92,19 @@ public class RobotContainer {
      */
 
 
-    /* Variables */
+    /* Misc Variables */
     private final BooleanSupplier readyToShoot = () -> shooter.nearTarget() && angler.anglerNearTarget();
     private boolean constantShooter = true;
     private final SendableChooser<Command> chooser;
 
+    /* Static Robot Utilities */
+    public static boolean isRedAlliance() {
+        return DriverStation.getAlliance().filter(value -> value == DriverStation.Alliance.Red).isPresent();
+    }
+
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
      */
-
     public RobotContainer() {
         // Register autonomous commands
         registerAutoCommands();
@@ -240,8 +245,8 @@ public class RobotContainer {
                         () -> 0,
                         () -> 0,
                         () -> false,
-                        TurretTargets.SPEAKER
-                ).until(swerve::turretNearTarget)
+                        Swerve.TurretTargets.SPEAKER
+                ).until(swerve::turretNearSpeakerTarget)
         );
 
         NamedCommands.registerCommand(
@@ -266,7 +271,7 @@ public class RobotContainer {
         driverXbox.y().onTrue(new InstantCommand(swerve::zeroGyro));
 
         /* Sync pose at subwoofer center */
-        driverXbox.x().onTrue(new InstantCommand(() -> swerve.setFusedPoseEstimator(Limelight.isRedAlliance() ? new Pose2d(15.29, 5.55, new Rotation2d()) : new Pose2d(1.25, 5.55, new Rotation2d(180)))));
+        driverXbox.x().onTrue(new InstantCommand(() -> swerve.setFusedPoseEstimator(isRedAlliance() ? new Pose2d(15.29, 5.55, new Rotation2d()) : new Pose2d(1.25, 5.55, new Rotation2d(180)))));
 
         /* Increment Trim */
         driverXbox.rightStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET += 0.1));
@@ -274,14 +279,14 @@ public class RobotContainer {
         /* Decrement Trim */
         driverXbox.leftStick().onTrue(new InstantCommand(() -> Constants.Angler.ANGLER_ENCODER_OFFSET -= 0.1));
 
-        /* Limelight Turret */
+        /* Speaker Turret */
         driverXbox.leftBumper().whileTrue(
                 new TurretCommand(
                         swerve,
                         driverXbox::getLeftY, // Ordinate Translation
                         driverXbox::getLeftX, // Coordinate Translation
                         driverXbox.b(), // Robot-centric trigger,
-                        TurretTargets.SPEAKER
+                        Swerve.TurretTargets.SPEAKER
                 )
         );
 
@@ -292,7 +297,7 @@ public class RobotContainer {
                         driverXbox::getLeftY, // Ordinate Translation
                         driverXbox::getLeftX, // Coordinate Translation
                         driverXbox.b(), // Robot-centric trigger
-                        TurretTargets.SHUTTLE
+                        Swerve.TurretTargets.SHUTTLE
                 )
         );
 
@@ -473,16 +478,16 @@ public class RobotContainer {
 
         // robot position
         SmartDashboard.putString("Robot Unfused Pose2d", swerve.getPose().getTranslation().toString());
-        SmartDashboard.putString("Robot Fused Pose2d", swerve.getFusedPoseEstimator().getTranslation().toString());
-        SmartDashboard.putString("Robot Fused Rotation", swerve.getFusedPoseEstimator().getRotation().toString());
+        SmartDashboard.putString("Robot Fused Pose2d", swerve.getFusedPoseEstimate().getTranslation().toString());
+        SmartDashboard.putString("Robot Fused Rotation", swerve.getFusedPoseEstimate().getRotation().toString());
         SmartDashboard.putNumber("Robot Yaw", swerve.getYaw());
         SmartDashboard.putNumber("Robot Pitch", swerve.getPitch());
         SmartDashboard.putNumber("Robot Roll", swerve.getRoll());
         SmartDashboard.putString("vector to speaker", swerve.getVectorToSpeakerTarget().toString());
         SmartDashboard.putNumber("est. dist to speaker", swerve.getVectorToSpeakerTarget().getNorm());
         SmartDashboard.putNumber("angle to speaker", swerve.getAngleToSpeakerTarget());
-        SmartDashboard.putNumber("turret error", swerve.getTurretError());
-        SmartDashboard.putBoolean("Turret near target", swerve.turretNearTarget());
+        SmartDashboard.putNumber("turret error", swerve.getTurretToSpeakerError());
+        SmartDashboard.putBoolean("Turret near target", swerve.turretNearSpeakerTarget());
         SmartDashboard.putBoolean("heading configured", swerve.isHeadingConfigured()); // TODO: ADD TO COMP DASHBOARD
         SmartDashboard.putData("Swerve Command", swerve);
 

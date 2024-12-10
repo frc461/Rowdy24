@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.VoltageConfigs;
+import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -11,8 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
-    private final TalonFX elevator, elevator2;
-    private final Follower elevatorFollower;
+    private final TalonFX elevator;
     private final PIDController elevatorPIDController;
     private final DigitalInput elevatorSwitch, servoSwitch;
     private final Servo elevatorClamp;
@@ -38,10 +41,9 @@ public class Elevator extends SubsystemBase {
                 Constants.Elevator.ELEVATOR_D
         );
 
-        elevatorFollower = new Follower(Constants.Elevator.ELEVATOR_ID, true);
-
-        elevator2 = new TalonFX(Constants.Elevator.ELEVATOR_FOLLOWER_ID);
-        elevator2.setControl(elevatorFollower);
+        try (TalonFX elevator2 = new TalonFX(Constants.Elevator.ELEVATOR_FOLLOWER_ID)) {
+            elevator2.setControl(new Follower(Constants.Elevator.ELEVATOR_ID, true));
+        }
 
         elevatorSwitch = new DigitalInput(Constants.Elevator.ELEVATOR_LIMIT_SWITCH);
         servoSwitch = new DigitalInput(Constants.Elevator.SERVO_LIMIT_SWITCH);
@@ -73,6 +75,10 @@ public class Elevator extends SubsystemBase {
         return target;
     }
 
+    public double getClampPosition() {
+        return elevatorClamp.getPosition();
+    }
+
     public double elevatorVelocity() {
         return elevator.getVelocity().getValueAsDouble();
     }
@@ -87,10 +93,6 @@ public class Elevator extends SubsystemBase {
 
     public boolean servoSwitchTriggered() {
         return !servoSwitch.get();
-    }
-
-    public double getClampPosition() {
-        return elevatorClamp.getPosition();
     }
 
     public boolean nearTarget() {
