@@ -48,3 +48,8 @@ The following links are to documentation extensively explaining the software imp
 
 As a to-do list to help beginner programmers, the following pages are recommended to read in order:
 - [ ] Follow the [Getting Started](README.md) guide to deploy the code.
+- [ ] [Robot](robot) - Readme
+- [ ] [Commands](robot/commands) - Readme
+- [ ] [Subsystems](robot/subsystems) - Readme
+- [ ] [RobotContainer](robot/ROBOT_CONTAINER.md) - Functions and Commands
+- [ ] [Commands]()

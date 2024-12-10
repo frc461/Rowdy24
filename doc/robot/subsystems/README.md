@@ -1,6 +1,6 @@
 # Subsystems Documentation
 
-Each of these subsystem classes contains primary, lower-level functions that are used to implement more higher-level commands.
+Each of these subsystem classes contains primary, lower-level functions that are used to implement more higher-level commands. Many of these functions utilizes motor Java classes imported as vendor dependencies for direct electric output to the robot. Each subsystem implementation allows for the conversion from software to motor control.
 
 ## Rowdy24 Subsystem Implementation
 This section of the documentation contains a more in-depth specification of each subsystem's software implementation. Each page will specify the functions (methods), objectives, and control of their respective subsystem:
