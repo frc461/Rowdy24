@@ -1,8 +1,12 @@
 # Robot Documentation
 
+The classes within this directory are developed directly for the implementation of the robot. Through primitive or advanced action, subsystem or command, through the container class, every action that the Rowdy24 robot performs is defined here.
+
 ## Robot Class
 
-The `Robot` class is the  contains methods that are run periodically and upon initialization of the robot.
+The [`Robot`](../../src/main/java/frc/robot/Robot.java) class is the base Java class that is automatically run by the virtual machine (via [`Main`](../../src/main/java/frc/robot/Main.java)) on the RoboRIO of the robot after deployment. That means that through deployment, the physical robot executes the methods within this class. The methods can be run periodically and upon initialization of the robot.
+
+### Methods
 
 ## Rowdy24 Robot Implementation
 This section of the documentation contains a more in-depth specification of the robot's general software implementation. The directories & upper-level classes include:
