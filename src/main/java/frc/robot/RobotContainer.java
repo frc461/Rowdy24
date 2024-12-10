@@ -92,7 +92,7 @@ public class RobotContainer {
      */
 
 
-    /* Variables */
+    /* Misc Variables */
     private final BooleanSupplier readyToShoot = () -> shooter.nearTarget() && angler.anglerNearTarget();
     private boolean constantShooter = true;
     private final SendableChooser<Command> chooser;

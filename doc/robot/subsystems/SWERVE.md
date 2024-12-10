@@ -6,7 +6,7 @@ Software implementation of the swerve subsystem on the Rowdy24 robot. The functi
 
 ### Class Information
 
-The [`Swerve`](../../../src/main/java/frc/robot/subsystems/Swerve.java) class extends the [`SubsystemBase`](https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj2/command/SubsystemBase.html) class, which helps to register commands involving the subsystem.
+The [`Swerve`](../../../src/main/java/frc/robot/subsystems/Swerve.java) class extends the [`SubsystemBase`](https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj2/command/SubsystemBase.html) class, which helps to register commands involving the subsystem. The constructor also [configures](../../src/main/java/frc/robot/subsystems/Swerve.java#L71) PathPlanner pathfinding to be optimized with Rowdy24's drivetrain when generating autonomous drivetrain commands.
 
 ### Enums
 
