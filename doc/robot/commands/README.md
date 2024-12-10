@@ -1,6 +1,6 @@
 # Commands Documentation
 
-Commands represent actions that the robot can register. Commands run when scheduled until they are interrupted or their end condition is met. Commands are represented in the command-based library by the [`Command`](https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj2/command/Command.html) class. Commands are usually directly implemented in the [`RobotContainer`](../../../src/main/java/frc/robot/RobotContainer.java) class.
+Commands are actions that the robot can perform, represented by the [`Command`](https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj2/command/Command.html) class in command-based WPILib. Commands are run by a Command Scheduler (represented by the `CommandScheduler` class), which runs all commands registered onto it periodically (see the [`robotPeriodic()`](../../src/main/java/frc/robot/Robot.java#L49) function in the `Robot` class). To run a specific command it has to be registered onto the Command Scheduler. They are run until deregistered, either when their end condition is met or through interruption (any `Command` can be canceled with the `cancel()` method). Commands are usually directly implemented/registered in the [`RobotContainer`](../../../src/main/java/frc/robot/RobotContainer.java) class.
 
 ## Command-Structure Robot Implementation
 
@@ -25,6 +25,14 @@ The [`end(boolean interrupted)`](https://github.wpilib.org/allwpilib/docs/releas
 ### Specifying end conditions
 
 The [`isFinished()`](https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj2/command/Command.html#end(boolean)) method is called repeatedly while the command is scheduled, whenever the scheduler’s run() method is called. As soon as it returns true, the command’s `end()` method is called and it ends. The `isFinished()` method is called after the `execute()` method, so the command will execute once on the same iteration that it ends.
+
+## Requirements
+
+Think about what would happen if two commands that contradicted each other (e.g., ran opposite methods of the same subsystem) were registered at the same time. As a preventative measure, a command is associated with a set of subsystems that it requires to run. The Command Scheduler then automatically checks if any two commands require the same subsystem, and based on criteria from each command (every command has a `withInterruptBehavior(InterruptionBehavior behavior)` method to set its interruption priority), decide which one to safely deregister.
+
+## Default Commands
+
+Default commands are an attribute of a subsystem. It is a command that requires (only) that subsystem to be run if there aren't any other commands requiring that subsystem that are registered. It is an optional attribute, so not every subsystem as a default command. However, it is important for manual controls, like driving the robot with joysticks, as it needs to be always registered. Default commands for each subsystem are defined in the `RobotContainer` class.
 
 ## Rowdy24 Command Implementation
 
