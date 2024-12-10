@@ -8,6 +8,16 @@ The [`Robot`](../../src/main/java/frc/robot/Robot.java) class is the base Java c
 
 ### Methods
 
+- `robotInit()` - called once when the robot is initialized
+- `robotPeriodic()` - called periodically regardless of current mode
+- `disabledInit()` - called once when the robot is disabled
+- `disabledPeriodic()` - called periodically when the robot is disabled
+- `autonomousInit()` - called once when the robot enters autonomous mode
+- `autonomousPeriodic()` - called periodically when the robot is in autonomous mode
+- `teleopInit()` - called once when the robot enters teleoperated mode
+- `teleopPeriodic()` - called periodically when the robot is in teleoperated mode
+- There are other methods for different robot modes that are similar in dynamic to the aforementioned mode methods
+
 ## Rowdy24 Robot Implementation
 This section of the documentation contains a more in-depth specification of the robot's general software implementation. The directories & upper-level classes include:
 
