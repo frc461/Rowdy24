@@ -4,18 +4,18 @@ The classes within this directory are developed directly for the implementation 
 
 ## Robot Class
 
-The [`Robot`](../../src/main/java/frc/robot/Robot.java) class is the base Java class that is automatically run by the virtual machine (via [`Main`](../../src/main/java/frc/robot/Main.java)) on the RoboRIO of the robot after deployment. That means that through deployment, the physical robot executes the methods within this class. The methods can be run periodically and upon initialization of the robot.
+The [`Robot`](../../src/main/java/frc/robot/Robot.java) class is the base Java class that is automatically run by the virtual machine (via [`Main`](../../src/main/java/frc/robot/Main.java)) on the RoboRIO of the robot after deployment. That means that through deployment, the physical robot executes the methods within this class. The methods can be run periodically and upon initialization of a certain operational mode. Modes include "deployment"/"robot," "disabled," "autonomous," "teleop," and "test." Each "period" or "tick" by default lasts 20 ms, so periodic functions to be called will run automatically every 20 ms.
 
 ### Methods
 
-- `robotInit()` - called once when the robot is initialized
-- `robotPeriodic()` - called periodically regardless of current mode
-- `disabledInit()` - called once when the robot is disabled
-- `disabledPeriodic()` - called periodically when the robot is disabled
-- `autonomousInit()` - called once when the robot enters autonomous mode
-- `autonomousPeriodic()` - called periodically when the robot is in autonomous mode
-- `teleopInit()` - called once when the robot enters teleoperated mode
-- `teleopPeriodic()` - called periodically when the robot is in teleoperated mode
+- [`robotInit()`](../../src/main/java/frc/robot/Robot.java#L28) - called once when the robot is initialized
+- [`robotPeriodic()`](../../src/main/java/frc/robot/Robot.java#L49) - called periodically regardless of current mode
+- [`disabledInit()`](../../src/main/java/frc/robot/Robot.java#L65) - called once when the robot is disabled
+- [`disabledPeriodic()`](../../src/main/java/frc/robot/Robot.java#L69) - called periodically when the robot is disabled
+- [`autonomousInit()`](../../src/main/java/frc/robot/Robot.java#L77) - called once when the robot enters autonomous mode
+- [`autonomousPeriodic()`](../../src/main/java/frc/robot/Robot.java#L87) - called periodically when the robot is in autonomous mode
+- [`teleopInit()`](../../src/main/java/frc/robot/Robot.java#L91) - called once when the robot enters teleoperated mode
+- [`teleopPeriodic()`](../../src/main/java/frc/robot/Robot.java#L105) - called periodically when the robot is in teleoperated mode
 - There are other methods for different robot modes that are similar in dynamic to the aforementioned mode methods
 
 ## Rowdy24 Robot Implementation
