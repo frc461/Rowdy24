@@ -1,6 +1,6 @@
 # Auto Align Command
 
-The Auto Align command automatically aligns the angler to the correct level based on how far away the robot is from the speaker. When the command ends, the angler is reset back to its lower limit. 
+The Auto Align command aligns the angler to an accurate incline angle based on the robot's distance is from the speaker. This command is triggered by a controller or called in the autonomous command for shooting and shuttling notes. 
 
 ## Execute
 
