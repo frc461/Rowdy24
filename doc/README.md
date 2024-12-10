@@ -52,4 +52,7 @@ As a to-do list to help beginner programmers, the following pages are recommende
 - [ ] [Commands](robot/commands) - Readme
 - [ ] [Subsystems](robot/subsystems) - Readme
 - [ ] [RobotContainer](robot/ROBOT_CONTAINER.md) - Functions and Commands
-- [ ] [Commands]()
+- [ ] [Commands](robot/commands) - All commands
+- [ ] [Libraries](lib) - Readme & All imported classes/vendor dependencies
+- [ ] [Subsystems](robot/subsystems) - All subsystems
+- [ ] [Development Guide](dev) - The guide to developing everything listed above *over time*
