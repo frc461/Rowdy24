@@ -37,7 +37,7 @@ On any issue/feature that doesn't have a branch yet, create an issue and create 
 - Check the driver station to ensure that everything including the robot, laptop, and controllers, is connected.
 - Record auto in all matches. It's better to base auto revisions/tweaks on a recording instead of recall.
 
-## Explore Documentation
+## Explore & Learn Through Documentation
 
 The following links are to documentation extensively explaining the software implementation of Rowdy24. The documentation directory structure is similar to that of the actual software implementation. Hence, the following items:
 
@@ -46,8 +46,8 @@ The following links are to documentation extensively explaining the software imp
    - [Commands](robot/commands)
    - [Subsystems](robot/subsystems)
 
-As a to-do list to help beginner programmers, the following pages are recommended to read in order:
-- [ ] Follow the [Getting Started](README.md) guide to deploy the code.
+As a TODO list to help beginner programmers, the following pages are recommended to read in order:
+- [ ] Follow the [Getting Started](README.md) guide to clone and deploy the code.
 - [ ] [Robot](robot) - Readme
 - [ ] [Commands](robot/commands) - Readme
 - [ ] [Subsystems](robot/subsystems) - Readme
@@ -55,4 +55,5 @@ As a to-do list to help beginner programmers, the following pages are recommende
 - [ ] [Commands](robot/commands) - All commands
 - [ ] [Libraries](lib) - Readme & All imported classes/vendor dependencies
 - [ ] [Subsystems](robot/subsystems) - All subsystems
+- [ ] [Constants](robot/CONSTANTS.md) - All constants & usage
 - [ ] [Development Guide](dev) - The guide to developing everything listed above *over time*
