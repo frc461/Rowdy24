@@ -16,7 +16,7 @@ Now we are going to retrieve the code from this repository to deploy it.
 
 1. Open your terminal and enter the command: `git clone https://github.com/frc461/Rowdy24.git`
 2. Once it finishes cloning, open WPILib VSCode Client and open the cloned folder as a project.
-3. Check our [vendor dependencies](lib/VENDOR%20LIBRARIES.md) to confirm that they are installed.
+3. Check our [vendor dependencies](lib/VENDOR_LIBRARIES.md) to confirm that they are installed.
 4. Press `ctrl`+`shift`+`P` to open up a VSCode menu, then type in 'Deploy'. Press `enter`.
 
 ## Contributing (Version Control)
